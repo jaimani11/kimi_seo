@@ -3,6 +3,8 @@ import type { AccommodationCategory } from '@lib/seo/accommodation-categories';
 import { allAccommodationCategories } from '@lib/seo/accommodation-categories';
 import { findCityBySlug, type SeoCity } from '@lib/seo/cities';
 import { resolveDestinationPhoto } from '@lib/imagery/destination-photo';
+import { SiteHeader } from '@/features/site/site-header';
+import { SiteFooter } from '@/features/site/site-footer';
 
 /**
  * Category-level accommodation landing page for gotript sub-brands
@@ -23,6 +25,8 @@ export function AccommodationCategoryPage({
   );
 
   return (
+    <>
+    <SiteHeader />
     <main style={{ minHeight: '100vh', background: 'var(--surface-base)' }}>
       {/* ── Hero ────────────────────────────────────────────────── */}
       <section
@@ -187,12 +191,6 @@ export function AccommodationCategoryPage({
                 color: 'inherit',
                 transition: 'border-color 120ms ease',
               }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.borderColor = 'var(--accent-primary)';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.borderColor = 'var(--border-subtle)';
-              }}
             >
               <span aria-hidden style={{ fontSize: '1.35rem' }}>
                 {c.emoji}
@@ -225,6 +223,8 @@ export function AccommodationCategoryPage({
         </div>
       </section>
     </main>
+    <SiteFooter />
+    </>
   );
 }
 
@@ -255,14 +255,6 @@ function CityCard({
         textDecoration: 'none',
         color: 'inherit',
         transition: 'transform 200ms ease, box-shadow 200ms ease',
-      }}
-      onMouseEnter={(e) => {
-        e.currentTarget.style.transform = 'translateY(-2px)';
-        e.currentTarget.style.boxShadow = '0 12px 24px -8px rgba(0, 0, 0, 0.18)';
-      }}
-      onMouseLeave={(e) => {
-        e.currentTarget.style.transform = 'translateY(0)';
-        e.currentTarget.style.boxShadow = 'none';
       }}
     >
       <div

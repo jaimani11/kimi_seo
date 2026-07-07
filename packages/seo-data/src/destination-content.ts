@@ -5227,6 +5227,55 @@ export const DESTINATION_GUIDES: Readonly<Record<string, DestinationGuide>> = {
     ],
     safety: 'Very safe; the ocean is the variable — swim between the flags, always. Schoolies week (late Nov) turns Surfers feral; plan around it.',
   },
+
+  'new-orleans': {
+    bestTimeToVisit: { months: 'February–May, October–December', blurb: 'Spring brings Mardi Gras, Jazz Fest, and patio weather; late fall is mild and cheap. June–September is a sauna with hurricane season peaking August–October.' },
+    budget: { budgetDailyUSD: 70, midDailyUSD: 150, luxuryDailyUSD: 380, blurb: 'Eat like royalty for less than any comparable US food city — po\'boys under $15, legendary dinners under $60. Hotels spike 3× during Mardi Gras and Jazz Fest.' },
+    travelStyles: {
+      family: 'Ride the St. Charles streetcar end to end, beignets at Café du Monde, and the Audubon Aquarium + Insectarium double-header. The French Quarter by day is very kid-doable.',
+      couples: 'A balcony room in the Quarter, jazz pilgrimage down Frenchmen Street, Garden District mansion walks, and a Sazerac where it was invented.',
+      solo: 'The friendliest big-personality city in America — solo bar stools at Preservation Hall shows, walking food tours, and streetcars that make car-free travel easy.',
+    },
+    food: [
+      { dish: 'Gumbo', note: 'The city\'s soul in a bowl — dark roux, andouille, and debate over every family recipe.' },
+      { dish: 'Beignets', note: 'Fried dough under a snowdrift of powdered sugar — Café du Monde at 3am is a rite of passage.' },
+      { dish: 'Po\'boys', note: 'Fried shrimp or roast beef "dressed" on Leidenheimer bread.' },
+      { dish: 'Jambalaya & red beans', note: 'Monday red beans and rice is a living tradition.' },
+      { dish: 'Sazerac', note: 'Rye, Peychaud\'s bitters, absinthe rinse — America\'s first cocktail.' },
+    ],
+    transportation: { primary: 'Walk the Quarter + Marigny; historic streetcars ($1.25) cover St. Charles and Canal. Rideshares fill the gaps; you don\'t want a car downtown.', tips: 'The airport is 25-35 minutes by taxi/rideshare (flat-ish rates). Swamp and plantation tours include hotel pickup.' },
+    neighborhoods: [
+      { name: 'French Quarter', blurb: 'The 300-year-old heart — wrought-iron balconies, Bourbon chaos, quiet Royal Street elegance one block over.' },
+      { name: 'Faubourg Marigny', blurb: 'Frenchmen Street\'s live-jazz row — where locals actually go at night.' },
+      { name: 'Garden District', blurb: 'Oak-shaded mansions, Lafayette Cemetery, Magazine Street shopping.' },
+      { name: 'Bywater', blurb: 'Pastel shotgun houses, murals, and the city\'s indie café-and-gallery scene.' },
+    ],
+    safety: 'Stay where the people are — the Quarter, Marigny, Garden District are well-walked; don\'t wander dark side streets alone late. Watch drinks on Bourbon, mind hurricane season (August–October), and use rideshares after midnight.',
+  },
+
+  queenstown: {
+    bestTimeToVisit: { months: 'December–February, June–September', blurb: 'Two peaks: southern-summer hiking and lake days, or June–September ski season across four resort fields. October–November and March–May are gorgeous, cheaper shoulders.' },
+    budget: { budgetDailyUSD: 80, midDailyUSD: 170, luxuryDailyUSD: 420, blurb: 'New Zealand prices with a resort premium — but hostels, Fergburger, and free alpine hikes keep budget trips honest. Adventure activities are the real line item ($150-300 each).' },
+    travelStyles: {
+      family: 'The Skyline gondola + luge combo is engineered for kids; add the Kiwi Park, lake beaches, and jet-boat rides for teens brave enough.',
+      couples: 'A Gibbston Valley wine afternoon, sunset from Bob\'s Peak, stargazing over Lake Wakatipu, and a cottage in storybook Arrowtown.',
+      solo: 'The adventure capital of the world runs on solo travelers — bungy, skydive, and trek groups form daily, and the hostel scene is world-class.',
+    },
+    food: [
+      { dish: 'Fergburger', note: 'The most famous burger queue in the hemisphere — worth it once, at an off hour.' },
+      { dish: 'Central Otago pinot noir', note: 'The world\'s southernmost wine region is 25 minutes away in Gibbston.' },
+      { dish: 'New Zealand lamb', note: 'High-country lamb done properly in the town\'s bistros.' },
+      { dish: 'Green-lipped mussels', note: 'Kiwi classic, best with a lake view.' },
+    ],
+    transportation: { primary: 'The town center is compact and walkable; Orbus loops the suburbs and Arrowtown. Rent a car for Glenorchy, Wanaka, and Milford Sound days.', tips: 'The airport is 15 minutes out with mountain views on approach. Milford Sound is a 4-hour drive each way — book a coach-cruise combo or flight and save your legs.' },
+    neighborhoods: [
+      { name: 'Queenstown Central', blurb: 'The lakefront grid — restaurants, bars, and every booking office within five minutes on foot.' },
+      { name: 'Frankton', blurb: 'Airport-side hub with lake trails, Remarkables views, and cheaper stays.' },
+      { name: 'Arrowtown', blurb: 'A gold-rush village 20 minutes away — autumn colors, heritage lanes, quiet luxury.' },
+      { name: 'Glenorchy', blurb: 'The road-end hamlet at the lake\'s head — Paradise valley and Routeburn trailheads.' },
+    ],
+    safety: 'One of the safest destinations anywhere. The risks are the activities and the alpine weather — book bungy/rafting/heli with licensed operators, check conditions before hikes, and drive mountain roads unhurried (icy in winter).',
+  },
 };
 
 /** Check whether we have a rich guide for a given city slug. */
