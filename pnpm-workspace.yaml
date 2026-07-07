@@ -2,12 +2,22 @@ packages:
   - "apps/*"
   - "packages/*"
 
-# pnpm 11 reads build-script approvals here; older pnpm (Vercel's
-# default without corepack) reads pnpm.onlyBuiltDependencies from the
-# root package.json. Keep BOTH in sync.
 allowBuilds:
-  '@prisma/client': true
-  '@prisma/engines': true
-  prisma: true
-  sharp: true
-  unrs-resolver: true
+  '@prisma/client': set this to true or false
+  '@prisma/engines': set this to true or false
+  prisma: set this to true or false
+  sharp: set this to true or false
+  unrs-resolver: set this to true or false
+
+# Build-script approvals. Use onlyBuiltDependencies (understood by
+# pnpm 10 AND 11) — NOT the v11-only allowBuilds key: Vercel installs
+# with pnpm 10 (chosen from lockfileVersion 9), and v10 discarded the
+# whole workspace config on the unknown key, reporting an EMPTY
+# workspace ("Packages found in the workspace:" → nothing) and
+# ERR_PNPM_WORKSPACE_PKG_NOT_FOUND for every workspace:* dep.
+onlyBuiltDependencies:
+  - "@prisma/client"
+  - "@prisma/engines"
+  - prisma
+  - sharp
+  - unrs-resolver
