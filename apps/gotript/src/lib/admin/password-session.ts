@@ -33,7 +33,18 @@ let cachedSecret: Buffer | null = null;
 
 function getSessionSecret(): Buffer {
   const fromEnv = (process.env.ADMIN_SESSION_SECRET ?? '').trim();
-  if (fromEnv.length >= 16) return Buffer.from(fromEnv, 'utf-8');
+  if (fromEnv.length > 0) {
+    // Previously secrets under 16 chars were silently IGNORED, which
+    // fell back to per-instance random keys - cookies minted on one
+    // serverless instance failed on the next, so login looped forever.
+    // Accept any non-empty secret; nag when it is weak.
+    if (fromEnv.length < 16) {
+      console.warn(
+        '[admin-session] ADMIN_SESSION_SECRET is shorter than 16 chars - working, but use a longer random value (e.g. openssl rand -hex 32).',
+      );
+    }
+    return Buffer.from(fromEnv, 'utf-8');
+  }
   if (cachedSecret) return cachedSecret;
   cachedSecret = randomBytes(32);
   console.warn(

@@ -32,7 +32,7 @@ export async function POST(req: NextRequest): Promise<Response> {
   }
   const parsed = BodySchema.safeParse(body);
   if (!parsed.success) return new Response(null, { status: 400 });
-  if (!verifyPassword(parsed.data.password)) {
+  if (!verifyPassword(parsed.data.password.trim())) {
     return new Response(null, { status: 401 });
   }
   const cookie = mintSessionCookie();
