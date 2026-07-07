@@ -9,6 +9,7 @@ const config: NextConfig = {
     '@adored/marketing',
     '@adored/imagery',
     '@adored/seo-routing',
+    '@adored/travel-tools',
     '@adored/ui',
   ],
   poweredByHeader: false,

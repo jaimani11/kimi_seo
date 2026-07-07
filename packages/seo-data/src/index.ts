@@ -42,8 +42,15 @@ export {
   ATTRACTIONS,
   findAttractionBySlug,
   allAttractions,
+  attractionsByCity,
   cityFor,
 } from './attractions';
+
+export type { CityClimate } from './climate-data';
+export { CITY_CLIMATE, MONTH_LABELS, findClimate } from './climate-data';
+
+export type { NeighborhoodPoi } from './poi-coords';
+export { NEIGHBORHOOD_COORDS, findNeighborhoodPois } from './poi-coords';
 
 export type { SeoComparison } from './comparisons';
 export {

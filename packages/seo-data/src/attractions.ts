@@ -595,3 +595,8 @@ export function allAttractions(): readonly Attraction[] {
 export function cityFor(attraction: Attraction): SeoCity | null {
   return findCityBySlug(attraction.citySlug);
 }
+
+/** All attractions in a city — map pins + walking-distance callouts. */
+export function attractionsByCity(citySlug: string): readonly Attraction[] {
+  return ATTRACTIONS.filter((a) => a.citySlug === citySlug);
+}

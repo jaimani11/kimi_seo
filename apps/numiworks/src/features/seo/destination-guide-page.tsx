@@ -4,6 +4,16 @@ import { SeoPageShell } from './seo-page-shell';
 import { resolveDestinationPhoto } from '@lib/imagery/destination-photo';
 import type { SeoCity } from '@lib/seo/cities';
 import type { DestinationGuide } from '@lib/seo/destination-content';
+import { findClimate, findNeighborhoodPois, attractionsByCity } from '@adored/seo-data';
+import { getUsdRates, haversineKm, distanceLabel } from '@adored/travel-tools';
+import {
+  ClimatePanel,
+  LocalTimeStrip,
+  CurrencyStrip,
+  DestinationMap,
+  WalkDistances,
+  type MapPin,
+} from '@adored/ui';
 import { VrboCityCallout } from '@/features/destinations/vrbo-city-callout';
 import { GygActivitiesWidget } from '@/features/experiences/getyourguide-widget';
 
@@ -28,7 +38,7 @@ import { GygActivitiesWidget } from '@/features/experiences/getyourguide-widget'
 import { DestinationScorecard } from './destination-scorecard';
 import type { DestinationScores } from '@lib/seo/destination-scores';
 
-export function DestinationGuidePage({
+export async function DestinationGuidePage({
   city,
   guide,
   scores,
@@ -44,6 +54,24 @@ export function DestinationGuidePage({
     name: city.name,
     country: city.countryCode,
   });
+  const climate = findClimate(city.slug);
+  const rates = await getUsdRates();
+  const mapPins: MapPin[] = [
+    ...attractionsByCity(city.slug).map((a) => ({
+      lat: a.coordinates.lat,
+      lng: a.coordinates.lng,
+      label: a.name,
+      kind: 'attraction' as const,
+      detail: distanceLabel(haversineKm(city.coordinates, a.coordinates)),
+    })),
+    ...findNeighborhoodPois(city.slug).map((n) => ({
+      lat: n.lat,
+      lng: n.lng,
+      label: n.name,
+      kind: 'neighborhood' as const,
+      detail: distanceLabel(haversineKm(city.coordinates, n)),
+    })),
+  ];
 
   return (
     <SeoPageShell
@@ -194,12 +222,21 @@ export function DestinationGuidePage({
       {/* Sections */}
       <article className="mx-auto max-w-3xl px-6 py-14 md:py-20">
         <Section title="Best Time to Visit" eyebrow="When to Go">
+          {climate ? (
+            <LocalTimeStrip
+              cityName={city.name}
+              tz={climate.tz}
+              lat={city.coordinates.lat}
+              lng={city.coordinates.lng}
+            />
+          ) : null}
           <p style={paragraphStyle}>
             <strong style={{ color: 'var(--ink-primary)', fontWeight: 700 }}>
               {guide.bestTimeToVisit.months}.
             </strong>{' '}
             {guide.bestTimeToVisit.blurb}
           </p>
+          {climate ? <ClimatePanel cityName={city.name} months={climate.months} /> : null}
         </Section>
 
         <Section title="Budget" eyebrow="Daily Spend in USD">
@@ -208,6 +245,14 @@ export function DestinationGuidePage({
             <BudgetTier label="Mid-range" value={`$${guide.budget.midDailyUSD}`} />
             <BudgetTier label="Luxury" value={`$${guide.budget.luxuryDailyUSD}`} />
           </ul>
+          <CurrencyStrip
+            rates={rates}
+            tiers={[
+              { label: 'Budget', usd: guide.budget.budgetDailyUSD },
+              { label: 'Mid-range', usd: guide.budget.midDailyUSD },
+              { label: 'Luxury', usd: guide.budget.luxuryDailyUSD },
+            ]}
+          />
           <p style={paragraphStyle}>{guide.budget.blurb}</p>
         </Section>
 
@@ -248,6 +293,15 @@ export function DestinationGuidePage({
               </li>
             ))}
           </ul>
+        </Section>
+
+        <Section title={`${city.name} Map & Walking Distances`} eyebrow="Get Your Bearings">
+          <DestinationMap cityName={city.name} center={city.coordinates} pins={mapPins} />
+          <WalkDistances
+            items={mapPins
+              .filter((p) => p.detail)
+              .map((p) => ({ name: p.label, kind: p.kind, label: p.detail ?? '' }))}
+          />
         </Section>
 
         <Section title="Safety" eyebrow="What to Know">

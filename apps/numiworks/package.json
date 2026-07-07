@@ -34,6 +34,7 @@
     "@adored/marketing": "workspace:*",
     "@adored/seo-data": "workspace:*",
     "@adored/seo-routing": "workspace:*",
+    "@adored/travel-tools": "workspace:*",
     "@adored/ui": "workspace:*",
     "@anthropic-ai/sdk": "^0.95.0",
     "@clerk/nextjs": "^7.3.2",
