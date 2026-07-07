@@ -44,7 +44,7 @@ export class InMemoryMarketingStore implements MarketingStore {
   private readonly posts: MarketingPost[] = [];
 
   async getConfig(): Promise<MarketingScheduleConfig> {
-    return { ...this.config };
+    return applyEnvOverrides({ ...this.config });
   }
 
   async putConfig(config: MarketingScheduleConfig): Promise<void> {
@@ -122,4 +122,33 @@ function cryptoRandomId(): string {
     globalThis.crypto?.randomUUID?.() ??
     `${Date.now()}-${Math.random().toString(36).slice(2)}`
   );
+}
+
+/**
+ * Env-var overlay for the schedule config.
+ *
+ * The in-memory store does not survive serverless instances, so a
+ * config toggled in the admin UI is lost before the daily cron reads
+ * it — the cron would see `enabled: false` forever. These env vars
+ * make scheduling deterministic per deployment:
+ *
+ *   MARKETING_PINTEREST_ENABLED=true    MARKETING_PINTEREST_DAILY=10
+ *   MARKETING_INSTAGRAM_ENABLED=...     MARKETING_INSTAGRAM_DAILY=...
+ *   MARKETING_TIKTOK_ENABLED=...        MARKETING_TIKTOK_DAILY=...
+ *
+ * Unset vars leave the stored (or default) value untouched, so the
+ * admin UI still works for same-instance experimentation. A
+ * database-backed store is the long-term fix for history/analytics.
+ */
+function applyEnvOverrides(config: MarketingScheduleConfig): MarketingScheduleConfig {
+  const platforms = ['pinterest', 'instagram', 'tiktok'] as const;
+  for (const p of platforms) {
+    const enabledRaw = (process.env[`MARKETING_${p.toUpperCase()}_ENABLED`] ?? '').trim().toLowerCase();
+    if (enabledRaw === 'true' || enabledRaw === '1') config[p].enabled = true;
+    else if (enabledRaw === 'false' || enabledRaw === '0') config[p].enabled = false;
+    const dailyRaw = (process.env[`MARKETING_${p.toUpperCase()}_DAILY`] ?? '').trim();
+    const daily = Number.parseInt(dailyRaw, 10);
+    if (Number.isFinite(daily) && daily >= 0 && daily <= 50) config[p].dailyCount = daily;
+  }
+  return config;
 }
