@@ -1,6 +1,10 @@
 packages:
   - "apps/*"
   - "packages/*"
+
+# pnpm 11 reads build-script approvals here; older pnpm (Vercel's
+# default without corepack) reads pnpm.onlyBuiltDependencies from the
+# root package.json. Keep BOTH in sync.
 allowBuilds:
   '@prisma/client': true
   '@prisma/engines': true
