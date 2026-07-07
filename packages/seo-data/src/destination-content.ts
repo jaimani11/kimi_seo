@@ -4749,6 +4749,484 @@ export const DESTINATION_GUIDES: Readonly<Record<string, DestinationGuide>> = {
     ],
     safety: 'Resort areas are heavily patrolled and very safe. Follow Foreign Office advice about Sinai interior — most travelers stay on the coast where restrictions don\'t apply. Watch for tourist-rate scams in Naama Bay taxis; agree on fares first.',
   },
+
+  // ────── Phase 10 expansion — 20 cities, first platform-native batch ──────
+
+  malaga: {
+    bestTimeToVisit: { months: 'April–June, September–October', blurb: 'Warm sea, 24-28°C days, and none of August\'s inland-Spain crowds. Winter stays mild (17°C) — the Costa del Sol\'s off-season is Europe\'s best-kept secret.' },
+    budget: { budgetDailyUSD: 60, midDailyUSD: 130, luxuryDailyUSD: 320, blurb: 'Cheaper than Barcelona or Madrid. Menu del día lunches run €14; beachfront chiringuito dinners €25.' },
+    travelStyles: {
+      family: 'Playa de la Malagueta is a 10-minute walk from the old town with calm swimming; the port aquarium and the Gibralfaro castle ramparts keep kids moving.',
+      couples: 'Sunset cava at a Calle Larios rooftop, a Picasso Museum morning, and espetos (sardine skewers) grilled over driftwood at an El Palo chiringuito.',
+      solo: 'Compact, walkable, and safe — the Soho street-art district, tapas counters at Atarazanas Market, and easy day trips (Ronda, Nerja, Caminito del Rey) fill a week fast.',
+    },
+    food: [
+      { dish: 'Espetos', note: 'Sardines skewered and grilled over open fire on the beach — Málaga\'s signature, best at El Palo.' },
+      { dish: 'Fried boquerones', note: 'Crisp anchovies with lemon — the tapas default in every bar.' },
+      { dish: 'Porra antequerana', note: 'A thicker, garlickier cousin of gazpacho from nearby Antequera.' },
+      { dish: 'Sweet Málaga wine', note: 'Moscatel dessert wine poured from barrels at Antigua Casa de Guardia since 1840.' },
+    ],
+    transportation: { primary: 'Walkable center; local Cercanías trains run along the coast to Torremolinos and Fuengirola. The airport is 12 minutes by train from the center.', tips: 'María Zambrano station puts Madrid 2.5 hours away by AVE. Rent a car only for white-village day trips (Ronda, Frigiliana).' },
+    neighborhoods: [
+      { name: 'Centro Histórico', blurb: 'Cathedral, Picasso Museum, tapas lanes — everything within 15 minutes on foot.' },
+      { name: 'Soho', blurb: 'Street-art district between the center and port — galleries, brunch, craft beer.' },
+      { name: 'La Malagueta', blurb: 'City beach strip — high-rises, chiringuitos, morning swims.' },
+      { name: 'El Palo', blurb: 'Old fishing quarter east of town — the most authentic espetos on the coast.' },
+    ],
+    safety: 'Very safe. Standard pickpocket caution on Calle Larios and the Alcazaba queue in high season.',
+  },
+
+  'san-sebastian': {
+    bestTimeToVisit: { months: 'May–June, September', blurb: 'Warm without August\'s Semana Grande crush; September brings the film festival and the year\'s best sea temperatures.' },
+    budget: { budgetDailyUSD: 85, midDailyUSD: 180, luxuryDailyUSD: 450, blurb: 'Spain\'s most expensive food city — but pintxos crawls let you eat like royalty at €3-4 a bite.' },
+    travelStyles: {
+      family: 'La Concha is one of Europe\'s safest swim beaches (shallow, sheltered); the Monte Igueldo funicular tops out at a delightfully old-fashioned amusement park.',
+      couples: 'Pintxos-bar hopping through Parte Vieja, a tasting-menu splurge, and the evening paseo around La Concha\'s balustrade.',
+      solo: 'Pintxos culture is built for solo travelers — stand at the bar, point at what looks good, repeat next door. Surf lessons at Zurriola are a great social entry point.',
+    },
+    food: [
+      { dish: 'Pintxos', note: 'Gilda (anchovy-olive-pepper skewer) is the original; slow-cooked veal cheek at La Cuchara de San Telmo is the modern classic.' },
+      { dish: 'Txuleta', note: 'Massive aged beef rib steak, charred outside, rare inside — best in cider houses.' },
+      { dish: 'Kokotxas', note: 'Hake throats in pil-pil sauce — a Basque delicacy you won\'t find elsewhere.' },
+      { dish: 'Burnt cheesecake', note: 'La Viña\'s caramelized cheesecake launched a thousand imitations worldwide; this is the source.' },
+    ],
+    transportation: { primary: 'Everything walkable; city buses cover the hills. Bilbao airport is 75 minutes by direct bus.', tips: 'Book Michelin tables 2-3 months out. Day trips: Hondarribia (30 min), Getaria (25 min), the French Basque coast (45 min).' },
+    neighborhoods: [
+      { name: 'Parte Vieja', blurb: 'The old town — highest pintxos-bar density on the planet.' },
+      { name: 'Gros', blurb: 'Surfer quarter behind Zurriola beach — younger bars, indie shops.' },
+      { name: 'Centro', blurb: 'Belle-époque shopping streets between the beaches.' },
+      { name: 'Antiguo', blurb: 'Local residential quarter at La Concha\'s west end, under Monte Igueldo.' },
+    ],
+    safety: 'One of Spain\'s safest cities. The only real hazard is the Atlantic — respect red flags at Zurriola.',
+  },
+
+  positano: {
+    bestTimeToVisit: { months: 'May–June, September–October', blurb: 'Warm sea and open ferries without July-August\'s wall-to-wall crowds and peak prices. Much of the town closes November–March.' },
+    budget: { budgetDailyUSD: 130, midDailyUSD: 300, luxuryDailyUSD: 800, blurb: 'The Amalfi Coast premium is real — cliffside-view rooms start around €250 in season. Day-trip from Sorrento to do it cheaper.' },
+    travelStyles: {
+      family: 'Doable but stroller-hostile — the town is staircases. Older kids love the ferry hops to Amalfi and the Fornillo beach snorkeling.',
+      couples: 'THE honeymoon town: sunrise over the duomo\'s majolica dome, a private boat afternoon to a beach-shack lunch, dinner above the lights.',
+      solo: 'Beautiful but couple-oriented and pricey solo; use it as a day stop from a Sorrento base and hike the Path of the Gods.',
+    },
+    food: [
+      { dish: 'Spaghetti alle vongole', note: 'Clams, garlic, white wine — the coast\'s default excellence.' },
+      { dish: 'Delizia al limone', note: 'Lemon sponge dome with lemon cream — Amalfi lemons at their best.' },
+      { dish: 'Grilled totani', note: 'Local flying squid, often paired with potatoes alla positanese.' },
+      { dish: 'Limoncello', note: 'Made from Sfusato lemons; drink it freezing, after dinner, facing the sea.' },
+    ],
+    transportation: { primary: 'Ferries (April–October) beat the SITA bus — arrive by sea for the classic view. From Naples: train to Sorrento, then ferry or bus.', tips: 'Pack light: hundreds of stairs, no cars in the lower town. Hike the Path of the Gods downhill, Bomerano → Nocelle direction.' },
+    neighborhoods: [
+      { name: 'Spiaggia Grande', blurb: 'Main beach and boat pier — restaurants, boutiques, the postcard angle.' },
+      { name: 'Fornillo', blurb: 'The quieter second beach, a 10-minute cliff path away.' },
+      { name: 'Nocelle', blurb: 'Hamlet 400m above town at the Path of the Gods trailhead.' },
+    ],
+    safety: 'Extremely safe. The dangers are sunburn, stair fatigue, and your credit card.',
+  },
+
+  matera: {
+    bestTimeToVisit: { months: 'April–June, September–October', blurb: 'Golden light on the Sassi and 20-26°C walking weather. August is punishingly hot in the stone; winter is atmospheric but cave hotels get chilly.' },
+    budget: { budgetDailyUSD: 70, midDailyUSD: 140, luxuryDailyUSD: 350, blurb: 'Southern-Italy prices: cave-hotel doubles from €90, tasting menus under €60. Exceptional value for the drama.' },
+    travelStyles: {
+      family: 'Kids love that people genuinely lived in caves until the 1950s — Casa Grotta shows exactly how. The ravine walk to the rupestrian churches is a manageable adventure.',
+      couples: 'Sleep in a candlelit cave suite, dinner in a grotto, and the Sassi lit up at night from the Murgia viewpoint across the ravine.',
+      solo: 'Compact and contemplative — two days of stone lanes, cave churches with Byzantine frescoes, and the best bread in Italy.',
+    },
+    food: [
+      { dish: 'Pane di Matera', note: 'IGP durum-wheat bread with a century-old sourdough lineage — the region\'s pride.' },
+      { dish: 'Peperoni cruschi', note: 'Sun-dried Senise peppers flash-fried to a crisp — sprinkled on everything.' },
+      { dish: 'Cavatelli with cruschi', note: 'The local pasta, typically with breadcrumbs and those peppers.' },
+      { dish: 'Caciocavallo podolico', note: 'Cave-aged cheese from Podolica cows — try it seared.' },
+    ],
+    transportation: { primary: 'No mainline station — reach it via Bari (90 min by Ferrovie Appulo Lucane train or bus). A car helps for Alberobello + Puglia combos.', tips: 'Stay IN the Sassi, not the modern town, for the full effect. Cobbles + stairs everywhere: pack shoes, not wheels.' },
+    neighborhoods: [
+      { name: 'Sasso Barisano', blurb: 'The more restored cave district — most hotels and restaurants.' },
+      { name: 'Sasso Caveoso', blurb: 'Rawer, more ancient-feeling — cave churches and Casa Grotta.' },
+      { name: 'Civita', blurb: 'The rocky spur between the two Sassi, crowned by the Duomo.' },
+    ],
+    safety: 'Very safe. Watch footing on worn stone stairs, especially after rain.',
+  },
+
+  oslo: {
+    bestTimeToVisit: { months: 'May–August', blurb: 'Endless daylight, fjord swims off the sauna rafts, the whole city outdoors. December is dark but cozy; February–March is city-plus-ski season.' },
+    budget: { budgetDailyUSD: 110, midDailyUSD: 220, luxuryDailyUSD: 480, blurb: 'Norway prices — a beer runs $10-12. Save with the Oslo Pass (transit + 30 museums) and bakery lunches.' },
+    travelStyles: {
+      family: 'The Fram polar-ship museum is a genuine kid magnet; Frogner Park\'s Vigeland sculptures and the Opera House roof-walk cost nothing.',
+      couples: 'A floating-sauna session in the fjord with a cold plunge, then the MUNCH museum and a harbor-side tasting dinner.',
+      solo: 'Safe, English-fluent, effortlessly navigable — island-hop the inner fjord on regular transit tickets, then hike from a metro stop into Nordmarka forest.',
+    },
+    food: [
+      { dish: 'Skrei cod (winter)', note: 'Seasonal Arctic cod — Norway\'s finest fish, on menus January–April.' },
+      { dish: 'Kanelboller', note: 'Cinnamon buns — the daily ritual at Åpent Bakeri.' },
+      { dish: 'Brunost', note: 'Caramel-brown whey cheese on waffles — divisive, essential to try once.' },
+      { dish: 'Reker', note: 'Fjord shrimp eaten off the boat at the harbor with baguette and mayo.' },
+    ],
+    transportation: { primary: 'Ruter transit (metro, tram, ferry) on one ticket — the island ferries are effectively a fjord cruise for $4.', tips: 'Flytoget airport express: 19 minutes to the center. The Bygdøy museums cluster — hit them in one ferry loop.' },
+    neighborhoods: [
+      { name: 'Bjørvika', blurb: 'Opera House, MUNCH, the new waterfront — modern Oslo\'s showcase.' },
+      { name: 'Grünerløkka', blurb: 'The hipster quarter — vintage shops, coffee bars, Sunday markets along the Akerselva.' },
+      { name: 'Aker Brygge / Tjuvholmen', blurb: 'Harbor promenade — seafood, the Astrup Fearnley museum, fjord saunas.' },
+      { name: 'Frogner', blurb: 'Embassy elegance around Vigeland Park.' },
+    ],
+    safety: 'Among Europe\'s safest capitals. The main risk is the bar bill.',
+  },
+
+  warsaw: {
+    bestTimeToVisit: { months: 'May–September', blurb: 'Park-and-terrace season, free Chopin concerts in Łazienki every summer Sunday. December\'s Old Town Christmas market is worth the cold.' },
+    budget: { budgetDailyUSD: 45, midDailyUSD: 95, luxuryDailyUSD: 240, blurb: 'Western-Europe quality at half the price: excellent dinners for $15-25, boutique hotels under $120.' },
+    travelStyles: {
+      family: 'The Copernicus Science Centre is one of Europe\'s best hands-on museums; the Old Town mermaid statue and a milk-bar lunch are easy wins.',
+      couples: 'Rooftop cocktails above the Palace of Culture, a Chopin recital, and dinner in a candle-lit cellar on the Royal Route.',
+      solo: 'Deep museum bench (POLIN, Warsaw Rising) and Vistula-side boulevards that buzz till late — safe, cheap, never boring.',
+    },
+    food: [
+      { dish: 'Pierogi', note: 'Ruskie (potato-cheese) is canon; duck-and-cherry shows the modern kitchen.' },
+      { dish: 'Żurek', note: 'Sour rye soup with sausage and egg, often served in a bread bowl.' },
+      { dish: 'Milk-bar classics', note: 'Communist-era canteens (bar mleczny) still serve full meals for a few dollars.' },
+      { dish: 'Pączki', note: 'Rose-jam doughnuts — queue at Blikle like everyone since 1869.' },
+    ],
+    transportation: { primary: 'Trams + a clean two-line metro cover everything; Bolt is cheap. Chopin airport is 20 minutes by train.', tips: 'The Old Town is a full postwar reconstruction — see the Warsaw Rising Museum first and the rebuilt streets hit differently.' },
+    neighborhoods: [
+      { name: 'Stare Miasto', blurb: 'The rebuilt Old Town — royal castle, market square, tourist heart.' },
+      { name: 'Śródmieście', blurb: 'The center: Palace of Culture, main shopping, rooftop bars.' },
+      { name: 'Praga', blurb: 'The gritty right bank turned arts district — pre-war courtyards, breweries.' },
+      { name: 'Powiśle', blurb: 'Riverside cool below the escarpment — Copernicus Centre, beach bars.' },
+    ],
+    safety: 'Very safe by any standard. Normal nightlife-district awareness after midnight.',
+  },
+
+  okinawa: {
+    bestTimeToVisit: { months: 'April–June, October–November', blurb: 'Warm sea either side of typhoon season (Aug–Sep peak risk). Cherry blossoms arrive in late January — Japan\'s first.' },
+    budget: { budgetDailyUSD: 75, midDailyUSD: 160, luxuryDailyUSD: 420, blurb: 'Cheaper than mainland resort Japan; Motobu-coast beach resorts undercut Kyoto ryokan prices.' },
+    travelStyles: {
+      family: 'Churaumi Aquarium\'s whale-shark tank is world-class; Emerald Beach sits next door and the Ocean Expo Park swallows a full day.',
+      couples: 'A Motobu-coast resort, sunset at Cape Manzamō, and island-hopping the Keramas for the bluest water in Japan.',
+      solo: 'Rent a car and trace the island: Shuri Castle\'s Ryukyu history, Kokusai-dōri izakayas, and English-friendly dive boats to the Blue Cave.',
+    },
+    food: [
+      { dish: 'Okinawa soba', note: 'Thick wheat noodles in pork broth with soki (stewed ribs) — nothing like mainland soba.' },
+      { dish: 'Gōyā champurū', note: 'Bitter-melon stir-fry with tofu, egg, and spam — the longevity-diet classic.' },
+      { dish: 'Rafute', note: 'Pork belly braised glossy in awamori and brown sugar.' },
+      { dish: 'Awamori', note: 'Okinawa\'s indigenous rice liquor — aged kūsu drinks like fine rum.' },
+    ],
+    transportation: { primary: 'A car is essential outside Naha — the monorail covers Naha only. Ferries reach the Kerama Islands in 35–50 minutes.', tips: 'Drive on the left; allow ~2 hours Naha→Churaumi. Book the aquarium for late afternoon when tour buses leave.' },
+    neighborhoods: [
+      { name: 'Naha / Kokusai-dōri', blurb: 'The capital\'s eat-drink-shop mile plus Makishi market\'s fish counters.' },
+      { name: 'Motobu Peninsula', blurb: 'Aquarium, Emerald Beach, and the island\'s best resort strip.' },
+      { name: 'Onna Coast', blurb: 'Mid-island resort row — Blue Cave diving, Cape Manzamō.' },
+      { name: 'Kerama Islands', blurb: 'Day-trip archipelago — Zamami\'s absurdly clear water.' },
+    ],
+    safety: 'Extremely safe. Respect typhoon advisories; coral cuts end more trips than anything else — wear reef shoes.',
+  },
+
+  jeju: {
+    bestTimeToVisit: { months: 'April–June, September–October', blurb: 'Cherry blossoms and canola fields in April; clear hiking weather in autumn. Summer brings beach season and the yearly typhoon watch.' },
+    budget: { budgetDailyUSD: 65, midDailyUSD: 140, luxuryDailyUSD: 350, blurb: 'Domestic-holiday pricing — resort rates below mainland five-stars, seafood feasts under $30.' },
+    travelStyles: {
+      family: 'Lava-tube caves (Manjanggul), trick-eye museums, and gentle beaches at Hyeopjae — Jeju is engineered for family trips.',
+      couples: 'Sunrise at Seongsan Ilchulbong crater, a Camellia Hill afternoon, and grilled black-pork dinner down a Jeju City alley.',
+      solo: 'Walk sections of the Jeju Olle Trail — 425km of waymarked coast path with guesthouses every few kilometers; the haenyeo diver demonstrations are unmissable.',
+    },
+    food: [
+      { dish: 'Jeju black pork', note: 'Char-grilled at dedicated alleys — noticeably richer than mainland pork.' },
+      { dish: 'Abalone porridge (jeonbokjuk)', note: 'The haenyeo\'s catch, slow-cooked with rice.' },
+      { dish: 'Hairtail fish (galchi)', note: 'Grilled or braised — Jeju\'s signature silver fish.' },
+      { dish: 'Hallabong', note: 'The island\'s sweet citrus — juice, chocolate, everything.' },
+    ],
+    transportation: { primary: 'Rent a car — attractions ring the island and buses are slow. Flights from Seoul run every 10-15 minutes (the world\'s busiest air route).', tips: 'International license required. Split stays: Jeju City side + Seogwipo side to halve driving.' },
+    neighborhoods: [
+      { name: 'Jeju City', blurb: 'Arrival hub — black-pork street, Dongmun market.' },
+      { name: 'Seogwipo', blurb: 'South-coast base — waterfalls, Olle trails, the best diving.' },
+      { name: 'Seongsan', blurb: 'East end — the sunrise crater and Udo island ferries.' },
+      { name: 'Aewol', blurb: 'West-coast café coast — ocean-view espresso on basalt shores.' },
+    ],
+    safety: 'Extremely safe. Coastal winds flip umbrellas and drones alike — anchor both.',
+  },
+
+  'koh-samui': {
+    bestTimeToVisit: { months: 'December–April', blurb: 'The Gulf\'s dry season (different from Phuket\'s!) — Samui\'s wettest months are October–November, when the Andaman side is drying out.' },
+    budget: { budgetDailyUSD: 55, midDailyUSD: 130, luxuryDailyUSD: 450, blurb: 'Every tier exists: $25 fan bungalows on Lamai to $1,000 pool villas on the north coast.' },
+    travelStyles: {
+      family: 'Choose Choeng Mon or Bophut for calm shallow water; ethical elephant sanctuaries and the Na Muang waterfalls fill the off-beach days.',
+      couples: 'A pool-villa breakfast, sunset at a jungle-ridge bar, and a private long-tail to Ang Thong marine park.',
+      solo: 'Fisherman\'s Village hostels, Muay Thai camps, and the ferry triangle to Koh Phangan (Full Moon) and Koh Tao (dive certs) make Samui a natural solo hub.',
+    },
+    food: [
+      { dish: 'Kôw man gài', note: 'Chicken rice done Thai-style — the local breakfast benchmark.' },
+      { dish: 'Southern Thai curry', note: 'Hotter and more turmeric-heavy than Bangkok\'s — try gaeng som.' },
+      { dish: 'Coconut everything', note: 'Samui was a coconut island before tourism — ice cream in the shell is obligatory.' },
+      { dish: 'Beach BBQ seafood', note: 'Nightly grills on Chaweng and Lamai — pick your snapper by weight.' },
+    ],
+    transportation: { primary: 'Songthaews (shared trucks) loop the ring road cheaply by day; Grab and scooters fill the gaps.', tips: 'Scooter accidents are the #1 tourist injury — helmets non-negotiable, skip riding in rain. Ferries: Lomprayah for speed.' },
+    neighborhoods: [
+      { name: 'Chaweng', blurb: 'The long main beach — nightlife, malls, the busiest sand.' },
+      { name: 'Lamai', blurb: 'Chaweng\'s calmer sibling — good swimming, Grandma-and-Grandpa rocks.' },
+      { name: 'Bophut / Fisherman\'s Village', blurb: 'Boutique-y old town — Friday walking street, wine bars.' },
+      { name: 'Maenam', blurb: 'Quiet north-shore stretch — long-stay favorite, Phangan views.' },
+    ],
+    safety: 'Safe overall; the risks are scooters, posted jellyfish warnings, and bucket-cocktail overconfidence.',
+  },
+
+  langkawi: {
+    bestTimeToVisit: { months: 'November–April', blurb: 'West-coast Malaysia\'s dry season — glassy Andaman water and reliable sunsets. September–October is the soggy low.' },
+    budget: { budgetDailyUSD: 45, midDailyUSD: 110, luxuryDailyUSD: 380, blurb: 'Duty-free island: alcohol at a third of mainland prices, resorts undercutting Thai equivalents.' },
+    travelStyles: {
+      family: 'The cable car + SkyBridge combo wows every age; Kilim Geoforest mangrove boats show eagles, monkeys, and bat caves in one loop.',
+      couples: 'A rainforest-luxury splurge on Datai Bay, sunset at Tanjung Rhu, and a private sandbank picnic between the islets.',
+      solo: 'Rent a scooter and do the full ring road in two days — waterfalls, empty northern beaches, night markets that rotate villages nightly.',
+    },
+    food: [
+      { dish: 'Nasi campur', note: 'Point-and-pick rice spreads — the everyday Malaysian feast.' },
+      { dish: 'Ikan bakar', note: 'Banana-leaf grilled fish with sambal — best at Pantai Cenang\'s beach ends.' },
+      { dish: 'Kedah laksa', note: 'Sour-fishy and herbal — a different animal from Penang\'s.' },
+      { dish: 'Roti canai breakfast', note: 'Flaky flatbread with dhal at any mamak stall, about $1.' },
+    ],
+    transportation: { primary: 'Scooters and rental cars — no real public transit. Grab exists but thins outside Cenang.', tips: 'Ferries connect to Penang and the mainland; direct flights from KL and Singapore. Fuel up before the empty northeast stretch.' },
+    neighborhoods: [
+      { name: 'Pantai Cenang', blurb: 'The main strip — beach bars, night-market energy, duty-free malls.' },
+      { name: 'Tanjung Rhu', blurb: 'The quiet northern spit — casuarina trees and the island\'s best sunset.' },
+      { name: 'Datai Bay', blurb: 'Rainforest-meets-sea luxury pocket on the northwest.' },
+      { name: 'Kuah', blurb: 'The port town — ferries, cheapest duty-free, local eating.' },
+    ],
+    safety: 'Very safe. Jellyfish occasionally close swim zones — heed flags; monkeys will unzip bags.',
+  },
+
+  cebu: {
+    bestTimeToVisit: { months: 'December–May', blurb: 'Dry season with the clearest water for whale sharks and sardine runs. Sinulog festival (January) is the Philippines\' biggest party.' },
+    budget: { budgetDailyUSD: 40, midDailyUSD: 90, luxuryDailyUSD: 280, blurb: 'Among Asia\'s best-value dive-and-island destinations — canyoneering day trips with lunch run $25.' },
+    travelStyles: {
+      family: 'Choose a Mactan resort with a house reef; older kids handle the Kawasan canyoneering jumps (every jump has a walk-around).',
+      couples: 'Kawasan Falls to yourselves by 8am, a Sumilon sandbar picnic, and a Mactan sunset cruise.',
+      solo: 'The backpacker corridor — Moalboal\'s sardine run, canyoneering groups, ferries onward to Bohol and Siquijor — makes solo logistics trivial.',
+    },
+    food: [
+      { dish: 'Lechon Cebu', note: 'The Philippines\' best roast pig — crackling skin, no sauce needed.' },
+      { dish: 'Sutukil', note: 'Pick seafood at the market, cooked three ways: sugba (grill), tuwa (soup), kilaw (ceviche).' },
+      { dish: 'Puso', note: 'Rice steamed in woven palm hearts — the street-food sidekick.' },
+      { dish: 'Dried mangoes', note: 'Cebu\'s export superpower — buy at the source.' },
+    ],
+    transportation: { primary: 'Grab in the city; buses and vans down the south coast (Moalboal 3h, Oslob 4h). Ferries fan out to the whole Visayas.', tips: 'Base split: 1-2 city days max, then south coast. Book canyoneering with licensed operators only.' },
+    neighborhoods: [
+      { name: 'Cebu City', blurb: 'Magellan\'s Cross, the country\'s oldest street, lechon pilgrimage stops.' },
+      { name: 'Mactan', blurb: 'Airport island — resorts, dive shops, seafood sutukil markets.' },
+      { name: 'Moalboal', blurb: 'Southwest dive town — the sardine ball is 20m off the beach.' },
+      { name: 'Oslob / Santander', blurb: 'Southern tip — whale sharks and the Sumilon sandbar.' },
+    ],
+    safety: 'Tourist areas are welcoming and safe; standard city caution downtown at night. Currents demand guides — dive with operators, not solo.',
+  },
+
+  pokhara: {
+    bestTimeToVisit: { months: 'October–November, March–April', blurb: 'Post-monsoon October gives the sharpest Annapurna views; spring adds rhododendron bloom on every trail.' },
+    budget: { budgetDailyUSD: 25, midDailyUSD: 60, luxuryDailyUSD: 180, blurb: 'One of the world\'s cheapest adventure hubs — lakeside doubles from $15, dal bhat refills forever.' },
+    travelStyles: {
+      family: 'Paddle-boat Phewa Lake to the island temple, walk to the World Peace Pagoda, and meet rescued animals at the sanctuary.',
+      couples: 'Sunrise at Sarangkot above a cloud sea, tandem paragliding after breakfast, lakeside candlelight dinner for less than a city cocktail.',
+      solo: 'THE trekker staging town — permits, gear, and trail partners for Annapurna Base Camp or Poon Hill materialize within a day on Lakeside.',
+    },
+    food: [
+      { dish: 'Dal bhat', note: 'Lentils, rice, curries, refills included — "dal bhat power, 24 hour."' },
+      { dish: 'Momos', note: 'Nepali dumplings — buff (buffalo) is the classic filling.' },
+      { dish: 'Thukpa', note: 'Tibetan noodle soup — the post-trek warm-up.' },
+      { dish: 'Sel roti', note: 'Ring-shaped rice bread fried at street stalls.' },
+    ],
+    transportation: { primary: 'Lakeside is walkable; taxis are cheap and negotiable. Kathmandu is 25 minutes by air or 6-8 rattling hours by road.', tips: 'Fly TO Pokhara — the mountain views justify it. Paragliding: book morning slots for stable air.' },
+    neighborhoods: [
+      { name: 'Lakeside (Baidam)', blurb: 'The tourist mile — gear shops, cafés, live-music bars along Phewa Lake.' },
+      { name: 'Sarangkot', blurb: 'The ridge above town — sunrise viewpoint and paragliding launch.' },
+      { name: 'Old Bazaar', blurb: 'The Newari trading town Pokhara was before trekking — worth a morning.' },
+    ],
+    safety: 'Very safe. Trek registered (TIMS + permits), never solo on high routes, and take altitude seriously above 3,000m.',
+  },
+
+  varanasi: {
+    bestTimeToVisit: { months: 'October–March', blurb: 'Cool, dry mornings for boat rides; Dev Deepawali (November) sets a million lamps on the ghats. April–June is 40°C+.' },
+    budget: { budgetDailyUSD: 20, midDailyUSD: 55, luxuryDailyUSD: 220, blurb: 'Guesthouse rooms over the ghats from $12; heritage haveli hotels from $120. Street-food dinners for $2.' },
+    travelStyles: {
+      family: 'Intense but unforgettable for older kids — the evening Ganga aarti, a calm dawn boat ride, and Sarnath\'s Buddhist ruins as a gentle counterpoint.',
+      couples: 'A sunrise rowboat past the waking ghats, silk-weaving workshops in the old lanes, rooftop lassi at golden hour.',
+      solo: 'The classic transformative solo stop — walk the full 7km ghat chain at dawn, sit with the chai-wallahs, and let the city happen to you.',
+    },
+    food: [
+      { dish: 'Kachori sabzi', note: 'The breakfast of the ghats — fried bread with spicy potato curry.' },
+      { dish: 'Banarasi lassi', note: 'Thick, in clay cups, topped with malai.' },
+      { dish: 'Tamatar chaat', note: 'Varanasi\'s signature — mashed spiced tomato served scalding in leaf bowls.' },
+      { dish: 'Malaiyo (winter)', note: 'Dawn-only saffron milk foam that dissolves on the tongue — November to February.' },
+    ],
+    transportation: { primary: 'Walk the ghats and old lanes; autos/e-rickshaws beyond. The airport is 45-60 minutes out.', tips: 'Stay ghat-side to skip traffic entirely. Photography at the cremation ghats is prohibited — respect it absolutely.' },
+    neighborhoods: [
+      { name: 'Dashashwamedh / Godowlia', blurb: 'The main ghat and its buzzing bazaar approach — aarti central.' },
+      { name: 'Assi Ghat', blurb: 'The mellower southern anchor — cafés, yoga, morning ragas.' },
+      { name: 'Sarnath', blurb: '10km out — where Buddha first taught; stupas, museums, quiet.' },
+    ],
+    safety: 'Intensity ≠ danger — violent crime against tourists is rare. Mind "donation" hustlers near cremation ghats, touts, and rooftop monkeys.',
+  },
+
+  'puerto-vallarta': {
+    bestTimeToVisit: { months: 'November–May', blurb: 'Dry, 27-30°C, and humpback whales in the bay December–March. Summer is hot, humid, and half-price.' },
+    budget: { budgetDailyUSD: 55, midDailyUSD: 120, luxuryDailyUSD: 350, blurb: 'Better value than Cancun: Zona Romántica boutique hotels from $90, taco crawls for single digits.' },
+    travelStyles: {
+      family: 'Playa Los Muertos\' calm mornings, whale-watching pangas in season, and the Malecón\'s sand sculptors make evenings free entertainment.',
+      couples: 'A cliffside sunset dinner south of town, the water-taxi to Yelapa\'s no-road cove, and gallery night in Centro every Wednesday.',
+      solo: 'Walkable, welcoming, and the LGBTQ+ capital of Mexico — Zona Romántica\'s café-and-bar density makes solo evenings effortless.',
+    },
+    food: [
+      { dish: 'Tacos de birria', note: 'Jalisco\'s pride — dipped, crisped, consommé on the side.' },
+      { dish: 'Pescado zarandeado', note: 'Butterflied whole fish grilled over mangrove wood.' },
+      { dish: 'Aguachile', note: 'Shrimp cured in lime-chile water — the coastal standard.' },
+      { dish: 'Raicilla', note: 'Jalisco\'s "other agave" — smokier cousin distilled in the sierra.' },
+    ],
+    transportation: { primary: 'Local buses and cheap taxis/Uber; the airport sits 20 minutes north of Centro.', tips: 'Water taxis from Los Muertos pier reach Yelapa + the southern coves. December–March: book whale trips for early morning calm.' },
+    neighborhoods: [
+      { name: 'Zona Romántica', blurb: 'Old Vallarta — cobblestones, beach clubs, nightlife, most character per block.' },
+      { name: 'Centro / Malecón', blurb: 'The seafront promenade, crowned church, galleries.' },
+      { name: 'Marina Vallarta', blurb: 'Golf-and-yacht polish near the airport.' },
+      { name: 'Versalles', blurb: 'The locals\' foodie quarter inland — the current restaurant boom.' },
+    ],
+    safety: 'One of Mexico\'s safest resort cities and it feels it — normal pickpocket care on busy Malecón nights.',
+  },
+
+  merida: {
+    bestTimeToVisit: { months: 'November–February', blurb: 'The only genuinely comfortable season — 28°C days instead of the 40°C furnace of April–May. January\'s Mérida Fest fills the plazas.' },
+    budget: { budgetDailyUSD: 45, midDailyUSD: 100, luxuryDailyUSD: 280, blurb: 'Restored-hacienda luxury at boutique prices; market lunches for $4.' },
+    travelStyles: {
+      family: 'Free nightly cultural shows in the plazas, cenote swims 30 minutes out, and the Sunday bici-ruta when Paseo de Montejo closes to cars.',
+      couples: 'A casona suite with a plunge pool, cocktails on Paseo de Montejo, and a private hacienda dinner under the arches.',
+      solo: 'Mexico\'s safest big city — walk everywhere, join the free walking tour, day-trip Uxmal and the pink lakes of Las Coloradas.',
+    },
+    food: [
+      { dish: 'Cochinita pibil', note: 'Achiote pork slow-roasted underground — Sunday\'s ritual.' },
+      { dish: 'Sopa de lima', note: 'Lime-scented turkey soup with tortilla crisps.' },
+      { dish: 'Panuchos & salbutes', note: 'The Yucatecan antojito twins — stuffed vs. puffed tortillas.' },
+      { dish: 'Marquesitas', note: 'Crispy rolled crepes with edam cheese — the plaza dessert.' },
+    ],
+    transportation: { primary: 'Centro is walkable; colectivos and cheap Ubers cover the rest. Cenote circuits and Uxmal want a rental car or tour.', tips: 'Chichén Itzá is 90 minutes — leave by 7am to beat the Cancún buses. Homún\'s cenote cluster beats any single famous one.' },
+    neighborhoods: [
+      { name: 'Centro Histórico', blurb: 'Pastel mansions around Plaza Grande — the colonial core.' },
+      { name: 'Paseo de Montejo', blurb: 'The henequén-boom boulevard — mansions, cafés, Monday-night vaquería.' },
+      { name: 'Santiago & Santa Ana', blurb: 'Market-square barrios with the best local eating.' },
+      { name: 'La Ermita', blurb: 'The quiet, arty southern quarter on the old Campeche road.' },
+    ],
+    safety: 'Frequently ranked Mexico\'s safest city — the biggest hazard is heatstroke; hydrate relentlessly.',
+  },
+
+  'san-miguel-de-allende': {
+    bestTimeToVisit: { months: 'October–April', blurb: 'Dry-season perfection at 1,900m — warm days, crisp nights. Día de Muertos and the Christmas posadas are peak magic.' },
+    budget: { budgetDailyUSD: 60, midDailyUSD: 140, luxuryDailyUSD: 400, blurb: 'Boutique-heavy: rooftop-view B&Bs from $120; world-class dinners at half US prices.' },
+    travelStyles: {
+      family: 'El Charco del Ingenio botanical canyon, hot-spring pools at La Gruta, and churro stops around the Jardín keep short legs happy.',
+      couples: 'THE romance town — a rooftop at golden hour when La Parroquia glows pink, gallery-hopping at Fábrica La Aurora, mezcal tastings after dark.',
+      solo: 'Massive artist scene: Spanish classes, workshops, and instant community at the Jardín. Walkable and safe at all the hours that matter.',
+    },
+    food: [
+      { dish: 'Enchiladas mineras', note: 'Guanajuato-style, chile-dipped and piled with potato-carrot — miner\'s fuel.' },
+      { dish: 'Tacos al pastor (street)', note: 'The nightly trompo stands run $1 a taco.' },
+      { dish: 'Nieves in the Jardín', note: 'Hand-churned ices — tuna (cactus fruit) is the local pick.' },
+      { dish: 'Small-batch mezcal', note: 'San Luis–Guanajuato campo mezcals poured in tasting rooms.' },
+    ],
+    transportation: { primary: 'Walk everything (cobblestones — flat shoes); taxis are cheap. Nearest airports: Querétaro (1h) or León (1.5h).', tips: 'Altitude + margaritas sneak up. Day trips: Atotonilco\'s "Sistine Chapel of Mexico," Dolores Hidalgo\'s talavera.' },
+    neighborhoods: [
+      { name: 'Centro', blurb: 'The Jardín, La Parroquia, every postcard — you walk out into the painting.' },
+      { name: 'San Antonio', blurb: 'Local-feeling hillside barrio 10 minutes out — better-value stays.' },
+      { name: 'Guadiana', blurb: 'Leafy, quiet, café-rich — the residential favorite.' },
+      { name: 'Fábrica La Aurora', blurb: 'A textile mill turned design-and-gallery complex.' },
+    ],
+    safety: 'Very safe, heavily walked at night around the center. Cobblestone ankles are the real epidemic.',
+  },
+
+  bogota: {
+    bestTimeToVisit: { months: 'December–March, July–August', blurb: 'The drier windows in a city of eternal spring (14-19°C year-round). Pack layers always — four seasons daily at 2,600m.' },
+    budget: { budgetDailyUSD: 40, midDailyUSD: 90, luxuryDailyUSD: 250, blurb: 'Big-city culture at Andean prices: tasting menus for $40, boutique Chapinero hotels under $100.' },
+    travelStyles: {
+      family: 'The Gold Museum genuinely amazes; Monserrate\'s cable car, Sunday Ciclovía (120km of car-free streets), and Zipaquirá\'s salt cathedral make a full slate.',
+      couples: 'Candelaria street-art walk, a top-table tasting dinner, and coffee-flight afternoons in Chapinero Alto.',
+      solo: 'A graffiti tour to decode the city, the Paloquemao fruit market at dawn, then the Andrés Carne de Res pilgrimage with your hostel crew.',
+    },
+    food: [
+      { dish: 'Ajiaco', note: 'The capital\'s chicken-and-three-potato soup with guasca herb, corn, capers, cream.' },
+      { dish: 'Arepa con queso', note: 'Griddled corn cakes everywhere, best from street carts at dawn.' },
+      { dish: 'Menú del día', note: 'Soup + main + juice for $4-5 — how the city actually lunches.' },
+      { dish: 'Origin-country coffee', note: 'Colombian micro-lots brewed properly in Chapinero\'s specialty cafés.' },
+    ],
+    transportation: { primary: 'Uber/DiDi and app taxis; TransMilenio buses are fast but pickpocket-prone at rush hour.', tips: 'Altitude: take day one slow. Sundays are the day — Ciclovía, Usaquén flea market, thinner Monserrate crowds by afternoon.' },
+    neighborhoods: [
+      { name: 'La Candelaria', blurb: 'The colonial core — museums, murals, universities; hostels thick on the ground.' },
+      { name: 'Chapinero', blurb: 'The food-and-coffee engine — where Bogotá actually goes out.' },
+      { name: 'Zona T / Zona Rosa', blurb: 'Glossy nightlife-and-shopping blocks.' },
+      { name: 'Usaquén', blurb: 'A colonial village swallowed by the city — Sunday market, brunch.' },
+    ],
+    safety: 'Use city smarts: no phone-flashing on empty streets ("no dar papaya"), app taxis after dark, Candelaria caution at night. Millions visit without incident.',
+  },
+
+  muscat: {
+    bestTimeToVisit: { months: 'October–April', blurb: 'Gulf winter is glorious — 25-30°C, wadi water still warm. May–September exceeds 40°C.' },
+    budget: { budgetDailyUSD: 80, midDailyUSD: 170, luxuryDailyUSD: 450, blurb: 'Pricier than Jordan, cheaper than Dubai — and the luxury tier delivers real value.' },
+    travelStyles: {
+      family: 'Wadi Shab\'s swim-to-a-waterfall adventure, dolphin-watching boats from the marina, and turtle hatchlings at Ras al Jinz (seasonal).',
+      couples: 'Understated beach luxury, a sunset dhow past the twin forts, and frankincense-scented souq wandering in Mutrah.',
+      solo: 'Rent a car — Oman is the Gulf\'s road-trip country: Nizwa\'s fort + Friday goat market, Jebel Akhdar\'s terraces, empty-highway beauty.',
+    },
+    food: [
+      { dish: 'Shuwa', note: 'Lamb marinated in Omani spices and buried-roasted for a day or two — festival food done right at a few restaurants.' },
+      { dish: 'Majboos', note: 'The Gulf\'s spiced rice-and-meat one-pot, Omani style.' },
+      { dish: 'Mishkak', note: 'Street skewers grilled at dusk stands.' },
+      { dish: 'Omani halwa + qahwa', note: 'Saffron-rose sweet with cardamom coffee — hospitality in edible form.' },
+    ],
+    transportation: { primary: 'Car rental or Otaxi app — Muscat sprawls 40km along the coast with no metro.', tips: 'Grand Mosque: mornings, modest dress, women cover hair. Wadi trips need water shoes; Fridays reshape opening hours.' },
+    neighborhoods: [
+      { name: 'Mutrah', blurb: 'The corniche, souq, and harbor forts — old Muscat\'s heart.' },
+      { name: 'Old Muscat', blurb: 'The gated royal quarter — Al Alam palace, twin Portuguese forts, museums.' },
+      { name: 'Qurum', blurb: 'Beach, parks, and embassy calm mid-city.' },
+      { name: 'Al Mouj', blurb: 'The modern marina district — cafés, golf, boat trips.' },
+    ],
+    safety: 'One of the safest countries on Earth. Real risks: flash floods in wadis after rain (heed warnings) and summer heat.',
+  },
+
+  perth: {
+    bestTimeToVisit: { months: 'September–November, March–May', blurb: 'Spring wildflowers or golden autumn — both dodge the 38°C summer spikes. Even winter (18°C) beats most places\' summer.' },
+    budget: { budgetDailyUSD: 95, midDailyUSD: 190, luxuryDailyUSD: 420, blurb: 'Australian prices, softened by free beaches, free Kings Park, and BYO restaurant culture.' },
+    travelStyles: {
+      family: 'Quokka selfies on Rottnest (bike-only island — kids adore it), the penguin ferry, and Scitech on the one rainy day.',
+      couples: 'Swan Valley wine-and-chocolate trail, sunset fish and chips at Cottesloe, and small bars hidden down city laneways.',
+      solo: 'Surf mornings at Scarborough, the Fremantle markets-and-brewery loop by train, and the most laid-back big-city pace in Australia.',
+    },
+    food: [
+      { dish: 'Fish and chips at the beach', note: 'Cicerello\'s in Freo is the institution; the gulls negotiate hard.' },
+      { dish: 'WA rock lobster', note: 'The state\'s crustacean pride — grilled simply.' },
+      { dish: 'Margaret River wines', note: 'Cabernet and chardonnay royalty, poured all over town.' },
+      { dish: 'Flat white + brunch', note: 'Perth\'s café game rivals Melbourne\'s, minus the queue.' },
+    ],
+    transportation: { primary: 'Transperth trains + free CAT buses downtown; the Freo line and Rottnest ferries handle the greatest hits.', tips: 'Rottnest: book ferries + bikes ahead in school holidays. Margaret River is a weekend, not a day trip.' },
+    neighborhoods: [
+      { name: 'Fremantle', blurb: 'The Victorian port town — markets, breweries, prison tours, busker energy.' },
+      { name: 'Northbridge', blurb: 'Nightlife + cultural centre across the tracks.' },
+      { name: 'Cottesloe / Scarborough', blurb: 'The Indian Ocean beach necklace.' },
+      { name: 'Swan Valley', blurb: 'Wineries, distilleries, and chocolate 25 minutes upstream.' },
+    ],
+    safety: 'Very safe. Swim between the flags; treat sunscreen as medicine — the UV is not a joke.',
+  },
+
+  'gold-coast': {
+    bestTimeToVisit: { months: 'April–May, September–November', blurb: 'Warm water, sunny 25°C days, no school-holiday surcharge. Summer is hotter, wetter, and packed.' },
+    budget: { budgetDailyUSD: 85, midDailyUSD: 170, luxuryDailyUSD: 400, blurb: 'Apartment-style stays keep families sane; theme-park multi-passes cut the biggest line item.' },
+    travelStyles: {
+      family: 'The theme-park capital (Movie World, Dreamworld, Wet\'n\'Wild) plus patrolled beaches at Broadbeach and koala encounters at Currumbin — engineered for kids.',
+      couples: 'A Burleigh headland sunset walk, hinterland waterfalls and wineries at Mount Tamborine, and rooftop bars above the Surfers skyline.',
+      solo: 'Learn-to-surf schools on every beach, hostel scenes at Surfers and Coolangatta, and the Burleigh single-fin culture for actual surfers.',
+    },
+    food: [
+      { dish: 'Fish tacos at Burleigh', note: 'The pavilion-and-headland strip is the coast\'s food heart.' },
+      { dish: 'Moreton Bay bugs', note: 'Sweet slipper lobsters — grilled with garlic butter.' },
+      { dish: 'Açaí + smoothie bowls', note: 'The surf-town breakfast uniform.' },
+      { dish: 'Local craft beer', note: 'Burleigh Brewing and surfer-founded Balter headline the pour.' },
+    ],
+    transportation: { primary: 'The G:link tram spines Surfers–Broadbeach; trains connect Brisbane. A car unlocks the hinterland.', tips: 'Stay Broadbeach or Burleigh over Surfers for calmer nights. Theme parks: one multi-park pass, arrive at opening.' },
+    neighborhoods: [
+      { name: 'Surfers Paradise', blurb: 'The skyline, the nightlife, the name-brand beach.' },
+      { name: 'Broadbeach', blurb: 'Family-friendly polish — restaurants, the casino, calmer sand.' },
+      { name: 'Burleigh Heads', blurb: 'The cool one — headland park, point break, best eating.' },
+      { name: 'Coolangatta', blurb: 'Southern border twin-town — Snapper Rocks and the Superbank.' },
+    ],
+    safety: 'Very safe; the ocean is the variable — swim between the flags, always. Schoolies week (late Nov) turns Surfers feral; plan around it.',
+  },
 };
 
 /** Check whether we have a rich guide for a given city slug. */

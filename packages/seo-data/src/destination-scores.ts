@@ -186,6 +186,28 @@ export const DESTINATION_SCORES: Readonly<Record<string, DestinationScores>> = {
   'cabo-san-lucas':{ family: 7, romance: 9, luxury: 10, budget: 4, nightlife: 8, food: 7, walkability: 5, digitalNomad: 6 },
   ushuaia:         { family: 7, romance: 9, luxury: 7, budget: 5, nightlife: 5, food: 7, walkability: 6, digitalNomad: 4 },
   'sharm-el-sheikh':{ family: 8, romance: 8, luxury: 8, budget: 8, nightlife: 6, food: 6, walkability: 4, digitalNomad: 5 },
+
+  // Phase 10 expansion
+  malaga:          { family: 8, romance: 8, luxury: 7, budget: 7, nightlife: 7, food: 9, walkability: 9, digitalNomad: 8 },
+  'san-sebastian': { family: 7, romance: 9, luxury: 8, budget: 4, nightlife: 7, food: 10, walkability: 9, digitalNomad: 6 },
+  positano:        { family: 5, romance: 10, luxury: 10, budget: 2, nightlife: 4, food: 9, walkability: 5, digitalNomad: 3 },
+  matera:          { family: 7, romance: 9, luxury: 7, budget: 7, nightlife: 4, food: 8, walkability: 7, digitalNomad: 5 },
+  oslo:            { family: 8, romance: 7, luxury: 8, budget: 3, nightlife: 7, food: 8, walkability: 9, digitalNomad: 7 },
+  warsaw:          { family: 8, romance: 7, luxury: 7, budget: 8, nightlife: 8, food: 8, walkability: 8, digitalNomad: 9 },
+  okinawa:         { family: 9, romance: 8, luxury: 8, budget: 6, nightlife: 5, food: 8, walkability: 4, digitalNomad: 6 },
+  jeju:            { family: 9, romance: 8, luxury: 7, budget: 6, nightlife: 5, food: 8, walkability: 5, digitalNomad: 6 },
+  'koh-samui':     { family: 8, romance: 9, luxury: 8, budget: 7, nightlife: 8, food: 8, walkability: 4, digitalNomad: 8 },
+  langkawi:        { family: 9, romance: 8, luxury: 8, budget: 8, nightlife: 5, food: 8, walkability: 4, digitalNomad: 6 },
+  cebu:            { family: 7, romance: 7, luxury: 6, budget: 9, nightlife: 7, food: 7, walkability: 4, digitalNomad: 7 },
+  pokhara:         { family: 7, romance: 7, luxury: 4, budget: 10, nightlife: 5, food: 6, walkability: 7, digitalNomad: 7 },
+  varanasi:        { family: 5, romance: 5, luxury: 4, budget: 10, nightlife: 3, food: 8, walkability: 6, digitalNomad: 5 },
+  'puerto-vallarta': { family: 8, romance: 9, luxury: 8, budget: 7, nightlife: 9, food: 9, walkability: 8, digitalNomad: 8 },
+  merida:          { family: 8, romance: 8, luxury: 7, budget: 8, nightlife: 6, food: 9, walkability: 8, digitalNomad: 8 },
+  'san-miguel-de-allende': { family: 7, romance: 10, luxury: 8, budget: 7, nightlife: 6, food: 9, walkability: 8, digitalNomad: 8 },
+  bogota:          { family: 7, romance: 6, luxury: 7, budget: 9, nightlife: 8, food: 8, walkability: 6, digitalNomad: 8 },
+  muscat:          { family: 8, romance: 8, luxury: 9, budget: 5, nightlife: 3, food: 7, walkability: 4, digitalNomad: 5 },
+  perth:           { family: 9, romance: 7, luxury: 8, budget: 4, nightlife: 7, food: 8, walkability: 7, digitalNomad: 7 },
+  'gold-coast':    { family: 10, romance: 7, luxury: 8, budget: 5, nightlife: 8, food: 7, walkability: 6, digitalNomad: 7 },
 };
 
 /** Get scores for a city, or null if not yet scored. */
