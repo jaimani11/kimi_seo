@@ -16,6 +16,11 @@
  * "token invalid").
  */
 
+import {
+  getManagedPinterestToken,
+  describePinterestAuthMode,
+} from './pinterest-oauth';
+
 const API_BASE = 'https://api.pinterest.com/v5';
 
 export interface PinterestBoard {
@@ -48,9 +53,12 @@ export interface PinterestApiError {
 }
 
 export class PinterestClient {
-  readonly #token: string;
-  constructor(token: string) {
-    this.#token = token;
+  readonly #tokenProvider: () => Promise<string>;
+  constructor(tokenOrProvider: string | (() => Promise<string>)) {
+    this.#tokenProvider =
+      typeof tokenOrProvider === 'string'
+        ? async () => tokenOrProvider
+        : tokenOrProvider;
   }
 
   async listBoards(args: { pageSize?: number } = {}): Promise<PinterestBoard[]> {
@@ -107,10 +115,11 @@ export class PinterestClient {
     path: string,
     body?: unknown,
   ): Promise<Response> {
+    const token = await this.#tokenProvider();
     return fetch(`${API_BASE}${path}`, {
       method,
       headers: {
-        authorization: `Bearer ${this.#token}`,
+        authorization: `Bearer ${token}`,
         accept: 'application/json',
         ...(body !== undefined ? { 'content-type': 'application/json' } : {}),
       },
@@ -146,9 +155,12 @@ export class PinterestClient {
  * token isn't configured so callers can fall back to stub mode.
  */
 export function pinterestClientFromEnv(): PinterestClient | null {
-  const token = (process.env.PINTEREST_ACCESS_TOKEN ?? '').trim();
-  if (!token) return null;
-  return new PinterestClient(token);
+  if (describePinterestAuthMode() === 'none') return null;
+  return new PinterestClient(async () => {
+    const token = await getManagedPinterestToken();
+    if (!token) throw new Error('Pinterest token unavailable (refresh failed and no static token)');
+    return token;
+  });
 }
 
 /**

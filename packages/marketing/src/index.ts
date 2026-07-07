@@ -104,3 +104,16 @@ export type {
   MarketingScheduler,
 } from './scheduler';
 export { createMarketingScheduler } from './scheduler';
+
+// ── Pinterest OAuth (authorize + automatic token refresh) ────────
+export type { PinterestOAuthEnv, PinterestTokenGrant } from './pinterest-oauth';
+export {
+  PINTEREST_SCOPES,
+  getPinterestOAuthEnv,
+  buildPinterestAuthorizeUrl,
+  exchangeCodeForTokens,
+  refreshAccessToken,
+  getManagedPinterestToken,
+  describePinterestAuthMode,
+  _resetManagedPinterestToken,
+} from './pinterest-oauth';

@@ -6,6 +6,7 @@ import type {
 import type { PinterestPin } from './social-types';
 import { findCityBySlug } from '@adored/seo-data';
 import { pinterestClientFromEnv } from './pinterest-client';
+import { describePinterestAuthMode } from './pinterest-oauth';
 
 /**
  * Pinterest adapter — brand-injected base class.
@@ -26,7 +27,10 @@ import { pinterestClientFromEnv } from './pinterest-client';
  * so the daily pipeline still exercises the rest of the scheduler.
  */
 
-const REQUIRED = ['PINTEREST_ACCESS_TOKEN', 'PINTEREST_BOARD_ID'] as const;
+const REQUIRED = [
+  'PINTEREST_BOARD_ID',
+  'PINTEREST_ACCESS_TOKEN (or PINTEREST_APP_ID + PINTEREST_APP_SECRET + PINTEREST_REFRESH_TOKEN)',
+] as const;
 
 export interface PinterestAdapterDeps {
   buildLink: (args: {
@@ -50,7 +54,11 @@ export class BasePinterestAdapter implements MarketingAdapter {
 
   constructor(deps: PinterestAdapterDeps) {
     this.#deps = deps;
-    this.isLive = REQUIRED.every((k) => Boolean(process.env[k]?.trim()));
+    // Live when a board is configured AND any token mode is available:
+    // static PINTEREST_ACCESS_TOKEN or the OAuth refresh trio.
+    this.isLive =
+      Boolean(process.env.PINTEREST_BOARD_ID?.trim()) &&
+      describePinterestAuthMode() !== 'none';
   }
 
   async post(input: MarketingAdapterPostInput): Promise<MarketingAdapterPostResult> {
