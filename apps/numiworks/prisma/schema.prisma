@@ -1,0 +1,212 @@
+// StayScout — Slice B1 schema. Postgres-shaped, with no Postgres-specific
+// features yet (no pgvector, no JSON arrays, no enum types). Slice C
+// introduces pgvector for memory embeddings.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ============== Identity ==============
+
+model User {
+  id           String   @id // Clerk userId for authenticated; "anon_<uuid>" for anonymous
+  isAnonymous  Boolean  @default(true)
+  email        String?  @unique
+  preferences  Json? // PreferenceProfile (Slice C populates richer)
+  migratedFrom String? // anon_<uuid> if this user was migrated from an anonymous session
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  trips         Trip[]
+  conversations Conversation[]
+  memories      MemoryRecord[]
+  subscription  Subscription?
+  bookings      Booking[]
+  bookingDrafts BookingDraft[]
+
+  @@index([migratedFrom])
+}
+
+// ============== Conversation history ==============
+
+model Conversation {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  startedAt DateTime @default(now())
+  turns     Turn[]
+  trips     Trip[]
+
+  @@index([userId, startedAt])
+}
+
+model Turn {
+  id             String       @id // turnId from the wire protocol
+  conversationId String
+  conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  type           String // 'compose' | 'refine'
+  rawInput       String
+  intent         Json // serialized TripIntent
+  proposalId     String?
+  proposal       Json? // serialized TripProposal
+  durationMs     Int?
+  failed         Boolean      @default(false)
+  error          String?
+  createdAt      DateTime     @default(now())
+
+  @@index([conversationId, createdAt])
+}
+
+// ============== Saved trips ==============
+
+model Trip {
+  id              String        @id @default(cuid())
+  userId          String
+  user            User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  conversationId  String?
+  conversation    Conversation? @relation(fields: [conversationId], references: [id], onDelete: SetNull)
+  proposalId      String // stable hash from buildProposalRef
+  proposalSummary Json // ProposalRef.summary at save time
+  proposal        Json // serialized TripProposal at save time
+  intent          Json // serialized TripIntent at save time
+  notes           String? // user's personal notes (Slice C)
+  // Lazy-minted on first share. ~95 bits of entropy → unguessable.
+  shareSlug       String?       @unique
+  bookmarkedAt    DateTime      @default(now())
+
+  @@unique([userId, proposalId])
+  @@index([userId, bookmarkedAt])
+}
+
+// ============== Affiliate (Slice B6 populates) ==============
+
+model AffiliateClick {
+  id               String    @id @default(cuid())
+  userId           String? // null when click came from an anonymous session
+  sessionId        String
+  turnId           String?
+  stayId           String
+  providerId       String
+  affiliateUrl     String
+  createdAt        DateTime  @default(now())
+  converted        Boolean   @default(false)
+  commissionAmount Float?
+  convertedAt      DateTime?
+
+  @@index([userId, createdAt])
+  @@index([sessionId])
+  @@index([providerId, converted])
+}
+
+// ============== Billing (Slice C4 — schema only) ==============
+//
+// C4 ships an in-memory `InMemorySubscriptionStore` + the
+// `StripeBillingProvider` that talks to Stripe. The Postgres-backed
+// `PostgresSubscriptionStore` lands in C4.x once we have a deployed
+// DB to integration-test against. Schema is in place now so the
+// migration is mechanical when it's time.
+
+model Subscription {
+  id                   String    @id @default(cuid())
+  // Owner is keyed via `userId` only — anonymous sessions can't
+  // subscribe (the route 401s before reaching here). Sign-in is
+  // required to check out, and B1's anonymous→user migration carries
+  // saved trips/memories with the new userId.
+  userId               String    @unique
+  user                 User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  stripeCustomerId     String?   @unique
+  stripeSubscriptionId String?   @unique
+  priceId              String?
+  // Mirrors Stripe's subscription.status enum exactly so we can store
+  // webhook payloads verbatim. Helper `isPremiumStatus()` derives
+  // entitlement from this + currentPeriodEnd.
+  status               String
+  currentPeriodEnd     DateTime?
+  updatedAt            DateTime  @updatedAt
+
+  @@index([status])
+}
+
+// Webhook idempotency log. Stripe retries on any non-2xx and may
+// double-deliver — we dedupe on `event.id` (the primary key here).
+// In-memory impl is mock-safe; the Postgres impl uses INSERT ON
+// CONFLICT DO NOTHING for a true atomic check-and-set.
+model WebhookEvent {
+  id          String   @id // stripe event.id
+  type        String
+  processedAt DateTime @default(now())
+
+  @@index([type, processedAt])
+}
+
+// ============== Bookings (Slice D — schema only) ==============
+//
+// Slice D ships in-memory `InMemoryBookingStore` + the
+// `MockBookingProvider`. The Postgres-backed `PostgresBookingStore`
+// + real provider integrations (`BookingComBookingProvider` etc.)
+// land in D.x. Schema is in place now so the migration is mechanical
+// when it's time.
+
+model BookingDraft {
+  id             String   @id // bkd_… from mintBookingDraftId()
+  idempotencyKey String   @unique // bk_… — provider booking is idempotent on this
+  userId         String
+  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  tripId         String
+  // Full BookingDraft payload as JSON — same shape as the on-the-wire
+  // type. Keeps the Postgres path simple while we iterate on the shape.
+  payload        Json
+  createdAt      DateTime @default(now())
+
+  @@index([userId, createdAt])
+}
+
+model Booking {
+  id                 String    @id // bok_… from mintBookingId()
+  idempotencyKey     String    @unique
+  userId             String
+  user               User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  tripId             String?
+  stayId             String
+  providerId         String
+  // Provider-assigned reference (mock_… in dev; real-provider id in D.x).
+  // Null for `failed` bookings where the provider call errored before
+  // issuing a reference.
+  providerBookingRef String?
+  status             String // mirrors BookingStatus enum
+  payload            Json
+  confirmedAt        DateTime?
+  canceledAt         DateTime?
+  createdAt          DateTime  @default(now())
+
+  @@index([userId, createdAt])
+  @@index([status])
+  @@index([providerBookingRef])
+}
+
+// ============== Memory (Slice C populates) ==============
+
+model MemoryRecord {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  kind      String // 'episodic' | 'structural'
+  content   String
+  signalKey String?
+  weight    Float?
+  // pgvector embedding — populated when STAYSCOUT_PGVECTOR=1 + the
+  // `vector` extension is installed. Otherwise null; the mock-safe
+  // InMemoryMemoryStore keeps embeddings in process. Slice C1 ships
+  // the schema; full migration (CREATE EXTENSION + ivfflat index) +
+  // PgvectorMemoryStore impl land in C1.x once we have a DB to test.
+  embedding Unsupported("vector(256)")?
+  createdAt DateTime @default(now())
+
+  @@index([userId, kind, createdAt])
+  @@index([userId, signalKey])
+}

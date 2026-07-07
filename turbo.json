@@ -1,0 +1,48 @@
+{
+  "$schema": "https://turbo.build/schema.json",
+  "tasks": {
+    "build": {
+      "dependsOn": ["^build"],
+      "outputs": [".next/**", "!.next/cache/**", "dist/**"],
+      "env": [
+        "NEXT_PUBLIC_SITE_URL",
+        "SITE_URL",
+        "ANTHROPIC_API_KEY",
+        "VIATOR_API_KEY",
+        "EXPEDIA_AFFILIATE_ID",
+        "EXPEDIA_AFFILIATE_LABEL",
+        "EXPEDIA_CAMPAIGN_ID",
+        "BOOKING_AFFILIATE_ID",
+        "GETYOURGUIDE_PARTNER_ID",
+        "NEXT_PUBLIC_GYG_PARTNER_ID",
+        "NEXT_PUBLIC_VRBO_SHORTLINK",
+        "GA_MEASUREMENT_ID",
+        "NEXT_PUBLIC_GA_MEASUREMENT_ID",
+        "PINTEREST_ACCESS_TOKEN",
+        "PINTEREST_BOARD_ID",
+        "PINTEREST_DOMAIN_VERIFY",
+        "CRON_SECRET",
+        "ADMIN_PASSWORD",
+        "ADMIN_SESSION_SECRET",
+        "RESEND_API_KEY"
+      ]
+    },
+    "dev": {
+      "cache": false,
+      "persistent": true
+    },
+    "lint": {
+      "dependsOn": ["^build"]
+    },
+    "test": {
+      "dependsOn": ["^build"],
+      "outputs": []
+    },
+    "typecheck": {
+      "dependsOn": ["^build"]
+    },
+    "clean": {
+      "cache": false
+    }
+  }
+}

@@ -1,0 +1,44 @@
+@import 'tailwindcss';
+@import './tokens.css';
+
+/* Base reset for our app's specific needs (Tailwind preflight handles most) */
+html,
+body {
+  height: 100%;
+}
+
+body {
+  background: var(--surface-base);
+  color: var(--ink-primary);
+  font-family: var(--font-inter), system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  transition:
+    background-color var(--dur-slow) var(--ease-in-out),
+    color var(--dur-slow) var(--ease-in-out);
+}
+
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 200ms !important;
+    transition-duration: 200ms !important;
+  }
+}
+
+@keyframes agentic-pulse {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.55;
+    transform: scale(0.85);
+  }
+}

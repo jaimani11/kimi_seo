@@ -1,0 +1,12 @@
+node_modules
+.next
+.env
+.env.local
+.env.production
+.vercel
+.DS_Store
+*.log
+# Project pins pnpm (see pnpm-lock.yaml); ignore any npm/yarn
+# lockfiles accidentally created by a stray `npm install`.
+package-lock.json
+yarn.lock

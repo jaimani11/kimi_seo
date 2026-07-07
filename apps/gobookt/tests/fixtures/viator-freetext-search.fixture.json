@@ -1,0 +1,90 @@
+{
+  "_note": "Recorded shape (not real data) of a /search/freetext response from Viator Partner API v2.0, used to anchor the mapper tests. Fields match the OpenAPI ProductSummary schema. The productUrl is what Viator would return when campaign-value is included on the request - it's the exact URL the affiliate redirect must hand out unchanged.",
+  "products": {
+    "totalCount": 2,
+    "results": [
+      {
+        "productCode": "5657BRIDGECLIMB",
+        "title": "Sydney BridgeClimb",
+        "description": "Climb the Sydney Harbour Bridge with one of our expert guides on a once-in-a-lifetime adventure. Choose from three different climbs across day, twilight, or night.",
+        "productUrl": "https://www.viator.com/tours/Sydney/Sydney-BridgeClimb/d357-5657BRIDGECLIMB?mcid=42383&pid=P00012345&campaign-value=stayscout-homepage",
+        "images": [
+          {
+            "isCover": true,
+            "caption": "Bridge summit photo at sunset",
+            "variants": [
+              { "width": 480, "height": 320, "url": "https://media.viator.com/photo/5657/480x320.jpg" },
+              { "width": 720, "height": 480, "url": "https://media.viator.com/photo/5657/720x480.jpg" },
+              { "width": 1080, "height": 720, "url": "https://media.viator.com/photo/5657/1080x720.jpg" }
+            ]
+          },
+          {
+            "isCover": false,
+            "caption": "Climbers approaching the summit",
+            "variants": [
+              { "width": 480, "height": 320, "url": "https://media.viator.com/photo/5657-2/480x320.jpg" },
+              { "width": 720, "height": 480, "url": "https://media.viator.com/photo/5657-2/720x480.jpg" }
+            ]
+          }
+        ],
+        "pricing": {
+          "currency": "USD",
+          "summary": {
+            "fromPrice": 248,
+            "fromPriceBeforeDiscount": 295
+          }
+        },
+        "reviews": {
+          "totalReviews": 1284,
+          "combinedAverageRating": 4.84
+        },
+        "duration": {
+          "fixedDurationInMinutes": 210
+        },
+        "destinations": [
+          { "ref": 357, "primary": true }
+        ],
+        "tags": [11930, 21487],
+        "flags": ["FREE_CANCELLATION", "LIKELY_TO_SELL_OUT"],
+        "confirmationType": "INSTANT",
+        "itineraryType": "STANDARD"
+      },
+      {
+        "productCode": "12345PARIS",
+        "title": "Paris Seine cruise with dinner",
+        "description": "Drift past the Eiffel and Notre-Dame at golden hour with a three-course French dinner pairings and live accordion. Departures every 30 minutes from Port de la Bourdonnais.",
+        "productUrl": "https://www.viator.com/tours/Paris/Seine-Dinner-Cruise/d479-12345PARIS?mcid=42383&pid=P00012345&campaign-value=stayscout-homepage",
+        "images": [
+          {
+            "isCover": true,
+            "caption": null,
+            "variants": [
+              { "width": 720, "height": 540, "url": "https://media.viator.com/photo/12345/720x540.jpg" }
+            ]
+          }
+        ],
+        "pricing": {
+          "currency": "USD",
+          "summary": {
+            "fromPrice": 92
+          }
+        },
+        "reviews": {
+          "totalReviews": 38,
+          "combinedAverageRating": 4.2
+        },
+        "duration": {
+          "variableDurationFromMinutes": 90,
+          "variableDurationToMinutes": 150
+        },
+        "destinations": [
+          { "ref": 479, "primary": true }
+        ],
+        "tags": [21495],
+        "flags": ["FREE_CANCELLATION"],
+        "confirmationType": "INSTANT",
+        "itineraryType": "STANDARD"
+      }
+    ]
+  }
+}

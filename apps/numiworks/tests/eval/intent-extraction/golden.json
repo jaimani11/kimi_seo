@@ -1,0 +1,29 @@
+[
+  {
+    "input": "Luxury but walkable Italy trip for 7 days. Family of 4. Budget $6k. Avoid tourist traps. Wants amazing food and views.",
+    "expected": {
+      "destinations": [{ "kind": "curated", "name": "Italy", "country": "IT" }],
+      "duration": { "nights": 7, "flexible": false },
+      "travelers": { "adults": 2, "children": { "count": 2 }, "infants": 0, "groupKind": "family" },
+      "budget": { "kind": "total", "amount": 6000, "currency": "USD", "flexibility": "flexible" },
+      "vibeMust": ["luxury", "walkable", "family-friendly", "foodie", "avoid-tourist-traps"]
+    }
+  },
+  {
+    "input": "Tokyo for a long weekend, just me, foodie, denser the better.",
+    "expected": {
+      "destinations": [{ "kind": "synthesized", "name": "Tokyo", "country": "JP" }],
+      "duration": { "nights": 3, "flexible": true },
+      "travelers": { "adults": 1, "children": { "count": 0 }, "infants": 0, "groupKind": "solo" },
+      "vibeMust": ["foodie", "urban"]
+    }
+  },
+  {
+    "input": "Patagonia in shoulder season, my partner and I, slow pace, mountain views.",
+    "expected": {
+      "destinations": [{ "kind": "synthesized", "name": "Patagonia", "country": "AR" }],
+      "travelers": { "adults": 2, "children": { "count": 0 }, "infants": 0, "groupKind": "couple" },
+      "vibeMust": ["slow", "mountains", "nature"]
+    }
+  }
+]

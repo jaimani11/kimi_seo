@@ -1,0 +1,26 @@
+{
+  "name": "adored-moments-platform",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Multi-brand travel publishing platform — numiworks, gotript, gobookt, stayviaowner, and future brands sharing one codebase.",
+  "packageManager": "pnpm@11.10.0",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "build": "turbo run build",
+    "dev": "turbo run dev --parallel",
+    "lint": "turbo run lint",
+    "test": "turbo run test",
+    "typecheck": "turbo run typecheck",
+    "clean": "turbo run clean && rm -rf node_modules"
+  },
+  "devDependencies": {
+    "turbo": "^2.3.0",
+    "typescript": "^5.7.0"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  }
+}

@@ -1,0 +1,159 @@
+/* ============================================================
+   StayScout Design Tokens - spec §4
+   Two themes (cinematic dark / boutique-sunset light) plus a
+   theme-independent --featured-* set for the marketing break.
+   ============================================================ */
+
+@theme {
+  /* Typography (font families come from next/font; we only declare scale here) */
+  --text-display-xl: 4.5rem;
+  --text-display-lg: 3.5rem;
+  --text-display-md: 2.25rem;
+  --text-display-sm: 1.625rem;
+  --text-body-lg: 1.125rem;
+  --text-body: 1rem;
+  --text-body-sm: 0.875rem;
+  --text-label: 0.75rem;
+  --text-mono: 0.8125rem;
+
+  /* Radii */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --radius-xl: 18px;
+  --radius-2xl: 22px;
+  --radius-full: 9999px;
+
+  /* Motion */
+  --ease-out: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --ease-emphasized: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+  --dur-instant: 100ms;
+  --dur-fast: 200ms;
+  --dur-base: 350ms;
+  --dur-slow: 600ms;
+  --dur-cinematic: 900ms;
+}
+
+/* ============== DARK MODE (default - cinematic) ============== */
+:root,
+:root[data-theme='dark'] {
+  --surface-base: #0b0d10;
+  --surface-raised: #14171c;
+  --surface-elevated: #1a1f28;
+  --surface-overlay: rgba(255, 255, 255, 0.06);
+
+  --ink-primary: #ffffff;
+  --ink-secondary: rgba(255, 255, 255, 0.78);
+  --ink-tertiary: rgba(255, 255, 255, 0.55);
+
+  /* Dark-mode brand stays the same blue family for continuity. */
+  --accent-primary: #4ea1ff;
+  --accent-primary-soft: rgba(78, 161, 255, 0.16);
+  --accent-primary-glow: rgba(78, 161, 255, 0.4);
+  --accent-secondary: #ff7a5c;
+
+  --brand-hero-from: #0b2547;
+  --brand-hero-to: #1664c8;
+
+  /* Warning - used for failure states, cancel-confirm, monitoring alerts.
+     Distinct from accent-secondary (which is a cool counterpoint, not a
+     warning signal). Coral pairs with the cinematic palette. */
+  --accent-warning: #ff8e6b;
+  --accent-warning-soft: rgba(255, 142, 107, 0.1);
+
+  --border-subtle: rgba(255, 255, 255, 0.08);
+  --border-emphasis: rgba(255, 255, 255, 0.14);
+
+  --bloom-warm: radial-gradient(
+    ellipse 80% 60% at 70% 20%,
+    rgba(212, 165, 116, 0.14) 0%,
+    transparent 60%
+  );
+  --bloom-cool: radial-gradient(
+    ellipse 60% 50% at 20% 90%,
+    rgba(80, 120, 200, 0.1) 0%,
+    transparent 60%
+  );
+
+  --elev-card: 0 8px 24px -8px rgb(0 0 0 / 0.5), inset 0 1px 0 rgb(255 255 255 / 0.04);
+  --elev-hero:
+    0 18px 40px -12px rgb(0 0 0 / 0.55), 0 0 0 1px rgb(255 255 255 / 0.06),
+    inset 0 1px 0 rgb(255 255 255 / 0.06);
+
+  color-scheme: dark;
+}
+
+/* ============== LIGHT MODE (affiliate marketplace) ==============
+   Booking.com / Expedia-inspired. Solid white surfaces, deep brand
+   blue for hero band + primary actions, near-black ink at high
+   contrast, coral as the bright attention accent.
+
+   Readability priority — no muddy mid-tones, no italic editorial
+   typography on the hero, no photo backgrounds competing with text.
+   Every text/background pair targets ≥ 4.5:1 contrast.
+*/
+:root[data-theme='light'] {
+  --surface-base: #ffffff;
+  --surface-raised: #f7f8fa;
+  --surface-elevated: #ffffff;
+  --surface-overlay: rgba(12, 20, 38, 0.04);
+
+  --ink-primary: #0c1426;
+  --ink-secondary: #475569;
+  --ink-tertiary: #94a3b8;
+
+  /* Brand blue — deep confident travel-marketplace blue
+     (Booking.com family). Used for primary CTAs + hero band. */
+  --accent-primary: #006ce4;
+  --accent-primary-soft: rgba(0, 108, 228, 0.10);
+  --accent-primary-glow: rgba(0, 108, 228, 0.30);
+
+  /* Attention accent — bright coral that pops against white + blue.
+     Used sparingly: header "Plan Now", urgent badges, urgency chips. */
+  --accent-secondary: #ff5e3a;
+
+  /* Hero band gradient (saturated travel blue). */
+  --brand-hero-from: #003b95;
+  --brand-hero-to: #006ce4;
+
+  --accent-warning: #d04a1f;
+  --accent-warning-soft: rgba(208, 74, 31, 0.10);
+
+  --border-subtle: #e2e8f0;
+  --border-emphasis: #cbd5e1;
+
+  --bloom-warm: radial-gradient(
+    ellipse 80% 60% at 70% 20%,
+    rgba(255, 94, 58, 0.05) 0%,
+    transparent 60%
+  );
+  --bloom-cool: radial-gradient(
+    ellipse 60% 50% at 20% 90%,
+    rgba(0, 108, 228, 0.04) 0%,
+    transparent 60%
+  );
+
+  --elev-card:
+    0 1px 3px rgba(12, 20, 38, 0.06),
+    0 4px 12px rgba(12, 20, 38, 0.06);
+  --elev-hero:
+    0 24px 56px -20px rgba(12, 20, 38, 0.30),
+    0 8px 18px rgba(12, 20, 38, 0.08);
+
+  color-scheme: light;
+}
+
+/* ============== FIXED BOUTIQUE-LIGHT TOKENS ==============
+   For the "Featured stays" marketing section break - keeps boutique
+   identity regardless of global theme. Spec §4.1.
+*/
+:root {
+  --featured-bg: #f4efe6;
+  --featured-bg-raised: #faf6ec;
+  --featured-ink-primary: #2a2a1f;
+  --featured-ink-secondary: rgba(42, 42, 31, 0.65);
+  --featured-accent: #5a6b3f;
+  --featured-accent-clay: #b0552f;
+  --featured-border: rgba(42, 42, 31, 0.14);
+}
