@@ -5,7 +5,8 @@
   "type": "module",
   "exports": {
     "./viator": "./src/route-parser-viator.ts",
-    "./multicategory": "./src/route-parser-multicategory.ts"
+    "./multicategory": "./src/route-parser-multicategory.ts",
+    "./sitemap": "./src/sitemap-render.ts"
   },
   "dependencies": {
     "@adored/seo-data": "workspace:*"
