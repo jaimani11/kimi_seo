@@ -1,7 +1,9 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "framework": "nextjs",
-  "regions": ["iad1"],
+  "regions": [
+    "iad1"
+  ],
   "git": {
     "deploymentEnabled": {
       "main": true
@@ -11,6 +13,10 @@
     {
       "path": "/api/cron/marketing-daily",
       "schedule": "0 13 * * *"
+    },
+    {
+      "path": "/api/cron/marketing-catchup",
+      "schedule": "0 18 * * *"
     }
   ]
 }

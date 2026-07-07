@@ -46,7 +46,7 @@ export type {
   PinterestApiError,
   PinterestStatus,
 } from './pinterest-client';
-export { PinterestClient, pinterestClientFromEnv, checkPinterestStatus } from './pinterest-client';
+export { PinterestClient, pinterestClientFromEnv, checkPinterestStatus, pinterestPostedToday } from './pinterest-client';
 
 export {
   SocialPlatformSchema,

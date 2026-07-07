@@ -87,6 +87,25 @@ export class PinterestClient {
     }));
   }
 
+  /** Newest-first pins on a board — used by the catch-up cron to
+   *  decide whether today's batch already posted. */
+  async listBoardPins(
+    boardId: string,
+    args: { pageSize?: number } = {},
+  ): Promise<Array<{ id: string; createdAt: string }>> {
+    const params = new URLSearchParams();
+    params.set('page_size', String(args.pageSize ?? 5));
+    const res = await this.#request('GET', `/boards/${boardId}/pins?${params.toString()}`);
+    if (!res.ok) throw await this.#errorFrom(res);
+    const body = (await res.json()) as {
+      items?: Array<{ id: string; created_at?: string }>;
+    };
+    return (body.items ?? []).map((p) => ({
+      id: p.id,
+      createdAt: p.created_at ?? '',
+    }));
+  }
+
   async createPin(input: PinterestCreatePinInput): Promise<{ pinId: string; url: string }> {
     const body = {
       board_id: input.boardId,
@@ -211,4 +230,31 @@ export async function checkPinterestStatus(): Promise<PinterestStatus> {
     boards,
     note: 'Token works for reads. Posting requires the pins:write scope, which Pinterest grants after full app review.',
   };
+}
+
+/**
+ * Has anything been pinned to the board on this UTC day?
+ *
+ * Used by the catch-up cron: the board itself is the durable record
+ * of whether today's batch ran (the marketing store is in-memory on
+ * serverless). Returns:
+ *   true  — at least one pin created today (batch ran; skip)
+ *   false — newest pin is older than today (batch missed; run)
+ *   null  — cannot determine (no client / API error); callers should
+ *           SKIP on null to avoid double-posting on flaky reads.
+ */
+export async function pinterestPostedToday(
+  boardId: string,
+  now: Date = new Date(),
+): Promise<boolean | null> {
+  const client = pinterestClientFromEnv();
+  if (!client || !boardId) return null;
+  try {
+    const pins = await client.listBoardPins(boardId, { pageSize: 5 });
+    if (pins.length === 0) return false;
+    const today = now.toISOString().slice(0, 10);
+    return pins.some((p) => (p.createdAt ?? '').slice(0, 10) === today);
+  } catch {
+    return null;
+  }
 }
