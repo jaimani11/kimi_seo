@@ -1,0 +1,39 @@
+/**
+ * @adored/affiliate — shared affiliate URL builders.
+ *
+ * Extraction status:
+ *   allowlist              — shared verbatim (identical in all 4 apps)
+ *   getyourguide           — shared verbatim (identical in 3 apps)
+ *   expedia-multicategory  — brand-parameterized factory; apps bind
+ *                            their label/src/camref from
+ *                            @adored/brand-config
+ *
+ * Still app-local (deliberately, until a second consumer appears or
+ * brand parameterization is designed):
+ *   booking-com-multicategory (gobookt), viator provider (typed
+ *   against app-local core/experience), link builders, go-url.
+ */
+
+export {
+  AFFILIATE_HOST_ALLOWLIST,
+  isAllowedAffiliateHost,
+} from './allowlist';
+
+export type { GygSearchInput } from './getyourguide';
+export {
+  GYG_PARTNER_ID,
+  buildGygSearchUrl,
+  buildGygActivityUrl,
+} from './getyourguide';
+
+export type {
+  ExpediaCategory,
+  ExpediaMultiConfig,
+  CategorySearchInput,
+  ExpediaBrandBinding,
+  ExpediaMulticategory,
+} from './expedia-multicategory';
+export {
+  createExpediaMulticategory,
+  CATEGORY_META,
+} from './expedia-multicategory';

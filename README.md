@@ -40,18 +40,39 @@ pnpm --filter numiworks build
 pnpm build
 ```
 
+## Packages
+
+| Package | What lives here |
+|---------|-----------------|
+| `@adored/brand-config` | One `BrandConfig` per brand: name, domain, siteUrl, colors, affiliate labels + camref, Pinterest board. The "new brand = one file" primitive. |
+| `@adored/seo-data` | Cities (195), rich destination guides (140), Destination Intelligence scores, attraction pages. **Add a city here once → all brands get it.** |
+| `@adored/affiliate` | Host allowlist, GetYourGuide deeplinks, Expedia multi-category **factory** (brand-parameterized: label/`_src`/camref bound from brand-config). |
+| `@adored/marketing` | Marketing schemas, city rotation + popularity weighting, Pinterest v5 client, social content schemas. |
+
+Apps keep thin shim files at their old import paths (`src/lib/seo/cities.ts` → re-export from `@adored/seo-data`) so zero call sites changed during extraction.
+
 ## Migration status
 
 - [x] Workspace skeleton (Turborepo + pnpm)
-- [x] numiworks moved to `apps/numiworks/`
-- [ ] gotript migration
-- [ ] gobookt migration
-- [ ] stayviaowner migration
-- [ ] Extract `packages/seo` (cities + route parser + destination content)
-- [ ] Extract `packages/affiliate` (Expedia + VRBO + Booking + Viator + GYG providers)
-- [ ] Extract `packages/marketing` (Pinterest / Instagram / TikTok scheduler)
-- [ ] Extract `packages/ui` (SiteHeader / SeoPageShell / cards)
-- [ ] Per-brand config file (`brands/{name}.ts` — brand identity, colors, nav, affiliate mix)
+- [x] All 4 apps migrated and building (`pnpm build` → 4/4)
+- [x] `@adored/brand-config` — 4 brands defined; consumed by origin.ts + expedia shims
+- [x] `@adored/seo-data` — cities/guides/scores/attractions shared (gotript/gobookt/stayviaowner gained the ~20 guides they were missing)
+- [x] `@adored/affiliate` — allowlist + GYG + Expedia factory
+- [x] `@adored/marketing` — schemas, rotation, popularity, Pinterest client
+- [x] SITE_URL discipline: `VERCEL_URL` removed from origin.ts + layout metadataBase in all apps
+- [ ] Phase 3b: marketing scheduler/adapters/template-generator behind `createMarketingEngine(brand)` (needs brand DI for CTAs, hashtags, branded URLs, imagery)
+- [ ] `packages/ui` — deferred: headers/pages diverge per brand *by design*; extract only after brand theming tokens exist
+- [ ] Route-parser unification (numiworks's Viator-flavor vs Expedia-family flavor differ meaningfully)
+- [ ] Vercel cutover (see below)
+
+## Vercel cutover (per site, one at a time)
+
+1. Vercel dashboard → the site's project → Settings → Git → Disconnect old repo → Connect `jaimani11/adored-moments-platform`.
+2. Settings → General → **Root Directory** = `apps/<name>` (e.g. `apps/numiworks`). Enable "Include files outside root directory" (needed for workspace packages).
+3. Build command stays `next build` (Vercel auto-detects pnpm workspace + Turborepo).
+4. Env vars: unchanged — they live on the project, not the repo. Add `NEXT_PUBLIC_SITE_URL=https://www.<domain>.com` if not already set.
+5. Deploy → verify prod URLs (home, one `/destinations/x`, one themed slug, `/sitemap.xml`, `/admin/marketing`).
+6. Only after verification: archive the old standalone repo.
 
 Once shared packages are extracted, launching a new brand takes:
 1. Copy `apps/{template}/` → `apps/{new-brand}/`

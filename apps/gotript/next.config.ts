@@ -2,6 +2,12 @@ import type { NextConfig } from 'next';
 
 const config: NextConfig = {
   reactStrictMode: true,
+  transpilePackages: [
+    '@adored/brand-config',
+    '@adored/seo-data',
+    '@adored/affiliate',
+    '@adored/marketing',
+  ],
   poweredByHeader: false,
   // Hide Next.js's dev indicator entirely - the small "N" badge that
   // floats in a corner is distracting during demos and overlaps with

@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { getSiteOrigin } from '@/lib/site/origin';
 import type { ReactNode } from 'react';
 import { cookies } from 'next/headers';
 
@@ -16,9 +17,7 @@ export const metadata: Metadata = {
   title: 'stayviaowner · Find tours, day trips & experiences worldwide',
   description:
     'AI-native travel orchestration. Describe your trip in a sentence; specialized agents handle the rest.',
-  metadataBase: new URL(
-    process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:3000',
-  ),
+  metadataBase: new URL(getSiteOrigin()),
 };
 
 export default async function RootLayout({ children }: { children: ReactNode }) {
