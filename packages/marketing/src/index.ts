@@ -65,3 +65,42 @@ export type {
   SocialContentItem,
   CitySocialPack,
 } from './social-types';
+
+// ── Phase 3b: brand-injected marketing engine ────────────────────
+
+export type {
+  BrandedUrlVariant,
+  BrandedUrlInput,
+  BrandedUrlOptions,
+  BrandedUrlBuilder,
+} from './branded-url';
+export { createBrandedUrlBuilder } from './branded-url';
+
+export type {
+  MarketingAdapter,
+  MarketingAdapterPostInput,
+  MarketingAdapterPostResult,
+} from './adapter-types';
+
+export { InstagramAdapter } from './instagram-adapter';
+export { TikTokAdapter } from './tiktok-adapter';
+export type { PinterestAdapterDeps } from './pinterest-adapter';
+export { BasePinterestAdapter } from './pinterest-adapter';
+
+export type { MarketingStore } from './marketing-store';
+export {
+  InMemoryMarketingStore,
+  getMarketingStore,
+  _resetMarketingStore,
+} from './marketing-store';
+
+export type { TemplateBrand } from './template-generator';
+export { createSocialTemplateGenerator } from './template-generator';
+
+export type {
+  SchedulerStore,
+  MarketingSchedulerDeps,
+  RunSchedulerArgs,
+  MarketingScheduler,
+} from './scheduler';
+export { createMarketingScheduler } from './scheduler';

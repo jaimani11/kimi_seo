@@ -30,8 +30,11 @@
   "dependencies": {
     "@adored/affiliate": "workspace:*",
     "@adored/brand-config": "workspace:*",
+    "@adored/imagery": "workspace:*",
     "@adored/marketing": "workspace:*",
     "@adored/seo-data": "workspace:*",
+    "@adored/seo-routing": "workspace:*",
+    "@adored/ui": "workspace:*",
     "@anthropic-ai/sdk": "^0.95.0",
     "@clerk/nextjs": "^7.3.2",
     "@langchain/core": "^1.1.45",

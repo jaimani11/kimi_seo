@@ -1,0 +1,16 @@
+{
+  "name": "@adored/ui",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "dependencies": {
+    "@adored/brand-config": "workspace:*"
+  },
+  "peerDependencies": {
+    "next": ">=15",
+    "react": ">=18"
+  }
+}

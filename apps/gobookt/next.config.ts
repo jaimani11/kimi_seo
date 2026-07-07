@@ -7,6 +7,9 @@ const config: NextConfig = {
     '@adored/seo-data',
     '@adored/affiliate',
     '@adored/marketing',
+    '@adored/imagery',
+    '@adored/seo-routing',
+    '@adored/ui',
   ],
   poweredByHeader: false,
   // Hide Next.js's dev indicator entirely - the small "N" badge that

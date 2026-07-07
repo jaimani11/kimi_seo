@@ -44,3 +44,11 @@ export {
   allAttractions,
   cityFor,
 } from './attractions';
+
+export type { SeoComparison } from './comparisons';
+export {
+  findComparison,
+  canonicalComparisonSlug,
+  enumerateAllComparisonSlugs,
+  comparisonsForCity,
+} from './comparisons';

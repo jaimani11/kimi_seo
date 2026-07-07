@@ -1,0 +1,13 @@
+{
+  "name": "@adored/seo-routing",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    "./viator": "./src/route-parser-viator.ts",
+    "./multicategory": "./src/route-parser-multicategory.ts"
+  },
+  "dependencies": {
+    "@adored/seo-data": "workspace:*"
+  }
+}

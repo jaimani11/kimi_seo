@@ -23,12 +23,21 @@ importers:
       '@adored/brand-config':
         specifier: workspace:*
         version: link:../../packages/brand-config
+      '@adored/imagery':
+        specifier: workspace:*
+        version: link:../../packages/imagery
       '@adored/marketing':
         specifier: workspace:*
         version: link:../../packages/marketing
       '@adored/seo-data':
         specifier: workspace:*
         version: link:../../packages/seo-data
+      '@adored/seo-routing':
+        specifier: workspace:*
+        version: link:../../packages/seo-routing
+      '@adored/ui':
+        specifier: workspace:*
+        version: link:../../packages/ui
       '@anthropic-ai/sdk':
         specifier: ^0.95.0
         version: 0.95.2(zod@4.4.3)
@@ -141,12 +150,21 @@ importers:
       '@adored/brand-config':
         specifier: workspace:*
         version: link:../../packages/brand-config
+      '@adored/imagery':
+        specifier: workspace:*
+        version: link:../../packages/imagery
       '@adored/marketing':
         specifier: workspace:*
         version: link:../../packages/marketing
       '@adored/seo-data':
         specifier: workspace:*
         version: link:../../packages/seo-data
+      '@adored/seo-routing':
+        specifier: workspace:*
+        version: link:../../packages/seo-routing
+      '@adored/ui':
+        specifier: workspace:*
+        version: link:../../packages/ui
       '@anthropic-ai/sdk':
         specifier: ^0.95.0
         version: 0.95.2(zod@4.4.3)
@@ -259,12 +277,21 @@ importers:
       '@adored/brand-config':
         specifier: workspace:*
         version: link:../../packages/brand-config
+      '@adored/imagery':
+        specifier: workspace:*
+        version: link:../../packages/imagery
       '@adored/marketing':
         specifier: workspace:*
         version: link:../../packages/marketing
       '@adored/seo-data':
         specifier: workspace:*
         version: link:../../packages/seo-data
+      '@adored/seo-routing':
+        specifier: workspace:*
+        version: link:../../packages/seo-routing
+      '@adored/ui':
+        specifier: workspace:*
+        version: link:../../packages/ui
       '@anthropic-ai/sdk':
         specifier: ^0.95.0
         version: 0.95.2(zod@4.4.3)
@@ -377,12 +404,21 @@ importers:
       '@adored/brand-config':
         specifier: workspace:*
         version: link:../../packages/brand-config
+      '@adored/imagery':
+        specifier: workspace:*
+        version: link:../../packages/imagery
       '@adored/marketing':
         specifier: workspace:*
         version: link:../../packages/marketing
       '@adored/seo-data':
         specifier: workspace:*
         version: link:../../packages/seo-data
+      '@adored/seo-routing':
+        specifier: workspace:*
+        version: link:../../packages/seo-routing
+      '@adored/ui':
+        specifier: workspace:*
+        version: link:../../packages/ui
       '@anthropic-ai/sdk':
         specifier: ^0.95.0
         version: 0.95.2(zod@4.4.3)
@@ -491,6 +527,8 @@ importers:
 
   packages/brand-config: {}
 
+  packages/imagery: {}
+
   packages/marketing:
     dependencies:
       '@adored/seo-data':
@@ -501,6 +539,24 @@ importers:
         version: 4.4.3
 
   packages/seo-data: {}
+
+  packages/seo-routing:
+    dependencies:
+      '@adored/seo-data':
+        specifier: workspace:*
+        version: link:../seo-data
+
+  packages/ui:
+    dependencies:
+      '@adored/brand-config':
+        specifier: workspace:*
+        version: link:../brand-config
+      next:
+        specifier: '>=15'
+        version: 16.2.10(@babel/core@7.29.7)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
+      react:
+        specifier: '>=18'
+        version: 19.2.7
 
 packages:
 

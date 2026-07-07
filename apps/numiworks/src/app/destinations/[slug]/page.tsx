@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { getSiteOrigin } from '@lib/site/origin';
 import { notFound } from 'next/navigation';
 import { ITALIAN_DESTINATIONS, findDestinationBySlugOrAlias } from '@lib/curation/destinations';
 import { resolveDestinationPhoto } from '@lib/imagery/destination-photo';
@@ -49,9 +50,9 @@ export function generateStaticParams() {
 }
 
 function siteUrl(): string {
-  if (process.env.NEXT_PUBLIC_APP_URL) return process.env.NEXT_PUBLIC_APP_URL;
-  if (process.env.VERCEL_URL) return `https://${process.env.VERCEL_URL}`;
-  return 'http://localhost:3000';
+  // Delegates to the canonical origin resolver - VERCEL_URL must
+  // never leak into robots/sitemap/canonical output.
+  return getSiteOrigin();
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
