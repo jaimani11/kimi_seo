@@ -83,7 +83,7 @@ export const STAYVIAOWNER: BrandConfig = {
     expediaLabel: 'stayviaowner',
     expediaCamref: '1110lFruB',
   },
-  // Board not created yet — set PINTEREST_BOARD_ID env once it exists.
+  pinterestBoardId: '825988456598212255',
 };
 
 export const ALL_BRANDS: readonly BrandConfig[] = [
