@@ -21,3 +21,9 @@ onlyBuiltDependencies:
   - prisma
   - sharp
   - unrs-resolver
+
+# pnpm 11 pre-run deps check trips over intentionally-skipped build
+# scripts (see onlyBuiltDependencies note) and short-circuits
+# `pnpm build` before turbo runs. Key exists since pnpm 10, so
+# Vercel's installer parses it fine.
+verifyDepsBeforeRun: false
