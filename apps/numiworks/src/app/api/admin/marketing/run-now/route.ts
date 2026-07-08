@@ -1,7 +1,7 @@
 import type { NextRequest } from 'next/server';
 import { requireAdmin } from '@lib/admin/require-admin';
 import { requirePasswordAdmin } from '@lib/admin/require-password-admin';
-import { runMarketingScheduler } from '@lib/marketing/scheduler';
+import { runMarketingScheduler, getRecentPosts } from '@lib/marketing/scheduler';
 import { MARKETING_PLATFORMS, type MarketingPlatform } from '@lib/marketing/types';
 
 export const runtime = 'nodejs';
@@ -37,5 +37,31 @@ export async function POST(req: NextRequest): Promise<Response> {
     ...(onlyPlatform ? { onlyPlatform } : {}),
     forceRun: body.forceRun ?? true,
   });
-  return Response.json({ ok: true, summary });
+
+  // Surface the concrete per-pin outcome from THIS run. The store is
+  // in-memory on serverless, so the errors only exist inside this same
+  // lambda — read them here or lose them. Deduped error messages make
+  // a failing run self-diagnosing instead of a silent "failed: 10".
+  const recent = await getRecentPosts(30);
+  const justNow = recent.filter((p) => p.scheduledFor === summary.startedAt);
+  const errorCounts = new Map<string, number>();
+  let sampleExternalUrl: string | undefined;
+  for (const p of justNow) {
+    if (p.status === 'failed' && p.errorMessage) {
+      errorCounts.set(p.errorMessage, (errorCounts.get(p.errorMessage) ?? 0) + 1);
+    }
+    if (p.status === 'posted' && p.externalUrl && !sampleExternalUrl) {
+      sampleExternalUrl = p.externalUrl;
+    }
+  }
+  const errors = [...errorCounts.entries()]
+    .sort((a, b) => b[1] - a[1])
+    .map(([message, count]) => ({ message, count }));
+
+  return Response.json({
+    ok: true,
+    summary,
+    ...(errors.length > 0 ? { errors } : {}),
+    ...(sampleExternalUrl ? { samplePinUrl: sampleExternalUrl } : {}),
+  });
 }
