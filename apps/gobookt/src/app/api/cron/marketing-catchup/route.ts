@@ -3,6 +3,10 @@ import { runMarketingScheduler } from '@lib/marketing/scheduler';
 import { pinterestPostedToday } from '@adored/marketing';
 
 export const runtime = 'nodejs';
+// Full posting run: parallel pack generation + serial pin posting.
+// Hobby's 10s default kills the run before the first pin — raise to
+// the plan ceiling.
+export const maxDuration = 60;
 export const dynamic = 'force-dynamic';
 
 /**

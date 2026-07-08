@@ -134,24 +134,30 @@ export function createMarketingScheduler(
       }
     }
 
+    // Packs are generated IN PARALLEL with a hard per-pack timeout.
+    // The serverless run has a 60s ceiling (Vercel Hobby) — 10 serial
+    // LLM calls blew straight through it and the function was killed
+    // before the first pin ever posted. Parallel generation costs one
+    // LLM latency total, and anything slower than the budget degrades
+    // to the deterministic template instead of eating the whole run.
+    const PACK_TIMEOUT_MS = 8_000;
     const packs = new Map<string, CitySocialPack>();
-    for (const slug of cityUnion) {
-      const city = findCityBySlug(slug) ?? SEO_CITIES[0]!;
-      let pack: CitySocialPack;
-      try {
-        pack = await deps.generatePack(city);
-      } catch (err) {
-        // The LLM-backed generator falls back to template internally,
-        // but a programmer bug or import-time failure could still
-        // throw. Belt-and-braces: catch and force the template path.
-        console.warn(
-          '[marketing/scheduler] generatePack threw, falling back to template',
-          { slug, error: err instanceof Error ? err.message : String(err) },
-        );
-        pack = deps.fallbackPack(city);
-      }
-      packs.set(slug, pack);
-    }
+    await Promise.all(
+      cityUnion.map(async (slug) => {
+        const city = findCityBySlug(slug) ?? SEO_CITIES[0]!;
+        let pack: CitySocialPack;
+        try {
+          pack = await withTimeout(deps.generatePack(city), PACK_TIMEOUT_MS);
+        } catch (err) {
+          console.warn(
+            '[marketing/scheduler] generatePack slow or threw — template fallback',
+            { slug, error: err instanceof Error ? err.message : String(err) },
+          );
+          pack = deps.fallbackPack(city);
+        }
+        packs.set(slug, pack);
+      }),
+    );
 
     const perPlatformSummary: MarketingRunSummary['perPlatform'] = {
       pinterest: { attempted: 0, posted: 0, failed: 0, skipped: 0 },
@@ -282,6 +288,26 @@ function shouldRun(cfg: MarketingPlatformConfig, forceRun: boolean): boolean {
   if (cfg.dailyCount <= 0) return false;
   if (forceRun) return true;
   return cfg.enabled;
+}
+
+/** Reject after `ms` so one slow upstream call can't eat the run budget. */
+function withTimeout<T>(promise: Promise<T>, ms: number): Promise<T> {
+  return new Promise<T>((resolve, reject) => {
+    const timer = setTimeout(
+      () => reject(new Error(`timed out after ${ms}ms`)),
+      ms,
+    );
+    promise.then(
+      (v) => {
+        clearTimeout(timer);
+        resolve(v);
+      },
+      (e) => {
+        clearTimeout(timer);
+        reject(e);
+      },
+    );
+  });
 }
 
 /**
