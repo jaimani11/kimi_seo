@@ -1,5 +1,6 @@
 import type { NextRequest } from 'next/server';
 import { runMarketingScheduler } from '@lib/marketing/scheduler';
+import { pinterestPostedToday } from '@adored/marketing';
 
 /**
  * GET /api/cron/marketing-daily
@@ -25,9 +26,21 @@ export async function GET(req: NextRequest): Promise<Response> {
   if (!isAuthorized(req)) {
     return Response.json({ error: 'unauthorized' }, { status: 401 });
   }
+  // Idempotency guard — same durable-record check the catch-up cron
+  // uses. An admin "Run now" earlier in the day (or a retried cron)
+  // must not double-post; the board is the source of truth. Unlike
+  // the catch-up, an UNVERIFIABLE board (null) still runs: this is
+  // the primary daily and a flaky read shouldn't cost the whole day.
+  // (Pinterest is the only live adapter today — revisit the guard's
+  // scope when Instagram/TikTok go live.)
+  const boardId = (process.env.PINTEREST_BOARD_ID ?? '').trim();
+  const posted = await pinterestPostedToday(boardId);
+  if (posted === true) {
+    return Response.json({ ok: true, action: 'skip', reason: 'already posted today' });
+  }
   try {
     const summary = await runMarketingScheduler({});
-    return Response.json({ ok: true, summary });
+    return Response.json({ ok: true, action: 'ran', summary });
   } catch (err) {
     const message = err instanceof Error ? err.message : String(err);
     console.error('[cron/marketing-daily] scheduler threw', err);
