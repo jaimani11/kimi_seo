@@ -40,16 +40,36 @@ export interface PinterestCreatePinInput {
   imageUrl: string;
 }
 
-export interface PinterestApiError {
-  status: number;
+/**
+ * A real Error subclass — NOT a plain object. It was previously an
+ * interface, so `throw errorObject` produced something where
+ * `err instanceof Error` was false and `String(err)` was the useless
+ * "[object Object]". The scheduler serialized exactly that into the
+ * failed-post record, hiding every real Pinterest message. Extending
+ * Error means `err.message` and `instanceof` both work while the extra
+ * fields (status/code/isInsufficientScope) ride along.
+ */
+export class PinterestApiError extends Error {
+  readonly status: number;
   /** Pinterest's error code, when their JSON body carries one. */
-  code?: number;
-  /** Human-readable message — Pinterest's, ours, or the raw body. */
-  message: string;
+  readonly code?: number;
   /** True when the request looks like a scope issue (insufficient
    *  permissions) rather than a malformed-request or auth failure.
    *  Lets the admin UI show "waiting for pins:write scope" specifically. */
-  isInsufficientScope: boolean;
+  readonly isInsufficientScope: boolean;
+
+  constructor(args: {
+    status: number;
+    code?: number;
+    message: string;
+    isInsufficientScope: boolean;
+  }) {
+    super(args.message);
+    this.name = 'PinterestApiError';
+    this.status = args.status;
+    if (args.code !== undefined) this.code = args.code;
+    this.isInsufficientScope = args.isInsufficientScope;
+  }
 }
 
 export class PinterestClient {
@@ -148,24 +168,30 @@ export class PinterestClient {
 
   async #errorFrom(res: Response): Promise<PinterestApiError> {
     let payload: { code?: number; message?: string } = {};
+    let rawBody = '';
     try {
-      payload = (await res.json()) as typeof payload;
+      rawBody = await res.text();
+      payload = JSON.parse(rawBody) as typeof payload;
     } catch {
-      // Body wasn't JSON — keep going with status info only.
+      // Body wasn't JSON — fall back to status + any raw text we got.
     }
-    const message = payload.message ?? `HTTP ${res.status} ${res.statusText}`;
+    const message =
+      payload.message ??
+      (rawBody.trim().length > 0
+        ? `HTTP ${res.status}: ${rawBody.slice(0, 200)}`
+        : `HTTP ${res.status} ${res.statusText}`);
     const code = payload.code;
     // Pinterest's "insufficient scope" surfaces variably: 401 + code 7
     // or 403 with a message that includes "scope". Catch both.
     const isInsufficientScope =
       (res.status === 401 || res.status === 403) &&
       (code === 7 || /scope/i.test(message));
-    return {
+    return new PinterestApiError({
       status: res.status,
       ...(code !== undefined ? { code } : {}),
       message,
       isInsufficientScope,
-    };
+    });
   }
 }
 
