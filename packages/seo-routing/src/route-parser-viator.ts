@@ -7,6 +7,10 @@ import {
   enumerateAllComparisonSlugs,
   findComparison,
   type SeoComparison,
+  findClimate,
+  findDestinationGuide,
+  MONTH_SLUGS,
+  monthIndexFromSlug,
 } from '@adored/seo-data';
 
 /**
@@ -52,7 +56,11 @@ export type SeoRouteMatch =
   | { kind: 'things-to-do'; city: SeoCity }
   | { kind: 'themed-list'; city: SeoCity; theme: ThemedListTheme }
   | { kind: 'weekend'; city: SeoCity }
-  | { kind: 'comparison'; comparison: SeoComparison };
+  | { kind: 'comparison'; comparison: SeoComparison }
+  | { kind: 'best-time'; city: SeoCity }
+  | { kind: 'weather-month'; city: SeoCity; monthIndex: number }
+  | { kind: 'where-to-stay'; city: SeoCity }
+  | { kind: 'where-to-go-month'; monthIndex: number };
 
 const ITINERARY_RE = /^([a-z][a-z0-9-]*)-(\d+)-day-itinerary$/;
 const THINGS_TO_DO_RE = /^things-to-do-in-([a-z][a-z0-9-]*)$/;
@@ -78,6 +86,18 @@ const BACHELOR_PARTY_RE = /^bachelor-party-in-([a-z][a-z0-9-]*)$/;
 const BACHELORETTE_PARTY_RE = /^bachelorette-party-in-([a-z][a-z0-9-]*)$/;
 const WEEKEND_RE = /^weekend-in-([a-z][a-z0-9-]*)$/;
 const COMPARISON_RE = /^([a-z][a-z0-9-]*)-vs-([a-z][a-z0-9-]*)$/;
+// Climate-powered surfaces (Phase A data). Month alternation keeps the
+// weather shape unambiguous against every other suffix pattern.
+const MONTH_ALT = MONTH_SLUGS.join('|');
+const BEST_TIME_RE = /^best-time-to-visit-([a-z][a-z0-9-]*)$/;
+const WHERE_TO_STAY_RE = /^where-to-stay-in-([a-z][a-z0-9-]*)$/;
+const WEATHER_MONTH_RE = new RegExp(`^([a-z][a-z0-9-]*)-weather-in-(${MONTH_ALT})$`);
+const WHERE_TO_GO_RE = new RegExp(`^where-to-go-in-(${MONTH_ALT})$`);
+
+/** Guide neighborhoods make a where-to-stay page; require enough to rank. */
+function whereToStayEligible(citySlug: string): boolean {
+  return (findDestinationGuide(citySlug)?.neighborhoods.length ?? 0) >= 3;
+}
 
 export function parseSeoSlug(slug: string): SeoRouteMatch | null {
   if (typeof slug !== 'string' || slug.length === 0 || slug.length > 80) {
@@ -102,6 +122,37 @@ export function parseSeoSlug(slug: string): SeoRouteMatch | null {
     // matches a `*-vs-*` slug, so this almost always returns null
     // overall, but the fall-through keeps the parser permissive in
     // case a future slug shape ever overlaps.
+  }
+
+  // Climate surfaces — prefix/suffix shapes are distinct from every
+  // legacy pattern, but run them early to keep "specific first".
+  const whereToGo = WHERE_TO_GO_RE.exec(slug);
+  if (whereToGo) {
+    const monthIndex = monthIndexFromSlug(whereToGo[1] ?? '');
+    if (monthIndex === null) return null;
+    return { kind: 'where-to-go-month', monthIndex };
+  }
+
+  const whereToStay = WHERE_TO_STAY_RE.exec(slug);
+  if (whereToStay) {
+    const city = findCityBySlug(whereToStay[1] ?? '');
+    if (!city || !whereToStayEligible(city.slug)) return null;
+    return { kind: 'where-to-stay', city };
+  }
+
+  const bestTime = BEST_TIME_RE.exec(slug);
+  if (bestTime) {
+    const city = findCityBySlug(bestTime[1] ?? '');
+    if (!city || !findClimate(city.slug)) return null;
+    return { kind: 'best-time', city };
+  }
+
+  const weatherMonth = WEATHER_MONTH_RE.exec(slug);
+  if (weatherMonth) {
+    const city = findCityBySlug(weatherMonth[1] ?? '');
+    const monthIndex = monthIndexFromSlug(weatherMonth[2] ?? '');
+    if (!city || monthIndex === null || !findClimate(city.slug)) return null;
+    return { kind: 'weather-month', city, monthIndex };
   }
 
   const weekend = WEEKEND_RE.exec(slug);
@@ -266,6 +317,12 @@ export function parseSeoSlug(slug: string): SeoRouteMatch | null {
  */
 export function buildCitySeoLinks(city: SeoCity): Array<{ label: string; href: string }> {
   return [
+    ...(findClimate(city.slug)
+      ? [{ label: `Best time to visit ${city.name}`, href: `/best-time-to-visit-${city.slug}` }]
+      : []),
+    ...(whereToStayEligible(city.slug)
+      ? [{ label: `Where to stay in ${city.name}`, href: `/where-to-stay-in-${city.slug}` }]
+      : []),
     { label: `Things to do in ${city.name}`, href: `/things-to-do-in-${city.slug}` },
     { label: `Best family activities in ${city.name}`, href: `/best-family-activities-in-${city.slug}` },
     { label: `Best food tours in ${city.name}`, href: `/best-food-tours-in-${city.slug}` },
@@ -300,7 +357,19 @@ export function buildCitySeoLinks(city: SeoCity): Array<{ label: string; href: s
  */
 export function enumerateAllSeoSlugs(): string[] {
   const out: string[] = [];
+  for (const month of MONTH_SLUGS) {
+    out.push(`where-to-go-in-${month}`);
+  }
   for (const city of SEO_CITIES) {
+    if (findClimate(city.slug)) {
+      out.push(`best-time-to-visit-${city.slug}`);
+      for (const month of MONTH_SLUGS) {
+        out.push(`${city.slug}-weather-in-${month}`);
+      }
+    }
+    if (whereToStayEligible(city.slug)) {
+      out.push(`where-to-stay-in-${city.slug}`);
+    }
     out.push(`things-to-do-in-${city.slug}`);
     out.push(`best-family-activities-in-${city.slug}`);
     out.push(`best-food-tours-in-${city.slug}`);

@@ -49,6 +49,29 @@ export {
 export type { CityClimate } from './climate-data';
 export { CITY_CLIMATE, MONTH_LABELS, findClimate } from './climate-data';
 
+export type {
+  MonthSlug,
+  ClimateMonth,
+  MonthVerdict,
+  RatedMonth,
+  MonthCityRanking,
+} from './climate-insights';
+export {
+  MONTH_SLUGS,
+  MONTH_NAMES,
+  monthIndexFromSlug,
+  monthSlug,
+  monthName,
+  cToF,
+  monthComfortScore,
+  monthVerdict,
+  rateMonths,
+  bestMonthIndices,
+  packingList,
+  monthBlurb,
+  rankCitiesForMonth,
+} from './climate-insights';
+
 export type { NeighborhoodPoi } from './poi-coords';
 export { NEIGHBORHOOD_COORDS, findNeighborhoodPois } from './poi-coords';
 

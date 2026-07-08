@@ -22,6 +22,17 @@ import {
   ComparisonSeoPage,
   buildComparisonJsonLd,
 } from '@/features/seo/comparison-seo-page';
+import {
+  BestTimeSeoPage,
+  buildBestTimeJsonLd,
+  WeatherMonthSeoPage,
+  buildWeatherMonthJsonLd,
+  WhereToStaySeoPage,
+  buildWhereToStayJsonLd,
+  WhereToGoMonthSeoPage,
+  buildWhereToGoMonthJsonLd,
+} from '@/features/seo/climate-seo-pages';
+import { findClimate, findDestinationGuide, monthName } from '@adored/seo-data';
 import type { Plan } from '@lib/plan/types';
 import type { Experience } from '@core/experience';
 
@@ -65,15 +76,77 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   // Resolve a destination photo for the Open Graph card. Pinterest,
   // Facebook, X and Slack all read this — without it, rich pins fall
   // back to the pin's own image (no page-context photo).
-  const ogCity = parsed.kind === 'comparison' ? parsed.comparison.a : parsed.city;
-  const ogPhoto = resolveDestinationPhoto({
-    name: ogCity.name,
-    country: ogCity.countryCode,
-    ...(ogCity.region ? { region: ogCity.region } : {}),
-  });
-  const ogImages = [
-    { url: ogPhoto.url, width: 1200, height: 630, alt: ogCity.name },
-  ];
+  const ogCity =
+    parsed.kind === 'comparison'
+      ? parsed.comparison.a
+      : parsed.kind === 'where-to-go-month'
+        ? null
+        : parsed.city;
+  const ogImages = ogCity
+    ? [
+        {
+          url: resolveDestinationPhoto({
+            name: ogCity.name,
+            country: ogCity.countryCode,
+            ...(ogCity.region ? { region: ogCity.region } : {}),
+          }).url,
+          width: 1200,
+          height: 630,
+          alt: ogCity.name,
+        },
+      ]
+    : undefined;
+
+  if (parsed.kind === 'best-time') {
+    const title = `Best Time to Visit ${parsed.city.name}: Month by Month · numiworks`;
+    const description = `When to visit ${parsed.city.name}, ${parsed.city.countryName} — monthly highs and lows, rain days, and an honest verdict for all 12 months, from 5-year climate normals.`;
+    return {
+      title,
+      description,
+      alternates: { canonical },
+      openGraph: { title, description, url: canonical, type: 'article', images: ogImages },
+      twitter: { card: 'summary_large_image', title, description, images: ogImages },
+    };
+  }
+
+  if (parsed.kind === 'weather-month') {
+    const m = findClimate(parsed.city.slug)?.months[parsed.monthIndex];
+    const title = `${parsed.city.name} Weather in ${monthName(parsed.monthIndex)} · numiworks`;
+    const description = m
+      ? `${parsed.city.name} in ${monthName(parsed.monthIndex)}: average highs of ${m[0]}°C, lows of ${m[1]}°C, and ~${m[2]} rain days — plus what to pack and whether it's a good month to go.`
+      : `${parsed.city.name} weather in ${monthName(parsed.monthIndex)} — temperatures, rain, and what to pack.`;
+    return {
+      title,
+      description,
+      alternates: { canonical },
+      openGraph: { title, description, url: canonical, type: 'article', images: ogImages },
+      twitter: { card: 'summary_large_image', title, description, images: ogImages },
+    };
+  }
+
+  if (parsed.kind === 'where-to-stay') {
+    const title = `Where to Stay in ${parsed.city.name}: Best Areas & Neighborhoods · numiworks`;
+    const description = `The best neighborhoods to base yourself in ${parsed.city.name}, ${parsed.city.countryName} — ranked, mapped, with walking distances from the center.`;
+    return {
+      title,
+      description,
+      alternates: { canonical },
+      openGraph: { title, description, url: canonical, type: 'article', images: ogImages },
+      twitter: { card: 'summary_large_image', title, description, images: ogImages },
+    };
+  }
+
+  if (parsed.kind === 'where-to-go-month') {
+    const title = `Where to Go in ${monthName(parsed.monthIndex)}: Destinations Ranked by Weather · numiworks`;
+    const description = `Every destination we cover, ranked for ${monthName(parsed.monthIndex)} by daytime comfort and rain days — computed from 5-year climate normals.`;
+    return {
+      title,
+      description,
+      alternates: { canonical },
+      openGraph: { title, description, url: canonical, type: 'website' },
+      twitter: { card: 'summary', title, description },
+    };
+  }
 
   if (parsed.kind === 'itinerary') {
     const title = `${parsed.days}-Day ${parsed.city.name} Itinerary · numiworks`;
@@ -142,6 +215,92 @@ export default async function ProgrammaticSeoPage({ params }: PageProps) {
   if (!parsed) notFound();
 
   const canonical = canonicalUrl(`/${slug}`);
+
+  if (parsed.kind === 'where-to-go-month') {
+    return (
+      <>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: buildWhereToGoMonthJsonLd({
+              monthIndex: parsed.monthIndex,
+              canonical,
+              siteUrl: canonicalUrl('/').replace(/\/$/, ''),
+            }),
+          }}
+        />
+        <WhereToGoMonthSeoPage monthIndex={parsed.monthIndex} />
+      </>
+    );
+  }
+
+  if (parsed.kind === 'best-time') {
+    const climate = findClimate(parsed.city.slug);
+    if (!climate) notFound();
+    return (
+      <>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: buildBestTimeJsonLd({ city: parsed.city, climate, canonical }),
+          }}
+        />
+        <BestTimeSeoPage
+          city={parsed.city}
+          climate={climate}
+          guide={findDestinationGuide(parsed.city.slug)}
+        />
+      </>
+    );
+  }
+
+  if (parsed.kind === 'weather-month') {
+    const climate = findClimate(parsed.city.slug);
+    if (!climate) notFound();
+    return (
+      <>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: buildWeatherMonthJsonLd({
+              city: parsed.city,
+              monthIndex: parsed.monthIndex,
+              climate,
+              canonical,
+            }),
+          }}
+        />
+        <WeatherMonthSeoPage
+          city={parsed.city}
+          monthIndex={parsed.monthIndex}
+          climate={climate}
+        />
+      </>
+    );
+  }
+
+  if (parsed.kind === 'where-to-stay') {
+    const guide = findDestinationGuide(parsed.city.slug);
+    if (!guide) notFound();
+    return (
+      <>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: buildWhereToStayJsonLd({ city: parsed.city, guide, canonical }),
+          }}
+        />
+        <WhereToStaySeoPage
+          city={parsed.city}
+          guide={guide}
+          stayCta={{
+            label: `See stays & experiences in ${parsed.city.name}`,
+            href: `/things-to-do-in-${parsed.city.slug}`,
+          }}
+        />
+      </>
+    );
+  }
 
   if (parsed.kind === 'itinerary' || parsed.kind === 'weekend') {
     const city = parsed.city;
