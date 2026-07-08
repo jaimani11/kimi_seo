@@ -232,7 +232,7 @@ export function createMarketingScheduler(
             await store.updatePost({
               id: stored.id,
               status: 'failed',
-              errorMessage: err instanceof Error ? err.message : String(err),
+              errorMessage: formatPostError(err),
             });
             perPlatformSummary[platform].failed += 1;
           }
@@ -288,6 +288,31 @@ function shouldRun(cfg: MarketingPlatformConfig, forceRun: boolean): boolean {
   if (cfg.dailyCount <= 0) return false;
   if (forceRun) return true;
   return cfg.enabled;
+}
+
+/**
+ * Flatten an adapter error into a diagnosable one-liner. Adapter
+ * errors (e.g. PinterestApiError) carry status/code/isInsufficientScope
+ * beyond `.message`; fold them in so a failed run is self-explaining
+ * ("Authentication failed. · HTTP 403 · insufficient_scope") instead
+ * of a bare message that can't tell a scope problem from a bad token.
+ */
+function formatPostError(err: unknown): string {
+  if (err && typeof err === 'object') {
+    const e = err as {
+      message?: string;
+      status?: number;
+      code?: number;
+      isInsufficientScope?: boolean;
+    };
+    const parts: string[] = [];
+    if (e.message) parts.push(e.message);
+    if (typeof e.status === 'number') parts.push(`HTTP ${e.status}`);
+    if (typeof e.code === 'number') parts.push(`code ${e.code}`);
+    if (e.isInsufficientScope) parts.push('insufficient_scope');
+    if (parts.length > 0) return parts.join(' · ');
+  }
+  return err instanceof Error ? err.message : String(err);
 }
 
 /** Reject after `ms` so one slow upstream call can't eat the run budget. */

@@ -60,6 +60,7 @@ export async function POST(req: NextRequest): Promise<Response> {
 
   return Response.json({
     ok: true,
+    diag: 3, // bump on each diagnostic deploy so watchers detect it
     summary,
     ...(errors.length > 0 ? { errors } : {}),
     ...(sampleExternalUrl ? { samplePinUrl: sampleExternalUrl } : {}),
