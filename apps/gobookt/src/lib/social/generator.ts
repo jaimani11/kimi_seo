@@ -11,9 +11,10 @@ import { CitySocialPackSchema, type CitySocialPack } from './types';
  * Three modes, picked in order:
  *
  *   1. Static sample if available (Tokyo ships one for free).
- *   2. LLM mode (ANTHROPIC_API_KEY set) — richer voice, more variety.
- *   3. Template mode (no key) — pulls from DESTINATION_GUIDES, builds
- *      platform-appropriate scripts deterministically. Always works.
+ *   2. LLM mode (opt-in via MARKETING_LLM_PACKS=true) — richer voice.
+ *   3. Template mode (DEFAULT) — pulls from DESTINATION_GUIDES, builds
+ *      platform-appropriate scripts deterministically. Always works,
+ *      costs nothing, and is the default so daily posting is free.
  *
  * The two non-static modes both run server-side; this file is safe to
  * import from a `'use server'` route handler.
@@ -38,8 +39,15 @@ export async function generateCitySocialPack(
     if (sample) return sample;
   }
 
-  // (2) LLM mode
-  if (!opts.forceTemplate && process.env.ANTHROPIC_API_KEY) {
+  // (2) LLM mode — OFF by default. The deterministic template (mode 3)
+  // pulls real guide facts and reads well, so a fresh LLM pack per city
+  // per day (~$40/mo across all four brands) isn't worth it. Set
+  // MARKETING_LLM_PACKS=true to opt back into the richer AI voice.
+  if (
+    !opts.forceTemplate &&
+    process.env.ANTHROPIC_API_KEY &&
+    process.env.MARKETING_LLM_PACKS === 'true'
+  ) {
     try {
       return await generateWithAnthropic(city);
     } catch (err) {
@@ -81,7 +89,7 @@ async function generateWithAnthropic(city: SeoCity): Promise<CitySocialPack> {
     model: 'claude-haiku-4-5',
     system: SOCIAL_GENERATION_SYSTEM,
     messages: [{ role: 'user', content: userPrompt }],
-    maxTokens: 6000,
+    maxTokens: 2048,
     temperature: 0.6,
     responseSchema: CitySocialPackSchema,
   });
