@@ -615,6 +615,51 @@ function PinterestConnectionPanel({ status }: { status: PinterestStatus }) {
         </span>
       </div>
       <div className="mt-2">{body}</div>
+
+      {/* Connect / reconnect via OAuth — this is the authentication
+        * moment shown in the Pinterest Standard-access demo video, and
+        * the one-click way to mint the durable refresh token. */}
+      <div className="mt-4 flex flex-wrap items-center gap-3">
+        <a
+          href="/api/pinterest/oauth/start"
+          style={{
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: '0.5rem',
+            padding: '0.6rem 1.15rem',
+            borderRadius: '0.5rem',
+            background: '#e60023',
+            color: '#ffffff',
+            fontFamily: 'var(--font-inter)',
+            fontSize: '0.85rem',
+            fontWeight: 700,
+            textDecoration: 'none',
+          }}
+        >
+          <span
+            aria-hidden
+            style={{
+              display: 'grid',
+              placeItems: 'center',
+              width: '1.1rem',
+              height: '1.1rem',
+              borderRadius: '999px',
+              background: '#ffffff',
+              color: '#e60023',
+              fontSize: '0.72rem',
+              fontWeight: 800,
+            }}
+          >
+            P
+          </span>
+          {status.state === 'no-token' ? 'Connect Pinterest' : 'Reconnect Pinterest'}
+        </a>
+        <span style={{ ...panelTextStyle, fontSize: '0.72rem', color: 'var(--ink-tertiary)' }}>
+          Opens Pinterest&apos;s secure authorize screen (OAuth). Needs{' '}
+          <code style={inlineCodeStyle}>PINTEREST_APP_ID</code> +{' '}
+          <code style={inlineCodeStyle}>PINTEREST_APP_SECRET</code> in Vercel.
+        </span>
+      </div>
     </section>
   );
 }
