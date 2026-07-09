@@ -42,6 +42,7 @@ import {
   buildWhereToGoMonthJsonLd,
 } from '@/features/seo/climate-seo-pages';
 import { findClimate, findDestinationGuide, monthName } from '@adored/seo-data';
+import { buildExpediaCategoryUrl } from '@lib/affiliate/expedia-multicategory';
 import type { Plan } from '@lib/plan/types';
 import type { Experience } from '@core/experience';
 
@@ -402,6 +403,14 @@ export default async function ProgrammaticSeoPage({ params }: PageProps) {
           city={parsed.city}
           climate={climate}
           guide={findDestinationGuide(parsed.city.slug)}
+          bookCta={{
+            label: `Search vacation rentals in ${parsed.city.name}`,
+            href: buildExpediaCategoryUrl('vacation-rentals', {
+              destination: `${parsed.city.name}, ${parsed.city.countryName}`,
+            }),
+            external: true,
+            blurb: `Whole homes, villas and cabins in ${parsed.city.name} on VRBO — more space, kitchens and privacy than a hotel.`,
+          }}
         />
       </>
     );
@@ -427,6 +436,14 @@ export default async function ProgrammaticSeoPage({ params }: PageProps) {
           city={parsed.city}
           monthIndex={parsed.monthIndex}
           climate={climate}
+          bookCta={{
+            label: `Search vacation rentals in ${parsed.city.name}`,
+            href: buildExpediaCategoryUrl('vacation-rentals', {
+              destination: `${parsed.city.name}, ${parsed.city.countryName}`,
+            }),
+            external: true,
+            blurb: `Whole homes, villas and cabins in ${parsed.city.name} on VRBO — more space, kitchens and privacy than a hotel.`,
+          }}
         />
       </>
     );

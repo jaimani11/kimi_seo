@@ -402,6 +402,11 @@ export default async function ProgrammaticSeoPage({ params }: PageProps) {
           city={parsed.city}
           climate={climate}
           guide={findDestinationGuide(parsed.city.slug)}
+          bookCta={{
+            label: `Compare hotels in ${parsed.city.name}`,
+            href: `/hotels-in-${parsed.city.slug}`,
+            blurb: `Find and compare the best-value ${parsed.city.name} hotels on Booking.com.`,
+          }}
         />
       </>
     );
@@ -427,6 +432,11 @@ export default async function ProgrammaticSeoPage({ params }: PageProps) {
           city={parsed.city}
           monthIndex={parsed.monthIndex}
           climate={climate}
+          bookCta={{
+            label: `Compare hotels in ${parsed.city.name}`,
+            href: `/hotels-in-${parsed.city.slug}`,
+            blurb: `Find and compare the best-value ${parsed.city.name} hotels on Booking.com.`,
+          }}
         />
       </>
     );

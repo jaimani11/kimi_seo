@@ -249,6 +249,11 @@ export default async function ProgrammaticSeoPage({ params }: PageProps) {
           city={parsed.city}
           climate={climate}
           guide={findDestinationGuide(parsed.city.slug)}
+          bookCta={{
+            label: `Book experiences in ${parsed.city.name}`,
+            href: `/things-to-do-in-${parsed.city.slug}`,
+            blurb: `Top-rated tours, skip-the-line tickets and day trips in ${parsed.city.name}, bookable through Viator.`,
+          }}
         />
       </>
     );
@@ -274,6 +279,11 @@ export default async function ProgrammaticSeoPage({ params }: PageProps) {
           city={parsed.city}
           monthIndex={parsed.monthIndex}
           climate={climate}
+          bookCta={{
+            label: `Book experiences in ${parsed.city.name}`,
+            href: `/things-to-do-in-${parsed.city.slug}`,
+            blurb: `Top-rated tours, skip-the-line tickets and day trips in ${parsed.city.name}, bookable through Viator.`,
+          }}
         />
       </>
     );

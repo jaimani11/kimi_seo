@@ -55,10 +55,13 @@ export function BestTimeSeoPage({
   city,
   climate,
   guide,
+  bookCta,
 }: {
   city: SeoCity;
   climate: CityClimate;
   guide: DestinationGuide | null;
+  /** Brand-specific booking CTA — VRBO/hotels/experiences per brand. */
+  bookCta?: BookingCtaSpec | null;
 }) {
   const rated = rateMonths(climate);
   const best = bestMonthIndices(climate).slice(0, 3);
@@ -102,6 +105,8 @@ export function BestTimeSeoPage({
             {monthName(worst)}
           </Link>
         </div>
+
+        <BookingCta cta={bookCta} />
 
         {guide ? (
           <p style={{ ...paragraphStyle, marginTop: '1.4rem' }}>
@@ -247,10 +252,13 @@ export function WeatherMonthSeoPage({
   city,
   monthIndex,
   climate,
+  bookCta,
 }: {
   city: SeoCity;
   monthIndex: number;
   climate: CityClimate;
+  /** Brand-specific booking CTA — VRBO/hotels/experiences per brand. */
+  bookCta?: BookingCtaSpec | null;
 }) {
   const m = climate.months[monthIndex] ?? climate.months[0];
   if (!m) return null;
@@ -291,6 +299,8 @@ export function WeatherMonthSeoPage({
           <StatTile label="Rain days" value={`~${m[2]}`} />
           <StatTile label="Precipitation" value={`${m[3]} mm`} />
         </div>
+
+        <BookingCta cta={bookCta} />
 
         <h2 style={{ ...h2Style, marginTop: '2.4rem' }}>
           What to pack for {city.name} in {monthName(monthIndex)}
@@ -679,6 +689,111 @@ export function buildWhereToGoMonthJsonLd({
 }
 
 // ── Shared building blocks ────────────────────────────────────────
+
+export interface BookingCtaSpec {
+  /** Button/headline text, e.g. "Search vacation rentals in Ibiza". */
+  label: string;
+  /** href — a direct affiliate deep link (VRBO/Booking) or a brand-
+   *  relative route to an inventory page. */
+  href: string;
+  /** One-line value prop under the headline. */
+  blurb?: string;
+  /** True for a direct external affiliate link — opens a new tab and
+   *  carries rel="sponsored" (correct for paid/affiliate outbound). */
+  external?: boolean;
+}
+
+/**
+ * The conversion surface. Climate pages pull high-intent trip-planning
+ * traffic ("ibiza weather in june") — without this, that traffic reads
+ * the forecast and leaves. This drives it straight to the brand's
+ * bookable inventory for the city (VRBO, Booking.com, or experiences),
+ * which is where the affiliate commission is earned.
+ */
+function BookingCta({ cta }: { cta?: BookingCtaSpec | null }) {
+  if (!cta) return null;
+  const externalAttrs = cta.external
+    ? { target: '_blank', rel: 'noopener noreferrer sponsored' }
+    : {};
+  return (
+    <a
+      href={cta.href}
+      {...externalAttrs}
+      style={{
+        display: 'flex',
+        flexWrap: 'wrap',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        gap: '1rem',
+        margin: '1.8rem 0 0.4rem',
+        padding: '1.3rem 1.5rem',
+        borderRadius: '1rem',
+        background: 'var(--accent-primary)',
+        color: '#ffffff',
+        textDecoration: 'none',
+        boxShadow: '0 12px 26px -12px rgba(0,0,0,0.4)',
+      }}
+    >
+      <span style={{ minWidth: 0 }}>
+        <span
+          style={{
+            display: 'block',
+            fontFamily: 'var(--font-inter)',
+            fontSize: '0.64rem',
+            letterSpacing: '0.16em',
+            textTransform: 'uppercase',
+            fontWeight: 700,
+            opacity: 0.85,
+          }}
+        >
+          Plan your stay
+        </span>
+        <span
+          style={{
+            display: 'block',
+            fontFamily: 'var(--font-inter)',
+            fontSize: '1.18rem',
+            fontWeight: 800,
+            lineHeight: 1.2,
+            marginTop: '0.2rem',
+          }}
+        >
+          {cta.label}
+        </span>
+        {cta.blurb ? (
+          <span
+            style={{
+              display: 'block',
+              fontFamily: 'var(--font-inter)',
+              fontSize: '0.85rem',
+              lineHeight: 1.45,
+              opacity: 0.92,
+              marginTop: '0.3rem',
+            }}
+          >
+            {cta.blurb}
+          </span>
+        ) : null}
+      </span>
+      <span
+        aria-hidden
+        style={{
+          flexShrink: 0,
+          fontFamily: 'var(--font-inter)',
+          fontSize: '0.95rem',
+          fontWeight: 800,
+          padding: '0.6rem 1.15rem',
+          borderRadius: '999px',
+          background: 'rgba(255,255,255,0.2)',
+          border: '1px solid rgba(255,255,255,0.45)',
+          whiteSpace: 'nowrap',
+        }}
+      >
+        Search →
+      </span>
+    </a>
+  );
+}
 
 function PageHeading({
   eyebrow,
