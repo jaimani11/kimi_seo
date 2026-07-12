@@ -41,14 +41,33 @@ export async function GET(req: NextRequest): Promise<Response> {
     const refreshExpiry = grant.refreshTokenExpiresAt
       ? new Date(grant.refreshTokenExpiresAt).toDateString()
       : '~1 year from now';
+    const refreshToken = grant.refreshToken ?? '';
     return html(
       200,
       `<h2>✅ Pinterest authorized</h2>
        <p>Scopes: <code>${grant.scope ?? 'unknown'}</code></p>
-       <p>Add this to <strong>all four Vercel projects</strong> (Production), then redeploy each:</p>
-       <pre>PINTEREST_REFRESH_TOKEN=${grant.refreshToken ?? '(no refresh token returned!)'}</pre>
+       <p>Set <code>PINTEREST_REFRESH_TOKEN</code> to the value below on <strong>all four Vercel projects</strong> (Production), then redeploy each. It's long — use the <em>Copy</em> button so you don't truncate it:</p>
+       <textarea id="tok" readonly rows="4" onclick="this.select()" style="width:100%;box-sizing:border-box;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;line-height:1.4;padding:10px;border:1px solid #ccd;border-radius:8px;word-break:break-all;white-space:pre-wrap;color:#0f2340;background:#f7f8fa">${refreshToken || '(no refresh token returned!)'}</textarea>
+       <p style="margin-top:10px">
+         <button id="copy" type="button" style="padding:9px 16px;font-size:14px;font-weight:600;border-radius:8px;border:0;background:#006ce4;color:#fff;cursor:pointer">Copy token</button>
+         <span id="msg" style="margin-left:10px;color:#0a7d33;font-weight:600"></span>
+         <span style="margin-left:10px;color:#667">expected length: <strong>${refreshToken.length}</strong> characters</span>
+       </p>
+       <p style="color:#667;font-size:0.9em">Tip: after you paste it into Vercel and it's still masked, you can't see the length — but if posting still 401s, re-run this flow and compare this number.</p>
        <p>Refresh token valid until: <strong>${refreshExpiry}</strong> — re-run this flow before then.</p>
-       <p>Access tokens now mint + refresh automatically; the static PINTEREST_ACCESS_TOKEN env var is no longer needed (kept as fallback if present).</p>`,
+       <p>Access tokens now mint + refresh automatically; the static PINTEREST_ACCESS_TOKEN env var is no longer needed (kept as fallback if present).</p>
+       <script>
+         (function(){
+           var b=document.getElementById('copy'),t=document.getElementById('tok'),m=document.getElementById('msg');
+           if(!b||!t)return;
+           b.addEventListener('click',function(){
+             t.select();t.setSelectionRange(0,t.value.length);
+             function ok(){m.textContent='Copied all '+t.value.length+' chars \\u2713';}
+             if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(t.value).then(ok,function(){document.execCommand('copy');ok();});}
+             else{document.execCommand('copy');ok();}
+           });
+         })();
+       </script>`,
     );
   } catch (err) {
     return html(
