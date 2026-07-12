@@ -105,6 +105,21 @@ export type {
 } from './scheduler';
 export { createMarketingScheduler } from './scheduler';
 
+// ── Newsletter capture (Resend-backed audience + welcome email) ──
+export type {
+  NewsletterBrand,
+  NewsletterEnv,
+  SubscribeStatus,
+  SubscribeResult,
+} from './newsletter';
+export {
+  getNewsletterEnv,
+  isNewsletterConfigured,
+  subscribeEmail,
+  getSubscriberCount,
+  sendNewsletterBroadcast,
+} from './newsletter';
+
 // ── Pinterest OAuth (authorize + automatic token refresh) ────────
 export type { PinterestOAuthEnv, PinterestTokenGrant } from './pinterest-oauth';
 export {

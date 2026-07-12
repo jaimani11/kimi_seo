@@ -23,3 +23,4 @@ export { CurrencyStrip } from './currency-strip';
 export type { MapPin } from './destination-map';
 export { DestinationMap } from './destination-map';
 export { WalkDistances } from './walk-distances';
+export { NewsletterSignup } from './newsletter-signup';

@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { NewsletterSignup } from '@adored/ui';
 
 /**
  * Clean footer with partner-attribution disclosure. Replaces the
@@ -14,6 +15,7 @@ export function SiteFooter() {
       }}
     >
       <div className="mx-auto flex max-w-6xl flex-col gap-10 px-6 py-12 md:py-16">
+        <NewsletterSignup compact />
         <div className="flex flex-col items-start justify-between gap-6 md:flex-row md:items-end">
           <div>
             <Link
