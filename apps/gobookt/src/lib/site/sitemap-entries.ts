@@ -4,6 +4,7 @@ import { getSiteOrigin } from '@lib/site/origin';
 import { enumerateAllSeoSlugs } from '@lib/seo/route-parser';
 import { SEO_CITIES } from '@lib/seo/cities';
 import { hasDestinationGuide } from '@lib/seo/destination-content';
+import { allAccommodationCategories } from '@lib/seo/accommodation-categories';
 
 /**
  * Crawler-facing sitemap. Includes:
@@ -113,6 +114,15 @@ export default function sitemap(): MetadataRoute.Sitemap {
       lastModified: now,
       changeFrequency: 'monthly' as const,
       priority: 0.85,
+    })),
+    // Accommodation-type landing pages — /villas, /luxury-villas,
+    // /beach-villas, etc. Each ranks for its category-level search
+    // intent and funnels clicks to Booking.com stay inventory.
+    ...allAccommodationCategories().map((c) => ({
+      url: `${base}/${c.slug}`,
+      lastModified: now,
+      changeFrequency: 'monthly' as const,
+      priority: 0.9,
     })),
   ];
 

@@ -3,12 +3,12 @@ import type { AccommodationCategory } from '@lib/seo/accommodation-categories';
 import { allAccommodationCategories } from '@lib/seo/accommodation-categories';
 import { findCityBySlug, type SeoCity } from '@lib/seo/cities';
 import { resolveDestinationPhoto } from '@lib/imagery/destination-photo';
-import { buildExpediaCategoryUrl } from '@lib/affiliate/expedia-multicategory';
+import { buildBookingComCategoryUrl } from '@lib/affiliate/booking-com-multicategory';
 import { SiteHeader } from '@/features/site/site-header';
 import { SiteFooter } from '@/features/site/site-footer';
 
 /**
- * Category-level accommodation landing page for gotript sub-brands
+ * Category-level accommodation landing page for gobookt sub-brands
  * — /villas, /cabins, /cottages, /beach-houses, /ski-lodges,
  * /lake-houses. Shared component; each route file just passes the
  * category slug in.
@@ -59,7 +59,7 @@ export function AccommodationCategoryPage({
               fontWeight: 700,
             }}
           >
-            gotript · sub-brand
+            gobookt · sub-brand
           </p>
           <h1
             className="mt-3"
@@ -170,7 +170,7 @@ export function AccommodationCategoryPage({
       >
         <SectionHeading
           eyebrow="Explore more"
-          heading="Every accommodation type on gotript"
+          heading="Every accommodation type on gobookt"
         />
         <div
           className="mt-6 grid gap-3"
@@ -246,7 +246,7 @@ function CityCard({
   // city lands the traveler on exactly "luxury villa Santorini" results,
   // one click from the page. Attribution rides the brand's Partnerize
   // camref inside the builder.
-  const href = buildExpediaCategoryUrl('vacation-rentals', {
+  const href = buildBookingComCategoryUrl('hotels', {
     destination: `${category.searchAnchor} ${city.name}, ${city.countryName}`,
   });
   return (
@@ -369,7 +369,7 @@ export function buildAccommodationCategoryJsonLd({
   const collectionPage = {
     '@context': 'https://schema.org',
     '@type': 'CollectionPage',
-    name: `${category.name} · gotript`,
+    name: `${category.name} · gobookt`,
     description: category.intro,
     url: canonical,
   };
