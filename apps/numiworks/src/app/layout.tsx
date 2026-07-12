@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { getSiteOrigin } from '@/lib/site/origin';
 import type { ReactNode } from 'react';
-import { cookies } from 'next/headers';
+import { cookies, headers } from 'next/headers';
 
 import { fontVariables } from '@/lib/fonts';
 import { ThemeProvider } from '@/lib/theme/theme-provider';
@@ -13,12 +13,19 @@ import { AnalyticsScript } from '@/lib/analytics/script';
 
 import '@/styles/globals.css';
 
-export const metadata: Metadata = {
-  title: 'numiworks · Find tours, day trips & experiences worldwide',
-  description:
-    'AI-native travel orchestration. Describe your trip in a sentence; specialized agents handle the rest.',
-  metadataBase: new URL(getSiteOrigin()),
-};
+export async function generateMetadata(): Promise<Metadata> {
+  // Middleware publishes the current pathname as `x-pathname`; use it to emit
+  // a self-referencing canonical on every page that doesn't set its own.
+  // Absent (e.g. the Clerk-auth path) → no canonical emitted, no regression.
+  const pathname = (await headers()).get('x-pathname');
+  return {
+    title: 'numiworks · Find tours, day trips & experiences worldwide',
+    description:
+      'AI-native travel orchestration. Describe your trip in a sentence; specialized agents handle the rest.',
+    metadataBase: new URL(getSiteOrigin()),
+    ...(pathname ? { alternates: { canonical: `${getSiteOrigin()}${pathname}` } } : {}),
+  };
+}
 
 export default async function RootLayout({ children }: { children: ReactNode }) {
   const theme = await getServerTheme();

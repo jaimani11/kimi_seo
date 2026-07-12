@@ -2,6 +2,45 @@ import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 import { getServerFeatures } from '@lib/env';
 import { resolveSession, SESSION_COOKIE } from '@lib/session/anonymous';
+import { getSiteOrigin } from '@lib/site/origin';
+
+/**
+ * Canonical-host redirect. Forces every production request onto the single
+ * www host from getSiteOrigin(), so Google never sees two live copies of a
+ * page (the "Duplicate without user-selected canonical" trap: apex AND www
+ * both returning 200). 308 = permanent + method-preserving. Path and query
+ * are preserved.
+ *
+ * Skips localhost and *.vercel.app previews so local dev and Vercel preview
+ * deployments keep working on their own hostnames. The canonical host is
+ * derived from the brand's own siteUrl, so this logic is identical across
+ * every site and copies verbatim to new ones.
+ */
+function canonicalHostRedirect(req: NextRequest): NextResponse | null {
+  const host = req.headers.get('host');
+  if (!host) return null;
+  if (
+    host.startsWith('localhost') ||
+    host.startsWith('127.0.0.1') ||
+    host.endsWith('.vercel.app')
+  ) {
+    return null;
+  }
+
+  let canonicalHost: string;
+  try {
+    canonicalHost = new URL(getSiteOrigin()).host;
+  } catch {
+    return null;
+  }
+  if (!canonicalHost || host === canonicalHost) return null;
+
+  const url = req.nextUrl.clone();
+  url.host = canonicalHost;
+  url.protocol = 'https:';
+  url.port = '';
+  return NextResponse.redirect(url, 308);
+}
 
 /**
  * Anonymous-session minting + Clerk delegation.
@@ -15,18 +54,29 @@ import { resolveSession, SESSION_COOKIE } from '@lib/session/anonymous';
  * the client receives, and trips saved on request 1 would be
  * invisible on request 2.
  *
- * Two responsibilities, in order:
+ * Order of responsibilities:
  *
- *   1. Mint the anonymous session cookie if it's missing. Set it
- *      on both the inbound request (so the route sees it) and the
- *      outbound response (so the client persists it).
+ *   0. Canonical-host redirect — before anything else. No point minting a
+ *      session on a request we're about to 308 away.
  *
- *   2. Delegate to Clerk's middleware when auth is configured.
- *      Otherwise NextResponse.next() - keeps Clerk completely off
- *      the keyless build path. The dynamic import ensures Clerk's
- *      runtime isn't evaluated in keyless builds.
+ *   1. Mint the anonymous session cookie if it's missing (on the inbound
+ *      request so the route sees it, and the outbound response so the
+ *      client persists it).
+ *
+ *   2. Publish the pathname as `x-pathname` so the root layout can emit a
+ *      self-referencing <link rel="canonical">. Pathname only — query
+ *      strings are intentionally dropped so ?utm=… / ?ss=… variants all
+ *      consolidate onto one canonical URL.
+ *
+ *   3. Delegate to Clerk's middleware when auth is configured. Otherwise
+ *      NextResponse.next() - keeps Clerk completely off the keyless build
+ *      path. The dynamic import ensures Clerk's runtime isn't evaluated in
+ *      keyless builds.
  */
 export default async function middleware(req: NextRequest) {
+  const hostRedirect = canonicalHostRedirect(req);
+  if (hostRedirect) return hostRedirect;
+
   // Read the inbound cookie via NextRequest.cookies (typed) so we can
   // mutate it for downstream consumers if minting.
   const existing = req.cookies.get(SESSION_COOKIE)?.value;
@@ -35,10 +85,17 @@ export default async function middleware(req: NextRequest) {
   // Propagate the minted id back onto the inbound request so any
   // route handler that reads cookies() sees it. This is the canonical
   // Next.js pattern for "I'm setting a cookie now AND want this same
-  // request to act as if it were already set."
+  // request to act as if it were already set." Mutating req.cookies here
+  // also updates the underlying `cookie` header, which we copy below.
   if (session.isNew) {
     req.cookies.set(SESSION_COOKIE, session.sessionId);
   }
+
+  // Copy the (now cookie-updated) request headers and add x-pathname so the
+  // layout can build a canonical URL. Copying AFTER the cookie mutation is
+  // what keeps the session cookie flowing to the route handler.
+  const requestHeaders = new Headers(req.headers);
+  requestHeaders.set('x-pathname', req.nextUrl.pathname);
 
   let res: NextResponse | undefined;
   if (getServerFeatures().auth) {
@@ -47,10 +104,9 @@ export default async function middleware(req: NextRequest) {
     res = clerkRes instanceof NextResponse ? clerkRes : undefined;
   }
   if (!res) {
-    // Pass `request: { headers }` so the mutated request.cookies survive
-    // to the route handler (Next forwards them through the rewritten
-    // request when this option is provided).
-    res = NextResponse.next({ request: { headers: req.headers } });
+    // Pass `request: { headers }` so the mutated request headers (session
+    // cookie + x-pathname) survive to the route handler.
+    res = NextResponse.next({ request: { headers: requestHeaders } });
   }
 
   if (session.isNew) {
