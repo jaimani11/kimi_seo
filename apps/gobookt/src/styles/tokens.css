@@ -35,8 +35,7 @@
   --dur-cinematic: 900ms;
 }
 
-/* ============== DARK MODE (default - cinematic) ============== */
-:root,
+/* ============== DARK MODE (opt-in via data-theme='dark') ============== */
 :root[data-theme='dark'] {
   --surface-base: #0b0d10;
   --surface-raised: #14171c;
@@ -93,6 +92,7 @@
    typography on the hero, no photo backgrounds competing with text.
    Every text/background pair targets ≥ 4.5:1 contrast.
 */
+:root,
 :root[data-theme='light'] {
   --surface-base: #ffffff;
   --surface-raised: #f7f8fa;
