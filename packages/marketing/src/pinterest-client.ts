@@ -235,13 +235,22 @@ export async function checkPinterestStatus(): Promise<PinterestStatus> {
     boards = await client.listBoards();
   } catch (err) {
     const e = err as PinterestApiError;
-    return {
-      state: 'token-invalid',
-      message:
-        e.status === 401
-          ? 'Token rejected (HTTP 401). Regenerate it in your Pinterest dashboard and update PINTEREST_ACCESS_TOKEN.'
-          : e.message ?? 'Unknown error reaching Pinterest API.',
-    };
+    // Make a 401 self-diagnosing. The failure mode depends on which auth
+    // mode is actually active — the old "update PINTEREST_ACCESS_TOKEN"
+    // advice was wrong whenever the OAuth refresh trio was intended but
+    // incomplete (the common footgun: token added to the wrong project or
+    // not redeployed, so it silently falls back to the expired static token).
+    const mode = describePinterestAuthMode();
+    let message: string;
+    if (e.status === 401) {
+      message =
+        mode === 'oauth-refresh'
+          ? 'Token rejected (HTTP 401) in OAuth-refresh mode — the refresh token is invalid or expired. Re-run /api/pinterest/oauth/start to mint a fresh PINTEREST_REFRESH_TOKEN, update it in Vercel, and redeploy.'
+          : `Token rejected (HTTP 401). Auth mode is "${mode}" — the OAuth refresh trio (PINTEREST_APP_ID + PINTEREST_APP_SECRET + PINTEREST_REFRESH_TOKEN) is NOT all set on THIS project, so it fell back to the expired static token. Add all three to this Vercel project's Production env and redeploy.`;
+    } else {
+      message = e.message ?? 'Unknown error reaching Pinterest API.';
+    }
+    return { state: 'token-invalid', message };
   }
   // Token works for reads. v1 doesn't have a cheap "do I have
   // pins:write?" probe — Pinterest doesn't expose a scopes endpoint
