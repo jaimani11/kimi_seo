@@ -346,6 +346,99 @@ export const THEME_META: Record<
       `${c.oneLiner} Spa days, wine tours, photo shoots, cocktail-making classes and rooftop experiences in ${c.name} — the bachelorette weekend that photographs well and the group actually enjoys.`,
     viatorQuery: (c) => `spa wine cocktail ${c.viatorQuery}`,
   },
+  'first-timer': {
+    slugPrefix: 'first-time-in-',
+    crumb: 'First-timer guide',
+    eyebrow: (c) => `${c.countryName} · first visit`,
+    heading: (c) => `First Time in ${c.name}: What to See & Do`,
+    intro: (c) =>
+      `${c.oneLiner} The essential first-timer's hit list for ${c.name} — the sights, stays and experiences worth your limited days, all in one place.`,
+    viatorQuery: (c) => `${c.viatorQuery} top attractions`,
+  },
+  'worth-visiting': {
+    slugPrefix: 'is-',
+    slugFor: (c) => `is-${c.slug}-worth-visiting`,
+    crumb: 'Worth visiting?',
+    eyebrow: (c) => `${c.countryName} · honest take`,
+    heading: (c) => `Is ${c.name} Worth Visiting?`,
+    intro: (c) =>
+      `${c.oneLiner} A straight answer on whether ${c.name} is worth the trip — what makes it special, who'll love it, and what to see when you go.`,
+    viatorQuery: (c) => `${c.viatorQuery} top tours`,
+  },
+  'hidden-gems': {
+    slugPrefix: 'hidden-gems-in-',
+    crumb: 'Hidden gems',
+    eyebrow: (c) => `${c.countryName} · off the beaten path`,
+    heading: (c) => `Hidden Gems in ${c.name}`,
+    intro: (c) =>
+      `${c.oneLiner} The lesser-known corners of ${c.name} most tourists miss — offbeat spots and local favorites worth seeking out.`,
+    viatorQuery: (c) => `${c.viatorQuery} hidden gems local`,
+  },
+  instagram: {
+    slugPrefix: 'most-instagrammable-places-in-',
+    crumb: 'Instagram spots',
+    eyebrow: (c) => `${c.countryName} · photo spots`,
+    heading: (c) => `Most Instagrammable Places in ${c.name}`,
+    intro: (c) =>
+      `${c.oneLiner} The most photogenic spots in ${c.name} and the viewpoints and neighborhoods that get you there at the right light.`,
+    viatorQuery: (c) => `${c.viatorQuery} photo sightseeing tour`,
+  },
+  luxury: {
+    slugPrefix: 'luxury-travel-in-',
+    crumb: 'Luxury travel',
+    eyebrow: (c) => `${c.countryName} · luxury`,
+    heading: (c) => `Luxury Travel in ${c.name}`,
+    intro: (c) =>
+      `${c.oneLiner} The high-end side of ${c.name} — the premium stays and experiences worth the splurge.`,
+    viatorQuery: (c) => `luxury private ${c.viatorQuery}`,
+  },
+  'how-many-days': {
+    slugPrefix: 'how-many-days-in-',
+    crumb: 'How many days',
+    eyebrow: (c) => `${c.countryName} · trip length`,
+    heading: (c) => `How Many Days in ${c.name}?`,
+    intro: (c) =>
+      `${c.oneLiner} How long you actually need in ${c.name} — and how to fill each day, whether you have a weekend or a week.`,
+    viatorQuery: (c) => `${c.viatorQuery} top attractions`,
+  },
+  'solo-female': {
+    slugPrefix: '',
+    slugFor: (c) => `${c.slug}-for-solo-female-travelers`,
+    crumb: 'Solo female travel',
+    eyebrow: (c) => `${c.countryName} · solo female travel`,
+    heading: (c) => `${c.name} for Solo Female Travelers`,
+    intro: (c) =>
+      `${c.oneLiner} A solo-female-friendly take on ${c.name} — safe neighborhoods, easy-to-meet-people spots, and where to base yourself.`,
+    viatorQuery: (c) => `small group ${c.viatorQuery}`,
+  },
+  'bucket-list': {
+    slugPrefix: '',
+    slugFor: (c) => `${c.slug}-bucket-list`,
+    crumb: 'Bucket list',
+    eyebrow: (c) => `${c.countryName} · bucket list`,
+    heading: (c) => `The ${c.name} Bucket List`,
+    intro: (c) =>
+      `${c.oneLiner} The once-in-a-lifetime experiences that define a ${c.name} trip — the bucket-list moments worth planning around.`,
+    viatorQuery: (c) => `${c.viatorQuery} must see top`,
+  },
+  'private-tours': {
+    slugPrefix: 'private-tours-in-',
+    crumb: 'Private tours',
+    eyebrow: (c) => `${c.countryName} · private tours`,
+    heading: (c) => `Best Private Tours in ${c.name}`,
+    intro: (c) =>
+      `${c.oneLiner} Private, guide-to-yourself tours of ${c.name} — your pace, your interests, skip the crowds.`,
+    viatorQuery: (c) => `private tour ${c.viatorQuery}`,
+  },
+  'walking-tours': {
+    slugPrefix: 'walking-tours-in-',
+    crumb: 'Walking tours',
+    eyebrow: (c) => `${c.countryName} · walking tours`,
+    heading: (c) => `Best Walking Tours in ${c.name}`,
+    intro: (c) =>
+      `${c.oneLiner} The best walking tours in ${c.name} — history, food, neighborhoods and hidden lanes on foot, led by local guides.`,
+    viatorQuery: (c) => `walking tour ${c.viatorQuery}`,
+  },
 };
 
 /**

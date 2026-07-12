@@ -49,7 +49,17 @@ export type ThemedListTheme =
   | 'airport-guide'
   | 'budget-per-day'
   | 'bachelor-party'
-  | 'bachelorette-party';
+  | 'bachelorette-party'
+  | 'first-timer'
+  | 'worth-visiting'
+  | 'hidden-gems'
+  | 'instagram'
+  | 'luxury'
+  | 'how-many-days'
+  | 'solo-female'
+  | 'bucket-list'
+  | 'private-tours'
+  | 'walking-tours';
 
 export type SeoRouteMatch =
   | { kind: 'itinerary'; city: SeoCity; days: number }
@@ -99,12 +109,46 @@ function whereToStayEligible(citySlug: string): boolean {
   return (findDestinationGuide(citySlug)?.neighborhoods.length ?? 0) >= 3;
 }
 
+/**
+ * Phase 11 themed page types — data-driven so the parser stays lean.
+ * Each fans out to one page per city; the regexes are distinctive so
+ * they never collide with the hardcoded patterns above. `build` is the
+ * inverse of `re` (used by enumerate + internal links).
+ */
+const EXTRA_THEMED: ReadonlyArray<{
+  theme: ThemedListTheme;
+  re: RegExp;
+  build: (citySlug: string) => string;
+  label: (city: SeoCity) => string;
+}> = [
+  { theme: 'first-timer', re: /^first-time-in-([a-z][a-z0-9-]*)$/, build: (s) => `first-time-in-${s}`, label: (c) => `First time in ${c.name}` },
+  { theme: 'worth-visiting', re: /^is-([a-z][a-z0-9-]*)-worth-visiting$/, build: (s) => `is-${s}-worth-visiting`, label: (c) => `Is ${c.name} worth visiting?` },
+  { theme: 'hidden-gems', re: /^hidden-gems-in-([a-z][a-z0-9-]*)$/, build: (s) => `hidden-gems-in-${s}`, label: (c) => `Hidden gems in ${c.name}` },
+  { theme: 'instagram', re: /^most-instagrammable-places-in-([a-z][a-z0-9-]*)$/, build: (s) => `most-instagrammable-places-in-${s}`, label: (c) => `Most instagrammable places in ${c.name}` },
+  { theme: 'luxury', re: /^luxury-travel-in-([a-z][a-z0-9-]*)$/, build: (s) => `luxury-travel-in-${s}`, label: (c) => `Luxury travel in ${c.name}` },
+  { theme: 'how-many-days', re: /^how-many-days-in-([a-z][a-z0-9-]*)$/, build: (s) => `how-many-days-in-${s}`, label: (c) => `How many days in ${c.name}?` },
+  { theme: 'solo-female', re: /^([a-z][a-z0-9-]*)-for-solo-female-travelers$/, build: (s) => `${s}-for-solo-female-travelers`, label: (c) => `${c.name} for solo female travelers` },
+  { theme: 'bucket-list', re: /^([a-z][a-z0-9-]*)-bucket-list$/, build: (s) => `${s}-bucket-list`, label: (c) => `${c.name} bucket list` },
+  { theme: 'private-tours', re: /^private-tours-in-([a-z][a-z0-9-]*)$/, build: (s) => `private-tours-in-${s}`, label: (c) => `Private tours in ${c.name}` },
+  { theme: 'walking-tours', re: /^walking-tours-in-([a-z][a-z0-9-]*)$/, build: (s) => `walking-tours-in-${s}`, label: (c) => `Walking tours in ${c.name}` },
+];
+
 export function parseSeoSlug(slug: string): SeoRouteMatch | null {
   if (typeof slug !== 'string' || slug.length === 0 || slug.length > 80) {
     return null;
   }
 
   if (!/^[a-z0-9-]+$/.test(slug)) return null;
+
+  // Phase 11 themed types — distinctive shapes, safe to check first.
+  for (const t of EXTRA_THEMED) {
+    const m = t.re.exec(slug);
+    if (m) {
+      const city = findCityBySlug(m[1] ?? '');
+      if (!city) return null;
+      return { kind: 'themed-list', city, theme: t.theme };
+    }
+  }
 
   // Order matters: more-specific patterns first so a `weekend-in-tokyo`
   // doesn't accidentally match a more generic `*-day-itinerary` shape
@@ -347,6 +391,7 @@ export function buildCitySeoLinks(city: SeoCity): Array<{ label: string; href: s
       label: `${n}-day ${city.name} itinerary`,
       href: `/${city.slug}-${n}-day-itinerary`,
     })),
+    ...EXTRA_THEMED.map((t) => ({ label: t.label(city), href: `/${t.build(city.slug)}` })),
   ];
 }
 
@@ -393,6 +438,7 @@ export function enumerateAllSeoSlugs(): string[] {
     for (const days of SEO_ITINERARY_DAYS) {
       out.push(`${city.slug}-${days}-day-itinerary`);
     }
+    for (const t of EXTRA_THEMED) out.push(t.build(city.slug));
   }
   for (const slug of enumerateAllComparisonSlugs()) {
     out.push(slug);
