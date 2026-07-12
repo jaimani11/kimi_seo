@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { getSiteOrigin } from '@/lib/site/origin';
+import { getSiteOrigin, siteJsonLd } from '@/lib/site/origin';
 import type { ReactNode } from 'react';
 import { cookies, headers } from 'next/headers';
 
@@ -44,6 +44,10 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
     <html lang="en" data-theme={theme} className={fontVariables} suppressHydrationWarning>
       <head>
         <meta name="p:domain_verify" content="eb7fe726f2b68def462a495fc1bd90c4" />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: siteJsonLd() }}
+        />
       </head>
       <body className="min-h-screen antialiased">
         <ThemeProvider initial={theme}>

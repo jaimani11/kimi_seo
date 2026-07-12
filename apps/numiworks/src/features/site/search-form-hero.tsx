@@ -104,7 +104,7 @@ export function SearchFormHero() {
             maxWidth: '48rem',
           }}
         >
-          Tours, hotels &amp; whole homes worldwide — planned by AI, booked in one place.
+          Plan your trip with AI — tours, hotels &amp; vacation rentals, booked in one place.
         </h1>
 
         <p

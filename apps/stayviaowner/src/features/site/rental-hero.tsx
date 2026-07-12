@@ -80,7 +80,7 @@ export function RentalHero() {
             textTransform: 'uppercase',
           }}
         >
-          Stayviaowner vacation rentals are yours to discover
+          Vacation rentals by owner — villas, cabins &amp; beach houses
         </h1>
         <p
           className="mt-4"

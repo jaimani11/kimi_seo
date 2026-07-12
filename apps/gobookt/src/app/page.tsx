@@ -1,3 +1,4 @@
+import type { Metadata } from 'next';
 import { SiteHeader } from '@/features/site/site-header';
 import { MultiCategoryHero } from '@/features/site/multi-category-hero';
 import { StatsBand } from '@/features/site/stats-band';
@@ -29,6 +30,22 @@ import { SiteFooter } from '@/features/site/site-footer';
  *   SeoLinkFooter           : indexable link footer.
  *   SiteFooter              : minimal legal footer.
  */
+// Homepage-specific title/description. Keyword-first for search, brand-
+// suffixed for recognition — overrides the generic layout default. The
+// self-referencing canonical still comes from the layout (x-pathname).
+export const metadata: Metadata = {
+  title: 'Hotels, Flights, Cars & Things to Do Worldwide | gobookt',
+  description:
+    'Search hotels, flights, car rentals, cruises and things to do across 190+ countries. Powered by Booking.com — real-time prices and free cancellation on most stays.',
+  openGraph: {
+    title: 'Hotels, Flights, Cars & Things to Do Worldwide',
+    description:
+      'Hotels, flights, car rentals, cruises and things to do across 190+ countries. Powered by Booking.com.',
+    type: 'website',
+    siteName: 'gobookt',
+  },
+};
+
 export default function HomePage() {
   return (
     <>

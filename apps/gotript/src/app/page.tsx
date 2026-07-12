@@ -1,3 +1,4 @@
+import type { Metadata } from 'next';
 import { SiteHeader } from '@/features/site/site-header';
 import { MultiCategoryHero } from '@/features/site/multi-category-hero';
 import { StatsBand } from '@/features/site/stats-band';
@@ -29,6 +30,22 @@ import { SiteFooter } from '@/features/site/site-footer';
  *   SeoLinkFooter           : indexable link footer.
  *   SiteFooter              : minimal legal footer.
  */
+// Homepage-specific title/description. Keyword-first for search, brand-
+// suffixed for recognition — overrides the generic layout default. The
+// self-referencing canonical still comes from the layout (x-pathname).
+export const metadata: Metadata = {
+  title: 'Vacation Rentals, Hotels & Things to Do Worldwide | gotript',
+  description:
+    'Find vacation rentals, whole homes and hotels, plus flights, cars and things to do across 190+ countries. Powered by Expedia — real-time prices and availability.',
+  openGraph: {
+    title: 'Vacation Rentals, Hotels & Things to Do Worldwide',
+    description:
+      'Whole homes, villas and hotels plus flights, cars and things to do across 190+ countries. Powered by Expedia.',
+    type: 'website',
+    siteName: 'gotript',
+  },
+};
+
 export default function HomePage() {
   return (
     <>

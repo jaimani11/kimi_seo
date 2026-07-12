@@ -28,3 +28,39 @@ export function canonicalUrl(path: string): string {
   const normalized = path.startsWith('/') ? path : `/${path}`;
   return `${getSiteOrigin()}${normalized}`;
 }
+
+/**
+ * Sitewide JSON-LD: Organization + WebSite entities for the knowledge graph
+ * and the sitelinks search box. Rendered once in the root layout <head>.
+ * Built from the brand's own name + canonical origin, so it stays correct
+ * per-site and copies verbatim to new ones.
+ */
+export function siteJsonLd(): string {
+  const origin = getSiteOrigin();
+  return JSON.stringify({
+    '@context': 'https://schema.org',
+    '@graph': [
+      {
+        '@type': 'Organization',
+        '@id': `${origin}/#organization`,
+        name: STAYVIAOWNER.name,
+        url: `${origin}/`,
+      },
+      {
+        '@type': 'WebSite',
+        '@id': `${origin}/#website`,
+        name: STAYVIAOWNER.name,
+        url: `${origin}/`,
+        publisher: { '@id': `${origin}/#organization` },
+        potentialAction: {
+          '@type': 'SearchAction',
+          target: {
+            '@type': 'EntryPoint',
+            urlTemplate: `${origin}/search?q={search_term_string}`,
+          },
+          'query-input': 'required name=search_term_string',
+        },
+      },
+    ],
+  });
+}

@@ -1,3 +1,4 @@
+import type { Metadata } from 'next';
 import { SiteHeader } from '@/features/site/site-header';
 import { SearchFormHero } from '@/features/site/search-form-hero';
 import { StatsBand } from '@/features/site/stats-band';
@@ -42,6 +43,22 @@ import { SiteFooter } from '@/features/site/site-footer';
  *   SeoLinkFooter           : wide indexable link footer
  *   SiteFooter              : minimal legal/disclosure footer
  */
+// Homepage-specific title/description. Keyword-first for search, brand-
+// suffixed for recognition — overrides the generic layout default. The
+// self-referencing canonical still comes from the layout (x-pathname).
+export const metadata: Metadata = {
+  title: 'AI Travel Planner — Tours, Hotels & Vacation Rentals | numiworks',
+  description:
+    'Plan your trip with AI, then book tours, hotels and vacation rentals in one place. 300,000+ experiences across 190+ countries — live prices, real availability.',
+  openGraph: {
+    title: 'AI Travel Planner for Tours, Hotels & Vacation Rentals',
+    description:
+      'Describe your trip in a sentence. numiworks plans it with AI and books tours, hotels and vacation rentals — 300,000+ experiences across 190+ countries.',
+    type: 'website',
+    siteName: 'numiworks',
+  },
+};
+
 export default function HomePage() {
   return (
     <>
