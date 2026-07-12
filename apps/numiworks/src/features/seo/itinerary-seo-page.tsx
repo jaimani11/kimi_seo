@@ -1,6 +1,8 @@
 import { PlanDayCard } from '@/features/plan/plan-day-card';
 import { ReserveAllButton } from '@/features/plan/reserve-all-button';
 import { SeoPageShell } from './seo-page-shell';
+import { CrossBrandBooking } from '@adored/ui';
+import { cityBookingLinks } from '@adored/brand-config';
 import type { SeoCity } from '@lib/seo/cities';
 import type { Plan } from '@lib/plan/types';
 import { GygActivitiesWidget } from '@/features/experiences/getyourguide-widget';
@@ -158,6 +160,11 @@ export function ItinerarySeoPage({
           </p>
         </section>
       )}
+
+      <CrossBrandBooking
+        cityName={city.name}
+        links={cityBookingLinks(city.slug, { exclude: 'numiworks' })}
+      />
     </SeoPageShell>
   );
 }

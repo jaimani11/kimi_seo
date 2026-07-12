@@ -106,7 +106,9 @@ for apex in "${DOMAINS[@]}"; do
 
   # 7. Spot-check N random sitemap URLs
   if [ "$locs" -gt 0 ]; then
-    mapfile -t urls < <(printf '%s' "$sm" | grep -oE "<loc>[^<]*</loc>" | sed 's/<loc>//;s/<\/loc>//' | awk "NR % (int($locs/$SAMPLE)+1) == 0" | head -"$SAMPLE")
+    # Portable (bash 3.2+) array fill — macOS ships bash 3.2, no `mapfile`.
+    urls=()
+    while IFS= read -r line; do urls+=("$line"); done < <(printf '%s' "$sm" | grep -oE "<loc>[^<]*</loc>" | sed 's/<loc>//;s/<\/loc>//' | awk "NR % (int($locs/$SAMPLE)+1) == 0" | head -"$SAMPLE")
     bad_urls=0
     for u in "${urls[@]}"; do
       [ "$(status "$u")" = "200" ] || { bad_urls=$((bad_urls+1)); echo "      404: $u"; }

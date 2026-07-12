@@ -1,6 +1,8 @@
 import Link from 'next/link';
 import { ExperienceCardStandard } from '@/features/experience-cards';
 import { SeoPageShell } from './seo-page-shell';
+import { CrossBrandBooking } from '@adored/ui';
+import { cityBookingLinks } from '@adored/brand-config';
 import type { SeoCity } from '@lib/seo/cities';
 import type { Experience } from '@core/experience';
 import { GygActivitiesWidget } from '@/features/experiences/getyourguide-widget';
@@ -140,6 +142,11 @@ export function ThingsToDoSeoPage({
           </p>
         )}
       </section>
+
+      <CrossBrandBooking
+        cityName={city.name}
+        links={cityBookingLinks(city.slug, { exclude: 'numiworks' })}
+      />
     </SeoPageShell>
   );
 }

@@ -12,8 +12,10 @@ import {
   CurrencyStrip,
   DestinationMap,
   WalkDistances,
+  CrossBrandBooking,
   type MapPin,
 } from '@adored/ui';
+import { cityBookingLinks } from '@adored/brand-config';
 import { VrboCityCallout } from '@/features/destinations/vrbo-city-callout';
 import { GygActivitiesWidget } from '@/features/experiences/getyourguide-widget';
 
@@ -310,6 +312,11 @@ export async function DestinationGuidePage({
       </article>
 
       {scores ? <DestinationScorecard cityName={city.name} scores={scores} /> : null}
+
+      <CrossBrandBooking
+        cityName={city.name}
+        links={cityBookingLinks(city.slug, { exclude: 'numiworks' })}
+      />
     </SeoPageShell>
   );
 }
