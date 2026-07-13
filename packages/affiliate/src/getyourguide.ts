@@ -43,6 +43,10 @@ export interface GygSearchInput {
   campaign?: string;
   /** Optional page source hint (e.g. 'guide', 'itinerary', 'social'). */
   source?: string;
+  /** Optional ISO-4217 display currency (e.g. 'USD'). When set, GYG shows
+   *  prices in this currency instead of geo-defaulting (often EUR). Only
+   *  passed by US-audience brands (numiworks, gotript). */
+  currency?: string;
 }
 
 /**
@@ -65,6 +69,7 @@ export function buildGygSearchUrl(input: GygSearchInput): string {
   params.set('utm_medium', 'online_publisher');
   if (input.campaign) params.set('cmp', input.campaign);
   if (input.source) params.set('psrc', input.source);
+  if (input.currency) params.set('currency', input.currency);
   return `https://www.getyourguide.com/s/?${params.toString()}`;
 }
 

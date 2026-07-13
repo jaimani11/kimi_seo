@@ -67,6 +67,7 @@ export function GygActivitiesWidget({
     destination,
     campaign: campaignSlug,
     source: 'destination-guide',
+    currency: 'USD',
   });
 
   return (
@@ -124,6 +125,7 @@ export function GygActivitiesWidget({
         className="gyg-widget mt-5"
         data-gyg-partner-id={GYG_PARTNER_ID}
         data-gyg-locale-code="en-US"
+        data-gyg-currency="USD"
         data-gyg-widget="activities"
         data-gyg-q={destination}
         data-gyg-variant={variant}
