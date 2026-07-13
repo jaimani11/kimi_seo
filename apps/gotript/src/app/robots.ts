@@ -20,6 +20,20 @@ export default function robots(): MetadataRoute.Robots {
         allow: ['/', '/destinations', '/destinations/'],
         disallow: ['/api/', '/t/'],
       },
+      {
+        // GoogleOther is Google's *non-search* crawler (product/R&D). It does
+        // NOT affect Google Search indexing — that's Googlebot — but it was
+        // ~95% of crawl volume (240k+ req/12h), and every hit is a billed
+        // edge+function invocation because these pages render dynamically.
+        // Blocking it cuts cost dramatically with zero SEO impact.
+        userAgent: ['GoogleOther', 'GoogleOther-Image', 'GoogleOther-Video'],
+        disallow: ['/'],
+      },
+      {
+        // Third-party SEO/backlink scrapers — no value to us, pure request cost.
+        userAgent: ['AhrefsBot', 'SemrushBot', 'MJ12bot', 'DotBot', 'DataForSeoBot'],
+        disallow: ['/'],
+      },
     ],
     sitemap: `${siteUrl()}/sitemap.xml`,
   };
