@@ -34,6 +34,14 @@ export default function robots(): MetadataRoute.Robots {
         userAgent: ['AhrefsBot', 'SemrushBot', 'MJ12bot', 'DotBot', 'DataForSeoBot'],
         disallow: ['/'],
       },
+      {
+        // Search crawlers for markets we don't serve (English/Western travel
+        // audience via Viator/Booking/Expedia). Baidu = China, Bytespider =
+        // ByteDance/TikTok. High volume, ~zero value here; blocking trims crawl
+        // cost without touching Google/Bing/AI-search visibility.
+        userAgent: ['Baiduspider', 'Bytespider'],
+        disallow: ['/'],
+      },
     ],
     sitemap: `${siteUrl()}/sitemap.xml`,
   };
