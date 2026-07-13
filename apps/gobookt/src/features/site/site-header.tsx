@@ -44,7 +44,7 @@ export function SiteHeader() {
           }}
         />
         Official <strong style={{ fontWeight: 600 }}>Booking.com</strong> affiliate ·
-        Hotels, flights, cars, things to do, cruises · The price you pay is the same
+        Hotels, apartments, villas &amp; unique stays worldwide · The price you pay is the same
       </div>
     <header
       className="sticky top-0 z-30 w-full"
@@ -97,11 +97,8 @@ export function SiteHeader() {
 
         <nav className="hidden items-center gap-1 md:flex">
           <NavLink href="/stays">Stays</NavLink>
-          <NavLink href="/flights">Flights</NavLink>
-          <NavLink href="/things-to-do">Things to do</NavLink>
-          <NavLink href="/cars">Cars</NavLink>
-          <NavLink href="/cruises">Cruises</NavLink>
           <NavLink href="/destinations">Destinations</NavLink>
+          <NavLink href="/things-to-do">Things to do</NavLink>
           <NavLink href="/about">About</NavLink>
           <NavLink href="/contact">Contact</NavLink>
         </nav>

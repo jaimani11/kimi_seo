@@ -211,9 +211,12 @@ function withAffiliate(url: string, config: BookingComMultiConfig): string {
 }
 
 /**
- * Display label + ordering for the 5-tab category strip on the home
- * page and the AI concierge response. Single source of truth for
- * "which categories does gobookt cover and in what order."
+ * Display label + ordering for the home hero + AI concierge. Single
+ * source of truth for which verticals gobookt surfaces and in what
+ * order. gobookt is accommodation-first: Stays leads; things-to-do,
+ * cars, and flights are supporting. Cruises are removed (Booking.com
+ * pays $0 on cruises) — the /cruises route + buildCruisesUrl stay in
+ * code but are no longer surfaced here.
  */
 export const CATEGORY_META: ReadonlyArray<{
   id: BookingComCategory;
@@ -224,19 +227,13 @@ export const CATEGORY_META: ReadonlyArray<{
   {
     id: 'hotels',
     label: 'Stays',
-    description: 'Hotels, apartments, vacation rentals.',
+    description: 'Hotels, apartments, vacation homes, villas, resorts, cabins.',
     iconHint: 'bed',
-  },
-  {
-    id: 'flights',
-    label: 'Flights',
-    description: 'Round-trip + one-way, every major carrier.',
-    iconHint: 'plane',
   },
   {
     id: 'attractions',
     label: 'Things to do',
-    description: 'Tours, day trips, food walks, tickets.',
+    description: 'Tours, tickets, and experiences to plan around your stay.',
     iconHint: 'ticket',
   },
   {
@@ -246,9 +243,9 @@ export const CATEGORY_META: ReadonlyArray<{
     iconHint: 'car',
   },
   {
-    id: 'cruises',
-    label: 'Cruises',
-    description: 'Pre & post-cruise hotels at every major embarkation port.',
-    iconHint: 'ship',
+    id: 'flights',
+    label: 'Flights',
+    description: 'Round-trip + one-way, every major carrier.',
+    iconHint: 'plane',
   },
 ];

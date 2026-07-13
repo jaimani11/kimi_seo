@@ -67,18 +67,17 @@ export function SiteFooter() {
               }}
             >
               Official <strong style={{ fontWeight: 600, color: '#003580' }}>Booking.com</strong>{' '}
-              affiliate. Search hotels, flights, things to do, car rentals, and cruises across
-              175+ destinations. Affiliate links; the price you pay is the same.
+              affiliate. Search hotels, apartments, villas, and unique stays across 175+
+              destinations. Affiliate links; the price you pay is the same.
             </p>
           </div>
 
           <nav className="flex flex-col gap-2 md:items-end">
             <FooterLink href="/stays">Stays</FooterLink>
-            <FooterLink href="/flights">Flights</FooterLink>
-            <FooterLink href="/things-to-do">Things to do</FooterLink>
-            <FooterLink href="/cars">Car rentals</FooterLink>
-            <FooterLink href="/cruises">Cruises</FooterLink>
             <FooterLink href="/destinations">Destinations</FooterLink>
+            <FooterLink href="/things-to-do">Things to do</FooterLink>
+            <FooterLink href="/flights">Flights</FooterLink>
+            <FooterLink href="/cars">Car rentals</FooterLink>
             <FooterLink href="/about">About</FooterLink>
             <FooterLink href="/contact">Contact</FooterLink>
             <FooterLink href="/profile/memory">Your memory</FooterLink>
