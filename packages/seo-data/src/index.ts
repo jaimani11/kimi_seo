@@ -28,6 +28,9 @@ export {
   findDestinationGuide,
 } from './destination-content';
 
+export type { ThingsToDoFaq, ThingsToDoFaqInput } from './things-to-do-faq';
+export { buildThingsToDoFaq } from './things-to-do-faq';
+
 export type { DestinationScores } from './destination-scores';
 export {
   SCORE_DIMENSIONS,

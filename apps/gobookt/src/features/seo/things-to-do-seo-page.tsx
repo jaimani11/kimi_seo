@@ -3,6 +3,7 @@ import { ExperienceCardStandard } from '@/features/experience-cards';
 import { SeoPageShell } from './seo-page-shell';
 import type { SeoCity } from '@lib/seo/cities';
 import type { Experience } from '@core/experience';
+import type { ThingsToDoFaq } from '@adored/seo-data';
 
 /**
  * SEO-shaped activity discovery page rendered at
@@ -16,10 +17,12 @@ export function ThingsToDoSeoPage({
   city,
   experiences,
   loadError,
+  faq,
 }: {
   city: SeoCity;
   experiences: Experience[];
   loadError: string | null;
+  faq: ThingsToDoFaq[];
 }) {
   const slug = `things-to-do-in-${city.slug}`;
   return (
@@ -122,6 +125,55 @@ export function ThingsToDoSeoPage({
           </p>
         )}
       </section>
+
+      {faq.length > 0 && (
+        <section className="mx-auto max-w-3xl px-6 pb-14">
+          <h2
+            style={{
+              fontFamily: 'var(--font-inter)',
+              fontSize: '1.5rem',
+              fontWeight: 800,
+              letterSpacing: '-0.02em',
+              color: 'var(--ink-primary)',
+              margin: '0 0 1.25rem',
+            }}
+          >
+            Things to do in {city.name} — FAQ
+          </h2>
+          <div className="flex flex-col gap-3">
+            {faq.map((f) => (
+              <details
+                key={f.question}
+                className="rounded-xl border px-5 py-4"
+                style={{ borderColor: 'var(--border-subtle)', background: 'var(--surface-elevated)' }}
+              >
+                <summary
+                  style={{
+                    fontFamily: 'var(--font-inter)',
+                    fontSize: '0.98rem',
+                    fontWeight: 700,
+                    color: 'var(--ink-primary)',
+                    cursor: 'pointer',
+                  }}
+                >
+                  {f.question}
+                </summary>
+                <p
+                  style={{
+                    fontFamily: 'var(--font-inter)',
+                    fontSize: '0.92rem',
+                    lineHeight: 1.6,
+                    color: 'var(--ink-secondary)',
+                    margin: '0.75rem 0 0',
+                  }}
+                >
+                  {f.answer}
+                </p>
+              </details>
+            ))}
+          </div>
+        </section>
+      )}
     </SeoPageShell>
   );
 }
@@ -136,10 +188,12 @@ export function buildThingsToDoJsonLd({
   city,
   experiences,
   canonical,
+  faq,
 }: {
   city: SeoCity;
   experiences: Experience[];
   canonical: string;
+  faq: ThingsToDoFaq[];
 }): string {
   const items = experiences.slice(0, 20).map((e, i) => ({
     '@type': 'ListItem',
@@ -164,7 +218,7 @@ export function buildThingsToDoJsonLd({
     },
   }));
 
-  const payload = {
+  const itemList = {
     '@context': 'https://schema.org',
     '@type': 'ItemList',
     name: `Things to do in ${city.name}, ${city.countryName}`,
@@ -174,5 +228,18 @@ export function buildThingsToDoJsonLd({
     numberOfItems: items.length,
     itemListElement: items,
   };
-  return JSON.stringify(payload).replace(/</g, '\\u003c').replace(/>/g, '\\u003e');
+
+  const faqPage = {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faq.map((f) => ({
+      '@type': 'Question',
+      name: f.question,
+      acceptedAnswer: { '@type': 'Answer', text: f.answer },
+    })),
+  };
+
+  // ItemList only when there's live inventory to list; FAQPage always.
+  const payloads = items.length > 0 ? [itemList, faqPage] : [faqPage];
+  return JSON.stringify(payloads).replace(/</g, '\\u003c').replace(/>/g, '\\u003e');
 }

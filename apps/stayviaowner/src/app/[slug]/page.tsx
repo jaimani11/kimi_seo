@@ -41,7 +41,12 @@ import {
   WhereToGoMonthSeoPage,
   buildWhereToGoMonthJsonLd,
 } from '@/features/seo/climate-seo-pages';
-import { findClimate, findDestinationGuide, monthName } from '@adored/seo-data';
+import {
+  buildThingsToDoFaq,
+  findClimate,
+  findDestinationGuide,
+  monthName,
+} from '@adored/seo-data';
 import { buildExpediaCategoryUrl } from '@lib/affiliate/expedia-multicategory';
 import type { Plan } from '@lib/plan/types';
 import type { Experience } from '@core/experience';
@@ -629,6 +634,12 @@ export default async function ProgrammaticSeoPage({ params }: PageProps) {
   // things-to-do
   const { city } = parsed;
   const result = await fetchExperiences(`${city.viatorQuery} tours`);
+  const faq = buildThingsToDoFaq({
+    cityName: city.name,
+    oneLiner: city.oneLiner,
+    guide: findDestinationGuide(city.slug),
+    topExperienceTitles: result.experiences.slice(0, 3).map((e) => e.title),
+  });
   return (
     <>
       <script
@@ -638,6 +649,7 @@ export default async function ProgrammaticSeoPage({ params }: PageProps) {
             city,
             experiences: result.experiences,
             canonical,
+            faq,
           }),
         }}
       />
@@ -645,6 +657,7 @@ export default async function ProgrammaticSeoPage({ params }: PageProps) {
         city={city}
         experiences={result.experiences}
         loadError={result.loadError}
+        faq={faq}
       />
     </>
   );
