@@ -1045,7 +1045,7 @@ function CapsuleCard({ capsule }: { capsule: ExperienceCapsule }) {
         <a
           href={capsule.href}
           target="_blank"
-          rel="noopener noreferrer sponsored"
+          rel="sponsored nofollow noopener noreferrer"
           className="mt-1 inline-flex items-center gap-1 transition-opacity hover:opacity-90"
           style={{
             fontFamily: 'var(--font-inter)',
@@ -1165,7 +1165,7 @@ function OpportunityBoard({ panel }: { panel: OpportunityPanel }) {
               <a
                 href={p.url}
                 target="_blank"
-                rel="noopener noreferrer sponsored"
+                rel="sponsored nofollow noopener noreferrer"
                 className="group flex h-full flex-col gap-1 rounded-lg border p-3 transition-colors hover:border-[color:var(--accent-primary)]"
                 style={{
                   background: 'rgba(237,230,219,0.04)',

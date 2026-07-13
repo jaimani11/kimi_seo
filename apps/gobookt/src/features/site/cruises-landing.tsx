@@ -230,7 +230,7 @@ export function CruisesLanding() {
                       key={port.slug}
                       href={hotelsUrl}
                       target="_blank"
-                      rel="noopener noreferrer sponsored"
+                      rel="sponsored nofollow noopener noreferrer"
                       className="rounded-2xl border p-5 transition-colors hover:border-[color:var(--accent-primary)]"
                       style={{
                         background: 'var(--surface-elevated)',

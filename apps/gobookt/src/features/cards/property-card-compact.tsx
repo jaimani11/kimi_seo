@@ -29,7 +29,7 @@ export function PropertyCardCompact({ property }: PropertyCardCompactProps) {
     <motion.a
       href={href}
       target="_blank"
-      rel="noopener noreferrer sponsored"
+      rel="sponsored nofollow noopener noreferrer"
       aria-label={`${property.name} in ${property.destination} (affiliate link)`}
       whileHover={{ y: -3 }}
       transition={{ duration: 0.22, ease: [0.22, 0.61, 0.36, 1] }}

@@ -189,7 +189,7 @@ export function PlanDayCard({ day }: { day: PlanDay }) {
                           <a
                             href={reserveHref}
                             target="_blank"
-                            rel="noopener noreferrer sponsored"
+                            rel="sponsored nofollow noopener noreferrer"
                             data-plan-reserve="1"
                             className="inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 transition-opacity hover:opacity-90"
                             style={{

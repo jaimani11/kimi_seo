@@ -79,5 +79,56 @@ export function resolveBookingUrl(surface: BookingCjSurface | null, target: stri
     const fixed = bookingCjFixedLink(surface);
     if (fixed) return fixed;
   }
+  // No CJ creative for this surface. When the affiliate program is ENABLED we
+  // must never emit a raw, untracked booking.com URL — fall back to the stays
+  // creative (a CJ-tracked homepage link) so the click still attributes. Only
+  // an unconfigured/disabled deployment returns the plain target, as a pure
+  // fail-safe so a missing env var never yields a broken CTA in dev.
+  if (bookingAffiliateEnabled()) {
+    const staysFallback = bookingCjFixedLink('stays');
+    if (staysFallback) {
+      if (surface !== 'stays') {
+        console.warn('[booking-cj] no CJ creative for surface; using stays creative', {
+          surface,
+        });
+      }
+      return staysFallback;
+    }
+  }
   return target;
+}
+
+/** CJ click-redirect domains — the tracked outbound hosts (see allowlist). */
+const CJ_REDIRECT_DOMAINS = [
+  'anrdoezrs.net',
+  'dpbolvw.net',
+  'tkqlhce.com',
+  'jdoqocy.com',
+  'kqzyfj.com',
+] as const;
+
+/**
+ * Classify a resolved outbound Booking.com URL for structured logging:
+ * whether it's a CJ-tracked link, which CJ domain, and the creative/link id
+ * parsed from the CJ click path (`…/click-<PID>-<CREATIVE>`). Never throws.
+ */
+export function describeBookingCjUrl(url: string): {
+  tracked: boolean;
+  cjDomain: string | null;
+  creativeId: string | null;
+} {
+  try {
+    const u = new URL(url);
+    const host = u.hostname.toLowerCase();
+    const cjDomain =
+      CJ_REDIRECT_DOMAINS.find((d) => host === d || host.endsWith(`.${d}`)) ?? null;
+    const m = u.pathname.match(/click-\d+-(\d+)/);
+    return {
+      tracked: cjDomain !== null,
+      cjDomain,
+      creativeId: m ? (m[1] ?? null) : null,
+    };
+  } catch {
+    return { tracked: false, cjDomain: null, creativeId: null };
+  }
 }

@@ -340,7 +340,7 @@ function ResultRow({ experience }: { experience: Experience }) {
           <a
             href={rawUrl}
             target="_blank"
-            rel="noopener noreferrer sponsored"
+            rel="sponsored nofollow noopener noreferrer"
             className="break-all"
             style={{
               fontFamily: 'var(--font-mono, ui-monospace)',
@@ -358,7 +358,7 @@ function ResultRow({ experience }: { experience: Experience }) {
             <a
               href={trackedHref}
               target="_blank"
-              rel="noopener noreferrer sponsored"
+              rel="sponsored nofollow noopener noreferrer"
               className="break-all"
               style={{
                 fontFamily: 'var(--font-mono, ui-monospace)',

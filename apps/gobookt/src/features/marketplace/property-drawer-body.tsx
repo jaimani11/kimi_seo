@@ -185,7 +185,7 @@ export function PropertyDrawerBody({ property, titleId, onClose }: PropertyDrawe
       <a
         href={href}
         target="_blank"
-        rel="noopener noreferrer sponsored"
+        rel="sponsored nofollow noopener noreferrer"
         className="group inline-flex items-center justify-between gap-4 transition-all"
         style={{
           marginTop: '0.5rem',

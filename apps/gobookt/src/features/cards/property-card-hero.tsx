@@ -44,7 +44,7 @@ export function PropertyCardHero({ property }: PropertyCardHeroProps) {
       ref={containerRef}
       href={href}
       target="_blank"
-      rel="noopener noreferrer sponsored"
+      rel="sponsored nofollow noopener noreferrer"
       aria-label={`Open details for ${property.name} in ${property.destination}`}
       onClick={(e) => {
         // Cmd/ctrl/middle-click: let the browser open the partner

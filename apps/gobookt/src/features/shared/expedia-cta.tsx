@@ -78,7 +78,7 @@ export function ExpediaCta({ stay, intent, turnId, variant }: ExpediaCtaProps) {
       <a
         href={href}
         target="_blank"
-        rel="noopener noreferrer sponsored"
+        rel="sponsored nofollow noopener noreferrer"
         onClick={(e) => e.stopPropagation()}
         className="inline-flex items-center gap-1 transition-opacity hover:opacity-80"
         style={{
@@ -103,7 +103,7 @@ export function ExpediaCta({ stay, intent, turnId, variant }: ExpediaCtaProps) {
       <a
         href={href}
         target="_blank"
-        rel="noopener noreferrer sponsored"
+        rel="sponsored nofollow noopener noreferrer"
         className="inline-flex items-center justify-center gap-2 transition-opacity hover:opacity-90"
         style={{
           fontFamily: 'var(--font-inter)',

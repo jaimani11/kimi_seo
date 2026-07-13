@@ -231,7 +231,7 @@ export default async function AffiliateDebugPage() {
         <a
           href={sampleTrackedUrl}
           target="_blank"
-          rel="noopener noreferrer sponsored"
+          rel="sponsored nofollow noopener noreferrer"
           className="inline-flex items-center gap-2 rounded-md transition-opacity hover:opacity-90"
           style={{
             fontFamily: 'var(--font-inter)',
@@ -356,7 +356,7 @@ function UrlPanel({ label, help, url }: UrlPanelProps) {
         <a
           href={url}
           target="_blank"
-          rel="noopener noreferrer sponsored"
+          rel="sponsored nofollow noopener noreferrer"
           style={{
             fontFamily: 'var(--font-inter)',
             fontSize: 'var(--text-label)',

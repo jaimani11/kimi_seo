@@ -397,7 +397,7 @@ export function VerticalLandingPage({
         <a
           href={searchUrl}
           target="_blank"
-          rel="noopener noreferrer sponsored"
+          rel="sponsored nofollow noopener noreferrer"
           className="mt-7 inline-flex items-center gap-2 transition-transform hover:scale-[1.01]"
           style={{
             fontFamily: 'var(--font-inter)',

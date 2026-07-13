@@ -91,7 +91,7 @@ export function DestinationStayCta({
         <a
           href={stayHref}
           target="_blank"
-          rel="noopener noreferrer sponsored"
+          rel="sponsored nofollow noopener noreferrer"
           aria-label={partnerAriaLabel(providerId, `stays in ${destination.name}`)}
           className="mt-5 inline-flex items-center gap-2 transition-transform hover:translate-x-0.5"
           style={{

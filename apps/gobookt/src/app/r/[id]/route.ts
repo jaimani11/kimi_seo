@@ -4,6 +4,7 @@ import { getServerAuth, ownerOf } from '@lib/auth';
 import { getSessionStore } from '@lib/session/factory';
 import { decodeAffiliateLink } from '@lib/affiliate/link-encoder';
 import { decorateOutboundUrl } from '@lib/affiliate/decorate-outbound';
+import { describeBookingCjUrl } from '@lib/affiliate/booking-cj-links';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -76,12 +77,15 @@ export async function GET(_req: NextRequest, { params }: RouteParams): Promise<R
 
   // Truncated log line so ops can see traffic + provider attribution
   // without leaking the full URL into logs at scale.
-  const truncated = outbound.length > 80 ? `${outbound.slice(0, 77)}…` : outbound;
+  const desc = describeBookingCjUrl(outbound);
   console.info('[r] redirecting', {
+    site: 'gobookt',
     providerId: payload.providerId,
     stayId: payload.stayId ?? null,
     turnId: payload.turnId ?? null,
-    url: truncated,
+    tracked: desc.tracked,
+    cjDomain: desc.cjDomain,
+    creativeId: desc.creativeId,
   });
 
   // 302, not 301 - affiliate URLs may change campaign params; we don't

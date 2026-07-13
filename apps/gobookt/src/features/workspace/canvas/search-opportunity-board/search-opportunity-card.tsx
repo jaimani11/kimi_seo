@@ -58,7 +58,7 @@ export function SearchOpportunityCard({ provider, turnId, destinationName }: Pro
     <a
       href={href}
       target="_blank"
-      rel="noopener noreferrer sponsored"
+      rel="sponsored nofollow noopener noreferrer"
       aria-label={partnerAriaLabel(provider.providerId, `stays in ${destinationName}`)}
       className="group flex flex-col gap-3 transition-transform hover:-translate-y-0.5"
       style={{

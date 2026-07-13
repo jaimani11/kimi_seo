@@ -4,6 +4,8 @@ import {
   buildBookingComCategoryUrl,
   type BookingComCategory,
 } from '@lib/affiliate/booking-com-multicategory';
+import { describeBookingCjUrl } from '@lib/affiliate/booking-cj-links';
+import { isAllowedAffiliateHost } from '@lib/affiliate/allowlist';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -58,8 +60,27 @@ export async function GET(req: NextRequest): Promise<Response> {
     children,
   });
 
-  const truncated = outbound.length > 100 ? `${outbound.slice(0, 97)}…` : outbound;
-  console.info('[go/booking]', { category, destination, url: truncated });
+  // Defense-in-depth open-redirect guard: the resolved URL must be a trusted
+  // affiliate host (booking.com or a CJ redirect domain). This can only fail
+  // if an operator misconfigures a BOOKING_*_AFFILIATE_URL to a foreign
+  // domain — fail closed rather than redirect off-network.
+  if (!isAllowedAffiliateHost(outbound)) {
+    console.error('[go/booking] resolved URL not on affiliate allowlist — refusing', {
+      product: category,
+    });
+    return new Response('Booking destination unavailable', { status: 502 });
+  }
+
+  const desc = describeBookingCjUrl(outbound);
+  console.info('[go/booking]', {
+    site: 'gobookt',
+    provider: 'booking',
+    product: category,
+    tracked: desc.tracked,
+    cjDomain: desc.cjDomain,
+    creativeId: desc.creativeId,
+    destination,
+  });
 
   return NextResponse.redirect(outbound, 302);
 }

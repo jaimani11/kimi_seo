@@ -41,7 +41,7 @@ export function EditorialCard({ property, photoSide = 'left' }: EditorialCardPro
       ref={containerRef}
       href={href}
       target="_blank"
-      rel="noopener noreferrer sponsored"
+      rel="sponsored nofollow noopener noreferrer"
       aria-label={`Open details for ${property.name} in ${property.destination}`}
       onClick={(e) => {
         if (e.metaKey || e.ctrlKey || e.button === 1) return;

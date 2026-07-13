@@ -421,7 +421,7 @@ function SamplePanel({
                 <a
                   href={row.href}
                   target="_blank"
-                  rel="noopener noreferrer sponsored"
+                  rel="sponsored nofollow noopener noreferrer"
                   style={{ color: 'var(--accent-primary)', textDecoration: 'underline' }}
                 >
                   {row.v}

@@ -19,6 +19,16 @@ export const AFFILIATE_HOST_ALLOWLIST: readonly string[] = [
   'skyscanner.com',
   'viator.com', // Slice H1: live experience inventory
   'getyourguide.com',
+  // Commission Junction (CJ) click-redirect domains. gobookt's Booking.com
+  // affiliate links track through these networks, NOT via a param on
+  // booking.com — a CJ click URL (e.g. anrdoezrs.net/click-101803878-XXXX)
+  // is ITSELF the tracked outbound target, so it must pass this allowlist or
+  // the /r/[id] + /api/go redirect handlers would 404 it.
+  'anrdoezrs.net',
+  'dpbolvw.net',
+  'tkqlhce.com',
+  'jdoqocy.com',
+  'kqzyfj.com',
 ];
 
 /**

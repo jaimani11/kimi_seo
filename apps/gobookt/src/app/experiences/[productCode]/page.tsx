@@ -384,7 +384,7 @@ export default async function ExperienceDetailPage({ params }: PageProps) {
               <a
                 href={reserveHref}
                 target="_blank"
-                rel="noopener noreferrer sponsored"
+                rel="sponsored nofollow noopener noreferrer"
                 className="group inline-flex items-center justify-between gap-3 transition-all"
                 style={{
                   marginTop: '0.6rem',
