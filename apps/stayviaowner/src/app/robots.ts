@@ -42,6 +42,24 @@ export default function robots(): MetadataRoute.Robots {
         userAgent: ['Baiduspider', 'Bytespider'],
         disallow: ['/'],
       },
+      {
+        // Explicitly welcome AI answer engines (GEO). Already allowed via `*`,
+        // but naming them is an unambiguous "please read + cite us" signal.
+        // Google-Extended = permission for Google's AI (Gemini/AI Overviews).
+        // Same /api + /t exclusions as every other agent.
+        userAgent: [
+          'GPTBot',
+          'OAI-SearchBot',
+          'ChatGPT-User',
+          'PerplexityBot',
+          'ClaudeBot',
+          'Claude-User',
+          'Google-Extended',
+          'Applebot-Extended',
+        ],
+        allow: ['/'],
+        disallow: ['/api/', '/t/'],
+      },
     ],
     sitemap: `${siteUrl()}/sitemap.xml`,
   };
