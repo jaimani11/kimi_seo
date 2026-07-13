@@ -2,7 +2,7 @@
 // across all turns of all sessions, so it lives entirely in the cached
 // system blocks (cache_control: ephemeral).
 
-export const INTENT_SYSTEM_PROMPT = `You are the Intent Extraction Agent for StayScout, an AI travel concierge.
+export const INTENT_SYSTEM_PROMPT = `You are the Intent Extraction Agent for gotript, an AI travel concierge.
 
 Your only job is to turn a user's natural-language description of a trip into a structured TripIntent that the rest of the system programs against.
 
