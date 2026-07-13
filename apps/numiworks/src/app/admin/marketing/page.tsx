@@ -74,6 +74,37 @@ export default async function AdminMarketingPage() {
 
   return (
     <AdminShell section="marketing" title="Marketing automation" subtitle={subtitle}>
+      {/* Internal ops reference — the phased Security & Analytics (Part B)
+       *  plan, hosted as a private Claude artifact. Planning only; opens
+       *  on claude.ai (visible to the signed-in operator only). */}
+      <a
+        href="https://claude.ai/code/artifact/3cb2343e-bf39-45fe-9f00-9aaa571c6c89"
+        target="_blank"
+        rel="noopener noreferrer"
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          gap: '0.65rem',
+          marginBottom: '1.25rem',
+          padding: '0.85rem 1.1rem',
+          borderRadius: '0.7rem',
+          border: '1px solid var(--border-subtle)',
+          background: 'var(--surface-elevated)',
+          textDecoration: 'none',
+          fontFamily: 'var(--font-inter)',
+          fontSize: '0.85rem',
+          color: 'var(--ink-secondary)',
+        }}
+      >
+        <span aria-hidden style={{ fontSize: '1.05rem' }}>🔒</span>
+        <span style={{ flex: 1, lineHeight: 1.45 }}>
+          <strong style={{ color: 'var(--ink-primary)' }}>Part&nbsp;B — Security &amp; Analytics plan</strong>
+          {' '}· phased program · planning only, not yet implemented
+        </span>
+        <span aria-hidden style={{ color: 'var(--accent-primary)', fontWeight: 700, whiteSpace: 'nowrap' }}>
+          Open&nbsp;↗
+        </span>
+      </a>
       <MarketingDashboard
         config={config}
         adapterStatus={adapterStatus}
