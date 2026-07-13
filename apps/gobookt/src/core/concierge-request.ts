@@ -17,7 +17,7 @@ export const ConciergeRequestSchema = z.object({
   turnId: z.string(),
   type: z.enum(['compose', 'refine']),
   input: z.object({
-    rawInput: z.string().min(1),
+    rawInput: z.string().min(1).max(1000, 'Your message is too long — please keep it under 1000 characters.'),
     priorProposalRef: ProposalRefSchema.optional(),
     compareSet: z.array(z.string()).max(3).optional(),
   }),
