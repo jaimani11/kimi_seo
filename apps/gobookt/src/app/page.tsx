@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import { SiteHeader } from '@/features/site/site-header';
-import { MultiCategoryHero } from '@/features/site/multi-category-hero';
+import { HomeStayHero } from '@/features/site/home-stay-hero';
 import { StatsBand } from '@/features/site/stats-band';
 import { AgenticHero } from '@/features/site/agentic-hero';
 import { RecentlyViewedRail } from '@/features/site/recently-viewed-rail';
@@ -17,9 +17,13 @@ import { SiteFooter } from '@/features/site/site-footer';
  *   SiteHeader              : sticky nav with 5 category links
  *                             (Stays / Flights / Things to do / Cars
  *                             / Cruises) + Destinations + Concierge.
- *   MultiCategoryHero       : 5-tab search form. Picks destination +
- *                             dates + party, redirects to Booking.com
- *                             for the chosen vertical via /api/go/booking.
+ *   HomeStayHero            : accommodation-first stays search. Picks
+ *                             destination + dates + party, hands off to
+ *                             Booking.com via /api/go/booking. Flights /
+ *                             cars / things-to-do are quiet secondary
+ *                             links, not equal tabs. (The 5-tab
+ *                             MultiCategoryHero is retained for the
+ *                             /flights, /cars, /cruises landing pages.)
  *   StatsBand               : numbered trust strip.
  *   AgenticHero             : AI concierge — frames "plan my whole
  *                             trip" rather than just experiences.
@@ -50,7 +54,7 @@ export default function HomePage() {
   return (
     <>
       <SiteHeader />
-      <MultiCategoryHero />
+      <HomeStayHero />
       <StatsBand />
       <AgenticHero />
       <RecentlyViewedRail />

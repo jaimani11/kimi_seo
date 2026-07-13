@@ -12,6 +12,7 @@ import {
   buildViatorStaySearchUrl,
   getViatorStayLinkConfig,
 } from './viator-stay-link-builder';
+import { resolveBookingUrl } from './booking-cj-links';
 
 /**
  * Active-stay-provider abstraction.
@@ -123,7 +124,13 @@ export function buildActiveStaySearchUrl(input: ActiveStaySearchInput): string {
       ...(typeof input.rooms === 'number' ? { rooms: input.rooms } : {}),
       ...(input.inventoryFilter ? { inventoryFilter: input.inventoryFilter } : {}),
     };
-    return buildBookingComSearchUrl(bookingInput, getBookingComAffiliateConfig());
+    const target = buildBookingComSearchUrl(bookingInput, getBookingComAffiliateConfig());
+    // gobookt is a Booking.com *CJ* affiliate — a raw booking.com URL with a
+    // label earns nothing on CJ. Route the stay CTA through the CJ resolver so
+    // it uses BOOKING_STAYS_AFFILIATE_URL (the tracked CJ link) when configured,
+    // falling back to the plain URL only when it isn't. Same path as every
+    // other gobookt Booking.com CTA now.
+    return resolveBookingUrl('stays', target);
   }
 
   // Default: Viator destination search. Viator doesn't sell hotels;

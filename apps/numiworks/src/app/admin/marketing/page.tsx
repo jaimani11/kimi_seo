@@ -75,17 +75,16 @@ export default async function AdminMarketingPage() {
   return (
     <AdminShell section="marketing" title="Marketing automation" subtitle={subtitle}>
       {/* Internal ops reference — the phased Security & Analytics (Part B)
-       *  plan, hosted as a private Claude artifact. Planning only; opens
-       *  on claude.ai (visible to the signed-in operator only). */}
+       *  plan. Canonical copy is rendered internally from a version-
+       *  controlled repo doc (no Claude login needed); the private artifact
+       *  is now only a secondary external mirror. */}
       <a
-        href="https://claude.ai/code/artifact/3cb2343e-bf39-45fe-9f00-9aaa571c6c89"
-        target="_blank"
-        rel="noopener noreferrer"
+        href="/admin/marketing/security-analytics-plan"
         style={{
           display: 'flex',
           alignItems: 'center',
           gap: '0.65rem',
-          marginBottom: '1.25rem',
+          marginBottom: '0.5rem',
           padding: '0.85rem 1.1rem',
           borderRadius: '0.7rem',
           border: '1px solid var(--border-subtle)',
@@ -96,15 +95,33 @@ export default async function AdminMarketingPage() {
           color: 'var(--ink-secondary)',
         }}
       >
-        <span aria-hidden style={{ fontSize: '1.05rem' }}>🔒</span>
+        <span aria-hidden style={{ fontSize: '1.05rem' }}>📋</span>
         <span style={{ flex: 1, lineHeight: 1.45 }}>
           <strong style={{ color: 'var(--ink-primary)' }}>Part&nbsp;B — Security &amp; Analytics plan</strong>
           {' '}· phased program · planning only, not yet implemented
         </span>
         <span aria-hidden style={{ color: 'var(--accent-primary)', fontWeight: 700, whiteSpace: 'nowrap' }}>
-          Open&nbsp;↗
+          View&nbsp;→
         </span>
       </a>
+      <p
+        style={{
+          margin: '0 0 1.25rem',
+          fontFamily: 'var(--font-inter)',
+          fontSize: '0.72rem',
+          color: 'var(--ink-tertiary, var(--ink-secondary))',
+        }}
+      >
+        External mirror (read-only, needs a Claude login):{' '}
+        <a
+          href="https://claude.ai/code/artifact/3cb2343e-bf39-45fe-9f00-9aaa571c6c89"
+          target="_blank"
+          rel="noopener noreferrer"
+          style={{ color: 'var(--ink-secondary)', textDecoration: 'underline' }}
+        >
+          Claude artifact&nbsp;↗
+        </a>
+      </p>
       <MarketingDashboard
         config={config}
         adapterStatus={adapterStatus}
