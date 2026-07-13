@@ -24,6 +24,8 @@
  *                                   (default 'gobookt').
  */
 
+import { resolveBookingUrl, type BookingCjSurface } from './booking-cj-links';
+
 export type BookingComCategory =
   | 'hotels'
   | 'attractions'
@@ -73,6 +75,37 @@ export function buildBookingComCategoryUrl(
   category: BookingComCategory,
   input: CategorySearchInput,
   config: BookingComMultiConfig = getBookingComMultiConfig(),
+): string {
+  // The specific booking.com page we'd ideally land on. Used directly
+  // only as the evergreen deep-link target, or as an untracked fail-safe
+  // when no CJ creative is configured. Otherwise the CJ creative link for
+  // the surface wins — Booking.com is approved via CJ, which tracks
+  // through its own redirect links, not an `aid` param.
+  const target = buildCategoryTargetUrl(category, input, config);
+  return resolveBookingUrl(surfaceForCategory(category), target);
+}
+
+/** Maps a vertical to its CJ creative surface (null = no CJ creative yet). */
+function surfaceForCategory(category: BookingComCategory): BookingCjSurface | null {
+  switch (category) {
+    case 'hotels':
+    case 'cruises': // gobookt routes cruises → embarkation-port hotels
+      return 'stays';
+    case 'attractions':
+      return 'attractions';
+    case 'flights':
+      return 'flights';
+    case 'cars':
+    case 'taxis':
+      return null; // no dedicated CJ creative supplied yet
+  }
+}
+
+/** The canonical booking.com destination URL for a vertical. */
+function buildCategoryTargetUrl(
+  category: BookingComCategory,
+  input: CategorySearchInput,
+  config: BookingComMultiConfig,
 ): string {
   switch (category) {
     case 'hotels':
