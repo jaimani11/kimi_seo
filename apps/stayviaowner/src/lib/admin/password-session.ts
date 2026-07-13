@@ -59,6 +59,19 @@ function getAdminPassword(): string | null {
 }
 
 /**
+ * Explicit, dev-only bypass for the admin + cron gates. True ONLY outside
+ * production AND when the operator opts in with ALLOW_INSECURE_LOCAL_ADMIN=true.
+ * Never true in Vercel Production/Preview (NODE_ENV === 'production'). This is
+ * what lets the gates fail CLOSED without blocking local development.
+ */
+export function insecureLocalAdminBypass(): boolean {
+  return (
+    process.env.NODE_ENV !== 'production' &&
+    (process.env.ALLOW_INSECURE_LOCAL_ADMIN ?? '').trim() === 'true'
+  );
+}
+
+/**
  * Returns true when the password gate is configured. When false, the
  * admin page is open — useful for local dev.
  */

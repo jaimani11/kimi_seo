@@ -1,4 +1,5 @@
 import type { NextRequest } from 'next/server';
+import { isCronAuthorized } from '@lib/admin/cron-auth';
 import { runMarketingScheduler } from '@lib/marketing/scheduler';
 import { pinterestPostedToday } from '@adored/marketing';
 
@@ -52,8 +53,6 @@ export async function GET(req: NextRequest): Promise<Response> {
 }
 
 function isAuthorized(req: NextRequest): boolean {
-  const secret = (process.env.CRON_SECRET ?? '').trim();
-  if (!secret) return true;
-  const header = req.headers.get('authorization') ?? '';
-  return header === `Bearer ${secret}`;
+  // Fail closed + timing-safe — see lib/admin/cron-auth.
+  return isCronAuthorized(req.headers.get('authorization'));
 }

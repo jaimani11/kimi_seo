@@ -2,28 +2,38 @@ import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 import {
   ADMIN_COOKIE_NAME,
+  insecureLocalAdminBypass,
   isCookieValid,
   isPasswordGateEnabled,
 } from './password-session';
 
 /**
  * Gate a server component or route handler behind the admin password.
+ * FAILS CLOSED: if `ADMIN_PASSWORD` is not configured, access is DENIED,
+ * not opened. Local dev may bypass only with an explicit
+ * `ALLOW_INSECURE_LOCAL_ADMIN=true` (never honored in production).
  *
- *   - If `ADMIN_PASSWORD` is NOT set in env → gate is OPEN, returns
- *     without redirect. Use this for local dev.
- *   - If `ADMIN_PASSWORD` IS set → must have a valid signed session
- *     cookie. Otherwise redirect to /admin/login with the original
- *     path encoded so we can bounce back after login.
+ *   - No `ADMIN_PASSWORD` → deny (throws a generic config error), unless
+ *     the explicit local-dev bypass is on.
+ *   - `ADMIN_PASSWORD` set → require a valid signed session cookie, else
+ *     redirect to /admin/login with the original path encoded.
  *
- * `redirect()` throws a Next-runtime exception when invoked, so this
- * function "returns" only when access is granted.
+ * `redirect()` / the thrown error stop execution, so this function
+ * "returns" only when access is granted.
  */
 export async function requirePasswordAdmin(args?: {
   /** Where to bounce after a successful login. Defaults to the
    *  requested page. Pass an absolute path. */
   returnTo?: string;
 }): Promise<void> {
-  if (!isPasswordGateEnabled()) return; // dev mode
+  if (!isPasswordGateEnabled()) {
+    // Explicit local-dev bypass only — never in production.
+    if (insecureLocalAdminBypass()) return;
+    // Fail closed: no admin password configured. Deny without naming the
+    // missing variable to end users; log a privacy-safe server event.
+    console.error('[admin] access denied — ADMIN_PASSWORD is not configured');
+    throw new Error('Admin is not available on this deployment.');
+  }
 
   const jar = await cookies();
   const cookie = jar.get(ADMIN_COOKIE_NAME)?.value;
