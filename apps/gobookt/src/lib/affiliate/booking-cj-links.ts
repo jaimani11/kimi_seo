@@ -21,11 +21,12 @@
  *   BOOKING_STAYS_AFFILIATE_URL       accommodation CTA (temp: Getaway Deal creative)
  *   BOOKING_ATTRACTIONS_AFFILIATE_URL attractions CTA
  *   BOOKING_FLIGHTS_AFFILIATE_URL     flights CTA
+ *   BOOKING_CARS_AFFILIATE_URL        car-rental CTA (→ booking.com/cars/index.html)
  *   BOOKING_CJ_EVERGREEN_TEMPLATE     optional; e.g.
  *                                     https://www.tkqlhce.com/click-PID123?url={TARGET}
  */
 
-export type BookingCjSurface = 'stays' | 'attractions' | 'flights';
+export type BookingCjSurface = 'stays' | 'attractions' | 'flights' | 'cars';
 
 function env(name: string): string | null {
   const v = (process.env[name] ?? '').trim();
@@ -51,6 +52,8 @@ export function bookingCjFixedLink(surface: BookingCjSurface): string | null {
       return env('BOOKING_ATTRACTIONS_AFFILIATE_URL');
     case 'flights':
       return env('BOOKING_FLIGHTS_AFFILIATE_URL');
+    case 'cars':
+      return env('BOOKING_CARS_AFFILIATE_URL');
   }
 }
 

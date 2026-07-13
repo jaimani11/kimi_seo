@@ -96,8 +96,9 @@ function surfaceForCategory(category: BookingComCategory): BookingCjSurface | nu
     case 'flights':
       return 'flights';
     case 'cars':
+      return 'cars';
     case 'taxis':
-      return null; // no dedicated CJ creative supplied yet
+      return null; // Airport Taxis: no CJ creative yet — stays hidden / Coming Soon
   }
 }
 
