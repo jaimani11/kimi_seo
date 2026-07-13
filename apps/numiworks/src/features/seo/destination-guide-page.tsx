@@ -479,6 +479,10 @@ export function buildDestinationGuideJsonLd({
       latitude: city.coordinates.lat,
       longitude: city.coordinates.lng,
     },
+    containedInPlace: {
+      '@type': 'Country',
+      name: city.countryName,
+    },
     touristType: ['Family', 'Couples', 'Solo'],
   };
 
