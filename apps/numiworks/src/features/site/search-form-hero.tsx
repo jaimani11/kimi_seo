@@ -53,13 +53,14 @@ const HIGHLIGHT = '#ffd166';
  * evergreen-template pattern gobookt uses for Booking.com.
  */
 function buildVrboSearchUrl(destination: string, checkIn: string, checkOut: string): string {
+  // VRBO's live search takes the location as a `destination` query param;
+  // the old `/search/keywords:<x>` path is deprecated (VRBO ignores it and
+  // geolocates the visitor instead).
   const params = new URLSearchParams();
+  params.set('destination', destination);
   if (checkIn) params.set('startDate', checkIn);
   if (checkOut) params.set('endDate', checkOut);
-  const query = params.toString();
-  const target = `https://www.vrbo.com/search/keywords:${encodeURIComponent(destination)}${
-    query ? `?${query}` : ''
-  }`;
+  const target = `https://www.vrbo.com/search?${params.toString()}`;
   const template = process.env.NEXT_PUBLIC_VRBO_DEEPLINK_TEMPLATE;
   if (template && template.includes('{TARGET}')) {
     return template.replace('{TARGET}', encodeURIComponent(target));

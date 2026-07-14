@@ -33,7 +33,7 @@ export function poiHeading(poi: StaysNearPoi): string {
 
 /** VRBO whole-home link (deep-link-template aware; falls back to the tracked shortlink). */
 export function vrboHref(poi: StaysNearPoi): string {
-  const target = `https://www.vrbo.com/search/keywords:${encodeURIComponent(poi.searchQuery)}`;
+  const target = `https://www.vrbo.com/search?destination=${encodeURIComponent(poi.searchQuery)}`;
   const template = process.env.NEXT_PUBLIC_VRBO_DEEPLINK_TEMPLATE;
   if (template && template.includes('{TARGET}')) return template.replace('{TARGET}', encodeURIComponent(target));
   return process.env.NEXT_PUBLIC_VRBO_SHORTLINK || 'https://vrbo.com/affiliate/zVJTNin';

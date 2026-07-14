@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 
 /**
  * Rental-focused home hero for stayviaowner.com.
@@ -47,13 +47,22 @@ export function RentalHero() {
   const [checkIn, setCheckIn] = useState('2026-07-20');
   const [checkOut, setCheckOut] = useState('2026-07-27');
 
-  const submitHref = useMemo(() => {
-    const url = new URL('/vacation-rentals', 'https://www.stayviaowner.com');
-    url.searchParams.set('ss', destination);
-    if (checkIn) url.searchParams.set('startDate', checkIn);
-    if (checkOut) url.searchParams.set('endDate', checkOut);
-    return `${url.pathname}?${url.searchParams.toString()}`;
-  }, [destination, checkIn, checkOut]);
+  // One-step handoff: go straight to VRBO via the tracked /api/go/expedia
+  // redirect (same route the /vacation-rentals search uses). Previously this
+  // linked to /vacation-rentals?ss=… — a page that ignored the params and
+  // showed an empty form, forcing a second search. No more middle step.
+  const goToVrbo = () => {
+    const dest = destination.trim();
+    if (!dest) return;
+    const params = new URLSearchParams({
+      category: 'vacation-rentals',
+      destination: dest,
+      adults: '2',
+    });
+    if (checkIn) params.set('checkIn', checkIn);
+    if (checkOut) params.set('checkOut', checkOut);
+    window.open(`/api/go/expedia?${params.toString()}`, '_blank', 'noopener,noreferrer');
+  };
 
   return (
     <section
@@ -102,7 +111,7 @@ export function RentalHero() {
           style={{ maxWidth: '60rem' }}
           onSubmit={(e) => {
             e.preventDefault();
-            window.location.href = submitHref;
+            goToVrbo();
           }}
         >
           <div

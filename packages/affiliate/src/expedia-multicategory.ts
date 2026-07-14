@@ -128,14 +128,22 @@ export function createExpediaMulticategory(
     // VRBO is Expedia Group's vacation-rental brand — same Partnerize
     // affiliate account, but VRBO pays the highest commission in the
     // family (8-10% vs 3-4% on Expedia hotels).
-    const encoded = encodeURIComponent(input.destination);
+    //
+    // VRBO's live search takes the location as a `destination` QUERY param
+    // (`/search?destination=Miami`); it geocodes the free text itself. The
+    // older `/search/keywords:<x>` PATH form is deprecated — VRBO now
+    // ignores it and geolocates the visitor's own city instead (so every
+    // link resolved to the wrong place while dates still carried). Query
+    // form fixes that.
     const params = new URLSearchParams();
+    params.set('destination', input.destination);
     if (input.checkIn) params.set('startDate', input.checkIn);
     if (input.checkOut) params.set('endDate', input.checkOut);
-    const query = params.toString();
-    const suffix = query.length > 0 ? `?${query}` : '';
+    if (typeof input.adults === 'number' && input.adults > 0) {
+      params.set('adults', String(input.adults));
+    }
     return wrapVrboPartnerize(
-      `https://www.vrbo.com/search/keywords:${encoded}${suffix}`,
+      `https://www.vrbo.com/search?${params.toString()}`,
       config,
     );
   }
