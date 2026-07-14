@@ -12,8 +12,8 @@ import { useState } from 'react';
  *   - White search band with Destination + Dates + green "Show best prices"
  *   - Property-type chips below the search
  *
- * Search redirect: /vacation-rentals?ss=<dest> — the existing VRBO
- * deep-link route already handles the Expedia + VRBO redirect.
+ * Search: hands off directly to /api/go/expedia (the tracked VRBO/Expedia
+ * redirect) in ONE step — no intermediate /vacation-rentals search form.
  */
 
 const NAVY = '#0f2340';
