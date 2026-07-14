@@ -40,6 +40,35 @@ const BTN_BG_HOVER = '#0050a8';
 const BTN_DISABLED = '#cbd5e1';
 const HIGHLIGHT = '#ffd166';
 
+/**
+ * Resolve the outbound VRBO URL for a whole-home destination search.
+ *
+ * numiworks tracks VRBO through the bounce shortlink (no camref for a
+ * Partnerize deep-link), so by default we open the tracked shortlink —
+ * commission attributes, the traveller re-enters the destination on VRBO.
+ *
+ * Set NEXT_PUBLIC_VRBO_DEEPLINK_TEMPLATE to a deep-link wrapper containing
+ * the literal `{TARGET}` (e.g. `https://prf.hn/click/camref:XXXX/destination:{TARGET}`)
+ * to BOTH deep-link the destination search AND keep it tracked — same
+ * evergreen-template pattern gobookt uses for Booking.com.
+ */
+function buildVrboSearchUrl(destination: string, checkIn: string, checkOut: string): string {
+  const params = new URLSearchParams();
+  if (checkIn) params.set('startDate', checkIn);
+  if (checkOut) params.set('endDate', checkOut);
+  const query = params.toString();
+  const target = `https://www.vrbo.com/search/keywords:${encodeURIComponent(destination)}${
+    query ? `?${query}` : ''
+  }`;
+  const template = process.env.NEXT_PUBLIC_VRBO_DEEPLINK_TEMPLATE;
+  if (template && template.includes('{TARGET}')) {
+    return template.replace('{TARGET}', encodeURIComponent(target));
+  }
+  return process.env.NEXT_PUBLIC_VRBO_SHORTLINK || 'https://vrbo.com/affiliate/zVJTNin';
+}
+
+type SearchMode = 'homes' | 'experiences';
+
 export function SearchFormHero() {
   const router = useRouter();
   const today = new Date();
@@ -51,18 +80,25 @@ export function SearchFormHero() {
   const [checkOut, setCheckOut] = useState(defaultOut);
   const [travelers, setTravelers] = useState(2);
   const [hover, setHover] = useState(false);
+  const [mode, setMode] = useState<SearchMode>('homes');
+
+  // Run a search for a destination in the active mode: whole homes open
+  // VRBO (tracked, sponsored, new tab); experiences route to the internal
+  // Viator results page.
+  const runSearch = (dest: string) => {
+    const trimmed = dest.trim();
+    if (!trimmed) return;
+    track('hero_search_submit', { mode, destination: trimmed, checkIn, checkOut, travelers });
+    if (mode === 'homes') {
+      window.open(buildVrboSearchUrl(trimmed, checkIn, checkOut), '_blank', 'noopener,noreferrer');
+    } else {
+      router.push(`/search?q=${encodeURIComponent(trimmed)}`);
+    }
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    const trimmed = destination.trim();
-    if (!trimmed) return;
-    track('hero_search_submit', {
-      destination: trimmed,
-      checkIn,
-      checkOut,
-      travelers,
-    });
-    router.push(`/search?q=${encodeURIComponent(trimmed)}`);
+    runSearch(destination);
   };
 
   const canSearch = destination.trim().length > 0;
@@ -121,33 +157,54 @@ export function SearchFormHero() {
           Villas, cabins, cottages &amp; beach homes on VRBO — then plan the rest of your trip with AI.
         </p>
 
-        {/* Primary VRBO CTA — big button right under the "VRBO" words. Whole
-          * homes are numiworks's highest-commission path, so it gets the
-          * loudest button; the Viator experience search sits just below it. */}
-        <a
-          href={process.env.NEXT_PUBLIC_VRBO_SHORTLINK || 'https://vrbo.com/affiliate/zVJTNin'}
-          target="_blank"
-          rel="sponsored nofollow noopener noreferrer"
+        {/* Search-mode toggle — whole homes (VRBO) is numiworks's primary
+          * theme, so it's selected by default; experiences run on Viator.
+          * The form below submits to whichever mode is active. */}
+        <div
+          role="tablist"
+          aria-label="Search type"
           style={{
             display: 'inline-flex',
-            alignItems: 'center',
-            gap: '0.5rem',
+            gap: '0.3rem',
             margin: '1.4rem auto 0',
-            padding: '0.95rem 1.7rem',
+            padding: '0.3rem',
             borderRadius: '999px',
-            background: '#FBC700',
-            color: '#0A2B45',
-            fontFamily: 'var(--font-inter)',
-            fontSize: '1.05rem',
-            fontWeight: 800,
-            letterSpacing: '0.01em',
-            textDecoration: 'none',
-            boxShadow: '0 12px 32px -10px rgba(251,199,0,0.55)',
+            background: 'rgba(255,255,255,0.14)',
+            border: '1px solid rgba(255,255,255,0.28)',
+            backdropFilter: 'blur(6px)',
           }}
         >
-          🏡 Browse whole homes on VRBO
-          <ArrowRight size={16} strokeWidth={2.6} />
-        </a>
+          {(['homes', 'experiences'] as const).map((m) => {
+            const active = mode === m;
+            return (
+              <button
+                key={m}
+                type="button"
+                role="tab"
+                aria-selected={active}
+                onClick={() => setMode(m)}
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '0.4rem',
+                  padding: '0.6rem 1.25rem',
+                  borderRadius: '999px',
+                  border: 'none',
+                  cursor: 'pointer',
+                  fontFamily: 'var(--font-inter)',
+                  fontSize: '0.92rem',
+                  fontWeight: 700,
+                  background: active ? '#ffffff' : 'transparent',
+                  color: active ? '#0A2B45' : 'rgba(255,255,255,0.92)',
+                  boxShadow: active ? '0 4px 14px -4px rgba(0,0,0,0.3)' : 'none',
+                  transition: 'background 140ms ease, color 140ms ease',
+                }}
+              >
+                {m === 'homes' ? '🏡 Whole homes on VRBO' : '🎟️ Experiences on Viator'}
+              </button>
+            );
+          })}
+        </div>
 
         <form
           onSubmit={handleSubmit}
@@ -253,13 +310,12 @@ export function SearchFormHero() {
                   strokeLinecap="round"
                 />
               </svg>
-              Search
+              {mode === 'homes' ? 'Search VRBO' : 'Search Viator'}
             </button>
           </div>
         </form>
 
-        {/* Viator sits right under the search — the destination search runs on
-          * Viator's live tours & experiences catalog. */}
+        {/* Note under the search — reflects the active mode's partner. */}
         <p
           style={{
             margin: '0.9rem auto 0',
@@ -268,9 +324,19 @@ export function SearchFormHero() {
             color: 'rgba(255,255,255,0.82)',
           }}
         >
-          🎟️ Search runs on{' '}
-          <strong style={{ fontWeight: 700, color: '#ffffff' }}>Viator</strong> — 300,000+ tours
-          &amp; experiences worldwide.
+          {mode === 'homes' ? (
+            <>
+              🏡 Searching whole homes on{' '}
+              <strong style={{ fontWeight: 700, color: '#ffffff' }}>VRBO</strong> — villas, cabins,
+              cottages &amp; beach houses. You continue to VRBO to book.
+            </>
+          ) : (
+            <>
+              🎟️ Powered by{' '}
+              <strong style={{ fontWeight: 700, color: '#ffffff' }}>Viator</strong> — 300,000+ tours
+              &amp; experiences worldwide.
+            </>
+          )}
         </p>
 
         <div
@@ -303,7 +369,7 @@ export function SearchFormHero() {
               type="button"
               onClick={() => {
                 setDestination(d);
-                router.push(`/search?q=${encodeURIComponent(d)}`);
+                runSearch(d);
               }}
               style={{
                 fontFamily: 'var(--font-inter)',

@@ -12,6 +12,11 @@ import Link from 'next/link';
  *   - "Destinations" runs numiworks's own Viator experience search (/search).
  *   - Flat links cover the AI tools.
  * Desktop only; mobile keeps the search-led hero. Theme-aware via CSS vars.
+ *
+ * The dropdown panel is flush to its trigger (top: 100%) with a transparent
+ * paddingTop "bridge" rather than an empty margin gap, so moving the cursor
+ * from the trigger into the panel never leaves the hover target — the menu
+ * stays open and its links stay clickable.
  */
 
 const VRBO_LINK = process.env.NEXT_PUBLIC_VRBO_SHORTLINK || 'https://vrbo.com/affiliate/zVJTNin';
@@ -38,7 +43,7 @@ export function MegaNav() {
           <Chevron open={open === 'homes'} />
         </button>
         {open === 'homes' && (
-          <div role="menu" style={panelStyle}>
+          <Panel>
             <div>
               <p style={colHeadingStyle}>Whole homes on VRBO</p>
               <ul style={listStyle}>
@@ -58,7 +63,7 @@ export function MegaNav() {
                 Browse all on VRBO →
               </a>
             </div>
-          </div>
+          </Panel>
         )}
       </div>
 
@@ -69,7 +74,7 @@ export function MegaNav() {
           <Chevron open={open === 'dest'} />
         </button>
         {open === 'dest' && (
-          <div role="menu" style={panelStyle}>
+          <Panel>
             {[CITIES.slice(0, 6), CITIES.slice(6)].map((col, i) => (
               <div key={i}>
                 <p style={colHeadingStyle}>{i === 0 ? 'Popular destinations' : 'More destinations'}</p>
@@ -85,7 +90,7 @@ export function MegaNav() {
                 )}
               </div>
             ))}
-          </div>
+          </Panel>
         )}
       </div>
 
@@ -93,6 +98,20 @@ export function MegaNav() {
       <FlatLink href="/quiz" onHover={() => setOpen(null)}>Where to go</FlatLink>
       <FlatLink href="/about" onHover={() => setOpen(null)}>About</FlatLink>
     </nav>
+  );
+}
+
+/**
+ * Absolute dropdown panel. The outer element is flush to the trigger
+ * (top: 100%) and carries a transparent paddingTop bridge; the inner
+ * element is the visible card. Keeping the bridge as part of the panel
+ * is what makes the menu "stick" while the cursor travels into it.
+ */
+function Panel({ children }: { children: React.ReactNode }) {
+  return (
+    <div role="menu" style={panelBridgeStyle}>
+      <div style={panelCardStyle}>{children}</div>
+    </div>
   );
 }
 
@@ -155,11 +174,15 @@ function triggerStyle(open: boolean): React.CSSProperties {
   };
 }
 
-const panelStyle: React.CSSProperties = {
+const panelBridgeStyle: React.CSSProperties = {
   position: 'absolute',
-  top: 'calc(100% + 0.5rem)',
+  top: '100%',
   left: 0,
   zIndex: 40,
+  paddingTop: '0.5rem',
+};
+
+const panelCardStyle: React.CSSProperties = {
   display: 'flex',
   gap: '2.5rem',
   padding: '1.25rem 1.5rem',

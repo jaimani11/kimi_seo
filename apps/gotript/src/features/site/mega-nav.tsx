@@ -121,18 +121,28 @@ function MegaItem({
           role="menu"
           style={{
             position: 'absolute',
-            top: 'calc(100% + 0.5rem)',
+            // Flush to the trigger (top: 100%) with a transparent paddingTop
+            // "bridge" instead of an empty margin gap. The bridge is part of
+            // this element, so moving the cursor from the trigger down into
+            // the panel never leaves the hover target — the menu stays open
+            // and its links are clickable.
+            top: '100%',
             left: 0,
             zIndex: 40,
-            display: 'flex',
-            gap: '2.5rem',
-            padding: '1.25rem 1.5rem',
-            borderRadius: '0.9rem',
-            background: 'var(--surface-base)',
-            border: '1px solid var(--border-subtle)',
-            boxShadow: '0 24px 60px -20px rgba(12,20,38,0.35), 0 8px 20px rgba(12,20,38,0.10)',
+            paddingTop: '0.5rem',
           }}
         >
+          <div
+            style={{
+              display: 'flex',
+              gap: '2.5rem',
+              padding: '1.25rem 1.5rem',
+              borderRadius: '0.9rem',
+              background: 'var(--surface-base)',
+              border: '1px solid var(--border-subtle)',
+              boxShadow: '0 24px 60px -20px rgba(12,20,38,0.35), 0 8px 20px rgba(12,20,38,0.10)',
+            }}
+          >
           {cols.map((col) => (
             <div key={col.heading}>
               <p
@@ -164,6 +174,7 @@ function MegaItem({
               )}
             </div>
           ))}
+          </div>
         </div>
       )}
     </div>
