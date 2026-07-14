@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { canonicalUrl } from '@lib/site/origin';
 import { SiteHeader } from '@/features/site/site-header';
 import { HomeStayHero } from '@/features/site/home-stay-hero';
 import { StatsBand } from '@/features/site/stats-band';
@@ -41,7 +42,13 @@ export const metadata: Metadata = {
   title: 'Hotels, Vacation Rentals & Unique Stays Worldwide | gobookt',
   description:
     'Find hotels, apartments, villas, resorts and vacation rentals across 190+ countries — powered by Booking.com. Free cancellation on most stays.',
+  // Explicit self-canonical WITH trailing slash, matching the sitemap
+  // (`${base}/`). Overrides the layout's x-pathname canonical (which was
+  // emitting the bare, slash-less origin) so Google sees one consistent URL
+  // for the home — removes the residual "duplicate canonical" ambiguity.
+  alternates: { canonical: canonicalUrl('/') },
   openGraph: {
+    url: canonicalUrl('/'),
     title: 'Find a better place to stay — gobookt',
     description:
       'Hotels, apartments, villas, resorts and vacation rentals across 190+ countries. Powered by Booking.com.',
