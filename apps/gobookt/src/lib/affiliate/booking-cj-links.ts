@@ -22,8 +22,12 @@
  *   BOOKING_ATTRACTIONS_AFFILIATE_URL attractions CTA
  *   BOOKING_FLIGHTS_AFFILIATE_URL     flights CTA
  *   BOOKING_CARS_AFFILIATE_URL        car-rental CTA (→ booking.com/cars/index.html)
- *   BOOKING_CJ_EVERGREEN_TEMPLATE     optional; e.g.
- *                                     https://www.tkqlhce.com/click-PID123?url={TARGET}
+ *   BOOKING_CJ_EVERGREEN_TEMPLATE     optional; enables city deep-linking.
+ *                                     Best: a CJ deep-link with a literal
+ *                                     {TARGET}, e.g.
+ *                                     https://www.dpbolvw.net/click-101803878-CREATIVE?url={TARGET}
+ *                                     A BARE CJ click link (no {TARGET}) also
+ *                                     works — the code appends ?url=<dest> for you.
  */
 
 export type BookingCjSurface = 'stays' | 'attractions' | 'flights' | 'cars';
@@ -72,8 +76,24 @@ export function bookingCjFixedLink(surface: BookingCjSurface): string | null {
  */
 export function resolveBookingUrl(surface: BookingCjSurface | null, target: string): string {
   const template = env('BOOKING_CJ_EVERGREEN_TEMPLATE');
-  if (template && template.includes('{TARGET}')) {
-    return template.replace('{TARGET}', encodeURIComponent(target));
+  if (template) {
+    // Preferred form: a template containing the literal {TARGET}, which we
+    // replace with the URL-encoded booking.com deep link. Works with any CJ
+    // deep-link shape — `…/click-PID-CREATIVE?url={TARGET}`, `…/type/dlg/{TARGET}`, etc.
+    if (template.includes('{TARGET}')) {
+      return template.replace('{TARGET}', encodeURIComponent(target));
+    }
+    // Convenience form: a BARE CJ click link (no placeholder) is treated as a
+    // deep-link base — we append the destination as a `url=` param (the CJ
+    // deep-link convention). This makes a plain pasted CJ link "just work".
+    // NOTE: it only truly deep-links if Booking.com has deep-linking ENABLED
+    // for the CJ program; otherwise CJ ignores `url` and shows the creative's
+    // default page (still CJ-tracked, just not city-specific). Test with a
+    // real search to confirm which behavior your program gives.
+    if (/^https?:\/\//i.test(template)) {
+      const sep = template.includes('?') ? '&' : '?';
+      return `${template}${sep}url=${encodeURIComponent(target)}`;
+    }
   }
   if (surface) {
     const fixed = bookingCjFixedLink(surface);
