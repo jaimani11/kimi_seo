@@ -89,6 +89,18 @@ export {
   slugifyPoi,
 } from './stays-near-pois';
 
+export type { Occasion, OccasionVibe, OccasionRoute } from './occasions';
+export {
+  OCCASIONS,
+  allOccasions,
+  findOccasion,
+  parseOccasionSlug,
+  occasionSlug,
+  enumerateOccasionSlugs,
+  staticOccasionSlugs,
+  siblingOccasions,
+} from './occasions';
+
 export type { SeoComparison } from './comparisons';
 export {
   findComparison,

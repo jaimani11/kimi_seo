@@ -6,7 +6,7 @@ import { SEO_CITIES } from '@lib/seo/cities';
 import { hasDestinationGuide } from '@lib/seo/destination-content';
 import { allAccommodationCategories } from '@lib/seo/accommodation-categories';
 import { enumerateRentalSlugs } from '@lib/seo/rental-routes';
-import { enumerateStaysNearSlugs } from '@adored/seo-data';
+import { enumerateStaysNearSlugs, enumerateOccasionSlugs } from '@adored/seo-data';
 
 /**
  * Crawler-facing sitemap. Includes:
@@ -145,6 +145,15 @@ export default function sitemap(): MetadataRoute.Sitemap {
       lastModified: now,
       changeFrequency: 'monthly' as const,
       priority: 0.65,
+    })),
+    // Occasion / celebration pages — /celebrations/{occasion}-in-{city}. In the
+    // sitemap (indexable) but NOT linked from nav/homepage: high-intent group +
+    // celebration travel captured via search, off the family-facing surface.
+    ...enumerateOccasionSlugs().map((slug) => ({
+      url: `${base}/celebrations/${slug}`,
+      lastModified: now,
+      changeFrequency: 'monthly' as const,
+      priority: 0.6,
     })),
   ];
 
