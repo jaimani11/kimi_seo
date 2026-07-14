@@ -1025,6 +1025,25 @@ function CapsuleCard({ capsule }: { capsule: ExperienceCapsule }) {
       >
         {capsule.name}
       </p>
+      {capsule.destination || capsule.priceLabel ? (
+        <p
+          style={{
+            fontFamily: 'var(--font-inter)',
+            fontSize: '0.7rem',
+            color: 'rgba(237,230,219,0.62)',
+            margin: 0,
+            display: 'flex',
+            gap: '0.5rem',
+            flexWrap: 'wrap',
+            alignItems: 'baseline',
+          }}
+        >
+          {capsule.destination ? <span>{capsule.destination}</span> : null}
+          {capsule.priceLabel ? (
+            <span style={{ color: 'rgba(237,230,219,0.9)', fontWeight: 500 }}>{capsule.priceLabel}</span>
+          ) : null}
+        </p>
+      ) : null}
       {capsule.reasons.length > 0 ? (
         <ul className="flex flex-wrap gap-1">
           {capsule.reasons.map((r) => (
@@ -1063,6 +1082,16 @@ function CapsuleCard({ capsule }: { capsule: ExperienceCapsule }) {
           <ArrowRight size={11} strokeWidth={2.4} />
         </a>
       ) : null}
+      <p
+        style={{
+          fontFamily: 'var(--font-inter)',
+          fontSize: '0.58rem',
+          color: 'rgba(237,230,219,0.42)',
+          margin: '0.05rem 0 0',
+        }}
+      >
+        Affiliate link · price shown by the provider.
+      </p>
     </li>
   );
 }
@@ -1214,6 +1243,16 @@ function OpportunityBoard({ panel }: { panel: OpportunityPanel }) {
             </li>
           ))}
         </ul>
+        <p
+          style={{
+            fontFamily: 'var(--font-inter)',
+            fontSize: '0.62rem',
+            color: 'rgba(237,230,219,0.5)',
+            margin: '0.85rem 0 0',
+          }}
+        >
+          Live Viator search · affiliate links · we may earn a commission · the price you pay is the same.
+        </p>
       </div>
     </div>
   );
@@ -1257,6 +1296,10 @@ interface ExperienceCapsule {
   photoUrl: string | null;
   reasons: string[];
   href: string | null;
+  /** Destination label — grounded from the provider/intent, never invented. */
+  destination: string | null;
+  /** Formatted price — present ONLY when the provider supplied a real amount. */
+  priceLabel: string | null;
 }
 
 interface ApplyEventTargets {
@@ -1454,8 +1497,28 @@ function readProposalStays(
         photoUrl: s.photos?.[0]?.url ?? null,
         reasons,
         href: s.bookingLink?.url ?? null,
+        destination: s.location?.destination || s.location?.region || s.location?.country || null,
+        priceLabel: formatNightlyPrice(s.pricing?.pricePerNight),
       };
     });
+}
+
+/** Format a nightly price for display. Returns null when the provider gave no
+ *  positive amount — we never invent or render a "$0" price. */
+function formatNightlyPrice(p?: { amount?: number; currency?: string }): string | null {
+  const amount = p?.amount;
+  const currency = p?.currency;
+  if (!amount || amount <= 0 || !currency) return null;
+  try {
+    const s = new Intl.NumberFormat('en', {
+      style: 'currency',
+      currency,
+      maximumFractionDigits: 0,
+    }).format(amount);
+    return `from ${s}/night`;
+  } catch {
+    return `from ${amount} ${currency}/night`;
+  }
 }
 
 function pickReasons(s: StayLike): string[] {
@@ -1475,6 +1538,8 @@ interface StayLike {
   photos?: { url: string }[];
   bookingLink?: { url?: string };
   signals?: { tags?: string[] };
+  pricing?: { pricePerNight?: { amount?: number; currency?: string } };
+  location?: { destination?: string; region?: string; country?: string };
 }
 
 async function readJsonlStream(
