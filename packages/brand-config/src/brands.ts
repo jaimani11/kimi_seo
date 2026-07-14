@@ -51,7 +51,12 @@ export const GOBOOKT: BrandConfig = {
   key: 'gobookt',
   name: 'gobookt',
   domain: 'gobookt.com',
-  siteUrl: 'https://www.gobookt.com',
+  // Apex (non-www) is gobookt's canonical host: Google already indexed
+  // https://gobookt.com/ and treats www as the duplicate, so we adopt the
+  // apex rather than fight it. This drives every canonical signal (canonical
+  // tags, OG/Twitter urls, sitemap, robots, JSON-LD, metadataBase) AND flips
+  // the middleware host-redirect to www -> apex. (The other 3 brands stay www.)
+  siteUrl: 'https://gobookt.com',
   tagline: 'Hotel discovery, powered by Booking.com.',
   colors: {
     primary: '#006ce4',

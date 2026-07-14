@@ -6,7 +6,7 @@ import { SiteFooter } from '@/features/site/site-footer';
 export const metadata: Metadata = {
   title: 'Terms of Service · gobookt',
   description: 'The terms governing your use of gobookt.com.',
-  alternates: { canonical: 'https://www.gobookt.com/terms' },
+  alternates: { canonical: 'https://gobookt.com/terms' },
 };
 
 /**

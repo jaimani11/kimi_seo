@@ -7,7 +7,7 @@ export const metadata: Metadata = {
   title: 'Privacy Policy · gobookt',
   description:
     'How gobookt collects, uses, and shares information when you use our travel-planning service.',
-  alternates: { canonical: 'https://www.gobookt.com/privacy' },
+  alternates: { canonical: 'https://gobookt.com/privacy' },
 };
 
 /**
