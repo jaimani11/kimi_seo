@@ -3,7 +3,6 @@ import type { AccommodationCategory } from '@lib/seo/accommodation-categories';
 import { allAccommodationCategories } from '@lib/seo/accommodation-categories';
 import { findCityBySlug, type SeoCity } from '@lib/seo/cities';
 import { resolveDestinationPhoto } from '@lib/imagery/destination-photo';
-import { buildExpediaCategoryUrl } from '@lib/affiliate/expedia-multicategory';
 import { SiteHeader } from '@/features/site/site-header';
 import { SiteFooter } from '@/features/site/site-footer';
 
@@ -242,18 +241,14 @@ function CityCard({
     ...(city.region ? { region: city.region } : {}),
   });
   const label = `${category.name.replace(/s$/, '')} rentals in ${city.name}`;
-  // Direct VRBO deep link, type-specific: the category searchAnchor +
-  // city lands the traveler on exactly "luxury villa Santorini" results,
-  // one click from the page. Attribution rides the brand's Partnerize
-  // camref inside the builder.
-  const href = buildExpediaCategoryUrl('vacation-rentals', {
-    destination: `${category.searchAnchor} ${city.name}, ${city.countryName}`,
-  });
+  // Internal link to the rich per-city rental page, which carries the
+  // VRBO + Expedia CTAs. Keeping this internal builds the crawl path into
+  // the rental matrix (unique stayviaowner content) instead of bouncing
+  // the visitor — and the crawler — straight out to VRBO.
+  const href = `/rentals/${category.slug}-in-${city.slug}`;
   return (
-    <a
+    <Link
       href={href}
-      target="_blank"
-      rel="sponsored nofollow noopener noreferrer"
       style={{
         display: 'flex',
         flexDirection: 'column',
@@ -316,7 +311,7 @@ function CityCard({
           {city.oneLiner}
         </p>
       </div>
-    </a>
+    </Link>
   );
 }
 

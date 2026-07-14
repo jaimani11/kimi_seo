@@ -5,6 +5,7 @@ import { enumerateAllSeoSlugs } from '@lib/seo/route-parser';
 import { SEO_CITIES } from '@lib/seo/cities';
 import { hasDestinationGuide } from '@lib/seo/destination-content';
 import { allAccommodationCategories } from '@lib/seo/accommodation-categories';
+import { enumerateRentalSlugs } from '@lib/seo/rental-routes';
 
 /**
  * Crawler-facing sitemap. Includes:
@@ -124,6 +125,17 @@ export default function sitemap(): MetadataRoute.Sitemap {
       lastModified: now,
       changeFrequency: 'monthly' as const,
       priority: 0.9,
+    })),
+    // Rental matrix — the stayviaowner-UNIQUE per-city × property-type
+    // pages (/rentals/{city} hubs + /rentals/{category}-in-{city}). This
+    // is the VRBO/whole-home surface gotript does not have; it's what
+    // differentiates stayviaowner from its Expedia-hotels sibling and
+    // gives Google unique content to index (~3.7k URLs).
+    ...enumerateRentalSlugs().map((slug) => ({
+      url: `${base}/rentals/${slug}`,
+      lastModified: now,
+      changeFrequency: 'monthly' as const,
+      priority: slug.includes('-in-') ? 0.7 : 0.8,
     })),
   ];
 
