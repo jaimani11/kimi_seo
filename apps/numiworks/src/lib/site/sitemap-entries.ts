@@ -6,6 +6,7 @@ import { SEO_CITIES } from '@lib/seo/cities';
 import { hasDestinationGuide } from '@lib/seo/destination-content';
 import { allAttractions } from '@lib/seo/attractions';
 import { enumerateStaysNearSlugs, enumerateOccasionSlugs } from '@adored/seo-data';
+import { enumerateTourCategorySlugs } from '@lib/seo/tour-category-routes';
 
 /**
  * Crawler-facing sitemap. Includes:
@@ -147,6 +148,15 @@ export default function sitemap(): MetadataRoute.Sitemap {
       lastModified: now,
       changeFrequency: 'monthly' as const,
       priority: 0.6,
+    })),
+    // Tour-category pages — cooking classes / boat tours / ski lessons etc.
+    // per city. numiworks-local Viator experience long-tail; targets only
+    // the categories the shared themed matrix doesn't already publish.
+    ...enumerateTourCategorySlugs().map((slug) => ({
+      url: `${base}/tours/${slug}`,
+      lastModified: now,
+      changeFrequency: 'monthly' as const,
+      priority: 0.7,
     })),
   ];
 

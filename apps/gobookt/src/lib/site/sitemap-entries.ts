@@ -6,6 +6,7 @@ import { SEO_CITIES } from '@lib/seo/cities';
 import { hasDestinationGuide } from '@lib/seo/destination-content';
 import { allAccommodationCategories } from '@lib/seo/accommodation-categories';
 import { enumerateStaysNearSlugs, enumerateOccasionSlugs } from '@adored/seo-data';
+import { enumerateHotelTypeSlugs } from '@lib/seo/hotel-type-routes';
 
 /**
  * Crawler-facing sitemap. Includes:
@@ -140,6 +141,15 @@ export default function sitemap(): MetadataRoute.Sitemap {
       lastModified: now,
       changeFrequency: 'monthly' as const,
       priority: 0.6,
+    })),
+    // Hotel-facet pages — spa / adults-only / ski / all-inclusive etc. per
+    // city. gobookt-local Booking.com hotel long-tail; targets only the
+    // facets the shared hotels-themed matrix doesn't already publish.
+    ...enumerateHotelTypeSlugs().map((slug) => ({
+      url: `${base}/hotels/${slug}`,
+      lastModified: now,
+      changeFrequency: 'monthly' as const,
+      priority: 0.7,
     })),
   ];
 
