@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { type StaysNearPoi, siblingPois } from '@adored/seo-data';
 import { buildViatorStaySearchUrl, getViatorStayLinkConfig } from '@lib/affiliate/viator-stay-link-builder';
+import { buildVrboSearchUrl } from '@lib/affiliate/vrbo-link';
 import { SiteHeader } from '@/features/site/site-header';
 import { SiteFooter } from '@/features/site/site-footer';
 
@@ -31,12 +32,9 @@ export function poiHeading(poi: StaysNearPoi): string {
   return `${poi.poiName}, ${poi.city.name}: Where to Stay & What to Do`;
 }
 
-/** VRBO whole-home link (deep-link-template aware; falls back to the tracked shortlink). */
+/** VRBO whole-home link — deep-links to the POI search and tracks (Partnerize). */
 export function vrboHref(poi: StaysNearPoi): string {
-  const target = `https://www.vrbo.com/search?destination=${encodeURIComponent(poi.searchQuery)}`;
-  const template = process.env.NEXT_PUBLIC_VRBO_DEEPLINK_TEMPLATE;
-  if (template && template.includes('{TARGET}')) return template.replace('{TARGET}', encodeURIComponent(target));
-  return process.env.NEXT_PUBLIC_VRBO_SHORTLINK || 'https://vrbo.com/affiliate/zVJTNin';
+  return buildVrboSearchUrl(poi.searchQuery);
 }
 
 export function viatorHref(poi: StaysNearPoi): string {

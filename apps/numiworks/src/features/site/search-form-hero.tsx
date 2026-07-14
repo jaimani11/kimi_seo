@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { ArrowRight } from '@/features/shared/icons';
 import { track } from '@/lib/analytics/client';
+import { buildVrboSearchUrl } from '@lib/affiliate/vrbo-link';
 
 /**
  * Reference-site style hero — solid brand-blue band, white search
@@ -39,34 +40,6 @@ const BTN_BG = '#006ce4';
 const BTN_BG_HOVER = '#0050a8';
 const BTN_DISABLED = '#cbd5e1';
 const HIGHLIGHT = '#ffd166';
-
-/**
- * Resolve the outbound VRBO URL for a whole-home destination search.
- *
- * numiworks tracks VRBO through the bounce shortlink (no camref for a
- * Partnerize deep-link), so by default we open the tracked shortlink —
- * commission attributes, the traveller re-enters the destination on VRBO.
- *
- * Set NEXT_PUBLIC_VRBO_DEEPLINK_TEMPLATE to a deep-link wrapper containing
- * the literal `{TARGET}` (e.g. `https://prf.hn/click/camref:XXXX/destination:{TARGET}`)
- * to BOTH deep-link the destination search AND keep it tracked — same
- * evergreen-template pattern gobookt uses for Booking.com.
- */
-function buildVrboSearchUrl(destination: string, checkIn: string, checkOut: string): string {
-  // VRBO's live search takes the location as a `destination` query param;
-  // the old `/search/keywords:<x>` path is deprecated (VRBO ignores it and
-  // geolocates the visitor instead).
-  const params = new URLSearchParams();
-  params.set('destination', destination);
-  if (checkIn) params.set('startDate', checkIn);
-  if (checkOut) params.set('endDate', checkOut);
-  const target = `https://www.vrbo.com/search?${params.toString()}`;
-  const template = process.env.NEXT_PUBLIC_VRBO_DEEPLINK_TEMPLATE;
-  if (template && template.includes('{TARGET}')) {
-    return template.replace('{TARGET}', encodeURIComponent(target));
-  }
-  return process.env.NEXT_PUBLIC_VRBO_SHORTLINK || 'https://vrbo.com/affiliate/zVJTNin';
-}
 
 type SearchMode = 'homes' | 'experiences';
 
