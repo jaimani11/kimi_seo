@@ -7,6 +7,7 @@ import {
 } from './viator-stay-link-builder';
 import { isAllowedAffiliateHost } from './allowlist';
 import { resolveDestinationPhoto } from '@lib/imagery/destination-photo';
+import { withBoundedRetry, isTransientProviderError } from '@lib/concierge/grounded-card';
 import type { ExperienceProvider } from '@core/experience-provider';
 
 /**
@@ -223,9 +224,16 @@ async function tryFetchProductUrl(
   }
 
   try {
-    const result = await provider.search(
-      { searchTerm, limit: 1 },
-      { signal: slotController.signal, secrets: {} },
+    // One bounded retry on a TRANSIENT provider failure (network/5xx) — never on
+    // a slot-budget abort or empty results. Falls back to the search URL if it
+    // still fails.
+    const result = await withBoundedRetry(
+      () =>
+        provider.search(
+          { searchTerm, limit: 1 },
+          { signal: slotController.signal, secrets: {} },
+        ),
+      { isTransient: isTransientProviderError },
     );
     const top = result.experiences[0];
     if (!top) return null;
