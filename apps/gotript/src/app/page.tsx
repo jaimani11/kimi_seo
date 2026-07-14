@@ -36,7 +36,7 @@ import { SiteFooter } from '@/features/site/site-footer';
 export const metadata: Metadata = {
   title: 'Vacation Rentals, Hotels & Things to Do Worldwide | gotript',
   description:
-    'Find vacation rentals, whole homes and hotels, plus flights, cars and things to do across 190+ countries. Powered by Expedia — real-time prices and availability.',
+    'Find vacation rentals, whole homes and hotels, plus flights, cars and things to do across 190+ countries. Powered by Expedia.',
   openGraph: {
     title: 'Vacation Rentals, Hotels & Things to Do Worldwide',
     description:

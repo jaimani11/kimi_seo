@@ -47,13 +47,13 @@ import { SiteFooter } from '@/features/site/site-footer';
 // suffixed for recognition — overrides the generic layout default. The
 // self-referencing canonical still comes from the layout (x-pathname).
 export const metadata: Metadata = {
-  title: 'AI Travel Planner — Tours, Hotels & Vacation Rentals | numiworks',
+  title: 'Vacation Homes, Villas & Whole-Home Rentals + AI Trip Planning | numiworks',
   description:
-    'Plan your trip with AI, then book tours, hotels and vacation rentals in one place. 300,000+ experiences across 190+ countries — live prices, real availability.',
+    'Discover villas, cabins, cottages and beach homes on VRBO, then use AI to plan the rest of your trip — tours, hotels and things to do across 190+ countries.',
   openGraph: {
-    title: 'AI Travel Planner for Tours, Hotels & Vacation Rentals',
+    title: 'Discover whole homes worth traveling for — numiworks',
     description:
-      'Describe your trip in a sentence. numiworks plans it with AI and books tours, hotels and vacation rentals — 300,000+ experiences across 190+ countries.',
+      'Villas, cabins, cottages and beach-home vacation rentals on VRBO, plus AI trip planning and things to do across 190+ countries.',
     type: 'website',
     siteName: 'numiworks',
   },

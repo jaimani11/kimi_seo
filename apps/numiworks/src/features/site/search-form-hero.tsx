@@ -104,7 +104,7 @@ export function SearchFormHero() {
             maxWidth: '48rem',
           }}
         >
-          Plan your trip with AI — tours, hotels &amp; vacation rentals, booked in one place.
+          Discover whole homes worth traveling for.
         </h1>
 
         <p
@@ -118,7 +118,7 @@ export function SearchFormHero() {
             maxWidth: '38rem',
           }}
         >
-          Live Viator inventory · VRBO whole-home rentals · AI concierge itineraries.
+          Villas, cabins, cottages &amp; beach homes on VRBO — then plan the rest of your trip with AI.
         </p>
 
         <form

@@ -479,12 +479,12 @@ function headlineFor(c: ExpediaCategory): string {
     case 'packages':
       return 'Hotel + flight bundles — save more booking together';
     default:
-      return 'Find hotels, vacation rentals, flights & things to do worldwide';
+      return 'Find vacation homes, hotels, villas and unique stays worldwide';
   }
 }
 
 function subheadFor(c: ExpediaCategory): string {
-  const tail = 'Powered by Expedia. Real-time prices, free cancellation on most bookings.';
+  const tail = 'Powered by Expedia — you continue to Expedia to check prices and book.';
   switch (c) {
     case 'vacation-rentals':
       return `More space, kitchens, room to spread out — VRBO's 2M+ whole-home listings. ${tail.replace('Expedia', 'Expedia Group')}`;
@@ -499,7 +499,7 @@ function subheadFor(c: ExpediaCategory): string {
     case 'packages':
       return `Bundle hotel + flight in one search — Expedia's package deals beat à-la-carte. ${tail}`;
     default:
-      return `Search across hotels, vacation rentals, flights, cars, cruises and bookable experiences. ${tail}`;
+      return `Explore whole-home rentals, cabins, beach houses, apartments, resorts and hotels — plus flights, cars and things to do. ${tail}`;
   }
 }
 

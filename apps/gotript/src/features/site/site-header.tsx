@@ -96,13 +96,13 @@ export function SiteHeader() {
         </Link>
 
         <nav className="hidden items-center gap-1 md:flex">
-          <NavLink href="/stays">Stays</NavLink>
           <NavLink href="/vacation-rentals">Vacation rentals</NavLink>
-          <NavLink href="/flights">Flights</NavLink>
-          <NavLink href="/packages">Packages</NavLink>
+          <NavLink href="/stays">Stays</NavLink>
+          <NavLink href="/villas">Villas</NavLink>
+          <NavLink href="/cabins">Cabins</NavLink>
           <NavLink href="/things-to-do">Things to do</NavLink>
+          <NavLink href="/flights">Flights</NavLink>
           <NavLink href="/cars">Cars</NavLink>
-          <NavLink href="/cruises">Cruises</NavLink>
           <NavLink href="/destinations">Destinations</NavLink>
           <NavLink href="/about">About</NavLink>
           <NavLink href="/contact">Contact</NavLink>

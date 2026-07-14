@@ -39,7 +39,7 @@ export function VrboHomepageStrip() {
         <a
           href={shortlink}
           target="_blank"
-          rel="noopener noreferrer sponsored"
+          rel="sponsored nofollow noopener noreferrer"
           className="group block rounded-2xl border-2 transition-transform hover:scale-[1.01]"
           style={{
             background: VRBO_BG,
@@ -128,7 +128,7 @@ export function VrboHomepageStrip() {
               margin: 0,
             }}
           >
-            ✨ AI concierge · Live Viator inventory
+            ✨ AI concierge · plan your whole trip
           </p>
           <h3
             className="mt-1"
