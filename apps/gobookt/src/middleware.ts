@@ -3,6 +3,7 @@ import type { NextRequest } from 'next/server';
 import { getServerFeatures } from '@lib/env';
 import { resolveSession, SESSION_COOKIE } from '@lib/session/anonymous';
 import { getSiteOrigin } from '@lib/site/origin';
+import { isUserAgentBlocked, classifyBot } from '@adored/seo-routing/crawler-policy';
 
 /**
  * Canonical-host redirect. Forces every production request onto the single
@@ -76,6 +77,21 @@ function canonicalHostRedirect(req: NextRequest): NextResponse | null {
 export default async function middleware(req: NextRequest) {
   const hostRedirect = canonicalHostRedirect(req);
   if (hostRedirect) return hostRedirect;
+
+  // Reversible per-bot hard block (AI_BOTS_BLOCKED). robots.txt is advisory;
+  // a bot that ignores it still costs a function invocation per hit. When an
+  // operator lists a bot in AI_BOTS_BLOCKED we 403 it at the edge here, before
+  // any session mint or downstream render. Empty env → nothing blocked (GEO
+  // reach preserved). Reverse by clearing the env var + redeploying — no
+  // code change (Vercel binds env vars at deploy time).
+  const userAgent = req.headers.get('user-agent');
+  if (isUserAgentBlocked(userAgent)) {
+    console.info('[crawler-block]', {
+      bot: classifyBot(userAgent) ?? 'unknown',
+      path: req.nextUrl.pathname,
+    });
+    return new NextResponse('Forbidden', { status: 403 });
+  }
 
   // Read the inbound cookie via NextRequest.cookies (typed) so we can
   // mutate it for downstream consumers if minting.

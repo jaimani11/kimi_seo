@@ -6,7 +6,8 @@
   "exports": {
     "./viator": "./src/route-parser-viator.ts",
     "./multicategory": "./src/route-parser-multicategory.ts",
-    "./sitemap": "./src/sitemap-render.ts"
+    "./sitemap": "./src/sitemap-render.ts",
+    "./crawler-policy": "./src/crawler-policy.ts"
   },
   "dependencies": {
     "@adored/seo-data": "workspace:*"

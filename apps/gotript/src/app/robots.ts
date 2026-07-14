@@ -1,5 +1,6 @@
 import type { MetadataRoute } from 'next';
 import { getSiteOrigin } from '@lib/site/origin';
+import { allowedAiAnswerEngines, envBlockedBotList } from '@adored/seo-routing/crawler-policy';
 
 function siteUrl(): string {
   // Delegates to the canonical origin resolver - VERCEL_URL must
@@ -43,23 +44,18 @@ export default function robots(): MetadataRoute.Robots {
         disallow: ['/'],
       },
       {
-        // Explicitly welcome AI answer engines (GEO). Already allowed via `*`,
-        // but naming them is an unambiguous "please read + cite us" signal.
-        // Google-Extended = permission for Google's AI (Gemini/AI Overviews).
-        // Same /api + /t exclusions as every other agent.
-        userAgent: [
-          'GPTBot',
-          'OAI-SearchBot',
-          'ChatGPT-User',
-          'PerplexityBot',
-          'ClaudeBot',
-          'Claude-User',
-          'Google-Extended',
-          'Applebot-Extended',
-        ],
+        // Explicitly welcome AI answer engines (GEO) — minus any the operator
+        // has env-blocked via AI_BOTS_BLOCKED, so robots.txt never says "allow"
+        // for a bot middleware is 403-ing. Same /api + /t exclusions.
+        userAgent: allowedAiAnswerEngines(),
         allow: ['/'],
         disallow: ['/api/', '/t/'],
       },
+      // Operator hard blocks (AI_BOTS_BLOCKED): politely Disallow here in
+      // addition to the middleware 403. Empty env → this rule is omitted.
+      ...(envBlockedBotList().length > 0
+        ? [{ userAgent: envBlockedBotList(), disallow: ['/'] }]
+        : []),
     ],
     sitemap: `${siteUrl()}/sitemap.xml`,
   };
