@@ -78,6 +78,17 @@ export {
 export type { NeighborhoodPoi } from './poi-coords';
 export { NEIGHBORHOOD_COORDS, findNeighborhoodPois } from './poi-coords';
 
+export type { StaysNearPoi, PoiKind } from './stays-near-pois';
+export {
+  poisForCity,
+  parseStaysNearSlug,
+  staysNearSlug,
+  enumerateStaysNearSlugs,
+  staticStaysNearSlugs,
+  siblingPois,
+  slugifyPoi,
+} from './stays-near-pois';
+
 export type { SeoComparison } from './comparisons';
 export {
   findComparison,

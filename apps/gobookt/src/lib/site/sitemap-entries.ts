@@ -5,6 +5,7 @@ import { enumerateAllSeoSlugs } from '@lib/seo/route-parser';
 import { SEO_CITIES } from '@lib/seo/cities';
 import { hasDestinationGuide } from '@lib/seo/destination-content';
 import { allAccommodationCategories } from '@lib/seo/accommodation-categories';
+import { enumerateStaysNearSlugs } from '@adored/seo-data';
 
 /**
  * Crawler-facing sitemap. Includes:
@@ -123,6 +124,14 @@ export default function sitemap(): MetadataRoute.Sitemap {
       lastModified: now,
       changeFrequency: 'monthly' as const,
       priority: 0.9,
+    })),
+    // "Hotels near {POI}" pages — city-centre + airport + real neighborhoods
+    // per city (hotala-style hyperlocal hotel intent, Booking.com angle).
+    ...enumerateStaysNearSlugs().map((slug) => ({
+      url: `${base}/stays-near/${slug}`,
+      lastModified: now,
+      changeFrequency: 'monthly' as const,
+      priority: 0.7,
     })),
   ];
 
