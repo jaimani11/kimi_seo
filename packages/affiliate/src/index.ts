@@ -37,3 +37,16 @@ export {
   createExpediaMulticategory,
   CATEGORY_META,
 } from './expedia-multicategory';
+
+export type { CruiseCreativeSlug, CruiseCreative } from './cruisedirect-creatives';
+export {
+  CRUISE_CREATIVES,
+  GOTRIPT_CRUISE_COLLECTIONS,
+  NUMIWORKS_CRUISE_COLLECTIONS,
+} from './cruisedirect-creatives';
+export {
+  cruiseDirectEnabled,
+  cruiseDirectPid,
+  resolveCruiseDirectUrl,
+  describeCruiseDirectUrl,
+} from './cruisedirect';
