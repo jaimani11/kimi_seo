@@ -38,13 +38,13 @@ import { SiteFooter } from '@/features/site/site-footer';
 // suffixed for recognition — overrides the generic layout default. The
 // self-referencing canonical still comes from the layout (x-pathname).
 export const metadata: Metadata = {
-  title: 'Hotels, Flights, Cars & Things to Do Worldwide | gobookt',
+  title: 'Hotels, Vacation Rentals & Unique Stays Worldwide | gobookt',
   description:
-    'Search hotels, flights, car rentals, cruises and things to do across 190+ countries. Powered by Booking.com — real-time prices and free cancellation on most stays.',
+    'Find hotels, apartments, villas, resorts and vacation rentals across 190+ countries — powered by Booking.com. Free cancellation on most stays.',
   openGraph: {
-    title: 'Hotels, Flights, Cars & Things to Do Worldwide',
+    title: 'Find a better place to stay — gobookt',
     description:
-      'Hotels, flights, car rentals, cruises and things to do across 190+ countries. Powered by Booking.com.',
+      'Hotels, apartments, villas, resorts and vacation rentals across 190+ countries. Powered by Booking.com.',
     type: 'website',
     siteName: 'gobookt',
   },
