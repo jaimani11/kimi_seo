@@ -1,4 +1,5 @@
 import { isAllowedAffiliateHost } from './allowlist';
+import { findForeignAffiliateMarker } from './numiworks-guard';
 
 /**
  * Self-contained affiliate-link encoder.
@@ -97,6 +98,10 @@ export function decodeAffiliateLink(id: string): AffiliateLinkPayload | null {
   // doesn't itself enforce, a tampered id from outside our app must
   // never resolve to a foreign URL.
   if (!isAllowedAffiliateHost(url)) return null;
+  // Defense-in-depth: reject any sibling-brand / off-strategy affiliate id
+  // (gobookt/gotript/Booking.com) so a leaked/tampered payload can't
+  // misattribute a numiworks click.
+  if (findForeignAffiliateMarker(url)) return null;
 
   const out: AffiliateLinkPayload = { url, providerId };
   if (typeof obj.s === 'string') out.stayId = obj.s;

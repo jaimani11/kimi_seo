@@ -1,34 +1,24 @@
 import type { SeoCity } from '@lib/seo/cities';
+import { buildVrboSearchUrl } from '@lib/affiliate/vrbo-link';
 
 /**
- * VRBO cross-brand callout — sits below the destination hero on
- * every gobookt destination guide, giving VRBO commission share of
- * destination-page traffic that would otherwise go straight to
- * Booking.com hotels.
+ * VRBO whole-home callout — sits below the destination hero, offering VRBO
+ * whole-home rentals for the destination as a secondary CTA. Deep-links to a
+ * TRACKED, destination-specific VRBO search for the city (Partnerize camref /
+ * template, via buildVrboSearchUrl) — never a destination-less homepage bounce.
  *
- * gobookt is the Booking.com brand, so the VRBO CTA is intentionally
- * secondary (not the primary hero CTA), and uses the shortlink form
- * `vrbo.com/affiliate/{deeplink}` rather than a full search URL — the
- * shortlink is Expedia Group's affiliate-tagged bounce point and
- * commissions correctly no matter which of our brands hosts it.
- *
- * Env:
- *   NEXT_PUBLIC_VRBO_SHORTLINK  Optional override for the affiliate
- *                               shortlink. Defaults to the account's
- *                               Link Builder-generated bounce URL.
+ * Fails closed: when VRBO is unconfigured the callout is hidden rather than
+ * sending the visitor to an untracked VRBO homepage.
  */
 
-const DEFAULT_SHORTLINK = 'https://vrbo.com/affiliate/zVJTNin';
-
 export function VrboCityCallout({ city }: { city: SeoCity }) {
-  const shortlink = (
-    process.env.NEXT_PUBLIC_VRBO_SHORTLINK || DEFAULT_SHORTLINK
-  ).trim();
+  const href = buildVrboSearchUrl(city.name);
+  if (!href) return null;
 
   return (
     <section className="mx-auto max-w-4xl px-6 pt-6 md:pt-10">
       <a
-        href={shortlink}
+        href={href}
         target="_blank"
         rel="noopener noreferrer sponsored"
         className="group flex items-center justify-between gap-4 rounded-xl border p-4 transition-colors hover:border-[color:var(--accent-primary)]"

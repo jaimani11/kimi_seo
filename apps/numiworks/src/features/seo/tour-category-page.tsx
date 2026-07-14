@@ -60,8 +60,8 @@ export function viatorHref(route: TourCategoryRoute): string {
   );
 }
 
-/** VRBO whole-home search for the city (the "where to stay" secondary). */
-export function vrboHref(route: TourCategoryRoute): string {
+/** VRBO whole-home search for the city (the "where to stay" secondary). Null when unconfigured. */
+export function vrboHref(route: TourCategoryRoute): string | null {
   return buildVrboSearchUrl(`${route.city.name}, ${route.city.countryName}`);
 }
 
@@ -157,9 +157,11 @@ export function TourCategoryPage({ route }: { route: TourCategoryRoute }) {
               <a href={viator} target="_blank" rel="sponsored nofollow noopener noreferrer" style={primaryCtaStyle}>
                 {category.emoji} See {category.name.toLowerCase()} in {city.name} on Viator →
               </a>
-              <a href={vrbo} target="_blank" rel="sponsored nofollow noopener noreferrer" style={secondaryCtaStyle}>
-                🏡 Where to stay on VRBO
-              </a>
+              {vrbo && (
+                <a href={vrbo} target="_blank" rel="sponsored nofollow noopener noreferrer" style={secondaryCtaStyle}>
+                  🏡 Where to stay on VRBO
+                </a>
+              )}
             </div>
             <p className="mt-3" style={{ fontFamily: 'var(--font-inter)', fontSize: '0.75rem', color: 'rgba(255,255,255,0.6)', margin: '0.75rem 0 0' }}>
               Affiliate links · prices may change · the price you pay is the same.

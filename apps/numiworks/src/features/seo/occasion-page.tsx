@@ -18,7 +18,7 @@ export function occasionHeading(route: OccasionRoute): string {
   return `Plan a ${route.occasion.name} in ${route.city.name}`;
 }
 
-export function vrboHref(route: OccasionRoute): string {
+export function vrboHref(route: OccasionRoute): string | null {
   return buildVrboSearchUrl(`${route.city.name}, ${route.city.countryName}`);
 }
 
@@ -60,10 +60,12 @@ export function OccasionPage({ route }: { route: OccasionRoute }) {
               {lead(route)}
             </p>
             <div className="mt-7" style={{ display: 'flex', flexWrap: 'wrap', gap: '0.8rem' }}>
-              <a href={vrbo} target="_blank" rel="sponsored nofollow noopener noreferrer" style={primaryCtaStyle}>
-                🏡 Group rentals on VRBO →
-              </a>
-              <a href={viator} target="_blank" rel="sponsored nofollow noopener noreferrer" style={secondaryCtaStyle}>
+              {vrbo && (
+                <a href={vrbo} target="_blank" rel="sponsored nofollow noopener noreferrer" style={primaryCtaStyle}>
+                  🏡 Group rentals on VRBO →
+                </a>
+              )}
+              <a href={viator} target="_blank" rel="sponsored nofollow noopener noreferrer" style={vrbo ? secondaryCtaStyle : primaryCtaStyle}>
                 🎟️ Things to do on Viator
               </a>
             </div>

@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import { wrapVrboAffiliate } from '@lib/affiliate/vrbo-link';
 
 /**
  * Numiworks desktop mega-dropdown nav (BedroomVillas / hotala style).
@@ -19,7 +20,9 @@ import Link from 'next/link';
  * stays open and its links stay clickable.
  */
 
-const VRBO_LINK = process.env.NEXT_PUBLIC_VRBO_SHORTLINK || 'https://vrbo.com/affiliate/zVJTNin';
+// Tracked VRBO entry point for the nav. Fails closed to numiworks' own search
+// when VRBO is unconfigured, rather than emitting an untracked homepage bounce.
+const VRBO_LINK = wrapVrboAffiliate('https://www.vrbo.com/') ?? '/search';
 
 const HOME_TYPES = [
   'Villas', 'Cabins', 'Cottages', 'Beach homes',

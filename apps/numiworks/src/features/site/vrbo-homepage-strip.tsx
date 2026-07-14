@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { wrapVrboAffiliate } from '@lib/affiliate/vrbo-link';
 
 /**
  * Homepage secondary-CTA strip — two cards side-by-side that surface
@@ -20,17 +21,16 @@ import Link from 'next/link';
  *                               Link Builder-generated bounce URL.
  */
 
-const DEFAULT_SHORTLINK = 'https://vrbo.com/affiliate/zVJTNin';
-
 const VRBO_BG = 'linear-gradient(135deg, #005EA6 0%, #0079C1 55%, #00A2E1 100%)';
 const CONCIERGE_BG = 'linear-gradient(135deg, #0f172a 0%, #1e293b 60%, #334155 100%)';
 const YELLOW = '#FBC700';
 const INK_ON_DARK = '#ffffff';
 
 export function VrboHomepageStrip() {
-  const shortlink = (
-    process.env.NEXT_PUBLIC_VRBO_SHORTLINK || DEFAULT_SHORTLINK
-  ).trim();
+  // Tracked VRBO entry point (general "browse rentals" promo, not a destination
+  // result). Fails closed to numiworks' own search when VRBO is unconfigured,
+  // never an untracked homepage bounce.
+  const shortlink = wrapVrboAffiliate('https://www.vrbo.com/') ?? '/search';
 
   return (
     <section className="mx-auto max-w-6xl px-6 py-6 md:py-8">

@@ -3,6 +3,7 @@ import { NextResponse } from 'next/server';
 import { getServerAuth, ownerOf } from '@lib/auth';
 import { getSessionStore } from '@lib/session/factory';
 import { isAllowedAffiliateHost } from '@lib/affiliate/allowlist';
+import { findForeignAffiliateMarker } from '@lib/affiliate/numiworks-guard';
 import { decorateOutboundUrl } from '@lib/affiliate/decorate-outbound';
 
 export const runtime = 'nodejs';
@@ -36,6 +37,14 @@ export async function GET(req: NextRequest): Promise<Response> {
 
   if (!isAllowedAffiliateHost(affiliateUrl)) {
     return Response.json({ error: 'redirect target not on allowlist' }, { status: 400 });
+  }
+
+  // Defense-in-depth: never redirect through a sibling-brand / off-strategy
+  // affiliate id (gobookt/gotript/Booking.com). Fail closed on a leak.
+  const foreignMarker = findForeignAffiliateMarker(affiliateUrl);
+  if (foreignMarker) {
+    console.error('[go] blocked cross-brand affiliate id in outbound url', { marker: foreignMarker });
+    return Response.json({ error: 'cross-brand affiliate id not permitted' }, { status: 400 });
   }
 
   const auth = await getServerAuth();

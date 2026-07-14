@@ -64,7 +64,14 @@ export function SearchFormHero() {
     if (!trimmed) return;
     track('hero_search_submit', { mode, destination: trimmed, checkIn, checkOut, travelers });
     if (mode === 'homes') {
-      window.open(buildVrboSearchUrl(trimmed, checkIn, checkOut), '_blank', 'noopener,noreferrer');
+      const vrbo = buildVrboSearchUrl(trimmed, checkIn, checkOut);
+      if (vrbo) {
+        window.open(vrbo, '_blank', 'noopener,noreferrer');
+      } else {
+        // VRBO unconfigured → fail closed to numiworks' own experience search
+        // rather than bounce the user to an untracked VRBO homepage.
+        router.push(`/search?q=${encodeURIComponent(trimmed)}`);
+      }
     } else {
       router.push(`/search?q=${encodeURIComponent(trimmed)}`);
     }

@@ -32,8 +32,8 @@ export function poiHeading(poi: StaysNearPoi): string {
   return `${poi.poiName}, ${poi.city.name}: Where to Stay & What to Do`;
 }
 
-/** VRBO whole-home link — deep-links to the POI search and tracks (Partnerize). */
-export function vrboHref(poi: StaysNearPoi): string {
+/** VRBO whole-home link — deep-links to the POI search and tracks (Partnerize). Null when unconfigured. */
+export function vrboHref(poi: StaysNearPoi): string | null {
   return buildVrboSearchUrl(poi.searchQuery);
 }
 
@@ -118,10 +118,12 @@ export function StaysNearPage({ poi }: { poi: StaysNearPoi }) {
               {lead(poi)}
             </p>
             <div className="mt-7" style={{ display: 'flex', flexWrap: 'wrap', gap: '0.8rem' }}>
-              <a href={vrbo} target="_blank" rel="sponsored nofollow noopener noreferrer" style={primaryCtaStyle}>
-                🏡 Browse homes on VRBO →
-              </a>
-              <a href={viator} target="_blank" rel="sponsored nofollow noopener noreferrer" style={secondaryCtaStyle}>
+              {vrbo && (
+                <a href={vrbo} target="_blank" rel="sponsored nofollow noopener noreferrer" style={primaryCtaStyle}>
+                  🏡 Browse homes on VRBO →
+                </a>
+              )}
+              <a href={viator} target="_blank" rel="sponsored nofollow noopener noreferrer" style={vrbo ? secondaryCtaStyle : primaryCtaStyle}>
                 🎟️ Things to do on Viator
               </a>
             </div>
