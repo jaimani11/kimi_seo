@@ -121,6 +121,34 @@ export function SearchFormHero() {
           Villas, cabins, cottages &amp; beach homes on VRBO — then plan the rest of your trip with AI.
         </p>
 
+        {/* Primary VRBO CTA — big button right under the "VRBO" words. Whole
+          * homes are numiworks's highest-commission path, so it gets the
+          * loudest button; the Viator experience search sits just below it. */}
+        <a
+          href={process.env.NEXT_PUBLIC_VRBO_SHORTLINK || 'https://vrbo.com/affiliate/zVJTNin'}
+          target="_blank"
+          rel="sponsored nofollow noopener noreferrer"
+          style={{
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: '0.5rem',
+            margin: '1.4rem auto 0',
+            padding: '0.95rem 1.7rem',
+            borderRadius: '999px',
+            background: '#FBC700',
+            color: '#0A2B45',
+            fontFamily: 'var(--font-inter)',
+            fontSize: '1.05rem',
+            fontWeight: 800,
+            letterSpacing: '0.01em',
+            textDecoration: 'none',
+            boxShadow: '0 12px 32px -10px rgba(251,199,0,0.55)',
+          }}
+        >
+          🏡 Browse whole homes on VRBO
+          <ArrowRight size={16} strokeWidth={2.6} />
+        </a>
+
         <form
           onSubmit={handleSubmit}
           style={{
@@ -230,6 +258,21 @@ export function SearchFormHero() {
           </div>
         </form>
 
+        {/* Viator sits right under the search — the destination search runs on
+          * Viator's live tours & experiences catalog. */}
+        <p
+          style={{
+            margin: '0.9rem auto 0',
+            fontFamily: 'var(--font-inter)',
+            fontSize: '0.82rem',
+            color: 'rgba(255,255,255,0.82)',
+          }}
+        >
+          🎟️ Search runs on{' '}
+          <strong style={{ fontWeight: 700, color: '#ffffff' }}>Viator</strong> — 300,000+ tours
+          &amp; experiences worldwide.
+        </p>
+
         <div
           style={{
             margin: '2rem auto 0',
@@ -332,27 +375,6 @@ export function SearchFormHero() {
             }}
           >
             💵 Trip cost estimator <ArrowRight size={11} strokeWidth={2.4} />
-          </a>
-          <a
-            href={process.env.NEXT_PUBLIC_VRBO_SHORTLINK || 'https://vrbo.com/affiliate/zVJTNin'}
-            target="_blank"
-            rel="noopener noreferrer sponsored"
-            style={{
-              marginLeft: '0.6rem',
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '0.3rem',
-              fontFamily: 'var(--font-inter)',
-              fontSize: '0.84rem',
-              fontWeight: 700,
-              color: '#0A2B45',
-              background: '#FBC700',
-              padding: '0.35rem 0.75rem',
-              borderRadius: '999px',
-              textDecoration: 'none',
-            }}
-          >
-            🏡 Whole homes on VRBO <ArrowRight size={11} strokeWidth={2.4} />
           </a>
         </div>
       </div>

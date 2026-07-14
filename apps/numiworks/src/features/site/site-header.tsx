@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { ThemeToggle } from '@/lib/theme/theme-toggle';
+import { MegaNav } from '@/features/site/mega-nav';
 
 /**
  * Sticky site header — token-driven so it picks up the active theme
@@ -60,13 +61,7 @@ export function SiteHeader() {
           </span>
         </Link>
 
-        <nav className="hidden items-center gap-1 md:flex">
-          <NavLink href="/search">Search</NavLink>
-          <NavLink href="/destinations">Destinations</NavLink>
-          <NavLink href="/plan">Plan a trip</NavLink>
-          <NavLink href="/about">About</NavLink>
-          <NavLink href="/contact">Contact</NavLink>
-        </nav>
+        <MegaNav />
 
         <div className="flex items-center gap-2">
           <Link
@@ -93,23 +88,5 @@ export function SiteHeader() {
         </div>
       </div>
     </header>
-  );
-}
-
-function NavLink({ href, children }: { href: string; children: React.ReactNode }) {
-  return (
-    <Link
-      href={href}
-      className="rounded-md px-3 py-1.5 transition-colors hover:bg-[color:var(--surface-overlay)]"
-      style={{
-        fontFamily: 'var(--font-inter)',
-        fontSize: '0.82rem',
-        fontWeight: 500,
-        color: 'var(--ink-secondary)',
-        textDecoration: 'none',
-      }}
-    >
-      {children}
-    </Link>
   );
 }
