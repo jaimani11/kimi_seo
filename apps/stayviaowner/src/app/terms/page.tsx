@@ -30,7 +30,7 @@ export default function TermsPage() {
               margin: 0,
             }}
           >
-            Gotript
+            Stayviaowner
           </p>
           <h1
             className="mt-3"
@@ -64,7 +64,7 @@ export default function TermsPage() {
 
         <Section title="1. About stayviaowner">
           <P>
-            Gotript is a travel-planning website that helps you discover destinations and book
+            Stayviaowner is a travel-planning website that helps you discover destinations and book
             experiences through our partner Viator. We are an independent publisher and not an
             agent of any travel supplier.
           </P>
@@ -142,7 +142,7 @@ export default function TermsPage() {
 
         <Section title="7. Intellectual property">
           <P>
-            Gotript owns or licenses everything on this site (text, photos, illustrations,
+            Stayviaowner owns or licenses everything on this site (text, photos, illustrations,
             code, brand). You may quote short excerpts with attribution and link to our pages
             freely. Anything beyond that requires written permission.
           </P>

@@ -38,7 +38,7 @@ export default function PrivacyPolicyPage() {
               margin: 0,
             }}
           >
-            Gotript
+            Stayviaowner
           </p>
           <h1
             className="mt-3"
@@ -72,7 +72,7 @@ export default function PrivacyPolicyPage() {
 
         <Section title="1. Who we are">
           <P>
-            Gotript (&ldquo;stayviaowner&rdquo;, &ldquo;we&rdquo;, &ldquo;us&rdquo;) operates the
+            Stayviaowner (&ldquo;stayviaowner&rdquo;, &ldquo;we&rdquo;, &ldquo;us&rdquo;) operates the
             travel-planning website at{' '}
             <Link href="/" style={{ color: 'var(--accent-primary)' }}>
               stayviaowner.com
@@ -233,7 +233,7 @@ export default function PrivacyPolicyPage() {
 
         <Section title="7. Children">
           <P>
-            Gotript is not directed at children under 13 (or under 16 in the EU). We do not
+            Stayviaowner is not directed at children under 13 (or under 16 in the EU). We do not
             knowingly collect personal information from children. If you believe a child has
             provided us information, contact us and we will delete it.
           </P>
@@ -250,7 +250,7 @@ export default function PrivacyPolicyPage() {
 
         <Section title="9. International transfers">
           <P>
-            Gotript is operated globally and your data may be processed in the United States,
+            Stayviaowner is operated globally and your data may be processed in the United States,
             the European Union, or wherever our service providers (above) operate. Where required
             by law, we use the standard contractual clauses or equivalent safeguards.
           </P>

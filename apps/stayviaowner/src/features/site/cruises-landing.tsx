@@ -140,7 +140,7 @@ export function CruisesLanding() {
               margin: 0,
             }}
           >
-            Gotript · cruise port hotels
+            stayviaowner · cruise port hotels
           </p>
           <h2
             className="mt-3"

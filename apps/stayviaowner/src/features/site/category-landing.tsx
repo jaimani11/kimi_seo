@@ -39,7 +39,7 @@ export function CategoryLanding({
               margin: 0,
             }}
           >
-            Gotript
+            stayviaowner
           </p>
           <h2
             className="mt-3"
