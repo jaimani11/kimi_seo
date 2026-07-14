@@ -6,6 +6,7 @@ import { SEO_CITIES } from '@lib/seo/cities';
 import { hasDestinationGuide } from '@lib/seo/destination-content';
 import { allAccommodationCategories } from '@lib/seo/accommodation-categories';
 import { enumerateRentalSlugs } from '@lib/seo/rental-routes';
+import { enumerateStaysNearSlugs } from '@adored/seo-data';
 
 /**
  * Crawler-facing sitemap. Includes:
@@ -136,6 +137,14 @@ export default function sitemap(): MetadataRoute.Sitemap {
       lastModified: now,
       changeFrequency: 'monthly' as const,
       priority: slug.includes('-in-') ? 0.7 : 0.8,
+    })),
+    // "Vacation rentals near {POI}" pages — city-centre + airport + real
+    // neighborhoods per city (hotala-style hyperlocal, VRBO angle).
+    ...enumerateStaysNearSlugs().map((slug) => ({
+      url: `${base}/stays-near/${slug}`,
+      lastModified: now,
+      changeFrequency: 'monthly' as const,
+      priority: 0.65,
     })),
   ];
 
