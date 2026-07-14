@@ -5,7 +5,7 @@ import { enumerateAllSeoSlugs } from '@lib/seo/route-parser';
 import { SEO_CITIES } from '@lib/seo/cities';
 import { hasDestinationGuide } from '@lib/seo/destination-content';
 import { allAttractions } from '@lib/seo/attractions';
-import { enumerateStaysNearSlugs } from '@adored/seo-data';
+import { enumerateStaysNearSlugs, enumerateOccasionSlugs } from '@adored/seo-data';
 
 /**
  * Crawler-facing sitemap. Includes:
@@ -139,6 +139,14 @@ export default function sitemap(): MetadataRoute.Sitemap {
       lastModified: now,
       changeFrequency: 'monthly' as const,
       priority: 0.65,
+    })),
+    // Occasion / celebration pages — in the sitemap (indexable) but NOT linked
+    // from nav/homepage.
+    ...enumerateOccasionSlugs().map((slug) => ({
+      url: `${base}/celebrations/${slug}`,
+      lastModified: now,
+      changeFrequency: 'monthly' as const,
+      priority: 0.6,
     })),
   ];
 
