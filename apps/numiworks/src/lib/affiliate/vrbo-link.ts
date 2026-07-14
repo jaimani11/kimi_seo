@@ -1,34 +1,45 @@
 /**
  * numiworks VRBO affiliate links.
  *
- * numiworks has no dedicated Partnerize camref of its own, but the whole
- * Adored Moments family shares one Partnerize publisher account
- * (id 1011l430591). So VRBO links deep-link through that account's camref by
- * default — which carries the searched destination AND tracks commission —
- * rather than bouncing to VRBO's homepage via the plain affiliate shortlink.
+ * The whole Adored Moments family (legal entity Adored Moments LLC) promotes
+ * VRBO through ONE shared Partnerize publisher account. The camref is NOT baked
+ * into source — it's supplied by env so the account/camref can change without a
+ * redeploy, preview and production can differ, and numiworks can later get its
+ * own camref without touching code. Precedence:
  *
- * Overrides (Vercel env, numiworks project):
  *   NEXT_PUBLIC_VRBO_DEEPLINK_TEMPLATE  full wrapper with a {TARGET} placeholder
- *   NEXT_PUBLIC_VRBO_CAMREF             just the Partnerize camref to use
+ *                                       — the PRODUCTION path, e.g.
+ *                                       https://prf.hn/click/camref:1110lFruB/destination:{TARGET}
+ *   NEXT_PUBLIC_VRBO_CAMREF             just the camref (we build the prf.hn wrapper)
+ *   NEXT_PUBLIC_VRBO_SHORTLINK / default bounce shortlink — FAIL-SAFE ONLY
+ *                                       (lands on VRBO's homepage, no destination)
  *
- * VRBO's live search takes the location as a `destination` query param; the
- * old `/search/keywords:<x>` path is deprecated (VRBO ignores it and
- * geolocates the visitor instead), so we always build the query form.
+ * Output is byte-identical to the shared `buildVacationRentalsUrl`
+ * (packages/affiliate) that gotript + stayviaowner use — numiworks keeps a thin
+ * local helper only because its Expedia-hotels side is affcid-based (a different
+ * account model), so it doesn't share their Partnerize ExpediaMulticategory
+ * instance.
+ *
+ * VRBO's live search takes the location as a `destination` query param; the old
+ * `/search/keywords:<x>` path is deprecated (VRBO ignores it and geolocates).
  */
 
-const DEFAULT_CAMREF = '1110lFruB';
-
-/** Wrap a plain vrbo.com URL for tracking (Partnerize deep-link by default). */
+/** Wrap a plain vrbo.com URL for tracking. Env-driven; bounce is fail-safe only. */
 export function wrapVrboAffiliate(target: string): string {
   const template = process.env.NEXT_PUBLIC_VRBO_DEEPLINK_TEMPLATE;
   if (template && template.includes('{TARGET}')) {
     return template.replace('{TARGET}', encodeURIComponent(target));
   }
-  const camref = (process.env.NEXT_PUBLIC_VRBO_CAMREF || DEFAULT_CAMREF).trim();
-  return `https://prf.hn/click/camref:${camref}/destination:${encodeURIComponent(target)}`;
+  const camref = (process.env.NEXT_PUBLIC_VRBO_CAMREF || '').trim();
+  if (camref) {
+    return `https://prf.hn/click/camref:${camref}/destination:${encodeURIComponent(target)}`;
+  }
+  // Fail-safe: no Partnerize config → the tracked bounce shortlink. This lands on
+  // VRBO's homepage with NO destination, so set the template above in production.
+  return process.env.NEXT_PUBLIC_VRBO_SHORTLINK || 'https://vrbo.com/affiliate/zVJTNin';
 }
 
-/** Build a tracked VRBO destination-search URL. */
+/** Build a VRBO destination-search URL, wrapped for tracking. */
 export function buildVrboSearchUrl(
   destination: string,
   checkIn?: string,
