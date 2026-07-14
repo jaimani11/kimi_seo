@@ -9,25 +9,28 @@
  * homepage-level: you must NOT append destination / date / property
  * params to them — CJ ignores or breaks on extra params.
  *
- * City-specific deep-linking requires a separate CJ "evergreen" link of
- * the form `…/click-PID<id>?url={TARGET}`. When BOOKING_CJ_EVERGREEN_TEMPLATE
- * is set (and contains the literal `{TARGET}`), we deep-link to the
- * specific booking.com page; otherwise we fall back to the fixed
- * homepage creative links below.
+ * City-specific deep-linking is opt-in PER VERTICAL via a
+ * `BOOKING_<SURFACE>_CJ_DEEPLINK` template that contains the literal `{TARGET}`
+ * (a CJ "Deep Link" creative that honours `?url=`). Deliberately per-vertical:
+ * a single GLOBAL template applied to every category is exactly how a "Search
+ * stays" click once landed on a Booking.com flights creative. Without a
+ * per-vertical template we fall back to that surface's own fixed creative.
  *
- * gobookt-only. Env (set in Vercel, gobookt project):
+ * gobookt-only. Env (set in Vercel, gobookt project). Each CJ creative below is
+ * VERTICAL-SPECIFIC — never point the stays var at a flights creative:
  *   BOOKING_AFFILIATE_ENABLED         'true' to surface Booking.com CTAs
  *   BOOKING_CJ_PUBLISHER_ID           101803878 (attribution id; analytics/label only)
- *   BOOKING_STAYS_AFFILIATE_URL       accommodation CTA (temp: Getaway Deal creative)
- *   BOOKING_ATTRACTIONS_AFFILIATE_URL attractions CTA
- *   BOOKING_FLIGHTS_AFFILIATE_URL     flights CTA
- *   BOOKING_CARS_AFFILIATE_URL        car-rental CTA (→ booking.com/cars/index.html)
- *   BOOKING_CJ_EVERGREEN_TEMPLATE     optional; enables city deep-linking.
- *                                     Best: a CJ deep-link with a literal
- *                                     {TARGET}, e.g.
- *                                     https://www.dpbolvw.net/click-101803878-CREATIVE?url={TARGET}
- *                                     A BARE CJ click link (no {TARGET}) also
- *                                     works — the code appends ?url=<dest> for you.
+ *   BOOKING_STAYS_AFFILIATE_URL       accommodation creative (e.g. …/click-101803878-17288985)
+ *   BOOKING_ATTRACTIONS_AFFILIATE_URL attractions creative
+ *   BOOKING_FLIGHTS_AFFILIATE_URL     flights creative (e.g. …-17288982)
+ *   BOOKING_CARS_AFFILIATE_URL        car-rental creative
+ *   BOOKING_<SURFACE>_CJ_DEEPLINK     optional per-vertical deep-link template with
+ *                                     a literal {TARGET}, e.g.
+ *                                     BOOKING_STAYS_CJ_DEEPLINK=https://www.anrdoezrs.net/click-101803878-<STAYS-DEEPLINK-CREATIVE>?url={TARGET}
+ *                                     (requires a Deep Link creative that honours ?url=).
+ *   BOOKING_CJ_EVERGREEN_TEMPLATE     DEPRECATED + IGNORED — was global (all verticals);
+ *                                     it caused stays→flights. Delete it. Use the
+ *                                     per-vertical BOOKING_<SURFACE>_CJ_DEEPLINK instead.
  */
 
 export type BookingCjSurface = 'stays' | 'attractions' | 'flights' | 'cars';
@@ -61,59 +64,56 @@ export function bookingCjFixedLink(surface: BookingCjSurface): string | null {
   }
 }
 
+/** Per-vertical deep-link template env var name for a surface. */
+function deeplinkTemplateVar(surface: BookingCjSurface): string {
+  return `BOOKING_${surface.toUpperCase()}_CJ_DEEPLINK`;
+}
+
 /**
- * Resolve the outbound URL for a Booking.com click, in preference order:
+ * Resolve the outbound URL for a Booking.com click — VERTICAL-SAFE. A stays
+ * request can only ever resolve to a stays creative, a flights request to a
+ * flights creative, etc. There is deliberately NO global template and NO
+ * cross-vertical fallback: a single global evergreen template applied to every
+ * category is exactly how a "Search stays" click once landed on a Booking.com
+ * flights creative.
  *
- *   1. Evergreen deep-link to `target` — city-specific AND CJ-tracked (best;
- *      only when BOOKING_CJ_EVERGREEN_TEMPLATE is set).
- *   2. Fixed CJ creative link for the surface — homepage-level but CJ-tracked.
- *   3. The plain `target` booking.com URL — correct page, but NOT tracked.
- *      Pure fail-safe so a missing env var never yields a broken CTA.
+ * Preference order (all scoped to `surface`):
+ *   1. `BOOKING_<SURFACE>_CJ_DEEPLINK` — a per-vertical CJ Deep Link template
+ *      with a literal {TARGET}; deep-links the exact page AND stays CJ-tracked.
+ *   2. `BOOKING_<SURFACE>_AFFILIATE_URL` — the fixed CJ creative for this
+ *      vertical; CJ-tracked but homepage-level (won't carry destination/dates).
+ *   3. The category-correct `target` booking.com URL — right vertical, but
+ *      untracked. Fail-safe for a missing creative; never borrows another
+ *      vertical's link.
  *
- * @param surface which CJ creative to attribute against (null = no CJ
- *                creative exists for this vertical yet, e.g. cars/taxis)
- * @param target  the specific booking.com page we'd ideally land on
+ * @param surface which vertical to attribute against (null = no CJ creative
+ *                maps to this vertical yet, e.g. taxis)
+ * @param target  the category-correct booking.com page we'd ideally land on
  */
 export function resolveBookingUrl(surface: BookingCjSurface | null, target: string): string {
-  const template = env('BOOKING_CJ_EVERGREEN_TEMPLATE');
-  if (template) {
-    // Preferred form: a template containing the literal {TARGET}, which we
-    // replace with the URL-encoded booking.com deep link. Works with any CJ
-    // deep-link shape — `…/click-PID-CREATIVE?url={TARGET}`, `…/type/dlg/{TARGET}`, etc.
-    if (template.includes('{TARGET}')) {
-      return template.replace('{TARGET}', encodeURIComponent(target));
-    }
-    // Convenience form: a BARE CJ click link (no placeholder) is treated as a
-    // deep-link base — we append the destination as a `url=` param (the CJ
-    // deep-link convention). This makes a plain pasted CJ link "just work".
-    // NOTE: it only truly deep-links if Booking.com has deep-linking ENABLED
-    // for the CJ program; otherwise CJ ignores `url` and shows the creative's
-    // default page (still CJ-tracked, just not city-specific). Test with a
-    // real search to confirm which behavior your program gives.
-    if (/^https?:\/\//i.test(template)) {
-      const sep = template.includes('?') ? '&' : '?';
-      return `${template}${sep}url=${encodeURIComponent(target)}`;
-    }
-  }
   if (surface) {
+    // 1. Per-vertical deep-link template (opt-in). Scoped to this surface, so a
+    //    flights creative can never be selected for a stays search.
+    const deeplink = env(deeplinkTemplateVar(surface));
+    if (deeplink && deeplink.includes('{TARGET}')) {
+      return deeplink.replace('{TARGET}', encodeURIComponent(target));
+    }
+    // 2. Fixed CJ creative for THIS vertical.
     const fixed = bookingCjFixedLink(surface);
     if (fixed) return fixed;
+    // 3. Nothing configured for this vertical — land on the category-correct
+    //    booking.com target (right vertical, untracked). NEVER borrow another
+    //    vertical's creative.
+    console.warn('[booking-cj] no CJ creative configured for surface — using untracked category target', {
+      surface,
+    });
+    return target;
   }
-  // No CJ creative for this surface. When the affiliate program is ENABLED we
-  // must never emit a raw, untracked booking.com URL — fall back to the stays
-  // creative (a CJ-tracked homepage link) so the click still attributes. Only
-  // an unconfigured/disabled deployment returns the plain target, as a pure
-  // fail-safe so a missing env var never yields a broken CTA in dev.
+  // No vertical mapping (generic click). A stays creative is the safe default
+  // when the program is enabled; otherwise the plain target.
   if (bookingAffiliateEnabled()) {
-    const staysFallback = bookingCjFixedLink('stays');
-    if (staysFallback) {
-      if (surface !== 'stays') {
-        console.warn('[booking-cj] no CJ creative for surface; using stays creative', {
-          surface,
-        });
-      }
-      return staysFallback;
-    }
+    const stays = bookingCjFixedLink('stays');
+    if (stays) return stays;
   }
   return target;
 }

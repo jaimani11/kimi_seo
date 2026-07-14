@@ -88,14 +88,41 @@ describe('gobookt Booking.com CJ routing — no monetized CTA emits a raw bookin
     expect(decoded?.url).toBe(url);
   });
 
-  it('a missing surface creative falls back to the stays CJ creative (never raw) while enabled', () => {
+  it('a missing surface creative uses the category-correct target — NEVER another vertical', () => {
     vi.stubEnv('BOOKING_AFFILIATE_ENABLED', 'true');
-    vi.stubEnv('BOOKING_CJ_EVERGREEN_TEMPLATE', '');
     vi.stubEnv('BOOKING_STAYS_AFFILIATE_URL', 'https://www.anrdoezrs.net/click-101803878-17288985');
     vi.stubEnv('BOOKING_FLIGHTS_AFFILIATE_URL', ''); // intentionally unconfigured
-    const url = resolveBookingUrl('flights', 'https://www.booking.com/flights/index.html?label=gobookt');
-    expect(isRawBooking(url), `${url} must not be a raw booking.com fallback`).toBe(false);
-    expect(isCjUrl(url), `${url} must be the stays CJ creative`).toBe(true);
+    const flightsTarget = 'https://www.booking.com/flights/index.html?label=gobookt';
+    const url = resolveBookingUrl('flights', flightsTarget);
+    // Must NOT borrow the stays creative (cross-vertical is what caused the bug).
+    expect(url).not.toContain('17288985');
+    // Right vertical: falls through to the category-correct booking.com target.
+    expect(url).toBe(flightsTarget);
+  });
+
+  it('VERTICAL-SAFE: a stays search never selects a flights creative, and vice-versa', () => {
+    stubCjEnv();
+    const stays = resolveBookingUrl('stays', 'https://www.booking.com/searchresults.html?ss=Tokyo');
+    expect(stays, 'stays → stays creative').toContain('17288985');
+    expect(stays, 'stays must NOT use the flights creative').not.toContain('17288982');
+    expect(stays.toLowerCase(), 'stays must not resolve to a flights link').not.toContain('flights');
+
+    const flights = resolveBookingUrl('flights', 'https://www.booking.com/flights/index.html');
+    expect(flights, 'flights → flights creative').toContain('17288982');
+    expect(flights, 'flights must NOT use the stays creative').not.toContain('17288985');
+  });
+
+  it('a per-vertical deep-link template is scoped to its own surface only', () => {
+    stubCjEnv();
+    vi.stubEnv('BOOKING_STAYS_CJ_DEEPLINK', 'https://www.anrdoezrs.net/click-101803878-99999999?url={TARGET}');
+    // stays uses its deep-link template and carries the destination...
+    const stays = resolveBookingUrl('stays', 'https://www.booking.com/searchresults.html?ss=Tokyo');
+    expect(stays).toContain('99999999');
+    expect(decodeURIComponent(stays), 'destination carried through the deep-link').toContain('ss=Tokyo');
+    // ...but a stays template must NOT affect flights (still the flights creative).
+    const flights = resolveBookingUrl('flights', 'https://www.booking.com/flights/index.html');
+    expect(flights).toContain('17288982');
+    expect(flights).not.toContain('99999999');
   });
 
   it('describeBookingCjUrl extracts the CJ domain + creative id for logging', () => {
