@@ -69,10 +69,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const now = new Date();
 
   const entries: MetadataRoute.Sitemap = [
-    // No trailing slash — matches the home's emitted <link rel="canonical">
-    // (Next normalizes the slash off), so the sitemap URL and the canonical
-    // are byte-identical and Google can't read them as two different URLs.
-    { url: base, lastModified: now, changeFrequency: 'daily', priority: 1.0 },
+    { url: `${base}/`, lastModified: now, changeFrequency: 'daily', priority: 1.0 },
     // /search is noindex — omitted from sitemap.
     { url: `${base}/plan`, lastModified: now, changeFrequency: 'weekly', priority: 0.9 },
     {

@@ -163,7 +163,7 @@ export function MultiCategoryHero({
               gap: '0.2rem',
             }}
           >
-            {CATEGORY_META.map((c) => {
+            {CATEGORY_META.filter((c) => c.id !== 'cruises' && c.id !== 'packages').map((c) => {
               const active = category === c.id;
               return (
                 <button

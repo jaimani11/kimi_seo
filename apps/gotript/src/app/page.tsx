@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { SiteHeader } from '@/features/site/site-header';
 import { MultiCategoryHero } from '@/features/site/multi-category-hero';
+import { PropertyTypeRail } from '@/features/site/property-type-rail';
 import { StatsBand } from '@/features/site/stats-band';
 import { AgenticHero } from '@/features/site/agentic-hero';
 import { RecentlyViewedRail } from '@/features/site/recently-viewed-rail';
@@ -51,6 +52,7 @@ export default function HomePage() {
     <>
       <SiteHeader />
       <MultiCategoryHero />
+      <PropertyTypeRail />
       <StatsBand />
       <AgenticHero />
       <RecentlyViewedRail />
