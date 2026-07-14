@@ -1,4 +1,5 @@
 import type { TripIntent } from '@core/trip-intent';
+import { redactPiiText } from '@lib/privacy/redact-pii';
 import type { MemoryStore, OwnerArgs } from './memory-store';
 
 /**
@@ -35,8 +36,10 @@ export class MemoryRecorder {
     this.seenTurnIds.add(args.turnId);
 
     try {
-      // 1. Episodic memory: rawInput truncated.
-      const episodicContent = args.rawInput.slice(0, 280).trim();
+      // 1. Episodic memory: rawInput, PII-redacted then truncated. Redact
+      //    BEFORE slicing so a PII token near the 280-char boundary can't be
+      //    cut in half and survive.
+      const episodicContent = redactPiiText(args.rawInput).slice(0, 280).trim();
       if (episodicContent.length > 0) {
         await this.store.record({
           ...args.owner,
@@ -63,7 +66,7 @@ export class MemoryRecorder {
         await this.store.record({
           ...args.owner,
           kind: 'structural',
-          content: `caveat: ${caveat.slice(0, 200)}`,
+          content: `caveat: ${redactPiiText(caveat).slice(0, 200)}`,
           signalKey: 'caveat',
           weight: 0.7,
         });

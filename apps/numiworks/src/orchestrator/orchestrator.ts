@@ -17,6 +17,7 @@ import {
   type DestinationFlavorAgentInput,
 } from '@/agents/destination-flavor-agent';
 import { buildProviderRegistry, routeProvider } from '@/providers';
+import { redactPiiText } from '@lib/privacy/redact-pii';
 import { NoOpTraceLogger } from '@lib/observability/trace-logger';
 import { MemoryHinter } from '@lib/memory-hinter';
 import { InMemorySessionStore, type SessionStore } from '@lib/session';
@@ -419,7 +420,9 @@ export class Orchestrator {
       turnId: req.turnId,
       sessionId: req.sessionId,
       type: req.type,
-      rawInput: req.input.rawInput,
+      // Persist a PII-redacted copy — the model already ran on the raw input;
+      // the stored turn is only read back for structured priorIntent + admin.
+      rawInput: redactPiiText(req.input.rawInput),
       intent,
       proposal,
       durationMs: Math.round(performance.now() - turnStartedAt),
@@ -543,7 +546,7 @@ export class Orchestrator {
       turnId: req.turnId,
       sessionId: req.sessionId,
       type: req.type,
-      rawInput: req.input.rawInput,
+      rawInput: redactPiiText(req.input.rawInput),
       intent,
       durationMs: agentTrace.totalDurationMs,
       completedAt: Date.now(),
