@@ -7,10 +7,12 @@
  *   UPSTASH_REDIS_REST_URL + UPSTASH_REDIS_REST_TOKEN   (Upstash), or
  *   KV_REST_API_URL       + KV_REST_API_TOKEN           (Vercel KV).
  *
- * FALLBACK: an in-process Map. DEV-ONLY — it counts per-instance, so on Vercel
- * it under-counts (each cold start / instance has its own map) and must not be
- * relied on for real protection. A one-time error is logged if it is selected
- * in a production environment.
+ * FALLBACK: an in-process Map. This still throttles a SINGLE instance, so it is
+ * an acceptable low-traffic / pre-launch mode — a visitor is limited per
+ * instance. It only under-counts when Vercel fans a burst across multiple
+ * instances. A one-time warning (not an error) is logged in production so the
+ * chosen mode is visible; provision Redis before public marketing for true
+ * distributed limiting.
  *
  * UNAVAILABLE backend: if the Redis endpoint errors or times out at request
  * time, `incr` throws and the caller (rateLimit) FAILS OPEN — the request is
@@ -99,10 +101,13 @@ export function getRateLimitStore(): RateLimitStore {
   } else {
     if (process.env.NODE_ENV === 'production' && !warnedMemoryInProd) {
       warnedMemoryInProd = true;
-      console.error(
-        '[ratelimit] no Redis REST backend configured (UPSTASH_REDIS_REST_URL/TOKEN or ' +
-          'KV_REST_API_URL/TOKEN) — using a PER-INSTANCE in-memory limiter, which ' +
-          'under-counts on Vercel. Configure Redis for real distributed protection.',
+      // Deliberate low-traffic mode — the in-memory limiter still throttles a
+      // single instance. Provision Upstash / Vercel-KV Redis
+      // (UPSTASH_REDIS_REST_URL/TOKEN or KV_REST_API_URL/TOKEN) before public
+      // launch for true distributed limiting.
+      console.warn(
+        '[ratelimit] no Redis backend configured — using the per-instance ' +
+          'in-memory limiter (OK for low traffic; provision Redis before public launch).',
       );
     }
     cached = new InMemoryStore();
