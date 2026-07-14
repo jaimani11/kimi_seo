@@ -3,6 +3,7 @@ import { ConciergeRequestBodySchema, type ConciergeRequest } from '@core/concier
 import { getOrchestrator } from '@/orchestrator/singleton';
 import { toJsonlStream } from '@lib/streaming/jsonl-stream';
 import { resolveSession, setSessionCookieHeader } from '@lib/session/anonymous';
+import { rateLimit, deriveRateLimitKey, clientIpFrom } from '@lib/ratelimit';
 
 export const runtime = 'nodejs';
 
@@ -25,6 +26,22 @@ export const runtime = 'nodejs';
  * a long memory hint, say), bump on a plan that supports it.
  */
 export const maxDuration = 60;
+
+/**
+ * Concierge rate limits (env-tunable). Burst stops rapid-fire abuse of the
+ * expensive LLM+provider path; sustained caps total volume per identity/hour.
+ * Distributed via Redis in production (see lib/ratelimit/store.ts).
+ */
+const CONCIERGE_LIMITS = {
+  burst: {
+    limit: Number(process.env.CONCIERGE_RL_BURST_LIMIT ?? 8),
+    windowSeconds: Number(process.env.CONCIERGE_RL_BURST_WINDOW ?? 10),
+  },
+  sustained: {
+    limit: Number(process.env.CONCIERGE_RL_SUSTAINED_LIMIT ?? 60),
+    windowSeconds: Number(process.env.CONCIERGE_RL_SUSTAINED_WINDOW ?? 3600),
+  },
+};
 
 export async function POST(req: NextRequest): Promise<Response> {
   let body: unknown;
@@ -54,6 +71,24 @@ export async function POST(req: NextRequest): Promise<Response> {
   // be present, but `resolveSession` mints if not (defense-in-depth).
   const session = resolveSession(req.headers.get('cookie'));
   const requestSessionId = parsed.data.sessionId || session.sessionId;
+
+  // Rate limit BEFORE the expensive orchestrator run. Keyed on a hashed
+  // IP+session identifier (no raw IP retained); separate burst + sustained
+  // windows; fails open on a limiter-backend outage.
+  const rl = await rateLimit(
+    deriveRateLimitKey({ sessionId: requestSessionId, ip: clientIpFrom(req.headers) }),
+    CONCIERGE_LIMITS,
+  );
+  if (!rl.allowed) {
+    console.warn('[concierge] rate limited', { scope: rl.scope, backend: rl.backend });
+    return Response.json(
+      {
+        error: 'Too many requests. Please slow down and try again in a moment.',
+        retryAfterSeconds: rl.retryAfterSeconds,
+      },
+      { status: 429, headers: { 'Retry-After': String(rl.retryAfterSeconds) } },
+    );
+  }
 
   // Construct the canonical request - sessionId guaranteed to be a
   // string from here on. Spread + override would still TS-widen to
