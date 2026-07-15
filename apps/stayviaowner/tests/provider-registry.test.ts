@@ -60,8 +60,10 @@ describe('availability-aware provider registry', () => {
   });
 
   it('includes Expedia when both env keys are present', () => {
-    process.env.EXPEDIA_AFFILIATE_ID = 'partner_42';
+    // The live Expedia search provider gates on the EPS credential pair
+    // (EXPEDIA_API_KEY + EXPEDIA_SHARED_SECRET), not the affiliate id.
     process.env.EXPEDIA_API_KEY = 'key_xyz';
+    process.env.EXPEDIA_SHARED_SECRET = 'secret_xyz';
     _resetProviderRegistryForTesting();
     const reg = buildProviderRegistry();
     expect(reg.real).toHaveLength(1);
@@ -78,16 +80,20 @@ describe('availability-aware provider registry', () => {
   });
 
   it('routeProvider promotes Expedia to first when keys are set', () => {
-    process.env.EXPEDIA_AFFILIATE_ID = 'partner_42';
+    // The live Expedia search provider gates on the EPS credential pair
+    // (EXPEDIA_API_KEY + EXPEDIA_SHARED_SECRET), not the affiliate id.
     process.env.EXPEDIA_API_KEY = 'key_xyz';
+    process.env.EXPEDIA_SHARED_SECRET = 'secret_xyz';
     _resetProviderRegistryForTesting();
     const p = routeProvider(baseIntent);
     expect(p.id).toBe('expedia');
   });
 
   it('routeProviders fans out real providers plus the dormant LLM fallback', () => {
-    process.env.EXPEDIA_AFFILIATE_ID = 'partner_42';
+    // The live Expedia search provider gates on the EPS credential pair
+    // (EXPEDIA_API_KEY + EXPEDIA_SHARED_SECRET), not the affiliate id.
     process.env.EXPEDIA_API_KEY = 'key_xyz';
+    process.env.EXPEDIA_SHARED_SECRET = 'secret_xyz';
     _resetProviderRegistryForTesting();
     const list = routeProviders(baseIntent);
     const ids = list.map((p) => p.id as string);

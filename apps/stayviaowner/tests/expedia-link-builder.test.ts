@@ -1,171 +1,102 @@
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import {
-  buildExpediaPropertyUrl,
   buildExpediaSearchUrl,
   getExpediaAffiliateConfig,
 } from '@/lib/affiliate/expedia-link-builder';
 
+// expedia-link-builder is a thin compat shim over the shared multi-category
+// Partnerize builder. Every stay hand-off it produces is wrapped through
+// prf.hn with camref 1110lFruB (the DIRECT Expedia Group Creator program) —
+// the camref lives in the wrapper, not the destination query string.
+const PARTNERIZE_PREFIX = 'https://prf.hn/click/camref:1110lFruB/destination:';
+
+function partnerizeTarget(url: string): URL {
+  expect(url.startsWith(PARTNERIZE_PREFIX), `expected Partnerize wrapper, got: ${url}`).toBe(true);
+  return new URL(decodeURIComponent(url.slice(PARTNERIZE_PREFIX.length)));
+}
+
 describe('getExpediaAffiliateConfig', () => {
   const ENV_KEYS = [
-    'NEXT_PUBLIC_EXPEDIA_AFFILIATE_CID',
+    'NEXT_PUBLIC_EXPEDIA_AFFILIATE_ID',
+    'EXPEDIA_AFFILIATE_ID',
     'NEXT_PUBLIC_EXPEDIA_AFFILIATE_LABEL',
-    'NEXT_PUBLIC_EXPEDIA_AFFILIATE_BASE_URL',
-    'NEXT_PUBLIC_EXPEDIA_AFFILIATE_SITE_ID',
-    'EXPEDIA_AFFILIATE_CID',
     'EXPEDIA_AFFILIATE_LABEL',
-    'EXPEDIA_AFFILIATE_BASE_URL',
-    'EXPEDIA_AFFILIATE_SITE_ID',
+    'EXPEDIA_SITE_ID',
   ] as const;
-
+  const saved: Record<string, string | undefined> = {};
   beforeEach(() => {
-    for (const k of ENV_KEYS) delete process.env[k];
+    for (const k of ENV_KEYS) {
+      saved[k] = process.env[k];
+      delete process.env[k];
+    }
   });
   afterEach(() => {
-    for (const k of ENV_KEYS) delete process.env[k];
+    for (const k of ENV_KEYS) {
+      if (saved[k] === undefined) delete process.env[k];
+      else process.env[k] = saved[k];
+    }
   });
 
-  it('returns null cid + null label + default baseUrl + siteId 1 when nothing is set', () => {
-    expect(getExpediaAffiliateConfig()).toEqual({
-      cid: null,
-      label: null,
-      baseUrl: 'https://www.expedia.com',
-      siteId: 1,
-    });
+  it('defaults to null affiliate id, the stayviaowner label, expedia.com base, siteId 1', () => {
+    const cfg = getExpediaAffiliateConfig();
+    expect(cfg.affiliateId).toBeNull();
+    expect(cfg.cid).toBeNull(); // cid is a back-compat mirror of affiliateId
+    expect(cfg.label).toBe('stayviaowner');
+    expect(cfg.baseUrl).toBe('https://www.expedia.com');
+    expect(cfg.siteId).toBe(1);
   });
 
-  it('reads NEXT_PUBLIC_-prefixed names', () => {
-    process.env.NEXT_PUBLIC_EXPEDIA_AFFILIATE_CID = 'CID123';
+  it('reads the affiliate id from env (cid mirrors it)', () => {
+    process.env.NEXT_PUBLIC_EXPEDIA_AFFILIATE_ID = 'AID123';
+    const cfg = getExpediaAffiliateConfig();
+    expect(cfg.affiliateId).toBe('AID123');
+    expect(cfg.cid).toBe('AID123');
+  });
+
+  it('honors a custom label override', () => {
     process.env.NEXT_PUBLIC_EXPEDIA_AFFILIATE_LABEL = 'web';
-    process.env.NEXT_PUBLIC_EXPEDIA_AFFILIATE_BASE_URL = 'https://www.expedia.co.uk';
-    process.env.NEXT_PUBLIC_EXPEDIA_AFFILIATE_SITE_ID = '3';
-    expect(getExpediaAffiliateConfig()).toEqual({
-      cid: 'CID123',
-      label: 'web',
-      baseUrl: 'https://www.expedia.co.uk',
-      siteId: 3,
-    });
+    expect(getExpediaAffiliateConfig().label).toBe('web');
   });
 
-  it('falls back to non-prefixed names server-side', () => {
-    process.env.EXPEDIA_AFFILIATE_CID = 'CID-fallback';
-    expect(getExpediaAffiliateConfig().cid).toBe('CID-fallback');
-  });
-
-  it('strips trailing slash on baseUrl', () => {
-    process.env.NEXT_PUBLIC_EXPEDIA_AFFILIATE_BASE_URL = 'https://www.expedia.de/';
-    expect(getExpediaAffiliateConfig().baseUrl).toBe('https://www.expedia.de');
-  });
-
-  it('rejects non-numeric siteId, falls back to default 1', () => {
-    process.env.NEXT_PUBLIC_EXPEDIA_AFFILIATE_SITE_ID = 'not-a-number';
+  it('reads a numeric EXPEDIA_SITE_ID, falling back to 1 on garbage', () => {
+    process.env.EXPEDIA_SITE_ID = '3';
+    expect(getExpediaAffiliateConfig().siteId).toBe(3);
+    process.env.EXPEDIA_SITE_ID = 'not-a-number';
     expect(getExpediaAffiliateConfig().siteId).toBe(1);
   });
 });
 
-describe('buildExpediaSearchUrl', () => {
-  it('produces a destination-search URL with all canonical params', () => {
-    const url = buildExpediaSearchUrl(
-      {
+describe('buildExpediaSearchUrl — Partnerize-tracked hotel search', () => {
+  it('wraps an expedia.com hotel search through prf.hn, preserving destination + dates', () => {
+    const target = partnerizeTarget(
+      buildExpediaSearchUrl({
         destination: 'Tuscany, Italy',
         checkIn: '2026-09-01',
         checkOut: '2026-09-05',
         adults: 2,
-      },
-      { cid: 'CID123', label: 'web', baseUrl: 'https://www.expedia.com', siteId: 1 },
+      }),
     );
-    expect(url).toContain('https://www.expedia.com/Hotel-Search?');
-    expect(url).toContain('destination=Tuscany%2C+Italy');
-    expect(url).toContain('startDate=2026-09-01');
-    expect(url).toContain('endDate=2026-09-05');
-    expect(url).toContain('adults=2');
-    expect(url).toContain('rooms=1');
-    expect(url).toContain('siteid=1');
-    expect(url).toContain('affcid=CID123');
-    expect(url).toContain('label=web');
-    expect(url).toContain('_src=gotript');
+    expect(target.hostname).toBe('www.expedia.com');
+    expect(target.pathname).toBe('/Hotel-Search');
+    expect(target.searchParams.get('destination')).toBe('Tuscany, Italy');
+    expect(target.searchParams.get('startDate')).toBe('2026-09-01');
+    expect(target.searchParams.get('endDate')).toBe('2026-09-05');
+    expect(target.searchParams.get('adults')).toBe('2');
+    expect(target.searchParams.get('rooms')).toBe('1');
+    expect(target.searchParams.get('label')).toBe('stayviaowner');
+    expect(target.searchParams.get('_src')).toBe('stayviaowner');
   });
 
-  it('omits affcid when no cid configured (mock-safe - URL still works)', () => {
-    const url = buildExpediaSearchUrl(
-      {
-        destination: 'Tokyo',
-        checkIn: '2026-04-12',
-        checkOut: '2026-04-15',
-        adults: 1,
-      },
-      { cid: null, label: null, baseUrl: 'https://www.expedia.com', siteId: 1 },
-    );
-    expect(url).not.toContain('affcid');
-    expect(url).not.toContain('label');
-    expect(url).toContain('destination=Tokyo');
-    expect(url).toContain('startDate=2026-04-12');
+  it('emits a children count when supplied', () => {
+    const target = partnerizeTarget(buildExpediaSearchUrl({ destination: 'Paris', children: 2 }));
+    expect(target.searchParams.get('children')).toBe('2');
   });
 
-  it('encodes children ages as comma-separated list', () => {
-    const url = buildExpediaSearchUrl(
-      {
-        destination: 'Paris',
-        checkIn: '2026-06-10',
-        checkOut: '2026-06-13',
-        adults: 2,
-        childrenAges: [4, 8],
-      },
-      { cid: 'C', label: null, baseUrl: 'https://www.expedia.com', siteId: 1 },
-    );
-    expect(url).toContain('children=4%2C8');
-  });
-
-  it('clamps child ages to [0, 17]', () => {
-    const url = buildExpediaSearchUrl(
-      {
-        destination: 'Lisbon',
-        checkIn: '2026-06-10',
-        checkOut: '2026-06-13',
-        adults: 2,
-        childrenAges: [-5, 99],
-      },
-      { cid: null, label: null, baseUrl: 'https://www.expedia.com', siteId: 1 },
-    );
-    expect(url).toContain('children=0%2C17');
-  });
-
-  it('respects baseUrl override (locale)', () => {
-    const url = buildExpediaSearchUrl(
-      {
-        destination: 'London',
-        checkIn: '2026-06-10',
-        checkOut: '2026-06-13',
-        adults: 2,
-      },
-      { cid: 'CID', label: null, baseUrl: 'https://www.expedia.co.uk', siteId: 3 },
-    );
-    expect(url.startsWith('https://www.expedia.co.uk/Hotel-Search?')).toBe(true);
-    expect(url).toContain('siteid=3');
-  });
-});
-
-describe('buildExpediaPropertyUrl', () => {
-  it('produces a property-information URL with the affcid attached', () => {
-    const url = buildExpediaPropertyUrl(
-      {
-        propertyId: '12345',
-        checkIn: '2026-09-01',
-        checkOut: '2026-09-05',
-        adults: 2,
-      },
-      { cid: 'CID', label: null, baseUrl: 'https://www.expedia.com', siteId: 1 },
-    );
-    expect(url).toContain('https://www.expedia.com/h12345.Hotel-Information');
-    expect(url).toContain('affcid=CID');
-    expect(url).toContain('chkin=2026-09-01');
-    expect(url).toContain('rm1=a2');
-  });
-
-  it('strips a leading h on the property id (accepts both forms)', () => {
-    const url = buildExpediaPropertyUrl(
-      { propertyId: 'h99887' },
-      { cid: null, label: null, baseUrl: 'https://www.expedia.com', siteId: 1 },
-    );
-    expect(url).toContain('/h99887.Hotel-Information');
+  it('never mixes in Awin/CJ attribution params', () => {
+    const url = buildExpediaSearchUrl({ destination: 'Tokyo' });
+    expect(url).not.toContain('clickref'); // Awin/CJ key — not this program
+    expect(url).not.toContain('affcid'); // the retired Awin-style CID param
+    expect(url).not.toContain('cj.com');
+    expect(url).not.toContain('tkqlhce');
   });
 });

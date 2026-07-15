@@ -110,7 +110,7 @@ describe('buildSearchOpportunity', () => {
       intent: makeIntent({ name: 'Lisbon', country: 'PT' }),
     });
     for (const p of opp.providers) {
-      expect(p.url).toContain('mcid=gotript-stay');
+      expect(p.url).toContain('mcid=stayviaowner-stay');
       expect(p.url).toContain('medium=link');
     }
   });

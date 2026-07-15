@@ -41,8 +41,8 @@ describe('getViatorStayLinkConfig', () => {
     expect(getViatorStayLinkConfig().partnerId).toBe('client-safe');
   });
 
-  it('defaults mcid to gotript-stay', () => {
-    expect(getViatorStayLinkConfig().mcid).toBe('gotript-stay');
+  it('defaults mcid to stayviaowner-stay', () => {
+    expect(getViatorStayLinkConfig().mcid).toBe('stayviaowner-stay');
   });
 
   it('honors NEXT_PUBLIC_VIATOR_STAY_MCID override', () => {
@@ -63,14 +63,14 @@ describe('getViatorStayLinkConfig', () => {
 describe('buildViatorStaySearchUrl', () => {
   const baseConfig = {
     partnerId: 'P00012345',
-    mcid: 'gotript-stay',
+    mcid: 'stayviaowner-stay',
     baseUrl: 'https://www.viator.com',
   };
 
   it('builds the canonical /searchResults/all URL with the destination', () => {
     const url = buildViatorStaySearchUrl({ destination: 'Agra' }, baseConfig);
     expect(url).toBe(
-      'https://www.viator.com/searchResults/all?text=Agra&pid=P00012345&mcid=gotript-stay&medium=link',
+      'https://www.viator.com/searchResults/all?text=Agra&pid=P00012345&mcid=stayviaowner-stay&medium=link',
     );
   });
 
@@ -86,15 +86,15 @@ describe('buildViatorStaySearchUrl', () => {
     );
     expect(url).not.toContain('pid=');
     expect(url).toContain('text=Tokyo');
-    expect(url).toContain('mcid=gotript-stay');
+    expect(url).toContain('mcid=stayviaowner-stay');
   });
 
   it('always includes medium=link and the configured mcid', () => {
     const url = buildViatorStaySearchUrl(
       { destination: 'Rome' },
-      { ...baseConfig, mcid: 'gotript-card' },
+      { ...baseConfig, mcid: 'stayviaowner-card' },
     );
-    expect(url).toContain('mcid=gotript-card');
+    expect(url).toContain('mcid=stayviaowner-card');
     expect(url).toContain('medium=link');
   });
 });

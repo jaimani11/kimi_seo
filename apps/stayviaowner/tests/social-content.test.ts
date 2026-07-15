@@ -22,16 +22,16 @@ describe('TOKYO_SAMPLE_PACK', () => {
     expect(TOKYO_SAMPLE_PACK.shorts).toHaveLength(10);
   });
 
-  it('every CTA mentions gotript (per the brief)', () => {
+  it('every CTA mentions stayviaowner (per the brief)', () => {
     for (const p of TOKYO_SAMPLE_PACK.pinterest) {
-      expect(p.cta.toLowerCase()).toContain('gotript');
+      expect(p.cta.toLowerCase()).toContain('stayviaowner');
     }
     for (const s of [
       ...TOKYO_SAMPLE_PACK.tiktok,
       ...TOKYO_SAMPLE_PACK.reels,
       ...TOKYO_SAMPLE_PACK.shorts,
     ]) {
-      expect(s.cta.toLowerCase()).toContain('gotript');
+      expect(s.cta.toLowerCase()).toContain('stayviaowner');
     }
   });
 
@@ -75,12 +75,12 @@ describe('Template generator fallback', () => {
     }
   });
 
-  it('every CTA mentions gotript', () => {
+  it('every CTA mentions stayviaowner', () => {
     const city = findCityBySlug('paris')!;
     const pack = buildSocialPackFromTemplate(city);
-    for (const p of pack.pinterest) expect(p.cta.toLowerCase()).toContain('gotript');
+    for (const p of pack.pinterest) expect(p.cta.toLowerCase()).toContain('stayviaowner');
     for (const s of [...pack.tiktok, ...pack.reels, ...pack.shorts]) {
-      expect(s.cta.toLowerCase()).toContain('gotript');
+      expect(s.cta.toLowerCase()).toContain('stayviaowner');
     }
   });
 
@@ -102,7 +102,7 @@ describe('Schema invariants', () => {
       description: 'A reasonable description that easily meets the minimum length requirement.',
       visualConcept: 'A reasonable visual concept that easily meets the minimum length requirement.',
       hashtags: ['#a', '#b', '#c'],
-      cta: 'Plan on gotript.com',
+      cta: 'Plan on stayviaowner.com',
     });
     expect(ok.success).toBe(false);
   });
@@ -114,7 +114,7 @@ describe('Schema invariants', () => {
       description: 'A perfectly fine description that meets the minimum length easily.',
       visualConcept: 'A perfectly fine visual concept that meets the minimum length easily.',
       hashtags: ['nohash', '#good'],
-      cta: 'Plan on gotript.com',
+      cta: 'Plan on stayviaowner.com',
     });
     expect(ok.success).toBe(false);
   });
@@ -140,7 +140,7 @@ describe('Schema invariants', () => {
           voiceover: 'A perfectly fine voiceover line.',
         },
       ],
-      cta: 'Plan on gotript.com',
+      cta: 'Plan on stayviaowner.com',
       durationSec: 60,
       musicCue: 'lo-fi',
       hashtags: ['#a', '#b', '#c', '#d', '#e'],

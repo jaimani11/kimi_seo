@@ -93,32 +93,42 @@ export function createExpediaMulticategory(
   }
 
   function withAffiliate(url: string, config: ExpediaMultiConfig): string {
+    // Attach the brand's Expedia-side reporting breadcrumbs (label + `_src`)
+    // to the destination, then wrap the whole thing through Partnerize. We do
+    // NOT set `clickref` (that's the Awin/CJ flow — this brand is on the
+    // DIRECT Expedia Group Creator / Partnerize program) and we do NOT put a
+    // `camref` on the destination query string (unreliable — Partnerize needs
+    // the server-side prf.hn click). The camref lives in the prf.hn wrapper.
     const u = new URL(url);
-    // `clickref` is the standard partner-tracking key on the Awin/CJ
-    // flow; `camref` carries the Expedia campaign id if configured.
-    // `_src` is our own analytics breadcrumb (doesn't affect
-    // commission).
-    if (config.affiliateId) u.searchParams.set('clickref', config.affiliateId);
-    if (config.campaignId) u.searchParams.set('camref', config.campaignId);
     u.searchParams.set('label', config.label);
     u.searchParams.set('_src', brand.src);
-    return u.toString();
+    return wrapPartnerize(u.toString(), config);
   }
 
   /**
-   * Wrap a plain vrbo.com URL through Partnerize's click tracker.
+   * Wrap a plain partner URL (expedia.com OR vrbo.com) through Partnerize's
+   * server-side click tracker — the only reliable attribution path for the
+   * DIRECT Expedia Group Creator / Partnerize program:
    *
-   * Format: `https://prf.hn/click/camref:<camref>/destination:<encoded>`
+   *   https://prf.hn/click/camref:<camref>/destination:<encoded target>
    *
-   * Partnerize registers the click server-side before forwarding to
-   * VRBO — that server-side step is what actually books the
-   * commission. Query-param camref on the destination URL is
-   * unreliable across the VRBO surface.
+   * Partnerize registers the click server-side before forwarding — that step
+   * is what books the commission (a query-param camref/clickref on the
+   * destination is unreliable, and this brand is not on Awin/CJ). The target
+   * is encoded exactly once.
+   *
+   * Fails CLOSED: with no camref (neither EXPEDIA_CAMPAIGN_ID nor the brand's
+   * defaultCamref) it throws rather than emit an untracked partner URL that
+   * would hand the click to Expedia/VRBO for free.
    */
-  function wrapVrboPartnerize(vrboUrl: string, config: ExpediaMultiConfig): string {
+  function wrapPartnerize(targetUrl: string, config: ExpediaMultiConfig): string {
     const camref = (config.campaignId ?? '').trim() || brand.defaultCamref || '';
-    if (!camref) return vrboUrl;
-    return `https://prf.hn/click/camref:${camref}/destination:${encodeURIComponent(vrboUrl)}`;
+    if (!camref) {
+      throw new Error(
+        'Partnerize camref missing (set EXPEDIA_CAMPAIGN_ID or the brand defaultCamref) — refusing to emit an untracked affiliate URL.',
+      );
+    }
+    return `https://prf.hn/click/camref:${camref}/destination:${encodeURIComponent(targetUrl)}`;
   }
 
   function buildVacationRentalsUrl(
@@ -142,7 +152,7 @@ export function createExpediaMulticategory(
     if (typeof input.adults === 'number' && input.adults > 0) {
       params.set('adults', String(input.adults));
     }
-    return wrapVrboPartnerize(
+    return wrapPartnerize(
       `https://www.vrbo.com/search?${params.toString()}`,
       config,
     );

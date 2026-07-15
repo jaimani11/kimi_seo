@@ -1,9 +1,4 @@
 import {
-  buildExpediaSearchUrl,
-  getExpediaAffiliateConfig,
-  type ExpediaSearchInput,
-} from './expedia-link-builder';
-import {
   buildViatorStaySearchUrl,
   getViatorStayLinkConfig,
 } from './viator-stay-link-builder';
@@ -75,16 +70,16 @@ export function buildActiveStaySearchUrl(input: ActiveStaySearchInput): string {
   const provider = getActiveStayProvider();
 
   if (provider === 'expedia') {
-    const expediaInput: ExpediaSearchInput = {
+    // Route through the shared Partnerize builder so the Expedia hotel handoff
+    // is wrapped in prf.hn/camref (tracked), never a plain untracked expedia.com URL.
+    return buildExpediaCategoryUrl('hotels', {
       destination: input.destination,
       checkIn: input.checkIn,
       checkOut: input.checkOut,
       adults: input.adults,
       children: input.childrenAges?.length ?? 0,
       ...(typeof input.rooms === 'number' ? { rooms: input.rooms } : {}),
-    };
-    void getExpediaAffiliateConfig();
-    return buildExpediaSearchUrl(expediaInput);
+    });
   }
 
   if (provider === 'viator') {

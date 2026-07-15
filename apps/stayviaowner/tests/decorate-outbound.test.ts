@@ -6,7 +6,7 @@ describe('decorateOutboundUrl', () => {
     const out = decorateOutboundUrl('https://www.viator.com/searchResults/all?text=Rome', {
       campaign: 'viator',
     });
-    expect(out).toContain('utm_source=gotript');
+    expect(out).toContain('utm_source=stayviaowner');
     expect(out).toContain('utm_medium=affiliate');
     expect(out).toContain('utm_campaign=viator');
   });
@@ -29,14 +29,14 @@ describe('decorateOutboundUrl', () => {
     expect(out).toContain('pid=PARTNER');
     // Partner's own utm_source must not be clobbered.
     expect(out).toContain('utm_source=partner-thing');
-    expect(out).not.toContain('utm_source=gotript');
+    expect(out).not.toContain('utm_source=stayviaowner');
   });
 
   it('returns the input unchanged when the URL is unparseable', () => {
     expect(decorateOutboundUrl('not-a-url', { campaign: 'viator' })).toBe('not-a-url');
   });
 
-  it('always overwrites dpl_turn (it is gotript-private)', () => {
+  it('always overwrites dpl_turn (it is stayviaowner-private)', () => {
     const out = decorateOutboundUrl('https://www.viator.com/x?dpl_turn=stale', {
       campaign: 'viator',
       turnId: 't_fresh',

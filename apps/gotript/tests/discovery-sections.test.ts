@@ -177,19 +177,25 @@ describe('buildPropertyAffiliateHref', () => {
   // gotript routes the curated property cards to Expedia hotels
   // search by default (active stay provider). Viator + Expedia builders
   // remain in the codebase as one-env-var overrides.
-  it('produces a /r/ redirect URL whose payload points at booking.com', () => {
+  const PARTNERIZE_PREFIX = 'https://prf.hn/click/camref:1110lFruB/destination:';
+
+  it('produces a /r/ redirect URL whose payload is a Partnerize-wrapped Expedia search', () => {
     const href = buildPropertyAffiliateHref(SAMPLE_PROPERTY);
     expect(href.startsWith('/r/')).toBe(true);
     const id = href.slice(3);
     const payload = decodeAffiliateLink(id);
     expect(payload).not.toBeNull();
     expect(payload!.providerId).toBe('expedia');
-    expect(payload!.url).toMatch(/^https:\/\/www\.booking\.com\/searchresults\.html\?/);
-    expect(payload!.url).toContain('Paris');
+    // Partnerize-wrapped (camref 1110lFruB) — the server-side prf.hn click is
+    // what books the commission, so the payload must NOT be a raw partner URL.
+    expect(payload!.url.startsWith(PARTNERIZE_PREFIX)).toBe(true);
+    const target = new URL(decodeURIComponent(payload!.url.slice(PARTNERIZE_PREFIX.length)));
+    expect(target.hostname).toBe('www.expedia.com');
+    expect(target.searchParams.get('destination')).toContain('Paris');
     expect(payload!.stayId).toBe('sample-stay');
   });
 
-  it('builds a working redirect for every curated property', () => {
+  it('builds a working, Partnerize-tracked redirect for every curated property', () => {
     for (const section of DISCOVERY_SECTIONS) {
       for (const property of section.properties) {
         const href = buildPropertyAffiliateHref(property);
@@ -197,7 +203,11 @@ describe('buildPropertyAffiliateHref', () => {
         const id = href.slice(3);
         const payload = decodeAffiliateLink(id);
         expect(payload, `decode failed for ${property.id}`).not.toBeNull();
-        expect(payload!.url).toMatch(/^https:\/\/www\.booking\.com\/searchresults\.html\?/);
+        expect(payload!.url.startsWith(PARTNERIZE_PREFIX), `untracked url for ${property.id}`).toBe(
+          true,
+        );
+        const target = new URL(decodeURIComponent(payload!.url.slice(PARTNERIZE_PREFIX.length)));
+        expect(target.hostname).toBe('www.expedia.com');
       }
     }
   });

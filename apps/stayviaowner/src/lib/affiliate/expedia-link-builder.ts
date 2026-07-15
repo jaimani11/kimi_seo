@@ -71,20 +71,3 @@ export function buildExpediaSearchUrl(input: ExpediaSearchInput): string {
     ...(input.rooms != null ? { rooms: input.rooms } : {}),
   });
 }
-
-/**
- * Build an Expedia property-detail URL by property id. Falls back
- * to a destination search if the id isn't known.
- */
-export function buildExpediaPropertyUrl(
-  input: { propertyId: string; destination?: string },
-  _config?: ExpediaAffiliateConfig,
-): string {
-  const id = input.propertyId.replace(/^h/i, '');
-  const base = buildExpediaCategoryUrl('hotels', {
-    destination: input.destination ?? '',
-  });
-  const u = new URL(base);
-  u.searchParams.set('selected', id);
-  return u.toString();
-}

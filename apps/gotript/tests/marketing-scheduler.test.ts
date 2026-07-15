@@ -169,7 +169,13 @@ describe('runMarketingScheduler', () => {
       expect(cta).toContain('gotript.com');
       expect(cta).toContain(`utm_source=${post.platform}`);
       expect(cta).toContain('utm_medium=organic');
-      expect(cta).toContain(`utm_campaign=daily-${post.citySlug}`);
+      // gotript rotates ~30% of cities onto the higher-commission VRBO
+      // vacation-rentals variant (utm_campaign=vrbo-<city>); the rest use the
+      // daily-<city> guide variant. Either is a correctly-scoped campaign.
+      const okCampaign =
+        cta.includes(`utm_campaign=daily-${post.citySlug}`) ||
+        cta.includes(`utm_campaign=vrbo-${post.citySlug}`);
+      expect(okCampaign, `unexpected utm_campaign in: ${cta}`).toBe(true);
     }
   });
 

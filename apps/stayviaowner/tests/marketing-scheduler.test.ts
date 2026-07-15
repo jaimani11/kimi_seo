@@ -154,7 +154,7 @@ describe('runMarketingScheduler', () => {
     expect(DEFAULT_MARKETING_CONFIG.tiktok.enabled).toBe(false);
   });
 
-  it('every posted CTA references gotript.com with a platform-scoped UTM', async () => {
+  it('every posted CTA references stayviaowner.com with a platform-scoped UTM', async () => {
     const store = getMarketingStore();
     await store.putConfig({
       pinterest: { enabled: true, dailyCount: 3 },
@@ -166,10 +166,15 @@ describe('runMarketingScheduler', () => {
     const all = await store.listPosts({});
     for (const post of all) {
       const cta = (post.payload as { cta?: string }).cta ?? '';
-      expect(cta).toContain('gotript.com');
+      expect(cta).toContain('stayviaowner.com');
       expect(cta).toContain(`utm_source=${post.platform}`);
       expect(cta).toContain('utm_medium=organic');
-      expect(cta).toContain(`utm_campaign=daily-${post.citySlug}`);
+      // stayviaowner rotates ~30% of cities onto the VRBO vacation-rentals
+      // variant (utm_campaign=vrbo-<city>); the rest use daily-<city>.
+      const okCampaign =
+        cta.includes(`utm_campaign=daily-${post.citySlug}`) ||
+        cta.includes(`utm_campaign=vrbo-${post.citySlug}`);
+      expect(okCampaign, `unexpected utm_campaign in: ${cta}`).toBe(true);
     }
   });
 
