@@ -1,27 +1,10 @@
 import type { Metadata } from 'next';
-import { notFound } from 'next/navigation';
+import { notFound, permanentRedirect } from 'next/navigation';
 import { parseSeoSlug, enumerateAllSeoSlugs } from '@lib/seo/route-parser';
+import { retirementFor, heldPageTitle } from '@lib/seo/gobookt-retirement';
 import { canonicalUrl } from '@lib/site/origin';
 import { resolveDestinationPhoto } from '@lib/imagery/destination-photo';
-import { buildPlan } from '@/app/plan/build-plan';
-import { viatorProviderFromEnv } from '@/providers/viator';
-import {
-  ItinerarySeoPage,
-  buildItineraryJsonLd,
-} from '@/features/seo/itinerary-seo-page';
-import {
-  ThingsToDoSeoPage,
-  buildThingsToDoJsonLd,
-} from '@/features/seo/things-to-do-seo-page';
-import {
-  ThemedListSeoPage,
-  buildThemedListJsonLd,
-  THEME_META,
-} from '@/features/seo/themed-list-seo-page';
-import {
-  ComparisonSeoPage,
-  buildComparisonJsonLd,
-} from '@/features/seo/comparison-seo-page';
+import { HeldEditorialBridge } from '@/features/seo/held-editorial-bridge';
 import {
   VerticalLandingPage,
   buildVerticalLandingJsonLd,
@@ -41,14 +24,7 @@ import {
   WhereToGoMonthSeoPage,
   buildWhereToGoMonthJsonLd,
 } from '@/features/seo/climate-seo-pages';
-import {
-  buildThingsToDoFaq,
-  findClimate,
-  findDestinationGuide,
-  monthName,
-} from '@adored/seo-data';
-import type { Plan } from '@lib/plan/types';
-import type { Experience } from '@core/experience';
+import { findClimate, findDestinationGuide, monthName } from '@adored/seo-data';
 
 /**
  * Top-level catch-all that powers every programmatic SEO surface:
@@ -86,6 +62,22 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   }
 
   const canonical = canonicalUrl(`/${slug}`);
+
+  // Viator retirement: redirected families never render their own metadata
+  // (they 308 at request time and are dropped from generateStaticParams). Held
+  // pure-experience pages get a clean, Viator-free title and are noindexed while
+  // they await the GSC/backlink traffic review.
+  const retire = retirementFor(parsed);
+  if (retire?.kind === 'redirect') return { alternates: { canonical } };
+  if (retire?.kind === 'held') {
+    return {
+      title: `${heldPageTitle(parsed)} · gobookt`,
+      description:
+        'Find where to stay on gobookt — real Booking.com availability and prices, free cancellation on most bookings.',
+      alternates: { canonical },
+      robots: { index: false, follow: true },
+    };
+  }
 
   // Resolve a destination photo for the Open Graph card. Pinterest,
   // Facebook, X and Slack all read this — without it, rich pins fall
@@ -160,56 +152,6 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       alternates: { canonical },
       openGraph: { title, description, url: canonical, type: 'website' },
       twitter: { card: 'summary', title, description },
-    };
-  }
-
-  if (parsed.kind === 'itinerary') {
-    const title = `${parsed.days}-Day ${parsed.city.name} Itinerary · gobookt`;
-    const description = `Day-by-day ${parsed.days}-day ${parsed.city.name}, ${parsed.city.countryName} itinerary with bookable Viator experiences in every slot. ${parsed.city.oneLiner}`;
-    return {
-      title,
-      description,
-      alternates: { canonical },
-      openGraph: { title, description, url: canonical, type: 'article', images: ogImages },
-      twitter: { card: 'summary_large_image', title, description, images: ogImages },
-    };
-  }
-
-  if (parsed.kind === 'weekend') {
-    const title = `A Weekend in ${parsed.city.name} · 2-Day Plan · gobookt`;
-    const description = `A focused 2-day plan for ${parsed.city.name}, ${parsed.city.countryName} — bookable Viator experiences for every slot. ${parsed.city.oneLiner}`;
-    return {
-      title,
-      description,
-      alternates: { canonical },
-      openGraph: { title, description, url: canonical, type: 'article', images: ogImages },
-      twitter: { card: 'summary_large_image', title, description, images: ogImages },
-    };
-  }
-
-  if (parsed.kind === 'themed-list') {
-    const meta = THEME_META[parsed.theme];
-    const title = `${meta.heading(parsed.city)} · gobookt`;
-    const description = meta.intro(parsed.city);
-    return {
-      title,
-      description,
-      alternates: { canonical },
-      openGraph: { title, description, url: canonical, type: 'website', images: ogImages },
-      twitter: { card: 'summary_large_image', title, description, images: ogImages },
-    };
-  }
-
-  if (parsed.kind === 'comparison') {
-    const { a, b } = parsed.comparison;
-    const title = `${a.name} vs ${b.name}: which to pick · gobookt`;
-    const description = `${a.name}, ${a.countryName} or ${b.name}, ${b.countryName}? A side-by-side travel guide with bookable Booking.com inventory in each.`;
-    return {
-      title,
-      description,
-      alternates: { canonical },
-      openGraph: { title, description, url: canonical, type: 'article', images: ogImages },
-      twitter: { card: 'summary_large_image', title, description, images: ogImages },
     };
   }
 
@@ -319,15 +261,9 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     };
   }
 
-  // things-to-do
-  const title = `Things to do in ${parsed.city.name}, ${parsed.city.countryName} · gobookt`;
-  const description = `${parsed.city.oneLiner} Bookable tours, day trips, and tickets in ${parsed.city.name} via Booking.com Attractions.`;
-  return {
-    title,
-    description,
-    alternates: { canonical },
-    openGraph: { title, description, url: canonical, type: 'website' },
-  };
+  // Any remaining kind is a retired Viator family already handled by the gate
+  // above; fall through defensively to noindex.
+  return { alternates: { canonical }, robots: { index: false, follow: false } };
 }
 
 const HOTEL_THEME_HEADING: Record<string, string> = {
@@ -373,6 +309,26 @@ export default async function ProgrammaticSeoPage({ params }: PageProps) {
   if (!parsed) notFound();
 
   const canonical = canonicalUrl(`/${slug}`);
+
+  // Viator retirement gate. Redirected families 308 to their closest live
+  // Booking.com/stays equivalent (one hop). Held pure-experience pages render an
+  // honest, Viator-free bridge (noindex) until the traffic review.
+  const retire = retirementFor(parsed);
+  if (retire?.kind === 'redirect') permanentRedirect(retire.to);
+  if (retire?.kind === 'held') {
+    if (parsed.kind === 'comparison') {
+      return (
+        <HeldEditorialBridge
+          title={heldPageTitle(parsed)}
+          city={parsed.comparison.a}
+          secondaryCity={parsed.comparison.b}
+        />
+      );
+    }
+    if (parsed.kind === 'themed-list') {
+      return <HeldEditorialBridge title={heldPageTitle(parsed)} city={parsed.city} />;
+    }
+  }
 
   if (parsed.kind === 'where-to-go-month') {
     return (
@@ -470,65 +426,6 @@ export default async function ProgrammaticSeoPage({ params }: PageProps) {
     );
   }
 
-  if (parsed.kind === 'itinerary' || parsed.kind === 'weekend') {
-    const city = parsed.city;
-    const days = parsed.kind === 'weekend' ? 2 : parsed.days;
-    let plan: Plan | null = null;
-    let loadError: string | null = null;
-    try {
-      plan = await buildPlan({
-        destination: `${city.name}, ${city.countryName}`,
-        nights: days,
-        vibeTags: [],
-      });
-    } catch (e) {
-      loadError = (e as Error).message;
-    }
-    return (
-      <>
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: buildItineraryJsonLd({ city, days, plan, canonical }),
-          }}
-        />
-        <ItinerarySeoPage
-          city={city}
-          days={days}
-          plan={plan}
-          loadError={loadError}
-        />
-      </>
-    );
-  }
-
-  if (parsed.kind === 'themed-list') {
-    const { city, theme } = parsed;
-    const meta = THEME_META[theme];
-    const experiences = await fetchExperiences(meta.viatorQuery(city));
-    return (
-      <>
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: buildThemedListJsonLd({
-              city,
-              theme,
-              experiences: experiences.experiences,
-              canonical,
-            }),
-          }}
-        />
-        <ThemedListSeoPage
-          city={city}
-          theme={theme}
-          experiences={experiences.experiences}
-          loadError={experiences.loadError}
-        />
-      </>
-    );
-  }
-
   if (
     parsed.kind === 'hotels-in' ||
     parsed.kind === 'flights-to' ||
@@ -594,66 +491,10 @@ export default async function ProgrammaticSeoPage({ params }: PageProps) {
     );
   }
 
-  if (parsed.kind === 'comparison') {
-    const { a, b } = parsed.comparison;
-    // Two parallel Viator fetches — keeps the page render fast since
-    // both inventories load in parallel rather than sequentially.
-    const [resA, resB] = await Promise.all([
-      fetchExperiences(`${a.viatorQuery} tours`),
-      fetchExperiences(`${b.viatorQuery} tours`),
-    ]);
-    return (
-      <>
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: buildComparisonJsonLd({
-              comparison: parsed.comparison,
-              canonical,
-            }),
-          }}
-        />
-        <ComparisonSeoPage
-          comparison={parsed.comparison}
-          experiencesA={resA.experiences}
-          experiencesB={resB.experiences}
-          loadErrorA={resA.loadError}
-          loadErrorB={resB.loadError}
-        />
-      </>
-    );
-  }
-
-  // things-to-do
-  const { city } = parsed;
-  const result = await fetchExperiences(`${city.viatorQuery} tours`);
-  const faq = buildThingsToDoFaq({
-    cityName: city.name,
-    oneLiner: city.oneLiner,
-    guide: findDestinationGuide(city.slug),
-    topExperienceTitles: result.experiences.slice(0, 3).map((e) => e.title),
-  });
-  return (
-    <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: buildThingsToDoJsonLd({
-            city,
-            experiences: result.experiences,
-            canonical,
-            faq,
-          }),
-        }}
-      />
-      <ThingsToDoSeoPage
-        city={city}
-        experiences={result.experiences}
-        loadError={result.loadError}
-        faq={faq}
-      />
-    </>
-  );
+  // Every non-retired kind returned above; retired kinds (itinerary, weekend,
+  // things-to-do, themed-list, comparison) are handled by the gate at the top.
+  // Anything else is defensively a 404.
+  notFound();
 }
 
 type ThemedRouteMatch =
@@ -706,22 +547,3 @@ function verticalKindFor(parsed: ThemedRouteMatch): VerticalKind {
   }
 }
 
-async function fetchExperiences(
-  query: string,
-): Promise<{ experiences: Experience[]; loadError: string | null }> {
-  const provider = viatorProviderFromEnv();
-  if (!provider) return { experiences: [], loadError: null };
-  const controller = new AbortController();
-  const timer = setTimeout(() => controller.abort(new Error('timeout')), 12_000);
-  try {
-    const result = await provider.search(
-      { searchTerm: query, limit: 24 },
-      { signal: controller.signal, secrets: {} },
-    );
-    return { experiences: [...result.experiences], loadError: null };
-  } catch (e) {
-    return { experiences: [], loadError: (e as Error).message };
-  } finally {
-    clearTimeout(timer);
-  }
-}
