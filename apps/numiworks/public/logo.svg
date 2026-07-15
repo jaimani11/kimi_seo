@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256" role="img" aria-label="numiworks">
+  <rect width="256" height="256" rx="56" fill="#003b95"/>
+  <path d="M128 40C137 97 159 119 216 128C159 137 137 159 128 216C119 159 97 137 40 128C97 119 119 97 128 40Z" fill="#ffffff"/>
+  <path d="M196 54C199 74 202 77 222 80C202 83 199 86 196 106C193 86 190 83 170 80C190 77 193 74 196 54Z" fill="#ff5e3a"/>
+</svg>

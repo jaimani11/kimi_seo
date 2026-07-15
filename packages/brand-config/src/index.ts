@@ -9,3 +9,4 @@ export {
 } from './brands';
 export type { CityBookingLink } from './network';
 export { cityBookingLinks } from './network';
+export { buildSiteJsonLd } from './site-schema';

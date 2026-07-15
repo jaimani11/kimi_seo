@@ -14,6 +14,11 @@ export const NUMIWORKS: BrandConfig = {
   domain: 'numiworks.com',
   siteUrl: 'https://www.numiworks.com',
   tagline: 'Tours, hotels & whole homes worldwide — planned by AI, booked in one place.',
+  legalName: 'Adored Moments LLC',
+  description:
+    'numiworks is an AI-powered travel planner that brings tours, activities, hotels, and whole-home rentals into one place — plan a trip by chatting, then book real inventory from partners like Viator and Vrbo.',
+  logoPath: '/logo.svg',
+  social: { sameAs: [] },
   colors: {
     primary: '#006ce4',
     secondary: '#ff5e3a',
@@ -33,6 +38,11 @@ export const GOTRIPT: BrandConfig = {
   domain: 'gotript.com',
   siteUrl: 'https://www.gotript.com',
   tagline: 'Hotels, vacation rentals, flights & more — every Expedia vertical in one search.',
+  legalName: 'Adored Moments LLC',
+  description:
+    'gotript unifies every Expedia travel vertical — hotels, vacation rentals, flights, cars, and activities — in a single search, backed by data-driven destination guides and itineraries.',
+  logoPath: '/logo.svg',
+  social: { sameAs: [] },
   colors: {
     primary: '#006ce4',
     secondary: '#ff5e3a',
@@ -58,6 +68,11 @@ export const GOBOOKT: BrandConfig = {
   // the middleware host-redirect to www -> apex. (The other 3 brands stay www.)
   siteUrl: 'https://gobookt.com',
   tagline: 'Hotel discovery, powered by Booking.com.',
+  legalName: 'Adored Moments LLC',
+  description:
+    'gobookt is a hotel-discovery service powered by Booking.com, helping travelers compare and book stays across thousands of destinations with rich, data-backed city guides.',
+  logoPath: '/logo.svg',
+  social: { sameAs: [] },
   colors: {
     primary: '#006ce4',
     secondary: '#ff5e3a',
@@ -78,6 +93,11 @@ export const STAYVIAOWNER: BrandConfig = {
   domain: 'stayviaowner.com',
   siteUrl: 'https://www.stayviaowner.com',
   tagline: 'Whole homes, villas, cabins and cottages — one search across every property type.',
+  legalName: 'Adored Moments LLC',
+  description:
+    'stayviaowner helps travelers book whole homes, villas, cabins, and cottages through vacation-rental partners like Vrbo — one search across every property type.',
+  logoPath: '/logo.svg',
+  social: { sameAs: [] },
   colors: {
     primary: '#37d0a1',
     secondary: '#2fbb90',

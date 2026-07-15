@@ -1,4 +1,4 @@
-import { GOBOOKT } from '@adored/brand-config';
+import { GOBOOKT, buildSiteJsonLd } from '@adored/brand-config';
 
 /**
  * Resolve the canonical origin (scheme + host) for the live site.
@@ -32,35 +32,9 @@ export function canonicalUrl(path: string): string {
 /**
  * Sitewide JSON-LD: Organization + WebSite entities for the knowledge graph
  * and the sitelinks search box. Rendered once in the root layout <head>.
- * Built from the brand's own name + canonical origin, so it stays correct
- * per-site and copies verbatim to new ones.
+ * Delegates to the shared builder so all brands stay in lockstep; the brand's
+ * own config (legalName, description, logo, sameAs) drives the entity fields.
  */
 export function siteJsonLd(): string {
-  const origin = getSiteOrigin();
-  return JSON.stringify({
-    '@context': 'https://schema.org',
-    '@graph': [
-      {
-        '@type': 'Organization',
-        '@id': `${origin}/#organization`,
-        name: GOBOOKT.name,
-        url: `${origin}/`,
-      },
-      {
-        '@type': 'WebSite',
-        '@id': `${origin}/#website`,
-        name: GOBOOKT.name,
-        url: `${origin}/`,
-        publisher: { '@id': `${origin}/#organization` },
-        potentialAction: {
-          '@type': 'SearchAction',
-          target: {
-            '@type': 'EntryPoint',
-            urlTemplate: `${origin}/search?q={search_term_string}`,
-          },
-          'query-input': 'required name=search_term_string',
-        },
-      },
-    ],
-  });
+  return buildSiteJsonLd(GOBOOKT, getSiteOrigin());
 }

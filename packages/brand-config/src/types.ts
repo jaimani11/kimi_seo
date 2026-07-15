@@ -54,12 +54,29 @@ export interface BrandConfig {
   siteUrl: string;
   /** One-line positioning used in hero/meta copy. */
   tagline: string;
+  /** Legal operating entity — shared parent LLC. Emitted as the
+   *  Organization `legalName` in sitewide JSON-LD (truthful: all four
+   *  brands are operated by the same company). */
+  legalName?: string;
+  /** 1–2 sentence brand description. Distinct per brand — emitted as the
+   *  Organization/WebSite `description` so Google reads four separate
+   *  commercial entities, not domain mirrors. */
+  description?: string;
+  /** Path (from site root) to the brand's square logo asset, e.g.
+   *  `/logo.svg`. Emitted as the Organization `logo` ImageObject. */
+  logoPath?: string;
   colors: BrandColors;
   affiliate: BrandAffiliateConfig;
   /** Default Pinterest board id (env PINTEREST_BOARD_ID overrides). */
   pinterestBoardId?: string;
-  /** Instagram / TikTok handles when the brand has them. */
+  /** Real, brand-controlled web presences. */
   social?: {
     pinterestUsername?: string;
+    /** Absolute URLs of REAL profiles this brand controls (social,
+     *  Wikipedia, Crunchbase, …). Emitted verbatim as Organization
+     *  `sameAs`. Populate ONLY with profiles that actually exist —
+     *  `sameAs` to a dead/nonexistent URL is a negative trust signal,
+     *  so the emitter omits `sameAs` entirely while this is empty. */
+    sameAs?: readonly string[];
   };
 }
