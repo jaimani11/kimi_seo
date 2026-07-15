@@ -492,3 +492,150 @@ export function reset(history: StateHistory): StateHistory {
   const first = history.stack[0];
   return { stack: first ? [first] : [] };
 }
+
+// ── turn computation (the "each turn produces" contract) ─────────────
+
+export interface TurnComputation {
+  /** The state before this turn's edit. */
+  previousIntent: TripIntent;
+  /** The normalized delta applied. */
+  delta: TripIntentDelta;
+  /** The merged state after applying the delta. */
+  merged: TripState;
+  /** Human-readable list of what changed. */
+  changed: string[];
+  conflicts: Conflict[];
+  strategy: 'patch' | 'rebuild';
+  itineraryEdits: ItineraryEdit[];
+  /** The single next question to ask, or null. */
+  nextQuestion: MissingQuestion | null;
+  /** Whether enough is known to show results (destination + dates + travelers). */
+  essentialsKnown: boolean;
+  /** Assumptions the concierge is making (from 'assume'-severity conflicts). */
+  assumptions: string[];
+}
+
+/**
+ * Everything a turn produces from a prior state + a normalized delta: previous
+ * intent, delta, merged state, conflicts, next question, patch-vs-rebuild, and
+ * the assumptions to surface. Deterministic — the LLM only supplies the delta.
+ */
+export function computeTurn(prior: TripState, delta: TripIntentDelta): TurnComputation {
+  const merge = applyDelta(prior, delta);
+  return {
+    previousIntent: prior.intent,
+    delta,
+    merged: merge.state,
+    changed: merge.changed,
+    conflicts: merge.conflicts,
+    strategy: merge.strategy,
+    itineraryEdits: merge.itineraryEdits,
+    nextQuestion: nextMissingQuestion(merge.state),
+    essentialsKnown: essentialsKnown(merge.state),
+    assumptions: merge.conflicts
+      .filter((c) => c.severity === 'assume' && c.assumption)
+      .map((c) => c.assumption as string),
+  };
+}
+
+/**
+ * Recover what changed + the patch-vs-rebuild strategy from two full intents.
+ * The current LLM path extracts a whole refined TripIntent (rather than a
+ * delta); this derives the same signal deterministically so the orchestrator
+ * can patch instead of regenerate. Rebuild only on a material core change
+ * (destination or the whole date range).
+ */
+export function diffIntents(
+  prior: TripIntent,
+  next: TripIntent,
+): { changed: string[]; strategy: 'patch' | 'rebuild' } {
+  const changed: string[] = [];
+  let strategy: 'patch' | 'rebuild' = 'patch';
+
+  const pd = prior.destinations[0]?.name?.toLowerCase() ?? '';
+  const nd = next.destinations[0]?.name?.toLowerCase() ?? '';
+  if (pd !== nd) {
+    changed.push('destination');
+    strategy = 'rebuild';
+  }
+  if (JSON.stringify(prior.dates) !== JSON.stringify(next.dates)) {
+    changed.push('dates');
+    strategy = 'rebuild';
+  }
+  if (
+    prior.travelers.adults !== next.travelers.adults ||
+    prior.travelers.children.count !== next.travelers.children.count
+  ) {
+    changed.push('travelers');
+  }
+  if (JSON.stringify(prior.budget) !== JSON.stringify(next.budget)) changed.push('budget');
+  if (prior.vibe.tags.slice().sort().join(',') !== next.vibe.tags.slice().sort().join(',')) {
+    changed.push('style');
+  }
+  if (prior.preferences.avoid.slice().sort().join(',') !== next.preferences.avoid.slice().sort().join(',')) {
+    changed.push('avoidances');
+  }
+  return { changed, strategy };
+}
+
+// ── UI summary ───────────────────────────────────────────────────────
+
+export interface TripStateSummary {
+  destination: string | null;
+  dates: string | null;
+  travelers: string | null;
+  budget: string | null;
+  style: string | null;
+  preferences: string[];
+}
+
+function formatDates(d: TripDates): string | null {
+  switch (d.kind) {
+    case 'specific':
+      return `${d.start} → ${d.end}`;
+    case 'flexible-month':
+      return `${d.month} ${d.year} (flexible)`;
+    case 'flexible-season':
+      return `${d.season} ${d.year}`;
+    case 'unspecified':
+      return null;
+  }
+}
+
+function formatTravelers(t: TripIntent['travelers']): string | null {
+  if (t.adults <= 0 && t.children.count <= 0 && !t.groupKind) return null;
+  const parts: string[] = [];
+  if (t.adults > 0) parts.push(`${t.adults} adult${t.adults === 1 ? '' : 's'}`);
+  if (t.children.count > 0) {
+    const ages = t.children.ages?.length ? ` (ages ${t.children.ages.join(', ')})` : '';
+    parts.push(`${t.children.count} child${t.children.count === 1 ? '' : 'ren'}${ages}`);
+  }
+  return parts.join(' · ') || (t.groupKind ?? null);
+}
+
+function formatBudget(b: BudgetIntent): string | null {
+  if (b.kind === 'unspecified') return null;
+  const per = b.kind === 'per-night' ? '/night' : ' total';
+  return `${b.currency} ${b.amount}${per}`;
+}
+
+/** A compact, editable trip-state summary for the UI. */
+export function summarizeState(state: TripState): TripStateSummary {
+  const { intent } = state;
+  const prefs: string[] = [];
+  if (state.pace) prefs.push(`${state.pace} pace`);
+  for (const a of intent.preferences.amenities.slice(0, 4)) prefs.push(a);
+  if (intent.preferences.avoid.length) prefs.push(`no ${intent.preferences.avoid.slice(0, 3).join(', ')}`);
+  for (const d of state.dietary.slice(0, 2)) prefs.push(d);
+  if (intent.preferences.accessibility?.length) prefs.push(...intent.preferences.accessibility.slice(0, 2));
+  if (state.mustKeep.length) prefs.push(`keep ${state.mustKeep.slice(0, 2).join(', ')}`);
+
+  return {
+    destination: intent.destinations[0]?.name ?? null,
+    dates: formatDates(intent.dates),
+    travelers: formatTravelers(intent.travelers),
+    budget: formatBudget(intent.budget),
+    style: intent.vibe.tags.length ? intent.vibe.tags.slice(0, 4).join(', ') : null,
+    preferences: prefs,
+  };
+}

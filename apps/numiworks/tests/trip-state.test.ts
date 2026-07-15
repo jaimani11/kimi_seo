@@ -13,6 +13,9 @@ import {
   current,
   undo,
   reset,
+  computeTurn,
+  diffIntents,
+  summarizeState,
   type TripIntentDelta,
 } from '@/lib/concierge/trip-state';
 import { isNumiworksAffiliateSafe } from '@/lib/affiliate/numiworks-guard';
@@ -183,5 +186,54 @@ describe('Phase B — no cross-brand affiliate regression', () => {
     // The state model holds no URLs; assert the guard still rejects foreign ids.
     expect(isNumiworksAffiliateSafe('https://www.anrdoezrs.net/click-101803878-17293132')).toBe(false);
     expect(isNumiworksAffiliateSafe('https://www.viator.com/tours/Rome/x/d511-P123')).toBe(true);
+  });
+});
+
+describe('Phase B — turn computation contract', () => {
+  it('computeTurn produces previous intent, merged, changed, next question, strategy, assumptions', () => {
+    const prior = emptyTripState(withDest()); // destination known, dates/travelers missing
+    const turn = computeTurn(prior, { setChildren: { count: 2, ages: [6, 9] } });
+    expect(turn.previousIntent).toBe(prior.intent);
+    expect(turn.merged.intent.travelers.children.count).toBe(2);
+    expect(turn.changed.join(' ')).toContain('children');
+    expect(turn.strategy).toBe('patch');
+    // dates still missing → next question is dates (priority)
+    expect(turn.nextQuestion?.field).toBe('dates');
+    expect(turn.essentialsKnown).toBe(false);
+  });
+
+  it('computeTurn surfaces assumptions from assume-severity conflicts', () => {
+    const prior = emptyTripState(withEssentials());
+    const turn = computeTurn(prior, { addVibe: ['budget', 'luxury'] });
+    expect(turn.assumptions.length).toBeGreaterThan(0);
+    expect(turn.assumptions.join(' ')).toContain('value');
+  });
+
+  it('diffIntents flags a destination change as rebuild', () => {
+    const a = withEssentials();
+    const b = makeIntent({ ...a, destinations: [{ kind: 'curated', name: 'Lisbon', country: 'PT' }] });
+    const d = diffIntents(a, b);
+    expect(d.strategy).toBe('rebuild');
+    expect(d.changed).toContain('destination');
+  });
+
+  it('diffIntents treats a budget-only change as a patch', () => {
+    const a = withEssentials();
+    const b = makeIntent({ ...a, budget: { kind: 'per-night', amount: 120, currency: 'EUR', flexibility: 'flexible' } });
+    const d = diffIntents(a, b);
+    expect(d.strategy).toBe('patch');
+    expect(d.changed).toEqual(['budget']);
+  });
+
+  it('summarizeState formats an editable summary', () => {
+    let s = emptyTripState(withEssentials());
+    s = applyDelta(s, { budgetDirection: 'more-luxurious', addAvoid: ['museums'], addDietary: ['vegetarian'] }).state;
+    const sum = summarizeState(s);
+    expect(sum.destination).toBe('Rome');
+    expect(sum.dates).toContain('August');
+    expect(sum.travelers).toContain('2 adult');
+    expect(sum.style).toContain('luxury');
+    expect(sum.preferences.join(' ')).toContain('no museums');
+    expect(sum.preferences.join(' ')).toContain('vegetarian');
   });
 });
