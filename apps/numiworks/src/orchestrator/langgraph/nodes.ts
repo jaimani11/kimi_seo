@@ -20,6 +20,7 @@ import type { SessionStore } from '@lib/session/session-store';
 import { buildSearchOpportunity } from '@lib/affiliate/search-opportunity-builder';
 import { viatorProviderFromEnv } from '@/providers/viator';
 import { computeIntentDelta } from '../intent-delta';
+import { buildTripStateSnapshot } from '@lib/concierge/trip-state';
 import { computeProposalDiff } from '../proposal-diff';
 import { buildProposal, buildProposalRef } from '../proposal-builder';
 import type { RouteDecision } from '../route-search';
@@ -232,6 +233,13 @@ export function makeIntentNode(deps: GraphDeps) {
     } else {
       emit({ kind: 'intent.extracted', turnId: req.turnId, intent });
     }
+
+    // Phase B — trip-state snapshot (parity with the hand-rolled orchestrator).
+    emit({
+      kind: 'concierge.trip_state',
+      turnId: req.turnId,
+      ...buildTripStateSnapshot(intent, req.type === 'refine' ? state.priorTurn?.intent : undefined),
+    });
 
     // Recover a destination by keyword-matching the raw input when
     // the IntentAgent returned an empty destinations array (terse

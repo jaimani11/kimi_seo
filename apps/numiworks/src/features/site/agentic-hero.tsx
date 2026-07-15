@@ -48,6 +48,8 @@ export function AgenticHero() {
   const [deltaNote, setDeltaNote] = useState<string | null>(null);
   const [history, setHistory] = useState<TurnHistoryItem[]>([]);
   const [opportunity, setOpportunity] = useState<OpportunityPanel | null>(null);
+  const [tripState, setTripState] = useState<TripStateView | null>(null);
+  const [tripStateHistory, setTripStateHistory] = useState<TripStateView[]>([]);
   const [errored, setErrored] = useState(false);
   const turnRef = useRef<string | null>(null);
   const abortRef = useRef<AbortController | null>(null);
@@ -108,6 +110,8 @@ export function AgenticHero() {
     setDeltaNote(null);
     setHistory([]);
     setOpportunity(null);
+    setTripState(null);
+    setTripStateHistory([]);
     setErrored(false);
   }, []);
 
@@ -182,6 +186,10 @@ export function AgenticHero() {
             setProposalRef,
             setDeltaNote,
             setOpportunity,
+            onTripState: (v) => {
+              setTripState(v);
+              setTripStateHistory((h) => [...h, v]);
+            },
           });
         });
       } catch (err) {
@@ -198,6 +206,24 @@ export function AgenticHero() {
     },
     [resetForCompose, router, running],
   );
+
+  // Phase B — start over (full reset) + undo the last trip-state change.
+  const startOver = useCallback(() => {
+    abortRef.current?.abort();
+    turnRef.current = null;
+    resetForCompose();
+    setRefineDraft('');
+    setRunning(false);
+  }, [resetForCompose]);
+
+  const undoLast = useCallback(() => {
+    setTripStateHistory((h) => {
+      if (h.length <= 1) return h;
+      const next = h.slice(0, -1);
+      setTripState(next[next.length - 1] ?? null);
+      return next;
+    });
+  }, []);
 
   const refine = useCallback(
     (raw: string) => {
@@ -343,6 +369,15 @@ export function AgenticHero() {
         ) : null}
 
         {hasActivity ? (
+          <>
+            {tripState ? (
+              <TripStatePanel
+                view={tripState}
+                canUndo={tripStateHistory.length > 1}
+                onUndo={undoLast}
+                onStartOver={startOver}
+              />
+            ) : null}
           <ConciergeWorkbench
             steps={steps}
             capsules={capsules}
@@ -359,6 +394,7 @@ export function AgenticHero() {
             setRefineDraft={setRefineDraft}
             onRefine={refine}
           />
+          </>
         ) : null}
 
         <Link
@@ -1098,6 +1134,78 @@ function CapsuleCard({ capsule }: { capsule: ExperienceCapsule }) {
 
 // ============== Opportunity board ==============
 
+function TripStatePanel({
+  view,
+  canUndo,
+  onUndo,
+  onStartOver,
+}: {
+  view: TripStateView;
+  canUndo: boolean;
+  onUndo: () => void;
+  onStartOver: () => void;
+}) {
+  const s = view.summary;
+  const rows: { label: string; value: string | null }[] = [
+    { label: 'Destination', value: s.destination },
+    { label: 'Dates', value: s.dates },
+    { label: 'Travelers', value: s.travelers },
+    { label: 'Budget', value: s.budget },
+    { label: 'Style', value: s.style },
+  ];
+  return (
+    <div
+      className="mt-4 rounded-xl border p-3"
+      style={{ borderColor: 'rgba(237,230,219,0.18)', background: 'rgba(20,20,24,0.72)' }}
+    >
+      <div className="flex items-center justify-between">
+        <p style={{ fontFamily: 'var(--font-inter)', fontSize: '0.6rem', letterSpacing: '0.18em', textTransform: 'uppercase', color: 'rgba(237,230,219,0.7)', margin: 0 }}>
+          Your trip so far
+        </p>
+        <div className="flex gap-2">
+          {canUndo ? (
+            <button type="button" onClick={onUndo} style={tripPillBtn}>↩ Undo</button>
+          ) : null}
+          <button type="button" onClick={onStartOver} style={tripPillBtn}>Start over</button>
+        </div>
+      </div>
+      <dl className="mt-2 grid grid-cols-2 gap-x-4 gap-y-1 sm:grid-cols-3">
+        {rows.map((r) => (
+          <div key={r.label}>
+            <dt style={{ fontFamily: 'var(--font-inter)', fontSize: '0.6rem', color: 'rgba(237,230,219,0.5)', margin: 0 }}>{r.label}</dt>
+            <dd style={{ fontFamily: 'var(--font-inter)', fontSize: '0.82rem', color: r.value ? '#EDE6DB' : 'rgba(237,230,219,0.35)', margin: 0 }}>{r.value ?? '—'}</dd>
+          </div>
+        ))}
+      </dl>
+      {s.preferences.length > 0 ? (
+        <ul className="mt-2 flex flex-wrap gap-1">
+          {s.preferences.map((p) => (
+            <li key={p} style={tripChip}>{p}</li>
+          ))}
+        </ul>
+      ) : null}
+      {view.changed.length > 0 ? (
+        <p className="mt-2" style={{ fontFamily: 'var(--font-inter)', fontSize: '0.72rem', color: 'var(--accent-primary)', margin: 0 }}>
+          Updated: {view.changed.join('; ')}
+        </p>
+      ) : null}
+      {view.assumptions.length > 0 ? (
+        <p className="mt-1" style={{ fontFamily: 'var(--font-inter)', fontSize: '0.7rem', color: 'rgba(237,230,219,0.55)', margin: 0 }}>
+          Assuming: {view.assumptions.join(' · ')}
+        </p>
+      ) : null}
+      {!view.essentialsKnown && view.nextQuestion ? (
+        <p className="mt-2" style={{ fontFamily: 'var(--font-inter)', fontSize: '0.78rem', color: 'rgba(237,230,219,0.85)', margin: 0 }}>
+          To refine: {view.nextQuestion.question}
+        </p>
+      ) : null}
+    </div>
+  );
+}
+
+const tripPillBtn: React.CSSProperties = { fontFamily: 'var(--font-inter)', fontSize: '0.65rem', fontWeight: 600, color: 'rgba(237,230,219,0.8)', background: 'rgba(237,230,219,0.08)', border: '1px solid rgba(237,230,219,0.16)', borderRadius: '999px', padding: '0.2rem 0.6rem', cursor: 'pointer' };
+const tripChip: React.CSSProperties = { fontFamily: 'var(--font-inter)', fontSize: '0.62rem', color: 'rgba(237,230,219,0.8)', padding: '0.15rem 0.5rem', borderRadius: '999px', background: 'rgba(237,230,219,0.06)', border: '1px solid rgba(237,230,219,0.14)' };
+
 function OpportunityBoard({ panel }: { panel: OpportunityPanel }) {
   return (
     <div
@@ -1302,6 +1410,22 @@ interface ExperienceCapsule {
   priceLabel: string | null;
 }
 
+/** The Phase B trip-state view the concierge.trip_state event carries. */
+export interface TripStateView {
+  summary: {
+    destination: string | null;
+    dates: string | null;
+    travelers: string | null;
+    budget: string | null;
+    style: string | null;
+    preferences: string[];
+  };
+  changed: string[];
+  nextQuestion: { field: string; question: string } | null;
+  essentialsKnown: boolean;
+  assumptions: string[];
+}
+
 interface ApplyEventTargets {
   setSteps: React.Dispatch<React.SetStateAction<AgentStep[]>>;
   setCapsules: React.Dispatch<React.SetStateAction<ExperienceCapsule[]>>;
@@ -1311,6 +1435,7 @@ interface ApplyEventTargets {
   setProposalRef: React.Dispatch<React.SetStateAction<ProposalRef | null>>;
   setDeltaNote: React.Dispatch<React.SetStateAction<string | null>>;
   setOpportunity: React.Dispatch<React.SetStateAction<OpportunityPanel | null>>;
+  onTripState: (v: TripStateView) => void;
 }
 
 export interface OpportunityPanel {
@@ -1360,6 +1485,17 @@ function applyEvent(event: OrchestratorEvent, t: ApplyEventTargets) {
       const e = event as EventOfKind<'intent.extracted'>;
       const dest = e.intent?.destinations?.[0]?.name;
       if (dest) t.setDestination(dest);
+      return;
+    }
+    case 'concierge.trip_state': {
+      const e = event as EventOfKind<'concierge.trip_state'>;
+      t.onTripState({
+        summary: e.summary,
+        changed: e.changed,
+        nextQuestion: e.nextQuestion,
+        essentialsKnown: e.essentialsKnown,
+        assumptions: e.assumptions,
+      });
       return;
     }
     case 'proposal.ready':
