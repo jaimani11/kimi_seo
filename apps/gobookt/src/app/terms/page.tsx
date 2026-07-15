@@ -64,8 +64,8 @@ export default function TermsPage() {
 
         <Section title="1. About gobookt">
           <P>
-            Gobookt is a travel-planning website that helps you discover destinations and book
-            experiences through our partner Viator. We are an independent publisher and not an
+            Gobookt is a travel-planning website that helps you discover destinations and find
+            stays through our partner Booking.com. We are an independent publisher and not an
             agent of any travel supplier.
           </P>
         </Section>
@@ -86,8 +86,7 @@ export default function TermsPage() {
 
         <Section title="3. What you can do">
           <ul style={ulStyle}>
-            <Li>Read our destination guides and itineraries.</Li>
-            <Li>Use the AI concierge to plan a trip.</Li>
+            <Li>Read our destination guides, stay guides, and travel tips.</Li>
             <Li>Save trips for later reference.</Li>
             <Li>
               Click through to Booking.com to search for stays, flights, attractions, cars, and cruises. Bookings happen
@@ -102,12 +101,11 @@ export default function TermsPage() {
             <Li>Use the site to break the law, infringe rights, or harm others.</Li>
             <Li>
               Scrape, mass-download, or systematically copy the content for republication. Our
-              destination guides, social-content packs, and AI-generated plans are protected by
+              destination guides and social-content packs are protected by
               copyright.
             </Li>
             <Li>
-              Reverse-engineer, decompile, or attempt to extract source code from the site or the
-              AI concierge.
+              Reverse-engineer, decompile, or attempt to extract source code from the site.
             </Li>
             <Li>
               Interfere with the site&apos;s operation — sending denial-of-service traffic,
@@ -128,15 +126,11 @@ export default function TermsPage() {
 
         <Section title="6. Accuracy of content">
           <P>
-            We try hard to keep destination guides, pricing ranges, and bookable-experience
+            We try hard to keep destination guides, pricing ranges, and stay
             listings accurate, but information changes. We do not guarantee that any specific
             detail is current or complete. Confirm prices, availability, visa rules, safety
             advisories, and cancellation policies directly with the relevant partner or government
             authority before you travel.
-          </P>
-          <P>
-            The AI concierge generates trip suggestions using a large language model. Its output
-            can contain errors. Treat it as a starting point, not authoritative travel advice.
           </P>
         </Section>
 

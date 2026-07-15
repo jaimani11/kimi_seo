@@ -3,7 +3,6 @@ import {
   CRUISE_REGIONS,
   enumerateAllSeoSlugs,
   parseSeoSlug,
-  SEO_SLUGS_PER_CITY,
 } from '@/lib/seo/route-parser';
 import { SEO_CITIES, SEO_ITINERARY_DAYS } from '@/lib/seo/cities';
 
@@ -153,16 +152,17 @@ describe('parseSeoSlug — weekend form', () => {
 });
 
 describe('enumerateAllSeoSlugs', () => {
-  it('produces every (city × shape) tuple — derived from SEO_SLUGS_PER_CITY + cruise regions + comparisons', () => {
+  it('drops the redirected Viator families but keeps comparisons + cruise regions', () => {
     const slugs = enumerateAllSeoSlugs();
-    const cityFanOut = SEO_CITIES.length * SEO_SLUGS_PER_CITY;
-    expect(slugs.length).toBeGreaterThanOrEqual(cityFanOut);
-    const comparisons = slugs.filter((s) => /-vs-/.test(s));
-    const cruiseRegions = slugs.filter((s) => /-cruises$/.test(s));
-    expect(cruiseRegions.length).toBe(CRUISE_REGIONS.length);
-    expect(slugs.length).toBe(
-      cityFanOut + comparisons.length + cruiseRegions.length,
-    );
+    expect(slugs.length).toBeGreaterThan(0);
+    // Redirected Viator families are dropped from the sitemap/static-params set
+    // by the gobookt-retirement shim; `[slug]` 308s them instead.
+    expect(slugs.some((s) => /-day-itinerary$/.test(s))).toBe(false);
+    expect(slugs.some((s) => /^weekend-in-/.test(s))).toBe(false);
+    expect(slugs.some((s) => /^things-to-do-in-/.test(s))).toBe(false);
+    // Comparisons + cruise regions (non-Viator) are retained.
+    expect(slugs.filter((s) => /-vs-/.test(s)).length).toBeGreaterThan(0);
+    expect(slugs.filter((s) => /-cruises$/.test(s)).length).toBe(CRUISE_REGIONS.length);
   });
 
   it('every emitted slug parses back into a valid match', () => {
@@ -177,13 +177,15 @@ describe('enumerateAllSeoSlugs', () => {
     expect(new Set(slugs).size).toBe(slugs.length);
   });
 
-  it('includes the four new template shapes for every city', () => {
+  it('keeps HELD themed-list shapes but drops REDIRECTED ones, for every city', () => {
     const slugs = new Set(enumerateAllSeoSlugs());
     for (const c of SEO_CITIES) {
-      expect(slugs.has(`best-family-activities-in-${c.slug}`)).toBe(true);
+      // Held (pure-experience) themes stay enumerated pending the traffic review.
       expect(slugs.has(`best-food-tours-in-${c.slug}`)).toBe(true);
       expect(slugs.has(`day-trips-from-${c.slug}`)).toBe(true);
-      expect(slugs.has(`weekend-in-${c.slug}`)).toBe(true);
+      // Redirected shapes (family -> family-hotels; weekend -> stays) are dropped.
+      expect(slugs.has(`best-family-activities-in-${c.slug}`)).toBe(false);
+      expect(slugs.has(`weekend-in-${c.slug}`)).toBe(false);
     }
   });
 

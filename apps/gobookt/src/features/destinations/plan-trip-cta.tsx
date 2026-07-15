@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { findCityBySlug } from '@lib/seo/cities';
 import { ArrowRight } from '@/features/shared/icons';
 import type { CuratedDestination } from '@lib/curation/destinations';
 
@@ -7,16 +8,14 @@ interface PlanTripCtaProps {
 }
 
 /**
- * Bottom-of-page call-to-action. Lands the visitor in the workspace
- * with a destination-specific prompt seeded - `UrlInit` (B3) consumes
- * `?prompt=` on first paint and clears it from the URL.
- *
- * The prompt mirrors how a user would phrase the search themselves:
- * "{Name}, 7 nights, couple, walkable" - short, structured.
+ * Bottom-of-page "where to stay" call-to-action. Drives to the
+ * destination's Booking.com stays page when it's a covered city,
+ * otherwise to the general stays search.
  */
 export function PlanTripCta({ destination }: PlanTripCtaProps) {
-  const prompt = `${destination.name}, 7 nights, couple, walkable`;
-  const href = `/?prompt=${encodeURIComponent(prompt)}`;
+  const href = findCityBySlug(destination.slug)
+    ? `/hotels-in-${destination.slug}`
+    : '/stays';
 
   return (
     <section className="mx-auto max-w-3xl px-6 pt-4 pb-14 md:px-8 md:pb-20">
@@ -36,7 +35,7 @@ export function PlanTripCta({ destination }: PlanTripCtaProps) {
             color: 'var(--ink-tertiary)',
           }}
         >
-          Start planning
+          Where to stay
         </p>
         <h2
           className="mt-1 mb-3"
@@ -49,7 +48,7 @@ export function PlanTripCta({ destination }: PlanTripCtaProps) {
             lineHeight: 1.15,
           }}
         >
-          Plan your trip to {destination.name}
+          Find your stay in {destination.name}
         </h2>
         <p
           className="mb-5 max-w-xl"
@@ -62,8 +61,8 @@ export function PlanTripCta({ destination }: PlanTripCtaProps) {
             lineHeight: 1.55,
           }}
         >
-          Tell the concierge what you&apos;re after - a few words is enough. Stays materialize, you
-          compare, you save what fits.
+          Compare hotels, apartments and vacation rentals in {destination.name} — real Booking.com
+          prices, free cancellation on most stays.
         </p>
         <Link
           href={href}
@@ -76,7 +75,7 @@ export function PlanTripCta({ destination }: PlanTripCtaProps) {
             fontWeight: 500,
           }}
         >
-          Open the concierge
+          Find stays in {destination.name}
           <ArrowRight size={16} strokeWidth={2.2} />
         </Link>
       </div>

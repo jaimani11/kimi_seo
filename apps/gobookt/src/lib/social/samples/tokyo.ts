@@ -21,7 +21,7 @@ export const TOKYO_SAMPLE_PACK: CitySocialPack = {
       platform: 'pinterest',
       title: 'The Perfect 3-Day Tokyo Itinerary',
       description:
-        'A day-by-day 3-day plan for first-time Tokyo: Shibuya scramble, Senso-ji at dawn, omakase counter, izakaya alleys, sumo-style brunch. Built around real Viator picks you can reserve in one tap.',
+        'A day-by-day 3-day plan for first-time Tokyo: Shibuya scramble, Senso-ji at dawn, omakase counter, izakaya alleys, sumo-style brunch. Find the perfect base to stay on Booking.com.',
       visualConcept:
         'Aerial of Shibuya Crossing at dusk with neon trails, overlay text "3 DAYS IN TOKYO" in gobookt coral.',
       hashtags: ['#tokyo', '#tokyotravel', '#japan', '#3dayitinerary', '#gobookt'],

@@ -18,23 +18,15 @@ import { canonicalUrl } from '@lib/site/origin';
  * Destination detail page. Generated at build time for each curated
  * destination; unknown slugs 404.
  *
- * Post-H2 structure (no mock-italy):
+ * Structure:
  *
  *   1. Hero - background photo resolved by `resolveDestinationPhoto`
  *      (curated Unsplash IDs in `lib/imagery/destination-photo-data`),
  *      editorial copy from `lib/curation/destinations`.
- *   2. Live "Things to do" rail - Viator inventory scoped to the
- *      destination, fetched client-side.
- *   3. "Where to stay" CTA - destination-prefilled Expedia search,
- *      routed through `/r/[id]` for affiliate attribution. Until
- *      real stay inventory lands we don't pretend to have it; the
- *      CTA is honest about handing off to the partner.
- *   4. Plan-trip CTA - lands the visitor in the workspace with the
- *      destination prompt pre-filled.
+ *   2. "Where to stay" CTA - destination-prefilled Booking.com search,
+ *      routed through `/r/[id]` for affiliate attribution.
  *
- * The page is SSG because each piece above is deterministic per slug;
- * the Viator rail fetches on the client so the static HTML stays
- * fast + cacheable.
+ * The page is SSG because each piece above is deterministic per slug.
  */
 
 interface PageProps {

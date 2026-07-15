@@ -8,7 +8,6 @@ export type AdminSection =
   | 'users'
   | 'memories'
   | 'affiliate'
-  | 'viator'
   | 'social'
   | 'content'
   | 'analytics'
@@ -26,7 +25,6 @@ const LINKS: Array<{ id: AdminSection; label: string; href: string }> = [
   { id: 'users', label: 'Users', href: '/admin' },
   { id: 'memories', label: 'Memories', href: '/admin/memories' },
   { id: 'affiliate', label: 'Affiliate', href: '/admin/affiliate' },
-  { id: 'viator', label: 'Viator', href: '/admin/viator' },
   { id: 'social', label: 'Social', href: '/admin/social' },
   { id: 'content', label: 'Content Ops', href: '/admin/content' },
   { id: 'analytics', label: 'Analytics', href: '/admin/analytics' },

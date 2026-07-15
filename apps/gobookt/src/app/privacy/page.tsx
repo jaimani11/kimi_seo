@@ -77,15 +77,15 @@ export default function PrivacyPolicyPage() {
             <Link href="/" style={{ color: 'var(--accent-primary)' }}>
               gobookt.com
             </Link>
-            . We help travelers discover destinations, plan trips, and book bookable experiences
-            through our partner Viator.
+            . We help travelers discover destinations, plan trips, and find stays
+            through our partner Booking.com.
           </P>
         </Section>
 
         <Section title="2. Information we collect">
           <H>Information you give us</H>
           <P>
-            When you use the AI concierge, type a search, save a trip, or contact us, you provide
+            When you search destinations, save a trip, or contact us, you provide
             the text of those messages and any trip preferences you choose to share (destination,
             dates, party size, vibe tags). When you sign in (if available), you provide an email
             address.
@@ -98,15 +98,15 @@ export default function PrivacyPolicyPage() {
               sign in.
             </Li>
             <Li>
-              <strong>Funnel events.</strong> When you view an experience, run a search, see an
-              AI recommendation, or save a trip, we record a small event in our server-side
+              <strong>Funnel events.</strong> When you view a destination or stay, or save a
+              trip, we record a small event in our server-side
               database — bound to your session id (not your name or email). This lets us see
               which features people use without tracking you across other sites.
             </Li>
             <Li>
               <strong>Affiliate click log.</strong> When you click a &ldquo;Search on Booking.com&rdquo;
               or destination CTA, we record that the click happened (session id, partner id, the
-              experience or destination clicked, timestamp) so we can confirm commission attribution
+              stay or destination clicked, timestamp) so we can confirm commission attribution
               with our partners.
             </Li>
             <Li>
@@ -119,17 +119,17 @@ export default function PrivacyPolicyPage() {
           <P>
             We do not sell your data. We do not run third-party advertising trackers, pixel
             networks, retargeting cookies, or social-media pixels on our pages. We do not collect
-            biometric data, precise GPS coordinates, or payment information (Viator handles all
+            biometric data, precise GPS coordinates, or payment information (Booking.com handles all
             bookings on their own site).
           </P>
         </Section>
 
         <Section title="3. How we use information">
           <ul style={ulStyle}>
-            <Li>To run the AI concierge, plan trips, and remember what you saved.</Li>
+            <Li>To help you plan trips and remember what you saved.</Li>
             <Li>
               To improve our content — anonymized event data tells us which destinations and
-              experiences are most useful so we can build better guides.
+              stays are most useful so we can build better guides.
             </Li>
             <Li>
               To attribute affiliate commission to the correct click when you book through a
@@ -153,15 +153,10 @@ export default function PrivacyPolicyPage() {
           </P>
           <ul style={ulStyle}>
             <Li>
-              <strong>Viator (Tripadvisor).</strong> When you click a Viator product link, you are
-              taken to Viator&apos;s website and they receive standard click + browser metadata
+              <strong>Booking.com.</strong> When you click a stay or destination link, you are
+              taken to Booking.com&apos;s website and they receive standard click + browser metadata
               under their own privacy policy. We do not share your gobookt account information
               with them.
-            </Li>
-            <Li>
-              <strong>Anthropic.</strong> The AI concierge sends your trip prompt to Anthropic to
-              generate the travel plan. Anthropic processes the text under their published
-              data-processing terms and does not train models on this traffic.
             </Li>
             <Li>
               <strong>Hosting + infrastructure (Vercel).</strong> Our website is served by Vercel,

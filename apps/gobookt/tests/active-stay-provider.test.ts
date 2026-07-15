@@ -50,9 +50,9 @@ describe('getActiveStayProvider', () => {
     expect(getActiveStayProvider()).toBe('booking-com');
   });
 
-  it('explicitly accepts viator override', () => {
+  it('falls back to booking-com on garbage values (incl. the retired viator value)', () => {
     process.env.NEXT_PUBLIC_STAYSCOUT_ACTIVE_STAY_PROVIDER = 'viator';
-    expect(getActiveStayProvider()).toBe('viator');
+    expect(getActiveStayProvider()).toBe('booking-com');
   });
 
   it('falls back to booking-com on garbage values', () => {
