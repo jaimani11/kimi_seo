@@ -204,7 +204,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   if (parsed.kind === 'comparison') {
     const { a, b } = parsed.comparison;
     const title = `${a.name} vs ${b.name}: which to pick · stayviaowner`;
-    const description = `${a.name}, ${a.countryName} or ${b.name}, ${b.countryName}? A side-by-side travel guide with bookable Expedia inventory in each.`;
+    const description = `${a.name}, ${a.countryName} or ${b.name}, ${b.countryName}? A side-by-side travel guide with bookable Viator experiences in each.`;
     return {
       title,
       description,
@@ -297,7 +297,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     const { city, variant } = parsed;
     const label = THINGS_VARIANT_HEADING[variant];
     const title = `${label} in ${city.name}, ${city.countryName} · stayviaowner`;
-    const description = `${label} in ${city.name}, ${city.countryName} — bookable through Expedia Attractions. Skip-the-line, verified guides, free cancellation on most tickets.`;
+    const description = `${label} in ${city.name}, ${city.countryName} — bookable on Viator. Skip-the-line, verified guides, free cancellation on most tickets.`;
     return {
       title,
       description,
@@ -322,7 +322,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   // things-to-do
   const title = `Things to do in ${parsed.city.name}, ${parsed.city.countryName} · stayviaowner`;
-  const description = `${parsed.city.oneLiner} Bookable tours, day trips, and tickets in ${parsed.city.name} via Expedia Attractions.`;
+  const description = `${parsed.city.oneLiner} Bookable tours, day trips, and tickets in ${parsed.city.name} on Viator.`;
   return {
     title,
     description,

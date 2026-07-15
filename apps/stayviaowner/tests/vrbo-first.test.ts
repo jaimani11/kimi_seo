@@ -1,6 +1,10 @@
 import { describe, expect, it } from 'vitest';
 import { META, type VerticalKind } from '@/features/seo/vertical-landing-page';
 import { buildExpediaCategoryUrl } from '@lib/affiliate/expedia-multicategory';
+import {
+  buildViatorStaySearchUrl,
+  getViatorStayLinkConfig,
+} from '@lib/affiliate/viator-stay-link-builder';
 import { enumerateAllSeoSlugs, parseSeoSlug } from '@lib/seo/route-parser';
 import { SEO_CITIES } from '@lib/seo/cities';
 
@@ -23,6 +27,8 @@ const HOTEL_KINDS: VerticalKind[] = [
   'beach-hotels',
   'apartments',
 ];
+
+const ATTRACTION_KINDS: VerticalKind[] = ['top-attractions', 'free-things', 'museums', 'tours'];
 
 const city = SEO_CITIES[0]!;
 
@@ -92,6 +98,23 @@ describe('stayviaowner hotel-themed pages are Vrbo-first', () => {
     const all = enumerateAllSeoSlugs();
     for (const marker of ['best-hotels', 'luxury-hotels', 'family-hotels', 'pet-friendly-hotels']) {
       expect(all.some((s) => s.includes(marker)), `${marker} slugs missing from sitemap`).toBe(true);
+    }
+  });
+
+  it('attractions-themed pages route to Viator (experiences), never Expedia', () => {
+    const url = buildViatorStaySearchUrl({ destination: 'Paris tours' }, getViatorStayLinkConfig());
+    expect(url).toContain('viator.com');
+    expect(url.toLowerCase()).not.toContain('expedia.com');
+    for (const kind of ATTRACTION_KINDS) {
+      expect(META[kind].category, `${kind} should stay category:attractions (render routes to Viator)`).toBe(
+        'attractions',
+      );
+    }
+  });
+
+  it('no attractions-themed page copy contains "Expedia"', () => {
+    for (const kind of ATTRACTION_KINDS) {
+      expect(renderedCopy(kind), `${kind} copy still mentions Expedia`).not.toMatch(/Expedia/i);
     }
   });
 });

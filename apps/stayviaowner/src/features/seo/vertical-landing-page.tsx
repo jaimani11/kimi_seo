@@ -5,6 +5,10 @@ import {
   buildExpediaCategoryUrl,
   type ExpediaCategory,
 } from '@lib/affiliate/expedia-multicategory';
+import {
+  buildViatorStaySearchUrl,
+  getViatorStayLinkConfig,
+} from '@lib/affiliate/viator-stay-link-builder';
 
 /**
  * Programmatic SEO landing pages, one per city. stayviaowner is a Vrbo
@@ -268,13 +272,13 @@ export const META: Record<
     heading: (c) => `Top attractions in ${c.name}`,
     eyebrow: (c) => `${c.countryName} · must-see`,
     intro: (c) =>
-      `The most-booked attractions, monuments, and experiences in ${c.name}, ${c.countryName}. Skip-the-line tickets, guided tours, and audio-guide options — all bookable through Expedia Attractions.`,
+      `The most-booked attractions, monuments, and experiences in ${c.name}, ${c.countryName} — skip-the-line tickets, guided tours, and audio guides, all bookable on Viator.`,
     ctaLabel: (c) => `See top attractions in ${c.name}`,
     bullets: (c) => [
       `The most-booked sights and experiences in ${c.name}`,
       'Skip-the-line tickets for the biggest draws',
       'Guided tours and audio guides for context',
-      'Free cancellation on most tickets · Powered by Expedia',
+      'Free cancellation on most tickets · Powered by Viator',
     ],
   },
   'free-things': {
@@ -283,13 +287,13 @@ export const META: Record<
     heading: (c) => `Free things to do in ${c.name}`,
     eyebrow: (c) => `${c.countryName} · zero cost`,
     intro: (c) =>
-      `Free walking tours, public museums on free days, parks, viewpoints, and self-guided routes in ${c.name}, ${c.countryName}. Bookable free walking tours and tip-based experiences via Expedia Attractions.`,
+      `Free walking tours, public museums on free days, parks, viewpoints, and self-guided routes in ${c.name}, ${c.countryName}. Bookable free walking tours and tip-based experiences on Viator.`,
     ctaLabel: (c) => `See free experiences in ${c.name}`,
     bullets: (c) => [
       `Free walking tours and tip-based experiences in ${c.name}`,
       'Public viewpoints, parks, and waterfronts to wander',
       'Museum free-day calendars on the listings that have them',
-      'Bookable for free · Powered by Expedia Attractions',
+      'Bookable free of charge · Powered by Viator',
     ],
   },
   museums: {
@@ -298,13 +302,13 @@ export const META: Record<
     heading: (c) => `Museums in ${c.name}`,
     eyebrow: (c) => `${c.countryName} · art & history`,
     intro: (c) =>
-      `Art, history, science, and design museums in ${c.name}, ${c.countryName}. Skip-the-line tickets, combo passes, and audio guides — Expedia Attractions makes museum tickets bookable in seconds.`,
+      `Art, history, science, and design museums in ${c.name}, ${c.countryName}. Skip-the-line tickets, combo passes, and audio guides — museum tickets bookable in seconds on Viator.`,
     ctaLabel: (c) => `See museum tickets in ${c.name}`,
     bullets: (c) => [
       `Tickets to ${c.name}'s major art, history, and science museums`,
       'Skip-the-line entry for the biggest names',
       'Combo passes that bundle multiple museums',
-      'Audio guides and mobile tickets · Powered by Expedia',
+      'Audio guides and mobile tickets · Powered by Viator',
     ],
   },
   tours: {
@@ -313,13 +317,13 @@ export const META: Record<
     heading: (c) => `Tours in ${c.name}`,
     eyebrow: (c) => `${c.countryName} · guided experiences`,
     intro: (c) =>
-      `Walking tours, food tours, day trips, and small-group experiences in ${c.name}, ${c.countryName}. Expedia Attractions surfaces every bookable tour with verified guides and real traveler reviews.`,
+      `Walking tours, food tours, day trips, and small-group experiences in ${c.name}, ${c.countryName}. Viator surfaces every bookable tour with verified guides and real traveler reviews.`,
     ctaLabel: (c) => `See tours in ${c.name}`,
     bullets: (c) => [
       `Walking, food, and history tours across ${c.name}`,
       'Small-group experiences and private guides',
       'Day trips to nearby villages, vineyards, and natural sights',
-      'Verified guides, real reviews · Powered by Expedia',
+      'Verified guides, real reviews · Powered by Viator',
     ],
   },
 };
@@ -336,9 +340,16 @@ export function VerticalLandingPage({
   const heading = meta.heading(city);
   const intro = meta.intro(city);
   const ctaLabel = meta.ctaLabel(city);
-  const searchUrl = buildExpediaCategoryUrl(meta.category, {
-    destination: city.name,
-  });
+  // Route each vertical to the best provider for the job — never Expedia:
+  // lodging → Vrbo (Partnerize), experiences → Viator (the provider the rest of
+  // stayviaowner's things-to-do surfaces already use).
+  const isAttractions = meta.category === 'attractions';
+  const searchUrl = isAttractions
+    ? buildViatorStaySearchUrl(
+        { destination: `${city.name} tours` },
+        getViatorStayLinkConfig(),
+      )
+    : buildExpediaCategoryUrl(meta.category, { destination: city.name });
 
   return (
     <SeoPageShell
@@ -416,7 +427,7 @@ export function VerticalLandingPage({
             boxShadow: '0 4px 12px rgba(0,113,194,0.32)',
           }}
         >
-          {ctaLabel} on Vrbo →
+          {ctaLabel} on {isAttractions ? 'Viator' : 'Vrbo'} →
         </a>
 
         {/* Why-this-vertical-on-Expedia bullets */}
