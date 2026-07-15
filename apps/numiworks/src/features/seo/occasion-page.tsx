@@ -4,6 +4,7 @@ import { buildVrboSearchUrl } from '@lib/affiliate/vrbo-link';
 import { buildViatorStaySearchUrl, getViatorStayLinkConfig } from '@lib/affiliate/viator-stay-link-builder';
 import { SiteHeader } from '@/features/site/site-header';
 import { SiteFooter } from '@/features/site/site-footer';
+import { buildCityContext } from '@lib/seo/city-context';
 
 /**
  * numiworks occasion / celebration page — the homes + experiences angle
@@ -40,11 +41,14 @@ export function OccasionPage({ route }: { route: OccasionRoute }) {
   const vrbo = vrboHref(route);
   const viator = viatorHref(route);
   const siblings = siblingOccasions(route);
+  // City-specific prose + FAQs from the destination guide / climate — breaks the
+  // ~96% token-swap duplication that kept the celebration long-tail unindexed.
+  const ctx = buildCityContext(city, `${occasion.name} ${occasion.vibe}`);
   const cityFaq = {
     q: `What should we do for a ${occasion.name.toLowerCase()} in ${city.name}?`,
     a: `${city.oneLiner} Book the big-ticket experiences ahead on Viator (they sell out), keep a whole-home rental as your base so the group stays together, and leave room for the spots you'll find on foot.`,
   };
-  const faqs = [...occasion.faqs, cityFaq];
+  const faqs = [...ctx.faqs, ...occasion.faqs, cityFaq];
 
   return (
     <>
@@ -84,6 +88,24 @@ export function OccasionPage({ route }: { route: OccasionRoute }) {
                   ? `${city.oneLiner} Rent a place with a view or a private terrace on VRBO, and let Viator handle the experiences worth planning ahead — numiworks' AI concierge can weave the stay and the itinerary into a day-by-day plan.`
                   : `${city.oneLiner} One whole home on VRBO keeps the group together and beats a row of hotel rooms; Viator covers the activities that make the trip. numiworks' AI concierge can plan the whole thing around your dates and group.`}
               </p>
+              {ctx.sentences.map((s, i) => (
+                <p key={i} className="mt-3" style={bodyStyle}>
+                  {s}
+                </p>
+              ))}
+
+              {ctx.areas.length > 0 && (
+                <>
+                  <h2 className="mt-10" style={h2Style}>Where to base the group in {city.name}</h2>
+                  <ul className="mt-4" style={{ listStyle: 'none', margin: 0, padding: 0, display: 'grid', gap: '0.85rem' }}>
+                    {ctx.areas.map((a) => (
+                      <li key={a.name} style={bodyStyle}>
+                        <strong style={{ color: 'var(--ink-primary)' }}>{a.name}</strong> — {a.blurb}
+                      </li>
+                    ))}
+                  </ul>
+                </>
+              )}
 
               <h2 className="mt-10" style={h2Style}>Common questions</h2>
               <div className="mt-5 space-y-3">

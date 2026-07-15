@@ -5,6 +5,7 @@ import type { SeoCity } from '@lib/seo/cities';
 import type { ThemedListTheme } from '@lib/seo/route-parser';
 import type { Experience } from '@core/experience';
 import { GygActivitiesWidget } from '@/features/experiences/getyourguide-widget';
+import { buildCityContext } from '@lib/seo/city-context';
 
 /**
  * SEO-shaped themed-list page. One page renderer powers three URL
@@ -39,6 +40,9 @@ export function ThemedListSeoPage({
     : `${meta.slugPrefix}${city.slug}`;
   const heading = meta.heading(city);
   const intro = meta.intro(city);
+  // City-specific prose + FAQs harvested from the destination guide / climate —
+  // breaks the ~93% token-swap duplication that kept this family out of the index.
+  const ctx = buildCityContext(city, theme);
 
   return (
     <SeoPageShell
@@ -120,6 +124,26 @@ export function ThemedListSeoPage({
         </header>
       </section>
 
+      {ctx.sentences.length > 0 && (
+        <section className="mx-auto max-w-3xl px-6 pb-2">
+          {ctx.sentences.map((s, i) => (
+            <p
+              key={i}
+              className={i === 0 ? '' : 'mt-3'}
+              style={{
+                fontFamily: 'var(--font-inter)',
+                fontSize: '1rem',
+                lineHeight: 1.7,
+                color: 'var(--ink-secondary)',
+                margin: 0,
+              }}
+            >
+              {s}
+            </p>
+          ))}
+        </section>
+      )}
+
       {/* GetYourGuide widget — theme-tuned query so per-theme CTR
         * rolls up cleanly in the partner dashboard. */}
       <GygActivitiesWidget
@@ -154,6 +178,58 @@ export function ThemedListSeoPage({
           </p>
         )}
       </section>
+
+      {ctx.faqs.length > 0 && (
+        <section className="mx-auto max-w-3xl px-6 pb-16">
+          <h2
+            style={{
+              fontFamily: 'var(--font-inter)',
+              fontSize: '1.35rem',
+              fontWeight: 800,
+              color: 'var(--ink-primary)',
+              margin: '0 0 1rem',
+            }}
+          >
+            {city.name}: common questions
+          </h2>
+          <div className="space-y-3">
+            {ctx.faqs.map((f) => (
+              <details
+                key={f.q}
+                style={{
+                  borderRadius: '0.6rem',
+                  border: '1px solid var(--border-subtle)',
+                  padding: '0.95rem 1.15rem',
+                  background: 'var(--surface-elevated)',
+                }}
+              >
+                <summary
+                  style={{
+                    fontFamily: 'var(--font-inter)',
+                    fontSize: '0.98rem',
+                    fontWeight: 600,
+                    color: 'var(--ink-primary)',
+                    cursor: 'pointer',
+                  }}
+                >
+                  {f.q}
+                </summary>
+                <p
+                  style={{
+                    margin: '0.7rem 0 0',
+                    fontFamily: 'var(--font-inter)',
+                    fontSize: '0.92rem',
+                    lineHeight: 1.6,
+                    color: 'var(--ink-secondary)',
+                  }}
+                >
+                  {f.a}
+                </p>
+              </details>
+            ))}
+          </div>
+        </section>
+      )}
     </SeoPageShell>
   );
 }
