@@ -6,8 +6,9 @@ import {
 
 describe('brandedGobooktUrl', () => {
   it('routes to gobookt.com / destinations / {slug}', () => {
+    // gobookt's canonical host is the APEX (https://gobookt.com); www 308s to it.
     expect(brandedGobooktUrl({ citySlug: 'tokyo', platform: 'pinterest' })).toMatch(
-      /^https:\/\/www\.gobookt\.com\/destinations\/tokyo\?/,
+      /^https:\/\/gobookt\.com\/destinations\/tokyo\?/,
     );
   });
 

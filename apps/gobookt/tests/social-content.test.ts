@@ -4,9 +4,10 @@ import {
   PinterestPinSchema,
   ShortFormVideoScriptSchema,
 } from '@/lib/social/types';
+import { clamp } from '@adored/marketing';
 import { buildSocialPackFromTemplate } from '@/lib/social/template-generator';
 import { TOKYO_SAMPLE_PACK } from '@/lib/social/samples/tokyo';
-import { SEO_CITIES, findCityBySlug } from '@/lib/seo/cities';
+import { SEO_CITIES, findCityBySlug, type SeoCity } from '@/lib/seo/cities';
 
 describe('TOKYO_SAMPLE_PACK', () => {
   it('parses against CitySocialPackSchema', () => {
@@ -146,5 +147,70 @@ describe('Schema invariants', () => {
       hashtags: ['#a', '#b', '#c', '#d', '#e'],
     });
     expect(ok.success).toBe(false);
+  });
+});
+
+describe('caption length clamp', () => {
+  it('leaves a caption exactly at the limit unchanged', () => {
+    const s = 'x'.repeat(220);
+    expect(clamp(s, 220)).toBe(s);
+    expect(clamp(s, 220).length).toBe(220);
+  });
+
+  it('clamps an over-limit caption to <= the limit, ending with an ellipsis', () => {
+    const out = clamp('word '.repeat(80), 220); // 400 chars
+    expect(out.length).toBeLessThanOrEqual(220);
+    expect(out.endsWith('…')).toBe(true);
+  });
+
+  it('does not cut a word in half when a boundary is available', () => {
+    const out = clamp('alpha '.repeat(60), 220);
+    expect(out.replace(/…$/u, '').trimEnd().endsWith('alpha')).toBe(true);
+  });
+
+  it('never leaves a broken surrogate pair when an emoji straddles the cut', () => {
+    const out = clamp('a'.repeat(216) + '😀😀😀😀', 220);
+    expect(out.length).toBeLessThanOrEqual(220);
+    // No lone high/low surrogate in the result.
+    expect(
+      /[\uD800-\uDBFF](?![\uDC00-\uDFFF])|(?<![\uD800-\uDBFF])[\uDC00-\uDFFF]/.test(out),
+    ).toBe(false);
+  });
+});
+
+describe('Template generator — long names + brand-safe CTAs', () => {
+  it('produces a schema-valid pack for New Orleans (the long-name regression)', () => {
+    const city = findCityBySlug('new-orleans')!;
+    expect(CitySocialPackSchema.safeParse(buildSocialPackFromTemplate(city)).success).toBe(true);
+  });
+
+  it('produces a schema-valid pack for a very long destination name + blurb', () => {
+    const city = {
+      slug: 'a-very-long-synthetic-destination',
+      name: 'Llanfairpwllgwyngyllgogerychwyrndrobwllllantysiliogogogoch',
+      countryName: 'United Kingdom of Great Britain and Northern Ireland',
+      countryCode: 'GB',
+      region: 'Europe',
+      coordinates: { lat: 53.2, lng: -4.2 },
+      oneLiner: 'An extraordinarily long one-liner that keeps going and going. '.repeat(12),
+      viatorQuery: 'x',
+    } as unknown as SeoCity;
+    const parsed = CitySocialPackSchema.safeParse(buildSocialPackFromTemplate(city));
+    if (!parsed.success) console.error(parsed.error.issues.slice(0, 4));
+    expect(parsed.success).toBe(true);
+  });
+
+  it('emits no Viator / AI-planner CTA (gobookt is a Booking.com stays brand)', () => {
+    const pack = buildSocialPackFromTemplate(findCityBySlug('paris')!);
+    const ctas = [
+      ...pack.pinterest.map((p) => p.cta),
+      ...pack.tiktok.map((s) => s.cta),
+      ...pack.reels.map((s) => s.cta),
+      ...pack.shorts.map((s) => s.cta),
+    ];
+    for (const cta of ctas) {
+      expect(cta.toLowerCase()).not.toContain('viator');
+      expect(cta.toLowerCase()).not.toContain('ai trip planner');
+    }
   });
 });

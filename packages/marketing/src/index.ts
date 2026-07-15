@@ -95,7 +95,7 @@ export {
 } from './marketing-store';
 
 export type { TemplateBrand } from './template-generator';
-export { createSocialTemplateGenerator } from './template-generator';
+export { createSocialTemplateGenerator, clamp } from './template-generator';
 
 export type {
   SchedulerStore,

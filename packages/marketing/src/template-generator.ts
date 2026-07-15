@@ -26,6 +26,62 @@ const MUSIC_CUES = [
   'soft acoustic guitar, sunset mood',
 ];
 
+/**
+ * Clamp a prose field to the schema's max length — deterministically, on a
+ * word boundary where possible, and without splitting a Unicode surrogate
+ * pair (emoji). Preserves the START of the string (where the destination +
+ * key message live) and appends a one-char ellipsis. A string already within
+ * the limit is returned unchanged. Hashtags are NOT clamped here — they are
+ * whole tokens built + counted elsewhere.
+ */
+export function clamp(s: string, max: number): string {
+  if (s.length <= max) return s;
+  let cut = s.slice(0, max - 1); // leave room for the 1-char ellipsis '…'
+  // Never leave a dangling high surrogate (that would split an emoji).
+  const last = cut.charCodeAt(cut.length - 1);
+  if (last >= 0xd800 && last <= 0xdbff) cut = cut.slice(0, -1);
+  // Prefer a word boundary, unless it would drop too much of the text.
+  const lastSpace = cut.lastIndexOf(' ');
+  if (lastSpace >= Math.floor((max - 1) * 0.6)) cut = cut.slice(0, lastSpace);
+  return cut.replace(/[\s.,;:!?–—-]+$/u, '') + '…';
+}
+
+function sanitizeScript(s: ShortFormVideoScript): ShortFormVideoScript {
+  return {
+    ...s,
+    hook: clamp(s.hook, 140),
+    cta: clamp(s.cta, 140),
+    scenes: s.scenes.map((sc) => ({
+      ...sc,
+      visual: clamp(sc.visual, 220),
+      text: clamp(sc.text, 80),
+      voiceover: clamp(sc.voiceover, 220),
+    })),
+  };
+}
+
+/**
+ * Final safety net: clamp every length-constrained prose field to its schema
+ * max so a long destination name or guide blurb can never push a field over
+ * the limit and fail validation. Length-only — hashtags, durations, and enums
+ * are untouched.
+ */
+function sanitizePack(pack: CitySocialPack): CitySocialPack {
+  return {
+    ...pack,
+    pinterest: pack.pinterest.map((p) => ({
+      ...p,
+      title: clamp(p.title, 100),
+      description: clamp(p.description, 500),
+      visualConcept: clamp(p.visualConcept, 280),
+      cta: clamp(p.cta, 120),
+    })),
+    tiktok: pack.tiktok.map(sanitizeScript),
+    reels: pack.reels.map(sanitizeScript),
+    shorts: pack.shorts.map(sanitizeScript),
+  };
+}
+
 export interface TemplateBrand {
   /** Display name used in hero copy + visual concepts ("numiworks"). */
   name: string;
@@ -33,12 +89,19 @@ export interface TemplateBrand {
   label: string;
   /** Hashtag base without the # (usually the brand name). */
   hashtag: string;
+  /**
+   * Optional CTA rotation — fully-formed strings, each mentioning the brand.
+   * When omitted a default rotation is used. Brands whose monetization differs
+   * (a Booking.com stays brand vs a Viator experiences brand) pass their own so
+   * no off-brand CTA (e.g. "Bookable on Viator") is ever emitted.
+   */
+  ctaOptions?: readonly string[];
 }
 
 export function createSocialTemplateGenerator(
   brand: TemplateBrand,
 ): (city: SeoCity) => CitySocialPack {
-  const CTA_OPTIONS = [
+  const CTA_OPTIONS = brand.ctaOptions ?? [
     `Plan your trip on ${brand.label}`,
     `Build the itinerary at ${brand.label}`,
     `Free AI trip planner → ${brand.label}`,
@@ -49,7 +112,7 @@ export function createSocialTemplateGenerator(
 function buildSocialPackFromTemplate(city: SeoCity): CitySocialPack {
   const guide = findDestinationGuide(city.slug);
 
-  return {
+  return sanitizePack({
     citySlug: city.slug,
     cityName: city.name,
     pinterest: buildPinterestPins(city, guide),
@@ -58,7 +121,7 @@ function buildSocialPackFromTemplate(city: SeoCity): CitySocialPack {
     shorts: buildVideoScripts(city, guide, 'youtube-shorts'),
     generatedAt: '2026-06-12T00:00:00.000Z',
     source: 'template-fallback',
-  };
+  });
 }
 
 function pickCta(seed: number): string {
@@ -89,7 +152,9 @@ function hashtagsFor(city: SeoCity, extra: readonly string[] = []): string[] {
     '#travelreels',
     `#${brand.hashtag}`,
   ];
-  return [...base, ...extra].slice(0, 10);
+  // Each hashtag must be <= 40 chars per the schema; a long slug or country
+  // name gets truncated to a still-valid (shorter, ASCII) hashtag token.
+  return [...base, ...extra].map((h) => h.slice(0, 40)).slice(0, 10);
 }
 
 // ============== Pinterest ==============
