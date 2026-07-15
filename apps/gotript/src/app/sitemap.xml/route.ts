@@ -1,15 +1,18 @@
-import { renderSitemapXml } from '@adored/seo-routing/sitemap';
-import buildSitemapEntries from '@lib/site/sitemap-entries';
+import { renderSitemapIndexXml } from '@adored/seo-routing/sitemap';
+import { getSiteOrigin } from '@lib/site/origin';
+import { sitemapSectionNames } from '@lib/site/sitemap-entries';
 
 /**
- * /sitemap.xml — same entries Next's MetadataRoute produced, plus an
- * xml-stylesheet PI so humans opening the URL see a styled table
- * (crawlers parse the XML unchanged).
+ * /sitemap.xml — a sitemap INDEX referencing the per-section child sitemaps
+ * (/sitemaps/{section}.xml). Search Console reports discovery per page-type.
  */
 export const revalidate = 3600;
 
 export async function GET(): Promise<Response> {
-  const xml = renderSitemapXml(buildSitemapEntries());
+  const base = getSiteOrigin();
+  const xml = renderSitemapIndexXml(
+    sitemapSectionNames().map((name) => ({ loc: `${base}/sitemaps/${name}.xml` })),
+  );
   return new Response(xml, {
     headers: { 'Content-Type': 'application/xml; charset=utf-8' },
   });

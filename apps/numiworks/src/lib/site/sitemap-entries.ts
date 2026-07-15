@@ -1,4 +1,4 @@
-import type { MetadataRoute } from 'next';
+import type { SitemapEntry } from '@adored/seo-routing/sitemap';
 import { ITALIAN_DESTINATIONS } from '@lib/curation/destinations';
 import { getSiteOrigin } from '@lib/site/origin';
 import { enumerateAllSeoSlugs } from '@lib/seo/route-parser';
@@ -9,156 +9,101 @@ import { enumerateStaysNearSlugs, enumerateOccasionSlugs } from '@adored/seo-dat
 import { enumerateTourCategorySlugs } from '@lib/seo/tour-category-routes';
 
 /**
- * Crawler-facing sitemap. Includes:
- *   - `/` homepage
- *   - `/search` (entry point) + high-intent `/search?q=…` queries
- *   - `/destinations` (curated index)
- *   - `/destinations/[slug]` (one per curated entry)
- *   - `/plan` (itinerary builder entry point)
- *   - `/faq`, `/about`, `/privacy`, `/terms`, `/contact` (trust pages)
+ * Crawler-facing sitemap, split into named SECTIONS so `/sitemap.xml` serves a
+ * sitemap INDEX referencing `/sitemaps/{section}.xml` children — Search Console
+ * then reports discovery per page-type.
  *
- * Deliberately EXCLUDES `/t/[slug]` - share slugs are unguessable
- * (~95 bits of entropy) and meant for direct sharing, not indexing.
- *
- * Deliberately EXCLUDES `/experiences/[productCode]` from the static
- * sitemap because the product catalog is enormous and changes
- * frequently. Surface the catalog via a separate dynamic sitemap or
- * via Viator's own canonicals once the volume justifies it.
+ * Organizational only: the same canonical URLs, the same deliberate exclusions
+ * (no `/search` [noindex], no `/api`, `/t`, `/admin` — those never appear here),
+ * every URL on numiworks' own canonical host, no duplicates (deduped globally,
+ * first section wins), and NO per-deploy `lastmod` stamp (we don't have real
+ * per-page modification dates, so we omit it rather than mislead the crawler).
  */
-
-/**
- * High-intent queries that map to common travel searches. Adding them
- * to the sitemap gives Google an indexable surface for each — every
- * one is an entry point that can rank for "<query>".
- */
-const HIGH_INTENT_QUERIES: readonly string[] = [
-  'Tokyo',
-  'Paris',
-  'Rome',
-  'Cappadocia',
-  'Reykjavik',
-  'Bali',
-  'New York',
-  'Marrakech',
-  'Lisbon',
-  'Santorini',
-  'Barcelona',
-  'Amsterdam',
-  'cooking class Tokyo',
-  'cooking class Rome',
-  'cooking class Paris',
-  'food tour Lisbon',
-  'wine tour Florence',
-  'snorkel Bali',
-  'hot air balloon Cappadocia',
-  'glacier hike Iceland',
-  'private tour Rome',
-  'day trip from Paris',
-  'day trip from Tokyo',
-  'sunset cruise Santorini',
-  'desert safari Marrakech',
-  'Vatican skip the line',
-  'Louvre tour',
-  'Eiffel Tower tour',
-  'Pompeii day trip',
-  'Northern Lights Iceland',
-];
 
 const TRUST_PAGES: readonly string[] = ['/faq', '/about', '/privacy', '/terms', '/contact'];
 
-export default function sitemap(): MetadataRoute.Sitemap {
-  const base = getSiteOrigin();
-  const now = new Date();
+function e(
+  base: string,
+  path: string,
+  priority: number,
+  changeFrequency: SitemapEntry['changeFrequency'] = 'monthly',
+): SitemapEntry {
+  return { url: `${base}${path}`, changeFrequency, priority };
+}
 
-  const entries: MetadataRoute.Sitemap = [
-    { url: `${base}/`, lastModified: now, changeFrequency: 'daily', priority: 1.0 },
-    // /search is noindex — not in sitemap. Query-string variants
-    // ($q=…) are also excluded to prevent Google indexing thin
-    // per-query pages that would dilute the strong themed pages.
-    { url: `${base}/plan`, lastModified: now, changeFrequency: 'weekly', priority: 0.9 },
-    { url: `${base}/quiz`, lastModified: now, changeFrequency: 'monthly', priority: 0.85 },
-    { url: `${base}/trip-cost-estimator`, lastModified: now, changeFrequency: 'monthly', priority: 0.85 },
+export interface SitemapSection {
+  name: string;
+  entries: SitemapEntry[];
+}
+
+/**
+ * Named sections in index order. Deduped globally: a URL that would appear in
+ * more than one section is kept only in the first (guarantees uniqueness within
+ * and across child sitemaps).
+ */
+export function sitemapSections(): SitemapSection[] {
+  const base = getSiteOrigin();
+  const raw: SitemapSection[] = [
     {
-      url: `${base}/destinations`,
-      lastModified: now,
-      changeFrequency: 'weekly',
-      priority: 0.9,
+      name: 'core',
+      entries: [
+        e(base, '/', 1.0, 'daily'),
+        e(base, '/plan', 0.9, 'weekly'),
+        e(base, '/quiz', 0.85),
+        e(base, '/trip-cost-estimator', 0.85),
+        ...TRUST_PAGES.map((p) => e(base, p, 0.5)),
+      ],
     },
-    ...ITALIAN_DESTINATIONS.map((d) => ({
-      url: `${base}/destinations/${d.slug}`,
-      lastModified: now,
-      changeFrequency: 'monthly' as const,
-      priority: 0.8,
-    })),
-    // HIGH_INTENT_QUERIES were previously mapped to /search?q=… URLs.
-    // Now excluded — /search is noindex. Traffic still routes through
-    // organic + the destination + themed-list slug pages, which carry
-    // stronger indexable signals.
-    ...TRUST_PAGES.map((p) => ({
-      url: `${base}${p}`,
-      lastModified: now,
-      changeFrequency: 'monthly' as const,
-      priority: 0.5,
-    })),
-    // Programmatic SEO surfaces — every itinerary length × every
-    // city, plus a things-to-do page per city. Each is statically
-    // generated at build time (generateStaticParams in app/[slug]/
-    // page.tsx) and lives behind a slug allowlist so the SEO surface
-    // can scale by tens of thousands of pages without ever serving
-    // an empty / thin / spam-shape page.
-    ...enumerateAllSeoSlugs().map((slug) => ({
-      url: `${base}/${slug}`,
-      lastModified: now,
-      changeFrequency: slug.includes('itinerary')
-        ? ('weekly' as const)
-        : ('weekly' as const),
-      priority: 0.75,
-    })),
-    // Rich destination guide pages — only the SEO cities that have
-    // hand-authored content in DESTINATION_GUIDES. As content gets
-    // authored for more cities (Sprint 13+), this list grows
-    // automatically.
-    ...SEO_CITIES.filter((c) => hasDestinationGuide(c.slug)).map((c) => ({
-      url: `${base}/destinations/${c.slug}`,
-      lastModified: now,
-      changeFrequency: 'monthly' as const,
-      priority: 0.85,
-    })),
-    // Attraction pages — one entry per hand-authored attraction in
-    // ATTRACTIONS. High priority because these rank for very
-    // high-intent queries ("eiffel tower tickets").
-    ...allAttractions().map((a) => ({
-      url: `${base}/attractions/${a.slug}`,
-      lastModified: now,
-      changeFrequency: 'monthly' as const,
-      priority: 0.9,
-    })),
-    // "Where to stay & what to do near {POI}" pages — city-centre + airport
-    // + real neighborhoods per city (VRBO homes + Viator experiences angle).
-    ...enumerateStaysNearSlugs().map((slug) => ({
-      url: `${base}/stays-near/${slug}`,
-      lastModified: now,
-      changeFrequency: 'monthly' as const,
-      priority: 0.65,
-    })),
-    // Occasion / celebration pages — in the sitemap (indexable) but NOT linked
-    // from nav/homepage.
-    ...enumerateOccasionSlugs().map((slug) => ({
-      url: `${base}/celebrations/${slug}`,
-      lastModified: now,
-      changeFrequency: 'monthly' as const,
-      priority: 0.6,
-    })),
-    // Tour-category pages — cooking classes / boat tours / ski lessons etc.
-    // per city. numiworks-local Viator experience long-tail; targets only
-    // the categories the shared themed matrix doesn't already publish.
-    ...enumerateTourCategorySlugs().map((slug) => ({
-      url: `${base}/tours/${slug}`,
-      lastModified: now,
-      changeFrequency: 'monthly' as const,
-      priority: 0.7,
-    })),
+    {
+      name: 'destinations',
+      entries: [
+        e(base, '/destinations', 0.9, 'weekly'),
+        ...ITALIAN_DESTINATIONS.map((d) => e(base, `/destinations/${d.slug}`, 0.8)),
+        ...SEO_CITIES.filter((c) => hasDestinationGuide(c.slug)).map((c) =>
+          e(base, `/destinations/${c.slug}`, 0.85),
+        ),
+      ],
+    },
+    {
+      name: 'tours',
+      entries: [
+        ...enumerateTourCategorySlugs().map((slug) => e(base, `/tours/${slug}`, 0.7)),
+        ...allAttractions().map((a) => e(base, `/attractions/${a.slug}`, 0.9)),
+        ...enumerateStaysNearSlugs().map((slug) => e(base, `/stays-near/${slug}`, 0.65)),
+      ],
+    },
+    {
+      name: 'occasion-pages',
+      entries: enumerateOccasionSlugs().map((slug) => e(base, `/celebrations/${slug}`, 0.6)),
+    },
+    {
+      name: 'editorial',
+      entries: enumerateAllSeoSlugs().map((slug) => e(base, `/${slug}`, 0.75, 'weekly')),
+    },
   ];
 
-  return entries;
+  const seen = new Set<string>();
+  return raw.map((s) => ({
+    name: s.name,
+    entries: s.entries.filter((entry) => {
+      if (seen.has(entry.url)) return false;
+      seen.add(entry.url);
+      return true;
+    }),
+  }));
+}
+
+/** Ordered section names — drives the sitemap index. */
+export function sitemapSectionNames(): string[] {
+  return sitemapSections().map((s) => s.name);
+}
+
+/** One section's entries, or null for an unknown section name. */
+export function sitemapSectionEntries(name: string): SitemapEntry[] | null {
+  return sitemapSections().find((s) => s.name === name)?.entries ?? null;
+}
+
+/** All entries flattened — parity with the pre-split single sitemap. */
+export default function buildSitemapEntries(): SitemapEntry[] {
+  return sitemapSections().flatMap((s) => s.entries);
 }
