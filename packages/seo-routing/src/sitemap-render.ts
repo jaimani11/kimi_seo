@@ -61,6 +61,36 @@ ${urls}
 `;
 }
 
+export interface SitemapIndexChild {
+  /** Absolute URL of the child sitemap. */
+  loc: string;
+  /** Only set when grounded in a real content-modification date. */
+  lastmod?: string | Date;
+}
+
+/**
+ * Render a sitemap INDEX that references child sitemaps. No stylesheet PI — an
+ * index is a machine artifact; the child urlsets carry the human-friendly
+ * stylesheet. Valid per sitemaps.org.
+ */
+export function renderSitemapIndexXml(children: readonly SitemapIndexChild[]): string {
+  const items = children
+    .map((c) => {
+      const lastmod = c.lastmod
+        ? `\n    <lastmod>${
+            c.lastmod instanceof Date ? c.lastmod.toISOString() : esc(String(c.lastmod))
+          }</lastmod>`
+        : '';
+      return `  <sitemap>\n    <loc>${esc(c.loc)}</loc>${lastmod}\n  </sitemap>`;
+    })
+    .join('\n');
+  return `<?xml version="1.0" encoding="UTF-8"?>
+<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+${items}
+</sitemapindex>
+`;
+}
+
 /**
  * The stylesheet browsers apply when a human opens /sitemap.xml.
  * Crawlers ignore it entirely.
