@@ -155,6 +155,26 @@ const ConciergeMemoryHint = z.object({
   confidence: z.number().min(0).max(1),
 });
 
+// Phase B — the structured trip-state summary streamed each turn so the UI can
+// render an editable trip-state panel, what-changed, assumptions, and the single
+// next question. Additive: it does not alter the proposal / opportunity flow.
+const ConciergeTripState = z.object({
+  kind: z.literal('concierge.trip_state'),
+  turnId: z.string(),
+  summary: z.object({
+    destination: z.string().nullable(),
+    dates: z.string().nullable(),
+    travelers: z.string().nullable(),
+    budget: z.string().nullable(),
+    style: z.string().nullable(),
+    preferences: z.array(z.string()),
+  }),
+  changed: z.array(z.string()),
+  nextQuestion: z.object({ field: z.string(), question: z.string() }).nullable(),
+  essentialsKnown: z.boolean(),
+  assumptions: z.array(z.string()),
+});
+
 const MoodSnapshotReady = z.object({
   kind: z.literal('mood.snapshot.ready'),
   turnId: z.string(),
@@ -193,6 +213,7 @@ export const OrchestratorEventSchema = z.discriminatedUnion('kind', [
   ProposalProvenanceComputed,
   ConciergeMessage,
   ConciergeMemoryHint,
+  ConciergeTripState,
   MoodSnapshotReady,
   SearchOpportunityReady,
 ]);

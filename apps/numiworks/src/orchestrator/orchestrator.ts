@@ -18,6 +18,7 @@ import {
 } from '@/agents/destination-flavor-agent';
 import { buildProviderRegistry, routeProvider } from '@/providers';
 import { redactPiiText } from '@lib/privacy/redact-pii';
+import { buildTripStateSnapshot } from '@lib/concierge/trip-state';
 import { NoOpTraceLogger } from '@lib/observability/trace-logger';
 import { MemoryHinter } from '@lib/memory-hinter';
 import { InMemorySessionStore, type SessionStore } from '@lib/session';
@@ -218,6 +219,15 @@ export class Orchestrator {
     } else {
       yield { kind: 'intent.extracted', turnId: req.turnId, intent };
     }
+
+    // Phase B — stream the structured trip-state snapshot (editable summary,
+    // what-changed, the single next question, assumptions). Additive: does not
+    // alter the proposal / opportunity flow below.
+    yield {
+      kind: 'concierge.trip_state',
+      turnId: req.turnId,
+      ...buildTripStateSnapshot(intent, req.type === 'refine' ? priorTurn?.intent : undefined),
+    };
 
     // ============== Step 1.5 - Route decision (F1) ==============
     // Decide between real-inventory path (existing) and SearchOpportunity

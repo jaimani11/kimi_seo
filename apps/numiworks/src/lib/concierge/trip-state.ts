@@ -619,6 +619,38 @@ function formatBudget(b: BudgetIntent): string | null {
   return `${b.currency} ${b.amount}${per}`;
 }
 
+/** The trip-state payload the orchestrator streams to the UI each turn. */
+export interface TripStateSnapshot {
+  summary: TripStateSummary;
+  /** What changed this turn (empty on the first compose). */
+  changed: string[];
+  nextQuestion: { field: MissingField; question: string } | null;
+  essentialsKnown: boolean;
+  assumptions: string[];
+}
+
+/**
+ * Build the streamed snapshot from the extracted intent (+ the prior intent on
+ * a refine turn, to compute what changed). Pure — used by the orchestrator.
+ */
+export function buildTripStateSnapshot(
+  intent: TripIntent,
+  priorIntent?: TripIntent,
+): TripStateSnapshot {
+  const state = emptyTripState(intent);
+  const nq = nextMissingQuestion(state);
+  const conflicts = detectConflicts(state);
+  return {
+    summary: summarizeState(state),
+    changed: priorIntent ? diffIntents(priorIntent, intent).changed : [],
+    nextQuestion: nq ? { field: nq.field, question: nq.question } : null,
+    essentialsKnown: essentialsKnown(state),
+    assumptions: conflicts
+      .filter((c) => c.severity === 'assume' && c.assumption)
+      .map((c) => c.assumption as string),
+  };
+}
+
 /** A compact, editable trip-state summary for the UI. */
 export function summarizeState(state: TripState): TripStateSummary {
   const { intent } = state;
