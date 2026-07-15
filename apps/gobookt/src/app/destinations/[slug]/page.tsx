@@ -5,7 +5,6 @@ import { ITALIAN_DESTINATIONS, findDestinationBySlugOrAlias } from '@lib/curatio
 import { resolveDestinationPhoto } from '@lib/imagery/destination-photo';
 import { DestinationHero } from '@/features/destinations/destination-hero';
 import { PlanTripCta } from '@/features/destinations/plan-trip-cta';
-import { DestinationThingsToDoRail } from '@/features/destinations/destination-things-to-do-rail';
 import { DestinationJsonLd } from './destination-jsonld';
 import { SEO_CITIES, findCityBySlug } from '@lib/seo/cities';
 import { findDestinationGuide } from '@lib/seo/destination-content';
@@ -137,7 +136,6 @@ export default async function DestinationPage({ params }: PageProps) {
           heroImageUrl={heroPhoto.url}
           heroImageAlt={heroPhoto.alt}
         />
-        <DestinationThingsToDoRail destinationName={italian.name} />
         <PlanTripCta destination={italian} />
       </main>
     );

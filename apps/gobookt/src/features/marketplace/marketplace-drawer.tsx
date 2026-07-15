@@ -5,7 +5,6 @@ import { useEffect } from 'react';
 import { useModalA11y } from '@/features/shared/use-modal-a11y';
 import { useMarketplaceDrawerStore, type MarketplaceDrawerItem } from './use-marketplace-drawer-store';
 import { PropertyDrawerBody } from './property-drawer-body';
-import { ExperienceDrawerBody } from './experience-drawer-body';
 
 /**
  * Slide-in detail surface for the hybrid booking flow.
@@ -91,9 +90,7 @@ function Drawer({ item, onClose }: { item: MarketplaceDrawerItem; onClose: () =>
       >
         {item.kind === 'property' ? (
           <PropertyDrawerBody property={item.property} titleId={titleId} onClose={onClose} />
-        ) : (
-          <ExperienceDrawerBody experience={item.experience} titleId={titleId} onClose={onClose} />
-        )}
+        ) : null}
       </motion.div>
     </>
   );

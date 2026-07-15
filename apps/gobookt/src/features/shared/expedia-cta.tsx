@@ -189,9 +189,6 @@ function isActiveStayHost(url: string): boolean {
   try {
     const u = new URL(url);
     const provider = getActiveStayProviderId();
-    if (provider === 'viator') {
-      return u.hostname === 'viator.com' || u.hostname.endsWith('.viator.com');
-    }
     if (provider === 'booking-com') {
       return u.hostname === 'booking.com' || u.hostname.endsWith('.booking.com');
     }

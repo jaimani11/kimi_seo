@@ -48,7 +48,6 @@ export function sitemapSections(): SitemapSection[] {
       name: 'core',
       entries: [
         e(base, '/', 1.0, 'daily'),
-        e(base, '/plan', 0.9, 'weekly'),
         ...TRUST_PAGES.map((p) => e(base, p, 0.5)),
       ],
     },

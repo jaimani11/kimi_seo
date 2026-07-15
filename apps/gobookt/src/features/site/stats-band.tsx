@@ -4,10 +4,9 @@
  * social proof at a glance without requiring the visitor to scroll
  * past the fold.
  *
- * Numbers reference live Viator catalog scale (publicly stated by
- * Viator: 300K+ experiences, 190+ countries, 6M+ reviews, 4.6+ avg
- * rating). Conservative phrasing — "300,000+", "190+" — so it stays
- * honest as Viator scales.
+ * Numbers reference Booking.com's publicly stated scale (28M+ reported
+ * listings, 190+ countries). Conservative phrasing so the band stays
+ * honest.
  */
 
 const STATS = [

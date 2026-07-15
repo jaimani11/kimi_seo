@@ -2,16 +2,9 @@ import Link from 'next/link';
 import Image from 'next/image';
 
 /**
- * Popular destinations grid — the photo-rich destination tiles that
- * carry the visual weight on rentbyowner / hotala / bedroomvillas.
- * Each tile is a curated "from $X · 4.8★ · N experiences" pitch with
- * a cinematic photo and a deep link to a /search query for that city.
- *
- * Photos are durable Unsplash CDN ids. From-price is a conservative
- * lower-bound representative for the destination (lowest-priced live
- * Viator experience category, typically a walking tour or short city
- * tour). Numbers are conservative-honest so the band reads as
- * trustworthy social proof, not marketing fluff.
+ * Popular destinations grid — photo-rich destination tiles on the
+ * homepage. Each tile deep-links to that city's Booking.com stays page
+ * (/hotels-in-{city}). Photos are durable Unsplash CDN ids.
  */
 
 interface Destination {
@@ -196,7 +189,11 @@ export function PopularDestinationsGrid() {
           {DESTINATIONS.map((d) => (
             <li key={d.name}>
               <Link
-                href={`/search?q=${encodeURIComponent(`${d.name}, ${d.country}`)}`}
+                href={`/hotels-in-${d.name
+                  .toLowerCase()
+                  .normalize('NFD')
+                  .replace(/[̀-ͯ]/g, '')
+                  .replace(/\s+/g, '-')}`}
                 className="group relative block w-full overflow-hidden"
                 style={{
                   aspectRatio: '3 / 4',
@@ -267,18 +264,17 @@ export function PopularDestinationsGrid() {
                     {d.name}
                   </h3>
                   <p
-                    className="mt-2 flex items-baseline gap-3"
+                    className="mt-2"
                     style={{
                       fontFamily: 'var(--font-inter)',
                       fontSize: '0.74rem',
-                      color: 'rgba(237,230,219,0.9)',
+                      fontWeight: 600,
+                      color: 'rgba(237,230,219,0.92)',
                       textShadow: '0 1px 3px rgba(0,0,0,0.55)',
                       margin: 0,
                     }}
                   >
-                    <span style={{ fontWeight: 600 }}>{d.fromPrice}</span>
-                    <span style={{ opacity: 0.75 }}>·</span>
-                    <span>{d.count}</span>
+                    View hotels &amp; stays →
                   </p>
                 </div>
               </Link>

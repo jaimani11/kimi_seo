@@ -3,11 +3,8 @@ import { canonicalUrl } from '@lib/site/origin';
 import { SiteHeader } from '@/features/site/site-header';
 import { HomeStayHero } from '@/features/site/home-stay-hero';
 import { StatsBand } from '@/features/site/stats-band';
-import { AgenticHero } from '@/features/site/agentic-hero';
-import { RecentlyViewedRail } from '@/features/site/recently-viewed-rail';
 import { PopularDestinationsGrid } from '@/features/site/popular-destinations-grid';
 import { HowGobooktWorks } from '@/features/site/how-it-works';
-import { SeoLinkFooter } from '@/features/site/seo-link-footer';
 import { SiteFooter } from '@/features/site/site-footer';
 
 /**
@@ -63,11 +60,8 @@ export default function HomePage() {
       <SiteHeader />
       <HomeStayHero />
       <StatsBand />
-      <AgenticHero />
-      <RecentlyViewedRail />
       <PopularDestinationsGrid />
       <HowGobooktWorks />
-      <SeoLinkFooter />
       <SiteFooter />
     </>
   );

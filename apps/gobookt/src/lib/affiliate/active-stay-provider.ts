@@ -8,10 +8,6 @@ import {
   getExpediaAffiliateConfig,
   type DestinationSearchInput,
 } from './expedia-link-builder';
-import {
-  buildViatorStaySearchUrl,
-  getViatorStayLinkConfig,
-} from './viator-stay-link-builder';
 import { resolveBookingUrl } from './booking-cj-links';
 
 /**
@@ -23,32 +19,13 @@ import { resolveBookingUrl } from './booking-cj-links';
  * calling a provider-specific builder. Flipping the active provider
  * is a single env var change.
  *
- * Active default: `viator`. gobookt is a Viator-affiliate platform;
- * every outbound link should land on viator.com so commission tracks
- * to the right network and the user stays inside the platform we're
- * actually monetizing. The Viator route lands on the destination's
- * experience search (Viator doesn't sell hotels) — so a "Stay at
- * Agra" CTA on the trip board sends the user to Viator's bookable
- * experiences in Agra rather than a hotel-search competitor.
- *
- * Legacy modes are preserved so the dispatch can flip back without a
- * code change if business conditions require:
- *   - `booking-com` — `booking.com/...` with Booking.com affiliate id
- *   - `expedia`     — `expedia.com/...` with Expedia campaign id
- *
- * The Expedia + Booking.com builders, provider implementations, env
- * vars, and types are intentionally preserved. Only the dispatch
- * default changes.
+ * Active default: `booking-com`. gobookt is a Booking.com CJ affiliate;
+ * every stay-search hand-off routes through Booking.com's affiliate
+ * program. `expedia` is preserved only as an override for future
+ * flexibility.
  */
 
-export type ActiveStayProvider = 'viator' | 'booking-com' | 'expedia';
-
-// gobookt: default flipped to 'booking-com' — every stay-CTA on the
-// site routes through Booking.com's affiliate program, which is the
-// whole point of the sister site. Viator + Expedia remain available
-// as overrides for future flexibility.
-const __ACTIVE_DEFAULT__ = 'booking-com';
-void __ACTIVE_DEFAULT__;
+export type ActiveStayProvider = 'booking-com' | 'expedia';
 
 const DEFAULT_PROVIDER: ActiveStayProvider = 'booking-com';
 
@@ -62,7 +39,7 @@ export function getActiveStayProvider(): ActiveStayProvider {
   const raw = (process.env.NEXT_PUBLIC_STAYSCOUT_ACTIVE_STAY_PROVIDER ?? '')
     .trim()
     .toLowerCase();
-  if (raw === 'viator' || raw === 'booking-com' || raw === 'expedia') return raw;
+  if (raw === 'booking-com' || raw === 'expedia') return raw;
   return DEFAULT_PROVIDER;
 }
 
@@ -90,8 +67,7 @@ export interface ActiveStaySearchInput {
 /**
  * Build the active provider's stay-search URL.
  *
- *   - default  → Viator      (`viator.com/searchResults/all?text=...`)
- *   - override → Booking.com (`booking.com/searchresults.html?ss=...`)
+ *   - default  → Booking.com (`booking.com/searchresults.html?ss=...`)
  *   - override → Expedia     (`expedia.com/Hotel-Search?destination=...`)
  *
  * The returned URL is ready for `/r/[id]` encoding (it's already
@@ -114,43 +90,22 @@ export function buildActiveStaySearchUrl(input: ActiveStaySearchInput): string {
     return buildExpediaSearchUrl(expediaInput, getExpediaAffiliateConfig());
   }
 
-  if (provider === 'booking-com') {
-    const bookingInput: BookingComSearchInput = {
-      destination: input.destination,
-      checkIn: input.checkIn,
-      checkOut: input.checkOut,
-      adults: input.adults,
-      children: input.childrenAges?.length ?? 0,
-      ...(typeof input.rooms === 'number' ? { rooms: input.rooms } : {}),
-      ...(input.inventoryFilter ? { inventoryFilter: input.inventoryFilter } : {}),
-    };
-    const target = buildBookingComSearchUrl(bookingInput, getBookingComAffiliateConfig());
-    // gobookt is a Booking.com *CJ* affiliate — a raw booking.com URL with a
-    // label earns nothing on CJ. Route the stay CTA through the CJ resolver so
-    // it uses BOOKING_STAYS_AFFILIATE_URL (the tracked CJ link) when configured,
-    // falling back to the plain URL only when it isn't. Same path as every
-    // other gobookt Booking.com CTA now.
-    return resolveBookingUrl('stays', target);
-  }
-
-  // Default: Viator destination search. Viator doesn't sell hotels;
-  // the click lands on the destination's experience inventory which is
-  // what gobookt monetizes. Date/traveler context lives in the
-  // planner UI and is intentionally NOT appended to the Viator URL —
-  // Viator's destination-search URL doesn't take those params and
-  // adding unrecognized params is the textbook way to get an affiliate
-  // tag stripped at the network layer.
-  //
-  // The text query has a " tours" suffix so Viator's destination
-  // resolver doesn't match a canonical destination and 302-redirect to
-  // e.g. `/Agra/d4547-ttd`, which would drop the visible pid + mcid +
-  // medium params from the URL. The suffix forces Viator to render the
-  // search-results view, which preserves the affiliate params in the
-  // visible URL.
-  return buildViatorStaySearchUrl(
-    { destination: `${input.destination} tours` },
-    getViatorStayLinkConfig(),
-  );
+  // Default: Booking.com (gobookt's CJ affiliate program). gobookt is a
+  // Booking.com *CJ* affiliate — a raw booking.com URL with a label earns
+  // nothing on CJ, so we route through the CJ resolver, which uses the tracked
+  // CJ link (BOOKING_STAYS_AFFILIATE_URL) when configured and falls back to the
+  // plain URL only when it isn't.
+  const bookingInput: BookingComSearchInput = {
+    destination: input.destination,
+    checkIn: input.checkIn,
+    checkOut: input.checkOut,
+    adults: input.adults,
+    children: input.childrenAges?.length ?? 0,
+    ...(typeof input.rooms === 'number' ? { rooms: input.rooms } : {}),
+    ...(input.inventoryFilter ? { inventoryFilter: input.inventoryFilter } : {}),
+  };
+  const target = buildBookingComSearchUrl(bookingInput, getBookingComAffiliateConfig());
+  return resolveBookingUrl('stays', target);
 }
 
 /**
