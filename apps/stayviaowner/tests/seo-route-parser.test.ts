@@ -3,7 +3,6 @@ import {
   CRUISE_REGIONS,
   enumerateAllSeoSlugs,
   parseSeoSlug,
-  SEO_SLUGS_PER_CITY,
 } from '@/lib/seo/route-parser';
 import { SEO_CITIES, SEO_ITINERARY_DAYS } from '@/lib/seo/cities';
 
@@ -153,16 +152,16 @@ describe('parseSeoSlug — weekend form', () => {
 });
 
 describe('enumerateAllSeoSlugs', () => {
-  it('produces every (city × shape) tuple — derived from SEO_SLUGS_PER_CITY + cruise regions + comparisons', () => {
+  it('produces the reposition slug set — city shapes + comparisons, retired verticals dropped', () => {
     const slugs = enumerateAllSeoSlugs();
-    const cityFanOut = SEO_CITIES.length * SEO_SLUGS_PER_CITY;
-    expect(slugs.length).toBeGreaterThanOrEqual(cityFanOut);
-    const comparisons = slugs.filter((s) => /-vs-/.test(s));
-    const cruiseRegions = slugs.filter((s) => /-cruises$/.test(s));
-    expect(cruiseRegions.length).toBe(CRUISE_REGIONS.length);
-    expect(slugs.length).toBe(
-      cityFanOut + comparisons.length + cruiseRegions.length,
-    );
+    expect(slugs.length).toBeGreaterThan(0);
+    // Cruise / flight / car verticals were retired in the Vrbo reposition — the
+    // shim drops them from the base enumeration, so none are emitted.
+    expect(slugs.filter((s) => /-cruises$/.test(s)).length).toBe(0);
+    expect(slugs.filter((s) => /^cheap-flights-to-/.test(s)).length).toBe(0);
+    expect(slugs.filter((s) => /car-rental-in-/.test(s)).length).toBe(0);
+    // Comparisons are retained.
+    expect(slugs.filter((s) => /-vs-/.test(s)).length).toBeGreaterThan(0);
   });
 
   it('every emitted slug parses back into a valid match', () => {
@@ -201,12 +200,14 @@ describe('enumerateAllSeoSlugs', () => {
     }
   });
 
-  it('includes flight, car, and things-to-do themed shapes for every city', () => {
+  it('retires flight + car themed shapes but keeps things-to-do, for every city', () => {
     const slugs = new Set(enumerateAllSeoSlugs());
     for (const c of SEO_CITIES) {
-      expect(slugs.has(`cheap-flights-to-${c.slug}`)).toBe(true);
-      expect(slugs.has(`cheap-car-rental-in-${c.slug}`)).toBe(true);
-      expect(slugs.has(`airport-car-rental-in-${c.slug}`)).toBe(true);
+      // Retired verticals (Vrbo reposition) — absent from the enumeration.
+      expect(slugs.has(`cheap-flights-to-${c.slug}`)).toBe(false);
+      expect(slugs.has(`cheap-car-rental-in-${c.slug}`)).toBe(false);
+      expect(slugs.has(`airport-car-rental-in-${c.slug}`)).toBe(false);
+      // Things-to-do shapes are kept.
       expect(slugs.has(`top-attractions-in-${c.slug}`)).toBe(true);
       expect(slugs.has(`free-things-to-do-in-${c.slug}`)).toBe(true);
       expect(slugs.has(`museums-in-${c.slug}`)).toBe(true);
@@ -214,10 +215,10 @@ describe('enumerateAllSeoSlugs', () => {
     }
   });
 
-  it('includes every cruise region as a fixed page', () => {
+  it('excludes every cruise region from the enumeration (retired)', () => {
     const slugs = new Set(enumerateAllSeoSlugs());
     for (const r of CRUISE_REGIONS) {
-      expect(slugs.has(`${r}-cruises`)).toBe(true);
+      expect(slugs.has(`${r}-cruises`)).toBe(false);
     }
   });
 });
@@ -250,18 +251,13 @@ describe('parseSeoSlug — hotel-themed shapes', () => {
 });
 
 describe('parseSeoSlug — flight/car/things sub-shapes', () => {
-  it('parses cheap-flights-to-{city}', () => {
-    const m = parseSeoSlug('cheap-flights-to-paris');
-    expect(m?.kind).toBe('flights-themed');
+  it('retires cheap-flights-to-{city} → null (404)', () => {
+    expect(parseSeoSlug('cheap-flights-to-paris')).toBeNull();
   });
 
-  it('parses cheap-car-rental + airport-car-rental', () => {
-    const a = parseSeoSlug('cheap-car-rental-in-paris');
-    const b = parseSeoSlug('airport-car-rental-in-paris');
-    expect(a?.kind).toBe('cars-themed');
-    expect(b?.kind).toBe('cars-themed');
-    if (a?.kind === 'cars-themed') expect(a.theme).toBe('cheap');
-    if (b?.kind === 'cars-themed') expect(b.theme).toBe('airport');
+  it('retires cheap-car-rental + airport-car-rental → null (404)', () => {
+    expect(parseSeoSlug('cheap-car-rental-in-paris')).toBeNull();
+    expect(parseSeoSlug('airport-car-rental-in-paris')).toBeNull();
   });
 
   it('parses the four things-themed variants', () => {
@@ -282,13 +278,9 @@ describe('parseSeoSlug — flight/car/things sub-shapes', () => {
 });
 
 describe('parseSeoSlug — cruise regions', () => {
-  it('parses each cruise region', () => {
+  it('retires each cruise region → null (404)', () => {
     for (const r of CRUISE_REGIONS) {
-      const m = parseSeoSlug(`${r}-cruises`);
-      expect(m?.kind).toBe('cruise-region');
-      if (m?.kind === 'cruise-region') {
-        expect(m.region).toBe(r);
-      }
+      expect(parseSeoSlug(`${r}-cruises`)).toBeNull();
     }
   });
 

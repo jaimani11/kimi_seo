@@ -169,9 +169,6 @@ export function RentalPage({ route }: { route: RentalRoute }) {
   const vrboHref = buildExpediaCategoryUrl('vacation-rentals', {
     destination: `${anchorNoun(route)} ${city.name}, ${city.countryName}`,
   });
-  const expediaHref = buildExpediaCategoryUrl('hotels', {
-    destination: `${city.name}, ${city.countryName}`,
-  });
 
   const faqs =
     route.kind === 'type'
@@ -217,13 +214,10 @@ export function RentalPage({ route }: { route: RentalRoute }) {
               {leadParagraph(route)}
             </p>
 
-            {/* CTAs — VRBO primary, Expedia compare secondary */}
+            {/* CTA — VRBO whole-home search (Vrbo is stayviaowner's stay provider). */}
             <div className="mt-7" style={{ display: 'flex', flexWrap: 'wrap', gap: '0.8rem' }}>
               <a href={vrboHref} target="_blank" rel="sponsored nofollow noopener noreferrer" style={primaryCtaStyle}>
                 🏡 Search {typeLabel(route).toLowerCase()} on VRBO →
-              </a>
-              <a href={expediaHref} target="_blank" rel="sponsored nofollow noopener noreferrer" style={secondaryCtaStyle}>
-                Compare {city.name} hotels
               </a>
             </div>
             <p className="mt-3" style={{ fontFamily: 'var(--font-inter)', fontSize: '0.75rem', color: 'rgba(255,255,255,0.6)', margin: '0.75rem 0 0' }}>
@@ -398,4 +392,3 @@ const tileStyle: React.CSSProperties = { display: 'flex', alignItems: 'center', 
 const faqStyle: React.CSSProperties = { borderRadius: '0.6rem', border: '1px solid var(--border-subtle)', padding: '0.95rem 1.15rem', background: 'var(--surface-overlay)' };
 const sideLinkStyle: React.CSSProperties = { fontFamily: 'var(--font-inter)', fontSize: '0.9rem', color: 'var(--ink-secondary)', textDecoration: 'none' };
 const primaryCtaStyle: React.CSSProperties = { display: 'inline-flex', alignItems: 'center', gap: '0.4rem', background: MINT, color: '#0a1930', fontFamily: 'var(--font-inter)', fontSize: '1rem', fontWeight: 800, padding: '0.9rem 1.6rem', borderRadius: '999px', textDecoration: 'none', boxShadow: '0 12px 30px -12px rgba(55,208,161,0.7)' };
-const secondaryCtaStyle: React.CSSProperties = { display: 'inline-flex', alignItems: 'center', gap: '0.4rem', background: 'rgba(255,255,255,0.12)', color: '#fff', fontFamily: 'var(--font-inter)', fontSize: '0.95rem', fontWeight: 600, padding: '0.9rem 1.4rem', borderRadius: '999px', textDecoration: 'none', border: '1px solid rgba(255,255,255,0.3)' };

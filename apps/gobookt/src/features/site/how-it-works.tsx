@@ -18,8 +18,8 @@ const STEPS = [
   },
   {
     number: '03',
-    title: 'Reserve on Viator',
-    body: 'One tap hands you off through an affiliate redirect. Same price as booking direct. Free cancellation on most experiences.',
+    title: 'Book on Booking.com',
+    body: 'One tap hands you off through an affiliate redirect. Same price as booking direct. Free cancellation on most stays.',
   },
 ] as const;
 
@@ -126,7 +126,7 @@ export function HowGobooktWorks() {
             margin: 0,
           }}
         >
-          Affiliate links to Viator. Prices identical to viator.com. Commission keeps the site free.
+          Affiliate links to Booking.com. Prices identical to booking.com. Commission keeps the site free.
         </p>
       </div>
     </section>

@@ -20,7 +20,7 @@ import { enumerateTourCategorySlugs } from '@lib/seo/tour-category-routes';
  * per-page modification dates, so we omit it rather than mislead the crawler).
  */
 
-const TRUST_PAGES: readonly string[] = ['/faq', '/about', '/privacy', '/terms', '/contact'];
+const TRUST_PAGES: readonly string[] = ['/about', '/privacy', '/terms', '/contact'];
 
 function e(
   base: string,

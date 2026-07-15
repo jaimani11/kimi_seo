@@ -88,7 +88,7 @@ export const ACCOMMODATION_CATEGORIES: readonly AccommodationCategory[] = [
     tagline: 'Wood-stove nights, star-filled skies, no signal.',
     emoji: '🪵',
     intro:
-      'Log cabin rentals across the mountains, national forests, and remote lakes of North America and beyond. Wood-burning stoves, hot tubs on the deck, cell-signal optional. Bookable through VRBO + Expedia with real guest reviews. Best-fit destinations: Great Smokies, Colorado Rockies, Adirondacks, Blue Ridge, Canadian mountain towns, and Alpine chalets in Europe.',
+      'Log cabin rentals across the mountains, national forests, and remote lakes of North America and beyond. Wood-burning stoves, hot tubs on the deck, cell-signal optional. Bookable through VRBO with real guest reviews. Best-fit destinations: Great Smokies, Colorado Rockies, Adirondacks, Blue Ridge, Canadian mountain towns, and Alpine chalets in Europe.',
     searchAnchor: 'cabin',
     topCitySlugs: [
       'banff',
@@ -107,7 +107,7 @@ export const ACCOMMODATION_CATEGORIES: readonly AccommodationCategory[] = [
     faqs: [
       {
         q: 'What\'s the difference between a cabin and a chalet?',
-        a: 'In North America, "cabin" usually means a rustic wooden home in the mountains or woods. In the Alps, the same shape is called a "chalet" — often larger, with ski-in/ski-out access. Both are on VRBO + Expedia; they overlap heavily.',
+        a: 'In North America, "cabin" usually means a rustic wooden home in the mountains or woods. In the Alps, the same shape is called a "chalet" — often larger, with ski-in/ski-out access. Both are on VRBO; they overlap heavily.',
       },
       {
         q: 'Do cabins have wifi?',
@@ -134,7 +134,7 @@ export const ACCOMMODATION_CATEGORIES: readonly AccommodationCategory[] = [
     tagline: 'Small, cozy, thatched-roof or lake-facing.',
     emoji: '🏡',
     intro:
-      'Cottage rentals for a weekend getaway or a summer of slow living. Everything from a thatched-roof Cotswold cottage to a lakeside dock cottage in Ontario. Smaller and often cozier than a full villa or house — typically 1–3 bedrooms. Bookable through VRBO + Expedia. Best-fit destinations: England (Cotswolds, Lake District), Ireland, coastal New England, Ontario lake country, Nova Scotia.',
+      'Cottage rentals for a weekend getaway or a summer of slow living. Everything from a thatched-roof Cotswold cottage to a lakeside dock cottage in Ontario. Smaller and often cozier than a full villa or house — typically 1–3 bedrooms. Bookable through VRBO. Best-fit destinations: England (Cotswolds, Lake District), Ireland, coastal New England, Ontario lake country, Nova Scotia.',
     searchAnchor: 'cottage',
     topCitySlugs: [
       'edinburgh',
@@ -176,7 +176,7 @@ export const ACCOMMODATION_CATEGORIES: readonly AccommodationCategory[] = [
     tagline: 'Sand outside the door. Sunset from the deck.',
     emoji: '🏖️',
     intro:
-      'Beach house rentals steps from the ocean — Outer Banks porches, Malibu decks, Amalfi terraces, or a cabana in Tulum. Every house on stayviaowner is bookable through VRBO + Expedia with verified guest reviews and free cancellation on most stays. Best-fit destinations: Outer Banks, 30A, Cape Cod, Malibu, Costa Rica, Tulum, Amalfi, Positano.',
+      'Beach house rentals steps from the ocean — Outer Banks porches, Malibu decks, Amalfi terraces, or a cabana in Tulum. Every house on stayviaowner is bookable through VRBO with verified guest reviews and free cancellation on most stays. Best-fit destinations: Outer Banks, 30A, Cape Cod, Malibu, Costa Rica, Tulum, Amalfi, Positano.',
     searchAnchor: 'beach house',
     topCitySlugs: [
       'tulum',
@@ -264,7 +264,7 @@ export const ACCOMMODATION_CATEGORIES: readonly AccommodationCategory[] = [
     tagline: 'Dock outside. Pontoon included. Sunset on the water.',
     emoji: '🛶',
     intro:
-      'Lake house rentals on private docks and mountain lakes across North America, Alpine Europe, and beyond. Kayaks, pontoons, fire-pit evenings, and slow mornings on the water. Bookable through VRBO + Expedia. Best-fit destinations: Lake Tahoe, Lake George, Lake of the Ozarks, Ontario lake country, Lake Como, Lake Bled, Lake Geneva, Lake Lucerne.',
+      'Lake house rentals on private docks and mountain lakes across North America, Alpine Europe, and beyond. Kayaks, pontoons, fire-pit evenings, and slow mornings on the water. Bookable through VRBO. Best-fit destinations: Lake Tahoe, Lake George, Lake of the Ozarks, Ontario lake country, Lake Como, Lake Bled, Lake Geneva, Lake Lucerne.',
     searchAnchor: 'lake house',
     topCitySlugs: [
       'lake-como',
@@ -306,7 +306,7 @@ export const ACCOMMODATION_CATEGORIES: readonly AccommodationCategory[] = [
     tagline: 'Wake up to the water. Private sand optional.',
     emoji: '🌊',
     intro:
-      'Beachfront and near-beach villa rentals with the space a hotel room can\'t touch — private pools, full kitchens, and the ocean a few steps away. Bookable through VRBO + Expedia with real photos and verified reviews. Best-fit destinations: Bali, the Greek islands, Phuket, the Riviera Maya, Ibiza, and the Amalfi Coast.',
+      'Beachfront and near-beach villa rentals with the space a hotel room can\'t touch — private pools, full kitchens, and the ocean a few steps away. Bookable through VRBO with real photos and verified reviews. Best-fit destinations: Bali, the Greek islands, Phuket, the Riviera Maya, Ibiza, and the Amalfi Coast.',
     searchAnchor: 'beach villa',
     topCitySlugs: ['bali', 'santorini', 'mykonos', 'phuket', 'tulum', 'cancun', 'maui', 'ibiza', 'mallorca', 'positano', 'nice', 'koh-samui', 'langkawi', 'sorrento', 'crete'],
     faqs: [
@@ -323,7 +323,7 @@ export const ACCOMMODATION_CATEGORIES: readonly AccommodationCategory[] = [
     tagline: 'Full staff, infinity pool, zero compromises.',
     emoji: '🥂',
     intro:
-      'The top tier of villa rentals — private chefs, daily housekeeping, infinity pools and concierge teams. These are the homes people book for milestone trips and multi-family getaways. Every property is bookable through VRBO + Expedia with verified reviews and free cancellation on most stays. Best-fit destinations: Santorini, Mykonos, Bali, the Côte d\'Azur, Lake Como, and Marrakech.',
+      'The top tier of villa rentals — private chefs, daily housekeeping, infinity pools and concierge teams. These are the homes people book for milestone trips and multi-family getaways. Every property is bookable through VRBO with verified reviews and free cancellation on most stays. Best-fit destinations: Santorini, Mykonos, Bali, the Côte d\'Azur, Lake Como, and Marrakech.',
     searchAnchor: 'luxury villa',
     topCitySlugs: ['santorini', 'mykonos', 'bali', 'dubai', 'nice', 'ibiza', 'st-moritz', 'mallorca', 'lake-como', 'marrakech', 'cape-town', 'positano'],
     faqs: [
@@ -340,7 +340,7 @@ export const ACCOMMODATION_CATEGORIES: readonly AccommodationCategory[] = [
     tagline: 'Your own pool. No loungers to fight for.',
     emoji: '🏊',
     intro:
-      'Villa rentals with a private pool you never have to share — the single most-requested amenity in vacation rentals. From plunge pools in Santorini caves to 20-metre lap pools in Bali, all bookable through VRBO + Expedia. Best-fit destinations: Bali, Phuket, the Greek islands, Marrakech, and the Balearics.',
+      'Villa rentals with a private pool you never have to share — the single most-requested amenity in vacation rentals. From plunge pools in Santorini caves to 20-metre lap pools in Bali, all bookable through VRBO. Best-fit destinations: Bali, Phuket, the Greek islands, Marrakech, and the Balearics.',
     searchAnchor: 'villa with private pool',
     topCitySlugs: ['bali', 'phuket', 'santorini', 'mykonos', 'marrakech', 'ibiza', 'mallorca', 'tulum', 'koh-samui', 'goa', 'langkawi', 'crete'],
     faqs: [
@@ -357,7 +357,7 @@ export const ACCOMMODATION_CATEGORIES: readonly AccommodationCategory[] = [
     tagline: 'Room for the whole crew, and then some.',
     emoji: '🏰',
     intro:
-      'Grand estate rentals for big groups, milestone celebrations and multi-generational trips — six to twenty bedrooms, sweeping grounds, and the kind of space that turns a trip into an event. Bookable through VRBO + Expedia. Best-fit destinations: the Côte d\'Azur, Mallorca, Cape Town, Lake Como, and Marrakech.',
+      'Grand estate rentals for big groups, milestone celebrations and multi-generational trips — six to twenty bedrooms, sweeping grounds, and the kind of space that turns a trip into an event. Bookable through VRBO. Best-fit destinations: the Côte d\'Azur, Mallorca, Cape Town, Lake Como, and Marrakech.',
     searchAnchor: 'mansion',
     topCitySlugs: ['nice', 'mallorca', 'cape-town', 'dubai', 'mykonos', 'lake-como', 'marrakech', 'ibiza', 'santorini', 'bali'],
     faqs: [
@@ -374,7 +374,7 @@ export const ACCOMMODATION_CATEGORIES: readonly AccommodationCategory[] = [
     tagline: 'Ski-in mornings, hot tub après, fire crackling.',
     emoji: '🎿',
     intro:
-      'Alpine chalet rentals — wood-clad, cosy, and often ski-in/ski-out — with hot tubs, boot rooms and mountain views. The group ski trip done right. Bookable through VRBO + Expedia for peak season and quieter shoulder weeks. Best-fit destinations: Zermatt, St. Moritz, the Swiss Jungfrau, Whistler, and Banff.',
+      'Alpine chalet rentals — wood-clad, cosy, and often ski-in/ski-out — with hot tubs, boot rooms and mountain views. The group ski trip done right. Bookable through VRBO for peak season and quieter shoulder weeks. Best-fit destinations: Zermatt, St. Moritz, the Swiss Jungfrau, Whistler, and Banff.',
     searchAnchor: 'chalet',
     topCitySlugs: ['zermatt', 'st-moritz', 'grindelwald', 'wengen', 'murren', 'interlaken', 'whistler', 'banff', 'queenstown', 'lauterbrunnen'],
     faqs: [
@@ -391,7 +391,7 @@ export const ACCOMMODATION_CATEGORIES: readonly AccommodationCategory[] = [
     tagline: 'Nature without the sleeping bag.',
     emoji: '⛺',
     intro:
-      'Luxury-camping rentals — safari tents, geodesic domes, yurts and eco-cabins with real beds, proper bathrooms and often a hot tub under the stars. The outdoors without roughing it. Bookable through VRBO + Expedia. Best-fit destinations: Cape Town\'s winelands, the Marrakech desert, Queenstown, Banff, and Bali\'s jungle.',
+      'Luxury-camping rentals — safari tents, geodesic domes, yurts and eco-cabins with real beds, proper bathrooms and often a hot tub under the stars. The outdoors without roughing it. Bookable through VRBO. Best-fit destinations: Cape Town\'s winelands, the Marrakech desert, Queenstown, Banff, and Bali\'s jungle.',
     searchAnchor: 'glamping',
     topCitySlugs: ['cape-town', 'marrakech', 'queenstown', 'banff', 'bali', 'tulum', 'santorini', 'crete'],
     faqs: [
@@ -408,7 +408,7 @@ export const ACCOMMODATION_CATEGORIES: readonly AccommodationCategory[] = [
     tagline: 'Slow mornings, long tables, open country.',
     emoji: '🌾',
     intro:
-      'Countryside farmhouse and finca rentals — stone walls, big kitchens, olive groves and vineyards out the window. Space to spread out and cook, at a pace the city can\'t offer. Bookable through VRBO + Expedia. Best-fit destinations: the Riviera hinterland, Mallorca, the Cape winelands, Crete, and the Marrakech countryside.',
+      'Countryside farmhouse and finca rentals — stone walls, big kitchens, olive groves and vineyards out the window. Space to spread out and cook, at a pace the city can\'t offer. Bookable through VRBO. Best-fit destinations: the Riviera hinterland, Mallorca, the Cape winelands, Crete, and the Marrakech countryside.',
     searchAnchor: 'farmhouse',
     topCitySlugs: ['nice', 'mallorca', 'cape-town', 'marrakech', 'crete', 'lake-como', 'santorini', 'ibiza'],
     faqs: [
@@ -425,7 +425,7 @@ export const ACCOMMODATION_CATEGORIES: readonly AccommodationCategory[] = [
     tagline: 'Top floor, skyline views, private terrace.',
     emoji: '🌆',
     intro:
-      'Top-floor penthouse rentals with wraparound terraces, skyline or sea views, and space that puts a suite to shame. The city stay upgraded. Bookable through VRBO + Expedia with verified reviews. Best-fit destinations: Dubai, Nice, Cape Town, Barcelona, Miami, and New York.',
+      'Top-floor penthouse rentals with wraparound terraces, skyline or sea views, and space that puts a suite to shame. The city stay upgraded. Bookable through VRBO with verified reviews. Best-fit destinations: Dubai, Nice, Cape Town, Barcelona, Miami, and New York.',
     searchAnchor: 'penthouse',
     topCitySlugs: ['dubai', 'nice', 'cape-town', 'barcelona', 'miami', 'new-york', 'ibiza', 'mallorca', 'bali', 'los-angeles'],
     faqs: [
@@ -442,7 +442,7 @@ export const ACCOMMODATION_CATEGORIES: readonly AccommodationCategory[] = [
     tagline: 'Bring the dog. Everyone\'s invited.',
     emoji: '🐕',
     intro:
-      'Villa rentals that genuinely welcome pets — fenced gardens, no size limits, and often a dog-friendly beach nearby. No more boarding the dog to take a trip. Bookable through VRBO + Expedia; filter for "pets allowed" and check the fee. Best-fit destinations: the Riviera, Mallorca, Tuscany-style countryside, the Cape, and coastal Portugal.',
+      'Villa rentals that genuinely welcome pets — fenced gardens, no size limits, and often a dog-friendly beach nearby. No more boarding the dog to take a trip. Bookable through VRBO; filter for "pets allowed" and check the fee. Best-fit destinations: the Riviera, Mallorca, Tuscany-style countryside, the Cape, and coastal Portugal.',
     searchAnchor: 'pet friendly villa',
     topCitySlugs: ['nice', 'mallorca', 'cape-town', 'lisbon', 'porto', 'crete', 'ibiza', 'lake-como', 'marrakech'],
     faqs: [
@@ -459,7 +459,7 @@ export const ACCOMMODATION_CATEGORIES: readonly AccommodationCategory[] = [
     tagline: 'Fenced pool, bunk room, space for everyone.',
     emoji: '👨‍👩‍👧‍👦',
     intro:
-      'Villa rentals built for families — fenced or shallow pools, bunk rooms, high chairs and cots, and gardens with room to run. A trip where the kids are happy and the adults actually relax. Bookable through VRBO + Expedia. Best-fit destinations: the Balearics, the Algarve, Crete, Bali, and the Riviera.',
+      'Villa rentals built for families — fenced or shallow pools, bunk rooms, high chairs and cots, and gardens with room to run. A trip where the kids are happy and the adults actually relax. Bookable through VRBO. Best-fit destinations: the Balearics, the Algarve, Crete, Bali, and the Riviera.',
     searchAnchor: 'family villa',
     topCitySlugs: ['mallorca', 'crete', 'bali', 'nice', 'ibiza', 'phuket', 'cancun', 'tulum', 'koh-samui', 'santorini'],
     faqs: [
@@ -476,7 +476,7 @@ export const ACCOMMODATION_CATEGORIES: readonly AccommodationCategory[] = [
     tagline: 'Resort amenities, apartment prices, beach out front.',
     emoji: '🏖️',
     intro:
-      'Condo and resort-apartment rentals — building pool, gym and often beach access, with a kitchen and separate bedrooms for less than a comparable hotel. The easy, well-located stay. Bookable through VRBO + Expedia. Best-fit destinations: Cancún, Tulum, Maui, Honolulu, Phuket, and Dubai.',
+      'Condo and resort-apartment rentals — building pool, gym and often beach access, with a kitchen and separate bedrooms for less than a comparable hotel. The easy, well-located stay. Bookable through VRBO. Best-fit destinations: Cancún, Tulum, Maui, Honolulu, Phuket, and Dubai.',
     searchAnchor: 'condo',
     topCitySlugs: ['cancun', 'tulum', 'maui', 'honolulu', 'phuket', 'dubai', 'miami', 'bali', 'koh-samui', 'mallorca'],
     faqs: [

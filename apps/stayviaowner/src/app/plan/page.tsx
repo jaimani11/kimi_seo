@@ -119,7 +119,7 @@ export default async function PlanPage({
           >
             {plan
               ? plan.destination
-              : 'Plan a trip in one sentence,'}
+              : 'Plan a trip in one sentence, '}
             <br />
             <em style={{ fontStyle: 'italic', color: 'var(--accent-primary)' }}>
               {plan ? `${plan.nights} ${plan.nights === 1 ? 'day' : 'days'}, planned end to end.` : 'reserve it end to end.'}

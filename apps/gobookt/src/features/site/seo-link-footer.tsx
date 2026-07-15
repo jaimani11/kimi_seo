@@ -146,7 +146,7 @@ export function SeoLinkFooter() {
               margin: 0,
             }}
           >
-            gobookt.com is a Viator affiliate. We earn a small commission on bookings made
+            gobookt.com is a Booking.com affiliate. We earn a small commission on bookings made
             through our links; the price you pay is identical to booking direct.
           </p>
         </div>

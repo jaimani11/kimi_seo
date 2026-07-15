@@ -18,9 +18,29 @@
 import {
   enumerateAllSeoSlugs as enumerateAllSeoSlugsBase,
   parseSeoSlug as parseSeoSlugBase,
+  buildCitySeoLinks as buildCitySeoLinksBase,
 } from '@adored/seo-routing/multicategory';
 
 export * from '@adored/seo-routing/multicategory';
+
+/**
+ * The retired/redirected URL families, as href patterns. The shared
+ * `buildCitySeoLinks` (which powers the "More for {city}" rail on every
+ * programmatic page) still emits flight/car/cruise deep-links + the generic
+ * `hotels-in` link — all now 404 (retired) or 308 (hotels-in). Strip them so
+ * the rail never renders a dead internal link.
+ */
+const RETIRED_LINK_RE =
+  /^\/(flights?-to-|cheap-flights-to-|car-rentals?-in-|cars-in-|cheap-car-rental-in-|airport-car-rental-in-|cruise)/;
+const REDIRECTED_LINK_RE = /^\/hotels-in-/;
+
+export function buildCitySeoLinks(
+  city: Parameters<typeof buildCitySeoLinksBase>[0],
+): ReturnType<typeof buildCitySeoLinksBase> {
+  return buildCitySeoLinksBase(city).filter(
+    (l) => !RETIRED_LINK_RE.test(l.href) && !REDIRECTED_LINK_RE.test(l.href),
+  );
+}
 
 /**
  * Slug kinds RETIRED on stayviaowner (Vrbo-first reposition): the Expedia-only

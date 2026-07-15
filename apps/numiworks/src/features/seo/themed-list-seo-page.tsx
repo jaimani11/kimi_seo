@@ -306,7 +306,7 @@ export const THEME_META: Record<
     slugPrefix: 'solo-travel-in-',
     crumb: 'Solo travel',
     eyebrow: (c) => `${c.countryName} · solo travel`,
-    heading: (c) => `Solo Travel in ${c.name}: Small-Group Tours &amp; Safe Experiences`,
+    heading: (c) => `Solo Travel in ${c.name}: Small-Group Tours & Safe Experiences`,
     intro: (c) =>
       `${c.oneLiner} Solo-friendly small-group tours, walking food tours, day trips and workshops in ${c.name} — meet other travelers, keep your independence, book everything in one place.`,
     viatorQuery: (c) => `small group tour ${c.viatorQuery}`,
@@ -324,7 +324,7 @@ export const THEME_META: Record<
     slugPrefix: 'rainy-day-in-',
     crumb: 'Rainy day',
     eyebrow: (c) => `${c.countryName} · indoor activities`,
-    heading: (c) => `Rainy Day in ${c.name}: Indoor Activities &amp; Tours`,
+    heading: (c) => `Rainy Day in ${c.name}: Indoor Activities & Tours`,
     intro: (c) =>
       `${c.oneLiner} Museums, escape rooms, cooking classes, indoor markets, cocktail-making sessions and covered walking tours in ${c.name} — bookable rain-or-shine activities so a wet forecast doesn't waste your day.`,
     viatorQuery: (c) => `indoor museum cooking class ${c.viatorQuery}`,
@@ -333,7 +333,7 @@ export const THEME_META: Record<
     slugPrefix: 'night-in-',
     crumb: 'At night',
     eyebrow: (c) => `${c.countryName} · nightlife`,
-    heading: (c) => `${c.name} at Night: Best Evening Tours &amp; Nightlife`,
+    heading: (c) => `${c.name} at Night: Best Evening Tours & Nightlife`,
     intro: (c) =>
       `${c.oneLiner} Sunset boat cruises, evening walking tours, ghost tours, night photography walks and rooftop bar experiences in ${c.name} — the city's best after-dark bookable activities.`,
     viatorQuery: (c) => `evening night tour ${c.viatorQuery}`,
@@ -351,7 +351,7 @@ export const THEME_META: Record<
     slugPrefix: 'summer-in-',
     crumb: 'Summer',
     eyebrow: (c) => `${c.countryName} · summer (Jun-Aug)`,
-    heading: (c) => `Summer in ${c.name}: Best Tours &amp; Activities`,
+    heading: (c) => `Summer in ${c.name}: Best Tours & Activities`,
     intro: (c) =>
       `${c.oneLiner} Boat trips, beach clubs, rooftop tours, outdoor food markets and long-daylight walking tours in ${c.name} — peak-season activities worth the crowds, all skip-the-line.`,
     viatorQuery: (c) => `summer boat rooftop ${c.viatorQuery}`,
@@ -360,7 +360,7 @@ export const THEME_META: Record<
     slugPrefix: 'fall-in-',
     crumb: 'Fall',
     eyebrow: (c) => `${c.countryName} · fall (Sep-Nov)`,
-    heading: (c) => `Fall in ${c.name}: Autumn Foliage Tours &amp; Activities`,
+    heading: (c) => `Fall in ${c.name}: Autumn Foliage Tours & Activities`,
     intro: (c) =>
       `${c.oneLiner} Foliage day trips, harvest food tours, autumn walking guides and quieter shoulder-season experiences in ${c.name} — the sweet spot between summer crowds and winter chill.`,
     viatorQuery: (c) => `autumn foliage harvest ${c.viatorQuery}`,
@@ -369,7 +369,7 @@ export const THEME_META: Record<
     slugPrefix: 'winter-in-',
     crumb: 'Winter',
     eyebrow: (c) => `${c.countryName} · winter (Dec-Feb)`,
-    heading: (c) => `Winter in ${c.name}: Best Tours &amp; Cold-Weather Activities`,
+    heading: (c) => `Winter in ${c.name}: Best Tours & Cold-Weather Activities`,
     intro: (c) =>
       `${c.oneLiner} Christmas market walks, ice-skating tours, cold-weather food tastings, indoor cultural tours and cozy evening experiences in ${c.name} — the city at its most atmospheric.`,
     viatorQuery: (c) => `winter christmas market ${c.viatorQuery}`,
@@ -379,7 +379,7 @@ export const THEME_META: Record<
     slugFor: (c) => `${c.slug}-with-kids`,
     crumb: 'With kids',
     eyebrow: (c) => `${c.countryName} · with kids`,
-    heading: (c) => `${c.name} with Kids: Family-Friendly Tours &amp; Activities`,
+    heading: (c) => `${c.name} with Kids: Family-Friendly Tours & Activities`,
     intro: (c) =>
       `${c.oneLiner} Kid-safe, age-appropriate experiences in ${c.name} — zoos, aquariums, hands-on museums, kid-friendly walking tours, cooking classes. Bookable through Viator, most with free cancellation.`,
     viatorQuery: (c) => `kids family ${c.viatorQuery}`,
@@ -389,7 +389,7 @@ export const THEME_META: Record<
     slugFor: (c) => `${c.slug}-with-teens`,
     crumb: 'With teens',
     eyebrow: (c) => `${c.countryName} · with teens`,
-    heading: (c) => `${c.name} with Teens: Cool Tours &amp; Activities That Don't Bore Them`,
+    heading: (c) => `${c.name} with Teens: Cool Tours & Activities That Don't Bore Them`,
     intro: (c) =>
       `${c.oneLiner} Escape rooms, food tours, adventure activities, photo walks, boat trips in ${c.name} — the experiences teens actually want to do (and won't ask to leave). All bookable in one tap.`,
     viatorQuery: (c) => `adventure escape food ${c.viatorQuery}`,
@@ -399,7 +399,7 @@ export const THEME_META: Record<
     slugFor: (c) => `${c.slug}-airport-guide`,
     crumb: 'Airport guide',
     eyebrow: (c) => `${c.countryName} · airport guide`,
-    heading: (c) => `${c.name} Airport Guide: Transfers, Lounges &amp; Layover Tips`,
+    heading: (c) => `${c.name} Airport Guide: Transfers, Lounges & Layover Tips`,
     intro: (c) =>
       `${c.oneLiner} Airport transfers into ${c.name} city center, layover-safe day tours, luggage storage tips, and skip-the-line access to airport lounges. Everything you need before you land.`,
     viatorQuery: (c) => `airport transfer ${c.viatorQuery}`,

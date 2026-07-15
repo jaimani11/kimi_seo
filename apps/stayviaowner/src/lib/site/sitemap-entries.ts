@@ -21,7 +21,7 @@ import { enumerateStaysNearSlugs, enumerateOccasionSlugs } from '@adored/seo-dat
  * crawler).
  */
 
-const TRUST_PAGES: readonly string[] = ['/faq', '/about', '/privacy', '/terms', '/contact'];
+const TRUST_PAGES: readonly string[] = ['/about', '/privacy', '/terms', '/contact'];
 
 function e(
   base: string,
