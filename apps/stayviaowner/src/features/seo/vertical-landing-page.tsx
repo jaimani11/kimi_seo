@@ -7,14 +7,17 @@ import {
 } from '@lib/affiliate/expedia-multicategory';
 
 /**
- * Programmatic SEO landing pages for the three Expedia verticals
- * (`/hotels-in-{slug}`, `/flights-to-{slug}`, `/car-rentals-in-{slug}`)
- * per city. Same shell as the experience-themed SEO pages so the
- * internal-linking density carries over.
+ * Programmatic SEO landing pages, one per city. stayviaowner is a Vrbo
+ * whole-home rental brand, so the hotel-themed kinds (`hotels-in`,
+ * `best/cheap/luxury/family/boutique/pet-friendly/beach-hotels`,
+ * `apartments`) are Vrbo-LED: their `category` is `vacation-rentals`, so
+ * every CTA builds a vrbo.com search (via Partnerize) and the copy is
+ * vacation-rental-first — no hotel inventory, no Expedia branding. The
+ * flights/cars kinds are retired (404 via the route-parser shim); the
+ * attractions kinds remain a separate follow-up.
  *
- * Every page renders a prominent Expedia search CTA pre-filled
- * with the city — the visitor's path to commission-eligible inventory
- * is one click from any of these surfaces.
+ * Every page renders a prominent destination-level Vrbo search CTA
+ * pre-filled with the city.
  */
 
 export type VerticalKind =
@@ -37,7 +40,7 @@ export type VerticalKind =
   | 'museums'
   | 'tours';
 
-const META: Record<
+export const META: Record<
   VerticalKind,
   {
     category: ExpediaCategory;
@@ -50,18 +53,18 @@ const META: Record<
   }
 > = {
   'hotels-in': {
-    category: 'hotels',
-    crumb: 'Hotels',
-    heading: (c) => `Hotels in ${c.name}`,
-    eyebrow: (c) => `${c.countryName} · stays`,
+    category: 'vacation-rentals',
+    crumb: 'Vacation rentals',
+    heading: (c) => `Vacation rentals in ${c.name}`,
+    eyebrow: (c) => `${c.countryName} · whole homes`,
     intro: (c) =>
-      `Find hotels, apartments, and vacation rentals across ${c.name}, ${c.countryName}. Free cancellation on most stays, no booking fees. Powered by Expedia — the price you pay is the same.`,
-    ctaLabel: (c) => `Search hotels in ${c.name}`,
+      `Whole homes, villas, apartments and cottages across ${c.name}, ${c.countryName} — more space, a kitchen, and privacy for the whole group. Book on Vrbo; the price you pay is the same.`,
+    ctaLabel: (c) => `Search vacation rentals in ${c.name}`,
     bullets: (c) => [
-      `Real-time availability across thousands of ${c.name} properties`,
-      'Free cancellation on most stays — flexible plans for changing trips',
-      'No booking fees — the price you pay on Expedia is the price you get',
-      `Honest reviews from real travelers who stayed in ${c.name}`,
+      `Real-time availability across thousands of ${c.name} rentals`,
+      'Whole homes — kitchens, laundry, and room to spread out',
+      'The price you pay on Vrbo is the price you see — no booking fees',
+      `Honest reviews from real guests who stayed in ${c.name}`,
     ],
   },
   'flights-to': {
@@ -95,123 +98,123 @@ const META: Record<
     ],
   },
   'best-hotels': {
-    category: 'hotels',
-    crumb: 'Best hotels',
-    heading: (c) => `Best hotels in ${c.name}`,
+    category: 'vacation-rentals',
+    crumb: 'Top-rated rentals',
+    heading: (c) => `Top-rated vacation rentals in ${c.name}`,
     eyebrow: (c) => `${c.countryName} · top picks`,
     intro: (c) =>
-      `The highest-rated, best-reviewed places to stay in ${c.name}, ${c.countryName}. We surface Expedia properties scoring 8+ out of 10 from real travelers, sorted by review density. Free cancellation on most.`,
-    ctaLabel: (c) => `See top-rated hotels in ${c.name}`,
+      `The highest-rated, best-reviewed vacation rentals in ${c.name}, ${c.countryName} — whole homes and apartments loved by real guests, sorted by rating and review count. Book on Vrbo.`,
+    ctaLabel: (c) => `See top-rated rentals in ${c.name}`,
     bullets: (c) => [
-      `Only properties scoring 8.0+ in real ${c.name} guest reviews`,
-      'Sorted by review density — the more reviews, the more reliable the score',
-      'Free cancellation on most stays — book now, decide later',
-      'No booking fees · Powered by Expedia',
+      `The best-reviewed whole-home rentals across ${c.name}`,
+      'Sorted by guest rating — the more reviews, the more reliable',
+      'Whole homes with kitchens, space, and privacy',
+      'The price you pay on Vrbo is the price you see',
     ],
   },
   'cheap-hotels': {
-    category: 'hotels',
-    crumb: 'Cheap hotels',
-    heading: (c) => `Cheap hotels in ${c.name}`,
+    category: 'vacation-rentals',
+    crumb: 'Affordable rentals',
+    heading: (c) => `Affordable vacation rentals in ${c.name}`,
     eyebrow: (c) => `${c.countryName} · budget stays`,
     intro: (c) =>
-      `Budget-friendly hotels, hostels, and guest houses in ${c.name}, ${c.countryName}. Expedia surfaces the lowest nightly rates with no booking fees — many with free cancellation if your plans change.`,
-    ctaLabel: (c) => `See cheap hotels in ${c.name}`,
+      `Budget-friendly whole homes, apartments and studios in ${c.name}, ${c.countryName}. Split a rental across the group and the per-person nightly cost often beats a hotel room. Book on Vrbo.`,
+    ctaLabel: (c) => `See affordable rentals in ${c.name}`,
     bullets: (c) => [
-      `Lowest nightly rates across ${c.name} hostels, guesthouses, and budget hotels`,
-      'Free cancellation on most bookings — flexible if plans change',
-      `Real reviews so you don't accidentally book the wrong end of ${c.name}`,
-      'No booking fees · Powered by Expedia',
+      `Lowest nightly rates across ${c.name} apartments and studios`,
+      'A kitchen to cook in — save on eating out, too',
+      'Weekly and monthly discounts on longer stays',
+      'No booking fees — the price you pay on Vrbo is the price you see',
     ],
   },
   'luxury-hotels': {
-    category: 'hotels',
-    crumb: 'Luxury hotels',
-    heading: (c) => `Luxury hotels in ${c.name}`,
-    eyebrow: (c) => `${c.countryName} · 5-star stays`,
+    category: 'vacation-rentals',
+    crumb: 'Luxury villas',
+    heading: (c) => `Luxury villas & vacation rentals in ${c.name}`,
+    eyebrow: (c) => `${c.countryName} · premium homes`,
     intro: (c) =>
-      `5-star hotels, boutique stays, and design-led properties in ${c.name}, ${c.countryName}. The Expedia luxury collection — concierge service, spa access, and the city's best addresses, free cancellation on most rates.`,
-    ctaLabel: (c) => `See luxury hotels in ${c.name}`,
+      `Design-led villas, premium homes and penthouses in ${c.name}, ${c.countryName} — private pools, chef's kitchens, and the area's best addresses, with space and privacy no suite can match. Book on Vrbo.`,
+    ctaLabel: (c) => `See luxury rentals in ${c.name}`,
     bullets: (c) => [
-      `5-star and boutique properties across ${c.name}`,
-      'Spa, pool, and concierge service on most listings',
-      `The city's most-loved addresses, ranked by ${c.name} guest reviews`,
-      'Free cancellation on most rates · Powered by Expedia',
+      `Private-pool villas and design-led homes across ${c.name}`,
+      'Space, privacy, and premium finishes for the whole group',
+      `The most-loved luxury rentals, ranked by ${c.name} guest reviews`,
+      'The price you pay on Vrbo is the price you see',
     ],
   },
   'family-hotels': {
-    category: 'hotels',
-    crumb: 'Family hotels',
-    heading: (c) => `Family-friendly hotels in ${c.name}`,
-    eyebrow: (c) => `${c.countryName} · family stays`,
+    category: 'vacation-rentals',
+    crumb: 'Family rentals',
+    heading: (c) => `Family vacation rentals in ${c.name}`,
+    eyebrow: (c) => `${c.countryName} · family homes`,
     intro: (c) =>
-      `Family-friendly hotels and apartments in ${c.name}, ${c.countryName} — kid-friendly amenities, family rooms, and pool access. Expedia filters for properties with cribs, kids' clubs, and connecting rooms.`,
-    ctaLabel: (c) => `See family hotels in ${c.name}`,
+      `Family-friendly whole homes and apartments in ${c.name}, ${c.countryName} — separate bedrooms, a kitchen for picky eaters, and room for everyone. Many with pools, gardens and cribs. Book on Vrbo.`,
+    ctaLabel: (c) => `See family rentals in ${c.name}`,
     bullets: (c) => [
-      `Family rooms, connecting rooms, and apartments in ${c.name}`,
-      'Cribs, kids\' clubs, and child-safe pools on filtered listings',
+      `Multi-bedroom homes and apartments across ${c.name}`,
+      'Kitchens, laundry, and the space kids actually need',
+      'Pools, gardens, and cribs on many listings',
       'Travel-with-kids reviews from other families',
-      'Free cancellation on most stays · Powered by Expedia',
     ],
   },
   'boutique-hotels': {
-    category: 'hotels',
-    crumb: 'Boutique hotels',
-    heading: (c) => `Boutique hotels in ${c.name}`,
-    eyebrow: (c) => `${c.countryName} · design stays`,
+    category: 'vacation-rentals',
+    crumb: 'Unique rentals',
+    heading: (c) => `Unique & boutique vacation rentals in ${c.name}`,
+    eyebrow: (c) => `${c.countryName} · characterful homes`,
     intro: (c) =>
-      `Boutique and design-led hotels in ${c.name}, ${c.countryName}. Small, characterful properties with the personality the big chains can't fake — Expedia surfaces the city's most-loved independent stays.`,
-    ctaLabel: (c) => `See boutique hotels in ${c.name}`,
+      `Characterful, design-led homes in ${c.name}, ${c.countryName} — converted lofts, historic cottages, and architect-designed villas with the personality a chain hotel can't fake. Book on Vrbo.`,
+    ctaLabel: (c) => `See unique rentals in ${c.name}`,
     bullets: (c) => [
-      `Independent, design-led properties across ${c.name}`,
-      'Smaller room counts, more attentive service',
+      `Design-led, one-of-a-kind homes across ${c.name}`,
+      'Lofts, historic conversions, and architect-designed villas',
       `Curated picks based on real ${c.name} guest reviews`,
-      'Free cancellation on most rates · Powered by Expedia',
+      'The price you pay on Vrbo is the price you see',
     ],
   },
   'pet-friendly-hotels': {
-    category: 'hotels',
-    crumb: 'Pet-friendly hotels',
-    heading: (c) => `Pet-friendly hotels in ${c.name}`,
+    category: 'vacation-rentals',
+    crumb: 'Pet-friendly rentals',
+    heading: (c) => `Pet-friendly vacation rentals in ${c.name}`,
     eyebrow: (c) => `${c.countryName} · pets welcome`,
     intro: (c) =>
-      `Hotels in ${c.name}, ${c.countryName} that welcome pets. Expedia filters for properties that allow dogs and cats — some with pet beds, treats, and on-site walking areas — so the whole family travels together.`,
-    ctaLabel: (c) => `See pet-friendly hotels in ${c.name}`,
+      `Whole homes in ${c.name}, ${c.countryName} that welcome dogs and cats — fenced gardens, room to roam, and no cramped hotel room. Many with pet beds and on-site walking areas. Book on Vrbo.`,
+    ctaLabel: (c) => `See pet-friendly rentals in ${c.name}`,
     bullets: (c) => [
-      `Pet-allowing hotels and apartments across ${c.name}`,
-      'On-site walking areas, pet beds, and treats on some listings',
+      `Pet-welcoming whole homes across ${c.name}`,
+      'Fenced gardens and room to roam — better than a hotel room',
       'Pet-fee details visible up-front, no surprises at check-in',
-      'Free cancellation on most stays · Powered by Expedia',
+      'The whole family travels together',
     ],
   },
   'beach-hotels': {
-    category: 'hotels',
-    crumb: 'Beach hotels',
-    heading: (c) => `Beach hotels in ${c.name}`,
+    category: 'vacation-rentals',
+    crumb: 'Beach rentals',
+    heading: (c) => `Beachfront rentals & beach houses in ${c.name}`,
     eyebrow: (c) => `${c.countryName} · beachfront`,
     intro: (c) =>
-      `Beachfront and seaside hotels in ${c.name}, ${c.countryName}. Expedia filters for properties on or steps from the sand — sea-view rooms, beach-club access, and easy walks to the water.`,
-    ctaLabel: (c) => `See beach hotels in ${c.name}`,
+      `Beach houses and seaside villas in ${c.name}, ${c.countryName} — steps from the sand, with sea-view terraces and space for the whole group. Book on Vrbo.`,
+    ctaLabel: (c) => `See beach rentals in ${c.name}`,
     bullets: (c) => [
-      `Beachfront properties and sea-view rooms across ${c.name}`,
-      'Beach-club access and on-site sun loungers on most listings',
-      'Walking distance to the water — no taxis to the beach',
-      'Free cancellation on most stays · Powered by Expedia',
+      `Beach houses and sea-view homes across ${c.name}`,
+      'Private terraces and gardens steps from the water',
+      'Room for the whole group — no cramped beach hotel',
+      'The price you pay on Vrbo is the price you see',
     ],
   },
   apartments: {
-    category: 'hotels',
-    crumb: 'Apartments',
-    heading: (c) => `Apartments in ${c.name}`,
+    category: 'vacation-rentals',
+    crumb: 'Apartment rentals',
+    heading: (c) => `Apartment rentals in ${c.name}`,
     eyebrow: (c) => `${c.countryName} · self-catered`,
     intro: (c) =>
-      `Self-catered apartments and vacation rentals in ${c.name}, ${c.countryName}. Full kitchens, more space than a hotel room, and weekly rates on longer stays. Expedia surfaces apartments across ${c.name}'s neighborhoods.`,
-    ctaLabel: (c) => `See apartments in ${c.name}`,
+      `Self-catered apartments in ${c.name}, ${c.countryName} — full kitchens, more space than a hotel room, and weekly rates on longer stays. Book on Vrbo.`,
+    ctaLabel: (c) => `See apartment rentals in ${c.name}`,
     bullets: (c) => [
-      `Full-kitchen apartments and aparthotels across ${c.name}`,
+      `Full-kitchen apartments across ${c.name}'s neighborhoods`,
       `Per-neighborhood filtering for the ${c.name} area you want`,
       'Weekly and monthly rates on longer-stay bookings',
-      'Free cancellation on most bookings · Powered by Expedia',
+      'The price you pay on Vrbo is the price you see',
     ],
   },
   'cheap-flights': {
@@ -413,7 +416,7 @@ export function VerticalLandingPage({
             boxShadow: '0 4px 12px rgba(0,113,194,0.32)',
           }}
         >
-          {ctaLabel} on Expedia →
+          {ctaLabel} on Vrbo →
         </a>
 
         {/* Why-this-vertical-on-Expedia bullets */}
@@ -446,9 +449,8 @@ export function VerticalLandingPage({
           ))}
         </ul>
 
-        {/* Cross-category links — internal-linking density that
-          *  signals "this site is a real multi-vertical hub" to
-          *  search-engine crawlers AND to the Expedia reviewer. */}
+        {/* Cross-links — internal-linking density into the rental hub +
+          *  destination content, reinforcing the whole-home positioning. */}
         <div
           className="mt-10 flex flex-wrap items-center gap-2"
           style={{
@@ -467,15 +469,7 @@ export function VerticalLandingPage({
           >
             Also in {city.name}
           </span>
-          {kind !== 'hotels-in' && (
-            <CrossLink href={`/hotels-in-${city.slug}`} label="Hotels" />
-          )}
-          {kind !== 'flights-to' && (
-            <CrossLink href={`/flights-to-${city.slug}`} label="Flights" />
-          )}
-          {kind !== 'cars-in' && (
-            <CrossLink href={`/car-rentals-in-${city.slug}`} label="Car rentals" />
-          )}
+          <CrossLink href={`/rentals/${city.slug}`} label="Vacation rentals" />
           <CrossLink href={`/things-to-do-in-${city.slug}`} label="Things to do" />
           <CrossLink href={`/destinations/${city.slug}`} label={`${city.name} guide`} />
         </div>

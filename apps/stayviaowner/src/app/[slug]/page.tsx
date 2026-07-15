@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { notFound } from 'next/navigation';
+import { notFound, permanentRedirect } from 'next/navigation';
 import { parseSeoSlug, enumerateAllSeoSlugs } from '@lib/seo/route-parser';
 import { canonicalUrl } from '@lib/site/origin';
 import { resolveDestinationPhoto } from '@lib/imagery/destination-photo';
@@ -215,8 +215,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   }
 
   if (parsed.kind === 'hotels-in') {
-    const title = `Hotels in ${parsed.city.name}, ${parsed.city.countryName} · stayviaowner`;
-    const description = `Find hotels, apartments and vacation rentals in ${parsed.city.name}, ${parsed.city.countryName}. Free cancellation on most stays · Powered by Expedia.`;
+    const title = `Vacation rentals in ${parsed.city.name}, ${parsed.city.countryName} · stayviaowner`;
+    const description = `Whole homes, villas and apartments in ${parsed.city.name}, ${parsed.city.countryName} on Vrbo — more space, a kitchen and privacy for the whole group.`;
     return {
       title,
       description,
@@ -254,7 +254,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     const { city, theme } = parsed;
     const heading = HOTEL_THEME_HEADING[theme];
     const title = `${heading} in ${city.name}, ${city.countryName} · stayviaowner`;
-    const description = `${heading} in ${city.name}, ${city.countryName} — real Expedia guest reviews, free cancellation on most stays. ${HOTEL_THEME_TAGLINE[theme]}`;
+    const description = `${heading} in ${city.name}, ${city.countryName} — whole-home vacation rentals with real guest reviews on Vrbo. ${HOTEL_THEME_TAGLINE[theme]}`;
     return {
       title,
       description,
@@ -332,25 +332,25 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 }
 
 const HOTEL_THEME_HEADING: Record<string, string> = {
-  best: 'Best hotels',
-  cheap: 'Cheap hotels',
-  luxury: 'Luxury hotels',
-  family: 'Family-friendly hotels',
-  boutique: 'Boutique hotels',
-  'pet-friendly': 'Pet-friendly hotels',
-  beach: 'Beach hotels',
-  apartments: 'Apartments',
+  best: 'Top-rated vacation rentals',
+  cheap: 'Affordable vacation rentals',
+  luxury: 'Luxury villas & vacation rentals',
+  family: 'Family vacation rentals',
+  boutique: 'Unique & boutique vacation rentals',
+  'pet-friendly': 'Pet-friendly vacation rentals',
+  beach: 'Beachfront rentals & beach houses',
+  apartments: 'Apartment rentals',
 };
 
 const HOTEL_THEME_TAGLINE: Record<string, string> = {
-  best: 'Curated for the highest-rated stays.',
-  cheap: 'Curated for great prices.',
-  luxury: 'Curated for 5-star service.',
-  family: 'Curated for family-room amenities.',
-  boutique: 'Curated for design and character.',
-  'pet-friendly': 'Curated for properties that welcome pets.',
-  beach: 'Curated for beachfront and sea-view stays.',
-  apartments: 'Curated for self-catered apartments and aparthotels.',
+  best: 'The highest-rated whole-home rentals.',
+  cheap: 'Budget-friendly homes and apartments.',
+  luxury: 'Private-pool villas and premium homes.',
+  family: 'Multi-bedroom homes with room for everyone.',
+  boutique: 'Design-led, one-of-a-kind homes.',
+  'pet-friendly': 'Whole homes that welcome your pets.',
+  beach: 'Beach houses steps from the sand.',
+  apartments: 'Self-catered apartments with full kitchens.',
 };
 
 const THINGS_VARIANT_HEADING: Record<string, string> = {
@@ -372,6 +372,13 @@ export default async function ProgrammaticSeoPage({ params }: PageProps) {
   const { slug } = await params;
   const parsed = parseSeoSlug(slug);
   if (!parsed) notFound();
+
+  // stayviaowner (Vrbo whole-home brand): the generic `/hotels-in-{city}`
+  // page reworded is an exact dup of the `/rentals/{city}` hub, so 308 →
+  // the hub to consolidate equity rather than run two near-identical pages.
+  if (parsed.kind === 'hotels-in') {
+    permanentRedirect(`/rentals/${parsed.city.slug}`);
+  }
 
   const canonical = canonicalUrl(`/${slug}`);
 
@@ -536,29 +543,10 @@ export default async function ProgrammaticSeoPage({ params }: PageProps) {
     );
   }
 
-  if (
-    parsed.kind === 'hotels-in' ||
-    parsed.kind === 'flights-to' ||
-    parsed.kind === 'cars-in'
-  ) {
-    const { city } = parsed;
-    return (
-      <>
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: buildVerticalLandingJsonLd({
-              kind: parsed.kind,
-              city,
-              canonical,
-            }),
-          }}
-        />
-        <VerticalLandingPage kind={parsed.kind} city={city} />
-      </>
-    );
-  }
-
+  // The generic-vertical branch (hotels-in / flights-to / cars-in) is
+  // unreachable here: hotels-in is 308-redirected to /rentals/{city} above, and
+  // flights-to / cars-in are retired (parseSeoSlug → null → notFound). The
+  // themed branch below renders the reworked, Vrbo-led hotel-themed pages.
   if (
     parsed.kind === 'hotels-themed' ||
     parsed.kind === 'flights-themed' ||

@@ -23,8 +23,9 @@ import {
 export * from '@adored/seo-routing/multicategory';
 
 /**
- * Slug kinds retired on stayviaowner (Vrbo-first reposition): the Expedia-only
- * flights / cars / cruises verticals. Hotels + attractions stay.
+ * Slug kinds RETIRED on stayviaowner (Vrbo-first reposition): the Expedia-only
+ * flights / cars / cruises verticals. `parseSeoSlug` returns null for these so
+ * the route 404s and they never enter the sitemap.
  */
 const RETIRED_KINDS: ReadonlySet<string> = new Set([
   'flights-to',
@@ -33,6 +34,17 @@ const RETIRED_KINDS: ReadonlySet<string> = new Set([
   'cars-themed',
   'cruise-region',
 ]);
+
+/**
+ * Slug kinds REDIRECTED (not retired): the generic `/hotels-in-{city}` page,
+ * reworded to vacation-rental intent, is an exact dup of the `/rentals/{city}`
+ * hub — so `[slug]/page.tsx` 308s it to the hub. We keep it PARSEABLE (so that
+ * redirect can fire) but exclude it from `enumerateAllSeoSlugs`, so it is
+ * neither statically generated nor listed in the sitemap. (The 8 themed hotel
+ * kinds — best/cheap/luxury/family/boutique/pet-friendly/beach/apartments — are
+ * reworked in place and stay in the sitemap.)
+ */
+const REDIRECTED_KINDS: ReadonlySet<string> = new Set(['hotels-in']);
 
 export function parseSeoSlug(slug: string): ReturnType<typeof parseSeoSlugBase> {
   const parsed = parseSeoSlugBase(slug);
@@ -43,6 +55,7 @@ export function parseSeoSlug(slug: string): ReturnType<typeof parseSeoSlugBase> 
 export function enumerateAllSeoSlugs(): string[] {
   return enumerateAllSeoSlugsBase().filter((slug) => {
     const parsed = parseSeoSlugBase(slug);
-    return !parsed || !RETIRED_KINDS.has(parsed.kind);
+    if (!parsed) return true;
+    return !RETIRED_KINDS.has(parsed.kind) && !REDIRECTED_KINDS.has(parsed.kind);
   });
 }
