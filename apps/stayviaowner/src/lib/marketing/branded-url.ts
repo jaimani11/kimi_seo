@@ -10,7 +10,7 @@ export type { BrandedUrlVariant, BrandedUrlInput } from '@adored/marketing';
 /** ~30% of daily posts land on /vacation-rentals (VRBO direct, the
  *  highest-commission product); the rest go to the destination
  *  guide with its VRBO callout. */
-export const brandedGotriptUrl = createBrandedUrlBuilder({
+export const brandedStayviaownerUrl = createBrandedUrlBuilder({
   siteUrl: STAYVIAOWNER.siteUrl,
   vrboRotation: { path: '/vacation-rentals', sharePct: 30 },
 });

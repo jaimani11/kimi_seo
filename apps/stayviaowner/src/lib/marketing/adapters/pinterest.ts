@@ -5,12 +5,12 @@
  */
 import { BasePinterestAdapter } from '@adored/marketing';
 import { resolveDestinationPhoto } from '@adored/imagery';
-import { brandedGotriptUrl } from '../branded-url';
+import { brandedStayviaownerUrl } from '../branded-url';
 
 export class PinterestAdapter extends BasePinterestAdapter {
   constructor() {
     super({
-      buildLink: (args) => brandedGotriptUrl(args),
+      buildLink: (args) => brandedStayviaownerUrl(args),
       resolvePhoto: (q) => resolveDestinationPhoto(q),
     });
   }

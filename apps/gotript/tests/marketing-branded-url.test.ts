@@ -30,8 +30,10 @@ describe('brandedGotriptUrl', () => {
   });
 
   it('utm_campaign is city-scoped for attribution', () => {
-    expect(brandedGotriptUrl({ citySlug: 'agra', platform: 'pinterest' })).toContain(
-      'utm_campaign=daily-agra',
+    // ~30% of cities land on the /vacation-rentals (VRBO) rotation → vrbo-{city};
+    // the rest → daily-{city}. Either way the campaign is scoped to the city.
+    expect(brandedGotriptUrl({ citySlug: 'agra', platform: 'pinterest' })).toMatch(
+      /utm_campaign=(daily|vrbo)-agra(?:&|$)/,
     );
   });
 

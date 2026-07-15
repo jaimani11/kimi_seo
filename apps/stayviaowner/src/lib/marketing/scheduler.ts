@@ -10,7 +10,7 @@ import { generateCitySocialPack } from '@lib/social/generator';
 import { buildSocialPackFromTemplate } from '@lib/social/template-generator';
 import { getMarketingStore } from './marketing-store';
 import { getMarketingAdapters } from './adapters';
-import { brandedGotriptUrl } from './branded-url';
+import { brandedStayviaownerUrl } from './branded-url';
 
 export type { RunSchedulerArgs } from '@adored/marketing';
 
@@ -19,7 +19,7 @@ const scheduler = createMarketingScheduler({
   getAdapters: getMarketingAdapters,
   generatePack: generateCitySocialPack,
   fallbackPack: buildSocialPackFromTemplate,
-  buildBrandedUrl: brandedGotriptUrl,
+  buildBrandedUrl: brandedStayviaownerUrl,
   brandDomain: STAYVIAOWNER.domain,
 });
 
