@@ -40,11 +40,8 @@ export function SiteHeader() {
           >
             <svg width="15" height="15" viewBox="0 0 16 16" fill="none">
               <path
-                d="M3 4l5 4 5-4M3 12l5-4 5 4"
-                stroke="#fff"
-                strokeWidth="1.8"
-                strokeLinecap="round"
-                strokeLinejoin="round"
+                d="M8 1.5c.5 3.7 1.8 5 5.5 5.5-3.7.5-5 1.8-5.5 5.5-.5-3.7-1.8-5-5.5-5.5 3.7-.5 5-1.8 5.5-5.5Z"
+                fill="#fff"
               />
             </svg>
           </span>

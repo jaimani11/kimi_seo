@@ -73,13 +73,12 @@ export function SiteHeader() {
             }}
           >
             <svg width="15" height="15" viewBox="0 0 16 16" fill="none">
-              <path
-                d="M3 4l5 4 5-4M3 12l5-4 5 4"
-                stroke="#fff"
-                strokeWidth="1.8"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
+              <path d="M4.3 7L8 3.8 11.7 7Z" fill="#fff" />
+              <rect x="4.9" y="7" width="6.2" height="6" rx="0.6" fill="#fff" />
+              <rect x="6" y="8.4" width="1.5" height="1.5" fill="#006ce4" />
+              <rect x="8.5" y="8.4" width="1.5" height="1.5" fill="#006ce4" />
+              <rect x="6" y="10.6" width="1.5" height="1.5" fill="#006ce4" />
+              <rect x="8.5" y="10.6" width="1.5" height="1.5" fill="#006ce4" />
             </svg>
           </span>
           <span

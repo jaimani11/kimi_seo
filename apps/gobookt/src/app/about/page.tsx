@@ -4,9 +4,35 @@ import { SiteHeader } from '@/features/site/site-header';
 import { SiteFooter } from '@/features/site/site-footer';
 
 export const metadata: Metadata = {
-  title: 'About gobookt · multi-category Booking.com affiliate',
+  title: 'About gobookt · hotel discovery powered by Booking.com',
   description:
-    'gobookt is an independent travel publisher and official Booking.com affiliate. We help travelers search hotels, flights, things to do, cars, and cruises across 175+ destinations worldwide.',
+    'gobookt is an independent hotel-discovery site and official Booking.com affiliate — compare stays across thousands of destinations with data-backed city guides.',
+};
+
+const eyebrow: React.CSSProperties = {
+  fontFamily: 'var(--font-inter)',
+  fontSize: '0.66rem',
+  letterSpacing: '0.22em',
+  textTransform: 'uppercase',
+  color: 'var(--accent-primary)',
+  fontWeight: 700,
+  margin: 0,
+};
+const h1Style: React.CSSProperties = {
+  fontFamily: 'var(--font-inter)',
+  fontSize: 'clamp(2rem, 4vw, 3rem)',
+  fontWeight: 800,
+  lineHeight: 1.05,
+  letterSpacing: '-0.025em',
+  color: 'var(--ink-primary)',
+  margin: 0,
+};
+const h2Style: React.CSSProperties = {
+  fontFamily: 'var(--font-inter)',
+  fontSize: '1.35rem',
+  fontWeight: 800,
+  color: 'var(--ink-primary)',
+  margin: '2rem 0 0.5rem',
 };
 
 export default function AboutPage() {
@@ -14,32 +40,9 @@ export default function AboutPage() {
     <>
       <SiteHeader />
       <main className="mx-auto max-w-3xl px-6 py-16">
-        <p
-          style={{
-            fontFamily: 'var(--font-inter)',
-            fontSize: '0.66rem',
-            letterSpacing: '0.22em',
-            textTransform: 'uppercase',
-            color: 'var(--accent-primary)',
-            fontWeight: 700,
-            margin: 0,
-          }}
-        >
-          About gobookt
-        </p>
-        <h1
-          className="mt-3"
-          style={{
-            fontFamily: 'var(--font-inter)',
-            fontSize: 'clamp(2rem, 4vw, 3rem)',
-            fontWeight: 800,
-            lineHeight: 1.05,
-            letterSpacing: '-0.025em',
-            color: 'var(--ink-primary)',
-            margin: 0,
-          }}
-        >
-          A traveler-first search hub, powered by Booking.com.
+        <p style={eyebrow}>About gobookt</p>
+        <h1 className="mt-3" style={h1Style}>
+          Find the right place to stay — powered by Booking.com.
         </h1>
 
         <div
@@ -52,111 +55,57 @@ export default function AboutPage() {
           }}
         >
           <p>
-            gobookt is an independent travel publisher and an{' '}
-            <strong>official Booking.com affiliate partner</strong>. We built gobookt
-            because travelers deserve a calm, opinionated search experience — one
-            surface that covers every leg of the trip, without the
-            twenty-tab-comparison ritual most trip planning devolves into.
+            gobookt is a hotel-discovery site and an{' '}
+            <strong>official Booking.com affiliate</strong>. We do one thing and try to
+            do it well: help you narrow thousands of possible stays down to the few
+            that actually fit your city, your dates and your budget — then hand the
+            booking to Booking.com.
           </p>
 
-          <h2
-            className="mt-10"
-            style={{
-              fontFamily: 'var(--font-inter)',
-              fontSize: '1.35rem',
-              fontWeight: 800,
-              color: 'var(--ink-primary)',
-              margin: '2rem 0 0.5rem',
-            }}
-          >
-            What we do
-          </h2>
+          <h2 style={h2Style}>Hotel-first, on purpose</h2>
           <p>
-            From one search box, gobookt hands you off to Booking.com&apos;s live
-            inventory across every vertical they sell:
-          </p>
-          <ul style={{ marginLeft: '1.25rem' }}>
-            <li>Hotels, apartments, and vacation rentals at 28M+ properties worldwide</li>
-            <li>Flights across every major airline (round-trip, one-way, multi-city)</li>
-            <li>Things to do — tours, day trips, skip-the-line tickets, food walks</li>
-            <li>Car rentals at airports and city pick-up points, every major brand</li>
-            <li>Pre &amp; post-cruise port hotels for major embarkation cities</li>
-          </ul>
-          <p>
-            We also publish 5,000+ programmatic destination guides — city
-            itineraries, day-trip roundups, themed hotel lists — because the best
-            time to book is when you already know what you&apos;re booking.
+            Plenty of sites try to sell you flights, cars and cruises in the same
+            breath. gobookt stays focused on where you sleep — hotels, apartments,
+            guesthouses and boutique stays — because that&apos;s the decision that
+            makes or breaks a trip, and it deserves a search that isn&apos;t
+            distracted.
           </p>
 
-          <h2
-            className="mt-10"
-            style={{
-              fontFamily: 'var(--font-inter)',
-              fontSize: '1.35rem',
-              fontWeight: 800,
-              color: 'var(--ink-primary)',
-              margin: '2rem 0 0.5rem',
-            }}
-          >
-            How we make money
-          </h2>
+          <h2 style={h2Style}>City guides that do the homework</h2>
           <p>
-            gobookt is 100% free for travelers. When you click through to
-            Booking.com from our site and complete a booking, Booking.com pays
-            gobookt a small commission — <strong>the price you pay is exactly the
-            same</strong> as if you&apos;d gone to Booking.com directly. No booking fees.
-            No hidden markups. No inventory of our own.
-          </p>
-          <p>
-            This is the standard affiliate model that publishers like NerdWallet
-            and The Points Guy use. The commission funds our editorial + technical
-            work; it does not change your price. Booking.com&apos;s Terms and Privacy
-            Notice govern the actual booking — we&apos;re the search + editorial layer
-            on top.
+            Every destination on gobookt comes with a data-backed guide: which
+            neighborhoods suit which travelers, when prices peak, how far the
+            landmarks really are from each other. You arrive at the Booking.com
+            search already knowing what &quot;a good area&quot; means for that city.
           </p>
 
-          <h2
-            className="mt-10"
-            style={{
-              fontFamily: 'var(--font-inter)',
-              fontSize: '1.35rem',
-              fontWeight: 800,
-              color: 'var(--ink-primary)',
-              margin: '2rem 0 0.5rem',
-            }}
-          >
-            Who we are
-          </h2>
+          <h2 style={h2Style}>Free to use, commission from Booking.com</h2>
           <p>
-            gobookt is a solo-founded travel publisher based in the United States.
-            The site was built by a small technical team with a background in
-            marketplace + search design. Our editorial voice is calm, opinionated,
-            and traveler-first — the goal is to help you decide, then hand you off
-            to Booking.com to actually book.
+            gobookt costs you nothing. When you book on Booking.com after clicking
+            through from here, Booking.com pays us a commission — and{' '}
+            <strong>your rate is exactly the same</strong> as booking on Booking.com
+            directly. No markup, no service fee, no rooms of our own. That commission
+            is what funds the guides and the search.
           </p>
 
-          <h2
-            className="mt-10"
-            style={{
-              fontFamily: 'var(--font-inter)',
-              fontSize: '1.35rem',
-              fontWeight: 800,
-              color: 'var(--ink-primary)',
-              margin: '2rem 0 0.5rem',
-            }}
-          >
-            Get in touch
-          </h2>
+          <h2 style={h2Style}>Independent of Booking.com</h2>
           <p>
-            Media enquiries, partnership questions, feedback on the site — the
-            best way to reach us is the{' '}
+            gobookt is operated by Adored Moments LLC in the United States. We partner
+            with Booking.com for inventory and send bookings their way, but we are not
+            owned or operated by Booking.com — your reservation, changes and
+            cancellations are governed by Booking.com&apos;s own terms.
+          </p>
+
+          <h2 style={h2Style}>Reach the team</h2>
+          <p>
+            Press, partnership questions or feedback on a guide — the{' '}
             <Link
               href="/contact"
               style={{ color: 'var(--accent-primary)', textDecoration: 'underline' }}
             >
               contact form
-            </Link>
-            . We read everything and respond within 2 business days.
+            </Link>{' '}
+            comes straight to us, and we answer within two business days.
           </p>
         </div>
       </main>

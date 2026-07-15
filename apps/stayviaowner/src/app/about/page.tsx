@@ -4,9 +4,35 @@ import { SiteHeader } from '@/features/site/site-header';
 import { SiteFooter } from '@/features/site/site-footer';
 
 export const metadata: Metadata = {
-  title: 'About stayviaowner · multi-category Expedia affiliate',
+  title: 'About stayviaowner · whole-home vacation rentals via Vrbo',
   description:
-    'stayviaowner is an independent travel publisher and official Expedia affiliate. We help travelers search hotels, flights, packages, things to do, cars, and cruises with Expedia\'s bundle-and-save angle.',
+    'stayviaowner is an independent vacation-rental discovery site and Vrbo affiliate — whole homes, villas, cabins and cottages compared in one search, booked through Vrbo.',
+};
+
+const eyebrow: React.CSSProperties = {
+  fontFamily: 'var(--font-inter)',
+  fontSize: '0.66rem',
+  letterSpacing: '0.22em',
+  textTransform: 'uppercase',
+  color: 'var(--accent-primary)',
+  fontWeight: 700,
+  margin: 0,
+};
+const h1Style: React.CSSProperties = {
+  fontFamily: 'var(--font-inter)',
+  fontSize: 'clamp(2rem, 4vw, 3rem)',
+  fontWeight: 800,
+  lineHeight: 1.05,
+  letterSpacing: '-0.025em',
+  color: 'var(--ink-primary)',
+  margin: 0,
+};
+const h2Style: React.CSSProperties = {
+  fontFamily: 'var(--font-inter)',
+  fontSize: '1.35rem',
+  fontWeight: 800,
+  color: 'var(--ink-primary)',
+  margin: '2rem 0 0.5rem',
 };
 
 export default function AboutPage() {
@@ -14,32 +40,9 @@ export default function AboutPage() {
     <>
       <SiteHeader />
       <main className="mx-auto max-w-3xl px-6 py-16">
-        <p
-          style={{
-            fontFamily: 'var(--font-inter)',
-            fontSize: '0.66rem',
-            letterSpacing: '0.22em',
-            textTransform: 'uppercase',
-            color: 'var(--accent-primary)',
-            fontWeight: 700,
-            margin: 0,
-          }}
-        >
-          About stayviaowner
-        </p>
-        <h1
-          className="mt-3"
-          style={{
-            fontFamily: 'var(--font-inter)',
-            fontSize: 'clamp(2rem, 4vw, 3rem)',
-            fontWeight: 800,
-            lineHeight: 1.05,
-            letterSpacing: '-0.025em',
-            color: 'var(--ink-primary)',
-            margin: 0,
-          }}
-        >
-          A traveler-first search hub, powered by Expedia.
+        <p style={eyebrow}>About stayviaowner</p>
+        <h1 className="mt-3" style={h1Style}>
+          Rent the whole place — homes, villas, cabins, cottages.
         </h1>
 
         <div
@@ -52,115 +55,60 @@ export default function AboutPage() {
           }}
         >
           <p>
-            stayviaowner is an independent travel publisher and an{' '}
-            <strong>official Expedia affiliate partner</strong>. We built stayviaowner
-            because travelers deserve a calm, opinionated search experience — one
-            surface that covers every leg of the trip, without the
-            twenty-tab-comparison ritual most trip planning devolves into.
+            stayviaowner is an independent vacation-rental discovery site and a{' '}
+            <strong>Vrbo affiliate</strong>. We&apos;re built around one idea: for a
+            family, a group or a longer stay, the whole home — with its kitchen, its
+            bedrooms and its space to spread out — usually beats a row of hotel rooms.
+            We help you find that home and book it through Vrbo.
           </p>
 
-          <h2
-            className="mt-10"
-            style={{
-              fontFamily: 'var(--font-inter)',
-              fontSize: '1.35rem',
-              fontWeight: 800,
-              color: 'var(--ink-primary)',
-              margin: '2rem 0 0.5rem',
-            }}
-          >
-            What we do
-          </h2>
+          <h2 style={h2Style}>Whole homes, for the trips that need them</h2>
           <p>
-            From one search box, stayviaowner hands you off to Expedia&apos;s live
-            inventory across every vertical they sell:
+            Hotels are great for a night in transit. But a week with the family, a
+            reunion, a ski trip or a work-from-anywhere month is a different problem —
+            you want a door that closes, a kitchen you can cook in and a living room
+            everyone fits in. That&apos;s the trip stayviaowner is for.
           </p>
+
+          <h2 style={h2Style}>Every property type in one search</h2>
           <ul style={{ marginLeft: '1.25rem' }}>
-            <li>Hotels, apartments, and vacation rentals worldwide</li>
-            <li>Flights across every major airline (round-trip, one-way, multi-city)</li>
-            <li>
-              <strong>Vacation packages</strong> — bundle hotel + flight in one
-              search; Expedia&apos;s bundle prices routinely beat à-la-carte
-            </li>
-            <li>Things to do — tours, day trips, skip-the-line tickets, food walks</li>
-            <li>Car rentals at airports and city pick-up points, every major brand</li>
-            <li>Cruises across Royal Caribbean, Carnival, NCL, MSC, Princess, and more</li>
+            <li><strong>Villas &amp; luxury homes</strong> — space, privacy, often a pool</li>
+            <li><strong>Cabins &amp; chalets</strong> — mountain and lake escapes</li>
+            <li><strong>Cottages &amp; beach houses</strong> — smaller, characterful stays</li>
+            <li><strong>Condos &amp; apartments</strong> — city bases with room to breathe</li>
           </ul>
           <p>
-            We also publish 5,000+ programmatic destination guides — city
-            itineraries, day-trip roundups, themed hotel lists — because the best
-            time to book is when you already know what you&apos;re booking.
+            Filter by the property type you actually want instead of scrolling past a
+            thousand hotel rooms to reach the homes.
           </p>
 
-          <h2
-            className="mt-10"
-            style={{
-              fontFamily: 'var(--font-inter)',
-              fontSize: '1.35rem',
-              fontWeight: 800,
-              color: 'var(--ink-primary)',
-              margin: '2rem 0 0.5rem',
-            }}
-          >
-            How we make money
-          </h2>
+          <h2 style={h2Style}>How the Vrbo partnership works</h2>
           <p>
-            stayviaowner is 100% free for travelers. When you click through to
-            Expedia from our site and complete a booking, Expedia pays stayviaowner a
-            small commission — <strong>the price you pay is exactly the same</strong>{' '}
-            as if you&apos;d gone to Expedia directly. No booking fees. No hidden
-            markups. No inventory of our own.
-          </p>
-          <p>
-            This is the standard affiliate model that publishers like NerdWallet
-            and The Points Guy use. The commission funds our editorial +
-            technical work; it does not change your price. Expedia&apos;s Terms
-            and Privacy Notice govern the actual booking — we&apos;re the search +
-            editorial layer on top.
+            stayviaowner is free to use. When you book a home on Vrbo after coming from
+            here, Vrbo pays us a referral commission — and{' '}
+            <strong>you pay exactly what you&apos;d pay booking on Vrbo directly</strong>.
+            We don&apos;t add fees, we don&apos;t mark up the nightly rate, and we
+            don&apos;t list any properties of our own.
           </p>
 
-          <h2
-            className="mt-10"
-            style={{
-              fontFamily: 'var(--font-inter)',
-              fontSize: '1.35rem',
-              fontWeight: 800,
-              color: 'var(--ink-primary)',
-              margin: '2rem 0 0.5rem',
-            }}
-          >
-            Who we are
-          </h2>
+          <h2 style={h2Style}>Independent of Vrbo</h2>
           <p>
-            stayviaowner is a solo-founded travel publisher based in the United States.
-            The site was built by a small technical team with a background in
-            marketplace + search design. Our editorial voice is calm, opinionated,
-            and traveler-first — the goal is to help you decide, then hand you off
-            to Expedia to actually book.
+            stayviaowner is operated by Adored Moments LLC in the United States. We send
+            bookings to Vrbo but aren&apos;t owned or operated by them; Vrbo&apos;s terms
+            and the individual owner&apos;s house rules govern your stay, changes and
+            cancellations.
           </p>
 
-          <h2
-            className="mt-10"
-            style={{
-              fontFamily: 'var(--font-inter)',
-              fontSize: '1.35rem',
-              fontWeight: 800,
-              color: 'var(--ink-primary)',
-              margin: '2rem 0 0.5rem',
-            }}
-          >
-            Get in touch
-          </h2>
+          <h2 style={h2Style}>Get in touch</h2>
           <p>
-            Media enquiries, partnership questions, feedback on the site — the
-            best way to reach us is the{' '}
+            Questions, partnership ideas or feedback on a listing page — the{' '}
             <Link
               href="/contact"
               style={{ color: 'var(--accent-primary)', textDecoration: 'underline' }}
             >
               contact form
-            </Link>
-            . We read everything and respond within 2 business days.
+            </Link>{' '}
+            reaches us directly, and we reply within two business days.
           </p>
         </div>
       </main>

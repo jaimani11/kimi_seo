@@ -6,7 +6,7 @@ import { ContactForm } from '@/features/site/contact-form';
 export const metadata: Metadata = {
   title: 'Contact gobookt',
   description:
-    'Contact gobookt. Media enquiries, partnership questions, feedback on the site — send a message via the form and we respond within 2 business days.',
+    'Contact gobookt. Press, partnerships, or feedback on a hotel guide — send a message and we respond within 2 business days.',
 };
 
 export default function ContactPage() {
@@ -25,7 +25,7 @@ export default function ContactPage() {
             margin: 0,
           }}
         >
-          Contact
+          Contact gobookt
         </p>
         <h1
           className="mt-3"
@@ -39,7 +39,7 @@ export default function ContactPage() {
             margin: 0,
           }}
         >
-          Say hello.
+          Get in touch.
         </h1>
         <p
           className="mt-4"
@@ -51,8 +51,8 @@ export default function ContactPage() {
             margin: 0,
           }}
         >
-          Media enquiries, partnership questions, feedback, or a bug you spotted —
-          fill out the form and we&apos;ll respond within 2 business days.
+          Press, a partnership idea, or feedback on one of our hotel guides — send it
+          through the form and we&apos;ll reply within two business days.
         </p>
 
         <div className="mt-8">
@@ -70,9 +70,11 @@ export default function ContactPage() {
             color: 'var(--ink-tertiary)',
           }}
         >
-          <strong style={{ color: 'var(--ink-secondary)' }}>Booking issues?</strong>{' '}
-          If you already booked a stay/flight/car through Booking.com and need
-          to change or cancel, contact Booking.com support directly at{' '}
+          <strong style={{ color: 'var(--ink-secondary)' }}>
+            Need to change a hotel booking?
+          </strong>{' '}
+          Reservations are held by Booking.com, not gobookt. To modify or cancel a
+          stay, contact Booking.com support directly at{' '}
           <a
             href="https://secure.booking.com/help.html"
             target="_blank"
@@ -81,7 +83,7 @@ export default function ContactPage() {
           >
             secure.booking.com/help.html
           </a>{' '}
-          — they hold your reservation and can action it faster than we can.
+          — they can action it faster than we can.
         </div>
       </main>
       <SiteFooter />

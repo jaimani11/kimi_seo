@@ -6,7 +6,7 @@ import { ContactForm } from '@/features/site/contact-form';
 export const metadata: Metadata = {
   title: 'Contact gotript',
   description:
-    'Contact gotript. Media enquiries, partnership questions, feedback on the site — send a message via the form and we respond within 2 business days.',
+    'Contact gotript. Questions about a search, partnership pitches, or a rough edge you found — send a message and we respond within 2 business days.',
 };
 
 export default function ContactPage() {
@@ -25,7 +25,7 @@ export default function ContactPage() {
             margin: 0,
           }}
         >
-          Contact
+          Contact gotript
         </p>
         <h1
           className="mt-3"
@@ -39,7 +39,7 @@ export default function ContactPage() {
             margin: 0,
           }}
         >
-          Say hello.
+          Let&apos;s talk travel.
         </h1>
         <p
           className="mt-4"
@@ -51,8 +51,9 @@ export default function ContactPage() {
             margin: 0,
           }}
         >
-          Media enquiries, partnership questions, feedback, or a bug you spotted —
-          fill out the form and we&apos;ll respond within 2 business days.
+          A question about a search, a partnership pitch, or a rough edge you found in
+          the site — drop it in the form and we&apos;ll get back to you within two
+          business days.
         </p>
 
         <div className="mt-8">
@@ -70,9 +71,11 @@ export default function ContactPage() {
             color: 'var(--ink-tertiary)',
           }}
         >
-          <strong style={{ color: 'var(--ink-secondary)' }}>Booking issues?</strong>{' '}
-          If you already booked a stay/flight/car through Expedia and need to
-          change or cancel, contact Expedia support directly at{' '}
+          <strong style={{ color: 'var(--ink-secondary)' }}>
+            Already booked through Expedia?
+          </strong>{' '}
+          To change or cancel a hotel, flight, car or package, go straight to Expedia
+          at{' '}
           <a
             href="https://service.expedia.com"
             target="_blank"
@@ -81,7 +84,7 @@ export default function ContactPage() {
           >
             service.expedia.com
           </a>{' '}
-          — they hold your reservation and can action it faster than we can.
+          — they hold the reservation and can action it faster than we can.
         </div>
       </main>
       <SiteFooter />

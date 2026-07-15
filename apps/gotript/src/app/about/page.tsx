@@ -4,9 +4,35 @@ import { SiteHeader } from '@/features/site/site-header';
 import { SiteFooter } from '@/features/site/site-footer';
 
 export const metadata: Metadata = {
-  title: 'About gotript · multi-category Expedia affiliate',
+  title: 'About gotript · one search across every Expedia vertical',
   description:
-    'gotript is an independent travel publisher and official Expedia affiliate. We help travelers search hotels, flights, packages, things to do, cars, and cruises with Expedia\'s bundle-and-save angle.',
+    'gotript is an independent travel-search site and official Expedia affiliate — hotels, vacation rentals, flights, cars and things to do compared in a single place.',
+};
+
+const eyebrow: React.CSSProperties = {
+  fontFamily: 'var(--font-inter)',
+  fontSize: '0.66rem',
+  letterSpacing: '0.22em',
+  textTransform: 'uppercase',
+  color: 'var(--accent-primary)',
+  fontWeight: 700,
+  margin: 0,
+};
+const h1Style: React.CSSProperties = {
+  fontFamily: 'var(--font-inter)',
+  fontSize: 'clamp(2rem, 4vw, 3rem)',
+  fontWeight: 800,
+  lineHeight: 1.05,
+  letterSpacing: '-0.025em',
+  color: 'var(--ink-primary)',
+  margin: 0,
+};
+const h2Style: React.CSSProperties = {
+  fontFamily: 'var(--font-inter)',
+  fontSize: '1.35rem',
+  fontWeight: 800,
+  color: 'var(--ink-primary)',
+  margin: '2rem 0 0.5rem',
 };
 
 export default function AboutPage() {
@@ -14,32 +40,9 @@ export default function AboutPage() {
     <>
       <SiteHeader />
       <main className="mx-auto max-w-3xl px-6 py-16">
-        <p
-          style={{
-            fontFamily: 'var(--font-inter)',
-            fontSize: '0.66rem',
-            letterSpacing: '0.22em',
-            textTransform: 'uppercase',
-            color: 'var(--accent-primary)',
-            fontWeight: 700,
-            margin: 0,
-          }}
-        >
-          About gotript
-        </p>
-        <h1
-          className="mt-3"
-          style={{
-            fontFamily: 'var(--font-inter)',
-            fontSize: 'clamp(2rem, 4vw, 3rem)',
-            fontWeight: 800,
-            lineHeight: 1.05,
-            letterSpacing: '-0.025em',
-            color: 'var(--ink-primary)',
-            margin: 0,
-          }}
-        >
-          A traveler-first search hub, powered by Expedia.
+        <p style={eyebrow}>About gotript</p>
+        <h1 className="mt-3" style={h1Style}>
+          Every way to travel, compared in one search.
         </h1>
 
         <div
@@ -52,115 +55,60 @@ export default function AboutPage() {
           }}
         >
           <p>
-            gotript is an independent travel publisher and an{' '}
-            <strong>official Expedia affiliate partner</strong>. We built gotript
-            because travelers deserve a calm, opinionated search experience — one
-            surface that covers every leg of the trip, without the
-            twenty-tab-comparison ritual most trip planning devolves into.
+            gotript is an independent travel-search site and an{' '}
+            <strong>official Expedia affiliate</strong>. Most trips get booked across
+            half a dozen tabs — a hotel here, a flight there, the rental car forgotten
+            until the last minute. gotript pulls Expedia&apos;s travel verticals onto
+            one screen so you can line up the whole trip and compare it in a single
+            pass.
           </p>
 
-          <h2
-            className="mt-10"
-            style={{
-              fontFamily: 'var(--font-inter)',
-              fontSize: '1.35rem',
-              fontWeight: 800,
-              color: 'var(--ink-primary)',
-              margin: '2rem 0 0.5rem',
-            }}
-          >
-            What we do
-          </h2>
-          <p>
-            From one search box, gotript hands you off to Expedia&apos;s live
-            inventory across every vertical they sell:
-          </p>
+          <h2 style={h2Style}>Five verticals, one query</h2>
+          <p>Enter a destination once and gotript searches across:</p>
           <ul style={{ marginLeft: '1.25rem' }}>
-            <li>Hotels, apartments, and vacation rentals worldwide</li>
-            <li>Flights across every major airline (round-trip, one-way, multi-city)</li>
-            <li>
-              <strong>Vacation packages</strong> — bundle hotel + flight in one
-              search; Expedia&apos;s bundle prices routinely beat à-la-carte
-            </li>
-            <li>Things to do — tours, day trips, skip-the-line tickets, food walks</li>
-            <li>Car rentals at airports and city pick-up points, every major brand</li>
-            <li>Cruises across Royal Caribbean, Carnival, NCL, MSC, Princess, and more</li>
+            <li><strong>Hotels</strong> — chains, boutiques and everything between</li>
+            <li><strong>Vacation rentals</strong> — whole homes for groups and longer stays</li>
+            <li><strong>Flights</strong> — routes and fares into your destination</li>
+            <li><strong>Cars</strong> — pickups at the airport or in town</li>
+            <li><strong>Things to do</strong> — tours, tickets and day trips once you land</li>
           </ul>
+
+          <h2 style={h2Style}>Data-backed, not just a wall of links</h2>
           <p>
-            We also publish 5,000+ programmatic destination guides — city
-            itineraries, day-trip roundups, themed hotel lists — because the best
-            time to book is when you already know what you&apos;re booking.
+            Underneath the search sits our own layer of destination intelligence —
+            when-to-go windows, typical costs, neighborhood notes and multi-day
+            itineraries for hundreds of cities. The goal isn&apos;t to bury you in
+            options; it&apos;s to hand you a defensible shortlist and let Expedia close
+            the booking.
           </p>
 
-          <h2
-            className="mt-10"
-            style={{
-              fontFamily: 'var(--font-inter)',
-              fontSize: '1.35rem',
-              fontWeight: 800,
-              color: 'var(--ink-primary)',
-              margin: '2rem 0 0.5rem',
-            }}
-          >
-            How we make money
-          </h2>
+          <h2 style={h2Style}>What a click costs you: nothing extra</h2>
           <p>
-            gotript is 100% free for travelers. When you click through to
-            Expedia from our site and complete a booking, Expedia pays gotript a
-            small commission — <strong>the price you pay is exactly the same</strong>{' '}
-            as if you&apos;d gone to Expedia directly. No booking fees. No hidden
-            markups. No inventory of our own.
-          </p>
-          <p>
-            This is the standard affiliate model that publishers like NerdWallet
-            and The Points Guy use. The commission funds our editorial +
-            technical work; it does not change your price. Expedia&apos;s Terms
-            and Privacy Notice govern the actual booking — we&apos;re the search +
-            editorial layer on top.
+            gotript is free to use. When you book through Expedia after arriving from
+            gotript, Expedia pays us a referral commission — and{' '}
+            <strong>your price is identical</strong> to booking on Expedia directly. No
+            markup, no booking fee, no inventory of our own. The commission funds the
+            search and the editorial work; it never touches your total.
           </p>
 
-          <h2
-            className="mt-10"
-            style={{
-              fontFamily: 'var(--font-inter)',
-              fontSize: '1.35rem',
-              fontWeight: 800,
-              color: 'var(--ink-primary)',
-              margin: '2rem 0 0.5rem',
-            }}
-          >
-            Who we are
-          </h2>
+          <h2 style={h2Style}>Independent — we don&apos;t work for Expedia</h2>
           <p>
-            gotript is a solo-founded travel publisher based in the United States.
-            The site was built by a small technical team with a background in
-            marketplace + search design. Our editorial voice is calm, opinionated,
-            and traveler-first — the goal is to help you decide, then hand you off
-            to Expedia to actually book.
+            gotript is operated by Adored Moments LLC in the United States. We&apos;re a
+            search-and-editorial layer that routes bookings to Expedia; we aren&apos;t
+            owned or run by Expedia, and their terms and privacy notice govern the
+            reservation itself.
           </p>
 
-          <h2
-            className="mt-10"
-            style={{
-              fontFamily: 'var(--font-inter)',
-              fontSize: '1.35rem',
-              fontWeight: 800,
-              color: 'var(--ink-primary)',
-              margin: '2rem 0 0.5rem',
-            }}
-          >
-            Get in touch
-          </h2>
+          <h2 style={h2Style}>Press &amp; partnerships</h2>
           <p>
-            Media enquiries, partnership questions, feedback on the site — the
-            best way to reach us is the{' '}
+            Coverage requests, partnership ideas or a bug you hit — the{' '}
             <Link
               href="/contact"
               style={{ color: 'var(--accent-primary)', textDecoration: 'underline' }}
             >
               contact form
-            </Link>
-            . We read everything and respond within 2 business days.
+            </Link>{' '}
+            reaches us directly, and we reply within two business days.
           </p>
         </div>
       </main>

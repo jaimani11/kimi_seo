@@ -6,7 +6,7 @@ import { ContactForm } from '@/features/site/contact-form';
 export const metadata: Metadata = {
   title: 'Contact stayviaowner',
   description:
-    'Contact stayviaowner. Media enquiries, partnership questions, feedback on the site — send a message via the form and we respond within 2 business days.',
+    'Contact stayviaowner. Questions about a rental, a partnership idea, or feedback — send a message and we respond within 2 business days.',
 };
 
 export default function ContactPage() {
@@ -25,7 +25,7 @@ export default function ContactPage() {
             margin: 0,
           }}
         >
-          Contact
+          Contact stayviaowner
         </p>
         <h1
           className="mt-3"
@@ -39,7 +39,7 @@ export default function ContactPage() {
             margin: 0,
           }}
         >
-          Say hello.
+          Reach out.
         </h1>
         <p
           className="mt-4"
@@ -51,8 +51,9 @@ export default function ContactPage() {
             margin: 0,
           }}
         >
-          Media enquiries, partnership questions, feedback, or a bug you spotted —
-          fill out the form and we&apos;ll respond within 2 business days.
+          A question about a rental, a partnership idea, or something on a listing page
+          that didn&apos;t work — use the form and we&apos;ll respond within two
+          business days.
         </p>
 
         <div className="mt-8">
@@ -70,18 +71,20 @@ export default function ContactPage() {
             color: 'var(--ink-tertiary)',
           }}
         >
-          <strong style={{ color: 'var(--ink-secondary)' }}>Booking issues?</strong>{' '}
-          If you already booked a stay/flight/car through Expedia and need to
-          change or cancel, contact Expedia support directly at{' '}
+          <strong style={{ color: 'var(--ink-secondary)' }}>
+            Already booked a home?
+          </strong>{' '}
+          Your reservation is held by Vrbo and the property owner, not stayviaowner. To
+          change or cancel a stay, contact Vrbo support directly at{' '}
           <a
-            href="https://service.expedia.com"
+            href="https://help.vrbo.com"
             target="_blank"
             rel="noopener noreferrer"
             style={{ color: 'var(--accent-primary)', textDecoration: 'underline' }}
           >
-            service.expedia.com
+            help.vrbo.com
           </a>{' '}
-          — they hold your reservation and can action it faster than we can.
+          — they hold your booking and can action it faster than we can.
         </div>
       </main>
       <SiteFooter />
