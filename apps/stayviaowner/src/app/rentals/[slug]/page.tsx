@@ -32,8 +32,8 @@ function metaTitle(route: RentalRoute): string {
 function metaDescription(route: RentalRoute): string {
   const { city } = route;
   return route.kind === 'type'
-    ? `Browse ${route.category.name.toLowerCase()} in ${city.name}, ${city.countryName} — whole-home rentals on VRBO with full kitchens, space for groups and free cancellation on most stays. Compare ${city.name} hotels on Expedia.`
-    : `Whole-home vacation rentals in ${city.name}, ${city.countryName} — villas, cabins, cottages, beach houses and more on VRBO. Compare with ${city.name} hotels on Expedia.`;
+    ? `Browse ${route.category.name.toLowerCase()} in ${city.name}, ${city.countryName} — whole-home rentals on VRBO with full kitchens, space for groups and free cancellation on most stays. Or compare ${city.name} hotels.`
+    : `Whole-home vacation rentals in ${city.name}, ${city.countryName} — villas, cabins, cottages, beach houses and more on VRBO. Or compare ${city.name} hotels.`;
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {

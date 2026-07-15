@@ -136,8 +136,8 @@ export function ThingsToDoSeoPage({
             }}
           >
             {loadError
-              ? `Live Expedia inventory is temporarily unavailable. Try again in a moment.`
-              : `Live Expedia inventory hasn’t been configured for this environment yet. Cards will populate once VIATOR_API_KEY is set.`}
+              ? `Live experience inventory is temporarily unavailable. Try again in a moment.`
+              : `Live experience inventory hasn’t been configured for this environment yet. Cards will populate once VIATOR_API_KEY is set.`}
           </p>
         )}
       </section>

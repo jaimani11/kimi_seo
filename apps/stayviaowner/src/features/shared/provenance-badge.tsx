@@ -18,11 +18,11 @@ interface ChipSpec {
 /** Brand-explicit labels - used only when branding mode is `explicit`
  *  (admin/operator surfaces, or once partnership review completes). */
 const EXPLICIT_PROVENANCE: Readonly<Record<string, ChipSpec>> = {
-  expedia: { label: 'EXPEDIA · LIVE', tone: 'live' },
+  expedia: { label: 'VRBO · LIVE', tone: 'live' },
   vrbo: { label: 'VRBO · LIVE', tone: 'live' },
   'mock-italy': { label: 'CURATED · ITALY', tone: 'curated' },
   'llm-synthesized': { label: 'AI PREVIEW', tone: 'preview' },
-  'expedia-search': { label: 'SEARCH · EXPEDIA', tone: 'preview' },
+  'expedia-search': { label: 'SEARCH · VRBO', tone: 'preview' },
   'vrbo-search': { label: 'SEARCH · VRBO', tone: 'preview' },
   'hotels-com-search': { label: 'SEARCH · HOTELS.COM', tone: 'preview' },
 };

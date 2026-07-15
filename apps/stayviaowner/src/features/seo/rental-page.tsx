@@ -84,7 +84,7 @@ function leadParagraph(route: RentalRoute): string {
   ];
   const closers = [
     `Every stay is bookable through VRBO with real photos, verified guest reviews, and free cancellation on most listings.`,
-    `Browse VRBO's whole-home inventory for ${city.name}, or compare hotels on Expedia if you'd rather have daily service.`,
+    `Browse Vrbo's whole-home inventory for ${city.name} — or, if you'd rather have daily housekeeping, compare local hotels too.`,
     `${city.oneLiner}`,
     `We send you straight to VRBO to check live prices and dates — the price you pay is the same as booking direct.`,
   ];
@@ -223,7 +223,7 @@ export function RentalPage({ route }: { route: RentalRoute }) {
                 🏡 Search {typeLabel(route).toLowerCase()} on VRBO →
               </a>
               <a href={expediaHref} target="_blank" rel="sponsored nofollow noopener noreferrer" style={secondaryCtaStyle}>
-                Compare {city.name} hotels on Expedia
+                Compare {city.name} hotels
               </a>
             </div>
             <p className="mt-3" style={{ fontFamily: 'var(--font-inter)', fontSize: '0.75rem', color: 'rgba(255,255,255,0.6)', margin: '0.75rem 0 0' }}>

@@ -78,7 +78,7 @@ export default async function AdminPage() {
         />
         <SummaryCard
           label="Affiliate"
-          value={features.affiliate.expediaConfigured ? 'Expedia · Live' : 'Untracked'}
+          value={features.affiliate.expediaConfigured ? 'Vrbo · Live' : 'Untracked'}
           caption={
             features.affiliate.expediaConfigured
               ? 'affcid attached on every CTA'

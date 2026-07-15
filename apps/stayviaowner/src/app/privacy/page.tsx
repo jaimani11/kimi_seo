@@ -104,7 +104,7 @@ export default function PrivacyPolicyPage() {
               which features people use without tracking you across other sites.
             </Li>
             <Li>
-              <strong>Affiliate click log.</strong> When you click a &ldquo;Search on Expedia&rdquo;
+              <strong>Affiliate click log.</strong> When you click a &ldquo;Search on Vrbo&rdquo;
               or destination CTA, we record that the click happened (session id, partner id, the
               experience or destination clicked, timestamp) so we can confirm commission attribution
               with our partners.

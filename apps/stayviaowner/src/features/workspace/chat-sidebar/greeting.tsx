@@ -62,8 +62,8 @@ export function Greeting() {
         }}
       >
         Tell me about your next trip in plain English. Mention a city, a vibe, your party size,
-        a budget. I&rsquo;ll surface real stays where I have them, or send you to Expedia, Vrbo,
-        and Hotels.com with your search already filled in.
+        a budget. I&rsquo;ll surface real whole homes where I have them, or send you to Vrbo with
+        your search already filled in.
       </p>
 
       {/* "How it works" - three quick steps. Tiny + understated; doesn't

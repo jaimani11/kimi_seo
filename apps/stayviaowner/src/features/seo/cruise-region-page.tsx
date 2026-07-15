@@ -32,12 +32,12 @@ const REGION_META: Record<
     label: 'Mediterranean cruise port hotels',
     eyebrow: 'Europe · pre & post-cruise stays',
     intro:
-      "Sailing the Med? Lock in your pre-cruise night at the embarkation port — Barcelona, Civitavecchia (Rome), Athens (Piraeus), or Venice. Walk onboard rested, not airport-tired. Every major Expedia hotel in each port city, free cancellation on most rates.",
+      "Sailing the Med? Lock in your pre-cruise night at the embarkation port — Barcelona, Civitavecchia (Rome), Athens (Piraeus), or Venice. Walk onboard rested, not airport-tired. Every major Vrbo hotel in each port city, free cancellation on most rates.",
     bullets: [
       'Hotels at every major Western & Eastern Med embarkation port',
       'Free cancellation on most rates — book early, decide later',
       'Filter by airport-proximity, port-proximity, or city center',
-      'Real Expedia guest reviews from past cruise travelers',
+      'Real Vrbo guest reviews from past cruise travelers',
     ],
     seasonHint: 'Mediterranean cruise season runs April through October.',
   },
@@ -45,7 +45,7 @@ const REGION_META: Record<
     label: 'Caribbean cruise port hotels',
     eyebrow: 'Americas · pre & post-cruise stays',
     intro:
-      "Caribbean sailings board mid-morning — fly in the day before to Miami, Fort Lauderdale, Port Canaveral, Tampa, San Juan, or Galveston. Sleep at the port, walk onto the ship at breakfast time. Expedia lists every major hotel near each cruise terminal.",
+      "Caribbean sailings board mid-morning — fly in the day before to Miami, Fort Lauderdale, Port Canaveral, Tampa, San Juan, or Galveston. Sleep at the port, walk onto the ship at breakfast time. Vrbo lists every major hotel near each cruise terminal.",
     bullets: [
       'Hotels at every Caribbean embarkation port (Miami, Lauderdale, Tampa, SJU, Galveston)',
       'Most properties offer free port shuttles to the cruise terminal',
@@ -58,12 +58,12 @@ const REGION_META: Record<
     label: 'Alaska cruise port hotels',
     eyebrow: 'North America · pre & post-cruise stays',
     intro:
-      "Alaska cruises embark from Seattle (round-trip Inside Passage) or Vancouver (one-way Gulf of Alaska). Both port cities deserve a night or two on either end — Seattle's Pike Place, Vancouver's seawall + Stanley Park. Expedia hotels at both, free cancellation on most.",
+      "Alaska cruises embark from Seattle (round-trip Inside Passage) or Vancouver (one-way Gulf of Alaska). Both port cities deserve a night or two on either end — Seattle's Pike Place, Vancouver's seawall + Stanley Park. Vrbo hotels at both, free cancellation on most.",
     bullets: [
       'Seattle and Vancouver hotels within an easy ride of the cruise terminal',
       'Most one-way Alaska sailings warrant 1-2 nights at the disembarkation port',
       'Pacific Northwest weather: pick hotels with refundable rates',
-      'Real Expedia reviews from past cruise passengers',
+      'Real Vrbo reviews from past cruise passengers',
     ],
     seasonHint: 'Alaska cruise season runs May through September only.',
   },
@@ -71,7 +71,7 @@ const REGION_META: Record<
     label: 'Northern Europe cruise port hotels',
     eyebrow: 'Europe · pre & post-cruise stays',
     intro:
-      "Norwegian fjord, Baltic, and British Isles cruises embark from Southampton, Copenhagen, or Bergen. The port cities are destinations in themselves — Southampton + a London side-trip, Copenhagen's harbour district, Bergen's UNESCO Bryggen wharf. Expedia hotels at every port.",
+      "Norwegian fjord, Baltic, and British Isles cruises embark from Southampton, Copenhagen, or Bergen. The port cities are destinations in themselves — Southampton + a London side-trip, Copenhagen's harbour district, Bergen's UNESCO Bryggen wharf. Vrbo hotels at every port.",
     bullets: [
       'Southampton, Copenhagen, and Bergen hotels near each cruise terminal',
       'Most Northern Europe ports are walkable city centers — skip the rental car',
@@ -84,7 +84,7 @@ const REGION_META: Record<
     label: 'Asia cruise port hotels',
     eyebrow: 'Asia-Pacific · pre & post-cruise stays',
     intro:
-      "Asia cruises typically embark from Singapore, Hong Kong, or Yokohama (Tokyo). Each is a destination in its own right — most travelers extend their cruise with 2-3 nights in the embarkation city. Expedia lists every major hotel near each port, free cancellation on most rates.",
+      "Asia cruises typically embark from Singapore, Hong Kong, or Yokohama (Tokyo). Each is a destination in its own right — most travelers extend their cruise with 2-3 nights in the embarkation city. Vrbo lists every major hotel near each port, free cancellation on most rates.",
     bullets: [
       'Singapore, Hong Kong, and Yokohama (Tokyo) hotels near each terminal',
       'Asia cruises run October through April — outside typhoon season',
@@ -262,7 +262,7 @@ export function CruiseRegionPage({ region }: { region: CruiseRegion }) {
                       margin: 0,
                     }}
                   >
-                    Hotels in {port.city} on Expedia →
+                    Hotels in {port.city} on Vrbo →
                   </p>
                 </a>
               );

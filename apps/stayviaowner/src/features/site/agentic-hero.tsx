@@ -260,7 +260,7 @@ export function AgenticHero() {
               boxShadow: '0 0 8px rgba(254,187,2,0.6)',
             }}
           />
-          Official Expedia affiliate · AI trip planner
+          Official Vrbo affiliate · AI trip planner
         </p>
 
         <h2
@@ -297,7 +297,7 @@ export function AgenticHero() {
           }}
         >
           Type a sentence — destination, dates, who, the vibe. Specialized agents extract intent,
-          search live Expedia inventory, and surface a curated short-list with reasoning.
+          search live Vrbo inventory, and surface a curated short-list with reasoning.
         </p>
 
         <ConciergeComposer
@@ -1389,7 +1389,7 @@ function prettyLabel(agent: string, fallback: string | null | undefined): string
     case 'destination-flavor':
       return 'Tasting the place';
     case 'search':
-      return 'Searching live Expedia inventory';
+      return 'Searching live Vrbo inventory';
     case 'mood':
       return 'Composing the vibe';
     case 'curate':

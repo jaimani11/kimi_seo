@@ -14,6 +14,12 @@ export const AFFILIATE_HOST_ALLOWLIST: readonly string[] = [
   'expedia.com',
   'hotels.com',
   'vrbo.com',
+  // Partnerize click-redirect host. Vrbo affiliate links are wrapped as
+  // `prf.hn/click/camref:<camref>/destination:<vrbo.com url>` — the prf.hn
+  // click URL is ITSELF the tracked outbound target (same pattern as the CJ
+  // domains below), so it must pass this allowlist or the /r/[id] + /api/go
+  // handlers would 400 the Vrbo hand-off.
+  'prf.hn',
   'airbnb.com',
   'hotelbeds.com',
   'skyscanner.com',

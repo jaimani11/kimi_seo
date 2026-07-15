@@ -265,8 +265,8 @@ function CityPicks({
           }}
         >
           {loadError
-            ? `Live Expedia inventory is temporarily unavailable for ${city.name}.`
-            : `Live Expedia inventory hasn’t been configured for this environment yet.`}
+            ? `Live experience inventory is temporarily unavailable for ${city.name}.`
+            : `Live experience inventory hasn’t been configured for this environment yet.`}
         </p>
       )}
     </div>

@@ -102,7 +102,7 @@ export function RentalHero() {
             maxWidth: '36rem',
           }}
         >
-          Whole homes, villas, cabins and cottages from Expedia + VRBO — one search across every property type.
+          Whole homes, villas, cabins and cottages from Vrbo — one search across every property type.
         </p>
 
         {/* Search band */}

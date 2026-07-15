@@ -131,7 +131,7 @@ export function buildConciergeNote(rawQuery: string): BuiltNote | null {
   }
 
   return {
-    body: 'Live Expedia inventory below — every card is bookable today. Tighten the search with a city name or a vibe, or let the planner build a day-by-day around it.',
+    body: 'Live Vrbo inventory below — every card is bookable today. Tighten the search with a city name or a vibe, or let the planner build a day-by-day around it.',
     planQuery: query,
     suggestedNights: 3,
     planVerb: 'day around it',

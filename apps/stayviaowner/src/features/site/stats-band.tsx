@@ -14,7 +14,7 @@ const STATS = [
   {
     value: '28M+',
     label: 'Stays bookable',
-    sublabel: 'Live from Expedia',
+    sublabel: 'Live from Vrbo',
   },
   {
     value: '190+',
@@ -28,7 +28,7 @@ const STATS = [
   },
   {
     value: '24/7',
-    label: 'Expedia support',
+    label: 'Vrbo support',
     sublabel: 'Real humans, every timezone',
   },
 ] as const;

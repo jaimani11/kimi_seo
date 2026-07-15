@@ -379,7 +379,7 @@ export function MultiCategoryHero({
             marginBottom: 0,
           }}
         >
-          Search hands off to <strong style={{ fontWeight: 700, color: '#ffd166' }}>Expedia</strong>. Affiliate link;
+          Search hands off to <strong style={{ fontWeight: 700, color: '#ffd166' }}>Vrbo</strong>. Affiliate link;
           the price you pay is the same.
         </p>
       </div>
@@ -469,37 +469,37 @@ function headlineFor(c: ExpediaCategory): string {
     case 'vacation-rentals':
       return 'Vacation rentals — whole homes, cabins & villas on VRBO';
     case 'flights':
-      return 'Cheap flights, every major airline worldwide';
+      return 'Whole homes & villas — rent direct, room for everyone';
     case 'cars':
-      return 'Car rentals at airports and city pick-up points';
+      return 'Cabins, cottages & villas — the whole place is yours';
     case 'cruises':
-      return 'River, ocean & expedition cruises worldwide';
+      return 'Beach houses & lake houses for longer stays';
     case 'attractions':
       return 'Tours, day trips, food walks & attraction tickets';
     case 'packages':
-      return 'Hotel + flight bundles — save more booking together';
+      return 'Whole-home rentals for the whole group';
     default:
-      return 'Find hotels, vacation rentals, flights & things to do worldwide';
+      return 'Find whole homes, villas & vacation rentals worldwide';
   }
 }
 
 function subheadFor(c: ExpediaCategory): string {
-  const tail = 'Powered by Expedia. Real-time prices, free cancellation on most bookings.';
+  const tail = 'Powered by Vrbo. Real-time prices, free cancellation on most bookings.';
   switch (c) {
     case 'vacation-rentals':
       return `More space, kitchens, room to spread out — VRBO's 2M+ whole-home listings. ${tail.replace('Expedia', 'Expedia Group')}`;
     case 'flights':
-      return `Compare fares across hundreds of carriers. ${tail}`;
+      return `Whole homes with kitchens and space for the whole group. ${tail}`;
     case 'cars':
-      return `Every major rental company in one search. ${tail}`;
+      return `Cabins, cottages and villas — rent direct from owners. ${tail}`;
     case 'cruises':
-      return `Caribbean, Mediterranean, Alaska, fjords — every major cruise line. ${tail}`;
+      return `Beach houses, lake houses and villas for longer stays. ${tail}`;
     case 'attractions':
       return `Skip-the-line tickets, guided tours, half-day adventures. ${tail}`;
     case 'packages':
-      return `Bundle hotel + flight in one search — Expedia's package deals beat à-la-carte. ${tail}`;
+      return `Rent the whole place — more room than a hotel, more value per night. ${tail}`;
     default:
-      return `Search across hotels, vacation rentals, flights, cars, cruises and bookable experiences. ${tail}`;
+      return `Search whole homes, villas, cabins and cottages — plus bookable experiences worldwide. ${tail}`;
   }
 }
 

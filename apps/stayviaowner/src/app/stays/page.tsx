@@ -2,17 +2,17 @@ import type { Metadata } from 'next';
 import { CategoryLanding } from '@/features/site/category-landing';
 
 export const metadata: Metadata = {
-  title: 'Hotels & stays · stayviaowner',
+  title: 'Stays & vacation rentals · stayviaowner',
   description:
-    'Search hotels, apartments, and vacation rentals across 175+ destinations. Expedia inventory, the price you pay is the same.',
+    'Whole-home vacation rentals — villas, cabins and cottages — plus hotels, apartments and resorts across 175+ destinations, at the same price you would pay booking direct.',
 };
 
 export default function StaysPage() {
   return (
     <CategoryLanding
       category="hotels"
-      heading="Stays — hotels, apartments, rentals."
-      subhead="Search Expedia's full inventory of hotels, apart-hotels, vacation rentals, and resorts. Free cancellation on most stays."
+      heading="Stays — whole homes, villas & cabins."
+      subhead="Book whole-home rentals with full kitchens and room for the group, or compare hotels, apart-hotels and resorts across 175+ destinations. Free cancellation on most stays."
     />
   );
 }

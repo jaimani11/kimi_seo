@@ -94,7 +94,7 @@ export function PropertyTypeGrid() {
             margin: 0,
           }}
         >
-          Every kind of stay — bookable through Expedia + VRBO.
+          Every kind of stay — bookable through Vrbo.
         </h2>
       </div>
 

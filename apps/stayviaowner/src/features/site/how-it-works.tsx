@@ -9,7 +9,7 @@ const STEPS = [
   {
     number: '01',
     title: 'Describe or browse',
-    body: 'Type a sentence into the concierge, or browse the catalog by destination and type. Real Expedia inventory, real-time prices.',
+    body: 'Type a sentence into the concierge, or browse the catalog by destination and type. Real Vrbo inventory, real-time prices.',
   },
   {
     number: '02',

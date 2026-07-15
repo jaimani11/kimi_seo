@@ -348,7 +348,7 @@ function OwnersMenu() {
               color: 'rgba(15,35,64,0.7)',
             }}
           >
-            List with our partner networks · Expedia + VRBO reach 750M+ travelers a month.
+            List with Vrbo · reach hundreds of millions of travelers a month.
           </p>
         </div>
         <div>

@@ -90,8 +90,8 @@ export default function TermsPage() {
             <Li>Use the AI concierge to plan a trip.</Li>
             <Li>Save trips for later reference.</Li>
             <Li>
-              Click through to Expedia to search for stays, flights, attractions, cars, and cruises. Bookings happen
-              on the partner&apos;s site, on their terms.
+              Click through to Vrbo to search whole-home vacation rentals and stays, or to Viator to book tours
+              and experiences. Bookings happen on the partner&apos;s site, on their terms.
             </Li>
             <Li>Share links to our pages with others.</Li>
           </ul>
@@ -119,7 +119,7 @@ export default function TermsPage() {
 
         <Section title="5. Bookings happen with partners">
           <P>
-            When you click a &ldquo;Search on Expedia&rdquo; or similar CTA, you leave stayviaowner
+            When you click a &ldquo;Search on Vrbo&rdquo; or similar CTA, you leave stayviaowner
             and book with the partner directly. The partner&apos;s terms, cancellation policies,
             pricing, and refund rights govern the booking. We may earn an affiliate commission on
             bookings — the price you pay is the same as if you had visited the partner directly.

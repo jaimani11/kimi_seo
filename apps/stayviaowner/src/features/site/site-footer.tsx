@@ -2,8 +2,8 @@ import Link from 'next/link';
 import { NewsletterSignup } from '@adored/ui';
 
 /**
- * Clean footer with partner-attribution disclosure. Replaces the
- * old marketing footer which referenced multiple partners.
+ * Clean footer with partner-attribution disclosure. stayviaowner is a
+ * Vrbo whole-home rental brand — the disclosure and nav reflect that.
  */
 export function SiteFooter() {
   return (
@@ -40,18 +40,20 @@ export function SiteFooter() {
                   width: '1.65rem',
                   height: '1.65rem',
                   borderRadius: '0.5rem',
-                  background: 'linear-gradient(135deg, #003b95 0%, #006ce4 100%)',
-                  boxShadow: '0 2px 6px rgba(0, 108, 228, 0.28)',
+                  background: '#37d0a1',
                 }}
               >
                 <svg width="13" height="13" viewBox="0 0 16 16" fill="none">
-                  <path
-                    d="M3 4l5 4 5-4M3 12l5-4 5 4"
-                    stroke="#fff"
-                    strokeWidth="1.8"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
+                  <g fill="#fff">
+                    <circle cx="4" cy="4" r="1.4" />
+                    <circle cx="8" cy="4" r="1.4" />
+                    <circle cx="12" cy="4" r="1.4" />
+                    <circle cx="4" cy="8" r="1.4" />
+                    <circle cx="12" cy="8" r="1.4" />
+                    <circle cx="4" cy="12" r="1.4" />
+                    <circle cx="8" cy="12" r="1.4" />
+                    <circle cx="12" cy="12" r="1.4" />
+                  </g>
                 </svg>
               </span>
               stayviaowner
@@ -66,20 +68,16 @@ export function SiteFooter() {
                 color: 'var(--ink-secondary)',
               }}
             >
-              Official <strong style={{ fontWeight: 600, color: '#003580' }}>Expedia</strong>{' '}
-              affiliate. Search hotels, flights, things to do, car rentals, and cruises across
-              175+ destinations. Affiliate links; the price you pay is the same.
+              Independent <strong style={{ fontWeight: 600, color: '#2fbb90' }}>Vrbo</strong>{' '}
+              affiliate. Compare whole homes, villas, cabins and cottages across thousands of
+              destinations. Affiliate links; the price you pay is the same as booking on Vrbo direct.
             </p>
           </div>
 
           <nav className="flex flex-col gap-2 md:items-end">
-            <FooterLink href="/stays">Stays</FooterLink>
-            <FooterLink href="/flights">Flights</FooterLink>
-            <FooterLink href="/packages">Packages</FooterLink>
-            <FooterLink href="/things-to-do">Things to do</FooterLink>
-            <FooterLink href="/cars">Car rentals</FooterLink>
-            <FooterLink href="/cruises">Cruises</FooterLink>
+            <FooterLink href="/vacation-rentals">Vacation rentals</FooterLink>
             <FooterLink href="/destinations">Destinations</FooterLink>
+            <FooterLink href="/things-to-do">Things to do</FooterLink>
             <FooterLink href="/about">About</FooterLink>
             <FooterLink href="/contact">Contact</FooterLink>
             <FooterLink href="/profile/memory">Your memory</FooterLink>
@@ -99,11 +97,11 @@ export function SiteFooter() {
           }}
         >
           <p>
-            stayviaowner is an independent travel publisher and an official Expedia affiliate.
-            All searches route through Expedia under their Partner Programme. We earn a
-            commission on completed bookings; the price you pay is unchanged.
+            stayviaowner is an independent vacation-rental publisher and a Vrbo affiliate.
+            Rental searches route to Vrbo through its partner programme. We earn a commission
+            on completed bookings; the price you pay is unchanged.
           </p>
-          <p>© {new Date().getUTCFullYear()} stayviaowner. Expedia is a trademark of Expedia B.V.</p>
+          <p>© {new Date().getUTCFullYear()} stayviaowner. Vrbo is a trademark of Expedia Group, Inc.</p>
         </div>
       </div>
     </footer>

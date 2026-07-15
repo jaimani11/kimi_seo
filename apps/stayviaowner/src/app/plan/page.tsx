@@ -38,7 +38,7 @@ export async function generateMetadata({
     return {
       title: 'Plan a trip · Viator-powered itinerary builder',
       description:
-        'Describe a trip in one sentence — destination, days, vibe — and the AI concierge builds a day-by-day plan from live Expedia inventory. Reserve every experience in one flow.',
+        'Describe a trip in one sentence — destination, days, vibe — and the AI concierge builds a day-by-day plan from live Viator inventory. Reserve every experience in one flow.',
       alternates: { canonical: canonicalUrl('/plan') },
     };
   }

@@ -4,7 +4,7 @@ import { CategoryLanding } from '@/features/site/category-landing';
 export const metadata: Metadata = {
   title: 'Things to do · stayviaowner',
   description:
-    'Book tours, day trips, food walks, attractions, and skip-the-line tickets through Expedia Attractions.',
+    'Book tours, day trips, food walks, attractions, and skip-the-line tickets for your destination.',
 };
 
 export default function ThingsToDoPage() {
@@ -12,7 +12,7 @@ export default function ThingsToDoPage() {
     <CategoryLanding
       category="attractions"
       heading="Things to do — tours, day trips, tickets."
-      subhead="Bookable experiences via Expedia Attractions. Skip-the-line tickets, guided tours, half-day adventures."
+      subhead="Bookable experiences worldwide. Skip-the-line tickets, guided tours, half-day adventures."
     />
   );
 }

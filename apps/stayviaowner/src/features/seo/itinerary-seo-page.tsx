@@ -151,8 +151,8 @@ export function ItinerarySeoPage({
             }}
           >
             {loadError
-              ? `Live Expedia inventory is temporarily unavailable. Try again in a moment.`
-              : `Live Expedia inventory hasn’t been configured for this environment yet. The day-by-day frame is in place; bookable picks will populate once VIATOR_API_KEY is set.`}
+              ? `Live experience inventory is temporarily unavailable. Try again in a moment.`
+              : `Live experience inventory hasn’t been configured for this environment yet. The day-by-day frame is in place; bookable picks will populate once VIATOR_API_KEY is set.`}
           </p>
         </section>
       )}

@@ -1,5 +1,48 @@
 /**
- * Shim — the multi-category (Expedia/Booking-family) programmatic SEO
- * route parser lives in @adored/seo-routing. Add URL patterns THERE.
+ * Shim over the shared multi-category (Expedia/Booking-family) programmatic
+ * SEO route parser (`@adored/seo-routing/multicategory`).
+ *
+ * stayviaowner is a Vrbo whole-home rental brand, but this shared parser is
+ * the same one the multi-vertical brands (gotript, gobookt) use — so out of
+ * the box it generates flights / cars / cruises pages that are off-brand here
+ * and were the core of the "ghost duplicate of gotript" duplicate-content
+ * problem. We RETIRE those slug kinds app-locally (without touching the shared
+ * package the other brands still need): the wrapped `enumerateAllSeoSlugs`
+ * drops them so they neither statically generate (→ 404 via
+ * `generateStaticParams`) nor appear in the sitemap, and the wrapped
+ * `parseSeoSlug` returns null for them so any typed URL 404s.
+ *
+ * Kept: hotels, itineraries, things-to-do, comparisons, climate/where-to-stay,
+ * and the Vrbo rental matrix. Add URL patterns in @adored/seo-routing.
  */
+import {
+  enumerateAllSeoSlugs as enumerateAllSeoSlugsBase,
+  parseSeoSlug as parseSeoSlugBase,
+} from '@adored/seo-routing/multicategory';
+
 export * from '@adored/seo-routing/multicategory';
+
+/**
+ * Slug kinds retired on stayviaowner (Vrbo-first reposition): the Expedia-only
+ * flights / cars / cruises verticals. Hotels + attractions stay.
+ */
+const RETIRED_KINDS: ReadonlySet<string> = new Set([
+  'flights-to',
+  'cars-in',
+  'flights-themed',
+  'cars-themed',
+  'cruise-region',
+]);
+
+export function parseSeoSlug(slug: string): ReturnType<typeof parseSeoSlugBase> {
+  const parsed = parseSeoSlugBase(slug);
+  if (parsed && RETIRED_KINDS.has(parsed.kind)) return null;
+  return parsed;
+}
+
+export function enumerateAllSeoSlugs(): string[] {
+  return enumerateAllSeoSlugsBase().filter((slug) => {
+    const parsed = parseSeoSlugBase(slug);
+    return !parsed || !RETIRED_KINDS.has(parsed.kind);
+  });
+}
