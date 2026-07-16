@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import { notFound, permanentRedirect } from 'next/navigation';
-import { parseSeoSlug, enumerateAllSeoSlugs } from '@lib/seo/route-parser';
+import { parseSeoSlug, enumerateAllSeoSlugs, isNoindexSeoKind } from '@lib/seo/route-parser';
 import { canonicalUrl } from '@lib/site/origin';
 import { resolveDestinationPhoto } from '@lib/imagery/destination-photo';
 import { buildPlan } from '@/app/plan/build-plan';
@@ -88,6 +88,15 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   const canonical = canonicalUrl(`/${slug}`);
 
+  // Shared cross-brand editorial (guides / activities / climate / comparisons)
+  // carries `noindex, follow`: it stays crawlable for users + internal links but
+  // drops out of Google's index, concentrating stayviaowner's tight new-domain
+  // crawl budget on its unique Vrbo inventory. Differentiated kinds
+  // (hotels-themed = whole-home rentals) spread nothing here → stay indexed.
+  const robotsMeta = isNoindexSeoKind(parsed.kind)
+    ? { robots: { index: false, follow: true } as const }
+    : {};
+
   // Resolve a destination photo for the Open Graph card. Pinterest,
   // Facebook, X and Slack all read this — without it, rich pins fall
   // back to the pin's own image (no page-context photo). Cruise-region
@@ -120,6 +129,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       title,
       description,
       alternates: { canonical },
+      ...robotsMeta,
       openGraph: { title, description, url: canonical, type: 'article', images: ogImages },
       twitter: { card: 'summary_large_image', title, description, images: ogImages },
     };
@@ -135,6 +145,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       title,
       description,
       alternates: { canonical },
+      ...robotsMeta,
       openGraph: { title, description, url: canonical, type: 'article', images: ogImages },
       twitter: { card: 'summary_large_image', title, description, images: ogImages },
     };
@@ -147,6 +158,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       title,
       description,
       alternates: { canonical },
+      ...robotsMeta,
       openGraph: { title, description, url: canonical, type: 'article', images: ogImages },
       twitter: { card: 'summary_large_image', title, description, images: ogImages },
     };
@@ -159,6 +171,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       title,
       description,
       alternates: { canonical },
+      ...robotsMeta,
       openGraph: { title, description, url: canonical, type: 'website' },
       twitter: { card: 'summary', title, description },
     };
@@ -171,6 +184,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       title,
       description,
       alternates: { canonical },
+      ...robotsMeta,
       openGraph: { title, description, url: canonical, type: 'article', images: ogImages },
       twitter: { card: 'summary_large_image', title, description, images: ogImages },
     };
@@ -183,6 +197,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       title,
       description,
       alternates: { canonical },
+      ...robotsMeta,
       openGraph: { title, description, url: canonical, type: 'article', images: ogImages },
       twitter: { card: 'summary_large_image', title, description, images: ogImages },
     };
@@ -196,6 +211,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       title,
       description,
       alternates: { canonical },
+      ...robotsMeta,
       openGraph: { title, description, url: canonical, type: 'website', images: ogImages },
       twitter: { card: 'summary_large_image', title, description, images: ogImages },
     };
@@ -209,6 +225,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       title,
       description,
       alternates: { canonical },
+      ...robotsMeta,
       openGraph: { title, description, url: canonical, type: 'article', images: ogImages },
       twitter: { card: 'summary_large_image', title, description, images: ogImages },
     };
@@ -221,6 +238,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       title,
       description,
       alternates: { canonical },
+      ...robotsMeta,
       openGraph: { title, description, url: canonical, type: 'website', images: ogImages },
       twitter: { card: 'summary_large_image', title, description, images: ogImages },
     };
@@ -233,6 +251,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       title,
       description,
       alternates: { canonical },
+      ...robotsMeta,
       openGraph: { title, description, url: canonical, type: 'website', images: ogImages },
       twitter: { card: 'summary_large_image', title, description, images: ogImages },
     };
@@ -245,6 +264,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       title,
       description,
       alternates: { canonical },
+      ...robotsMeta,
       openGraph: { title, description, url: canonical, type: 'website', images: ogImages },
       twitter: { card: 'summary_large_image', title, description, images: ogImages },
     };
@@ -259,6 +279,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       title,
       description,
       alternates: { canonical },
+      ...robotsMeta,
       openGraph: { title, description, url: canonical, type: 'website', images: ogImages },
       twitter: { card: 'summary_large_image', title, description, images: ogImages },
     };
@@ -272,6 +293,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       title,
       description,
       alternates: { canonical },
+      ...robotsMeta,
       openGraph: { title, description, url: canonical, type: 'website', images: ogImages },
       twitter: { card: 'summary_large_image', title, description, images: ogImages },
     };
@@ -288,6 +310,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       title,
       description,
       alternates: { canonical },
+      ...robotsMeta,
       openGraph: { title, description, url: canonical, type: 'website', images: ogImages },
       twitter: { card: 'summary_large_image', title, description, images: ogImages },
     };
@@ -302,6 +325,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       title,
       description,
       alternates: { canonical },
+      ...robotsMeta,
       openGraph: { title, description, url: canonical, type: 'website', images: ogImages },
       twitter: { card: 'summary_large_image', title, description, images: ogImages },
     };
@@ -315,6 +339,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       title,
       description,
       alternates: { canonical },
+      ...robotsMeta,
       openGraph: { title, description, url: canonical, type: 'article', images: ogImages },
       twitter: { card: 'summary_large_image', title, description, images: ogImages },
     };
@@ -327,6 +352,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     title,
     description,
     alternates: { canonical },
+    ...robotsMeta,
     openGraph: { title, description, url: canonical, type: 'website' },
   };
 }

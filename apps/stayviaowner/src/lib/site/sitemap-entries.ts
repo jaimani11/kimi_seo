@@ -1,7 +1,7 @@
 import type { SitemapEntry } from '@adored/seo-routing/sitemap';
 import { ITALIAN_DESTINATIONS } from '@lib/curation/destinations';
 import { getSiteOrigin } from '@lib/site/origin';
-import { enumerateAllSeoSlugs } from '@lib/seo/route-parser';
+import { enumerateAllSeoSlugs, isNoindexSeoSlug } from '@lib/seo/route-parser';
 import { SEO_CITIES } from '@lib/seo/cities';
 import { hasDestinationGuide } from '@lib/seo/destination-content';
 import { allAccommodationCategories } from '@lib/seo/accommodation-categories';
@@ -81,8 +81,15 @@ export function sitemapSections(): SitemapSection[] {
       entries: enumerateOccasionSlugs().map((slug) => e(base, `/celebrations/${slug}`, 0.6)),
     },
     {
+      // Only the differentiated, indexable /[slug] pages remain (hotels-themed =
+      // Vrbo whole-home rental themes). The shared cross-brand editorial
+      // (things-to-do, itineraries, climate, comparisons) is `noindex, follow`, so
+      // it's dropped from the sitemap — a sitemap should list only indexable URLs,
+      // and this keeps Google's crawl budget on the unique inventory.
       name: 'editorial',
-      entries: enumerateAllSeoSlugs().map((slug) => e(base, `/${slug}`, 0.75, 'weekly')),
+      entries: enumerateAllSeoSlugs()
+        .filter((slug) => !isNoindexSeoSlug(slug))
+        .map((slug) => e(base, `/${slug}`, 0.75, 'weekly')),
     },
   ];
 

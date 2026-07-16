@@ -66,6 +66,45 @@ const RETIRED_KINDS: ReadonlySet<string> = new Set([
  */
 const REDIRECTED_KINDS: ReadonlySet<string> = new Set(['hotels-in']);
 
+/**
+ * Slug kinds NOINDEXED on stayviaowner (crawl-budget concentration): the
+ * destination-guide / activity / climate / comparison editorial that renders
+ * near-identically from the shared `@adored/seo-data` across all four sibling
+ * brands. gotript (older, first-indexed) wins the cross-domain canonical, so
+ * Google dedupes these away from stayviaowner AND burns its tight new-domain
+ * crawl budget on them before it ever reaches the unique Vrbo inventory.
+ *
+ * These pages stay LIVE + crawlable (`noindex, follow`) for users + internal
+ * links, but are dropped from the index and the sitemap so crawl budget
+ * concentrates on what's actually unique to stayviaowner: the `/rentals` matrix,
+ * accommodation categories, and the differentiated `hotels-themed` (Vrbo
+ * whole-home) pages — all of which stay indexed. Reversible: remove a kind from
+ * this set to re-index it. Single source of truth for [slug] robots + sitemap.
+ */
+const NOINDEX_KINDS: ReadonlySet<string> = new Set([
+  'things-to-do',
+  'things-themed',
+  'itinerary',
+  'weekend',
+  'themed-list',
+  'comparison',
+  'best-time',
+  'weather-month',
+  'where-to-stay',
+  'where-to-go-month',
+]);
+
+/** True when a parsed slug kind should carry `noindex, follow` (shared editorial). */
+export function isNoindexSeoKind(kind: string): boolean {
+  return NOINDEX_KINDS.has(kind);
+}
+
+/** True when a slug resolves to a noindexed page-type — used to omit it from the sitemap. */
+export function isNoindexSeoSlug(slug: string): boolean {
+  const parsed = parseSeoSlug(slug);
+  return parsed ? NOINDEX_KINDS.has(parsed.kind) : false;
+}
+
 export function parseSeoSlug(slug: string): ReturnType<typeof parseSeoSlugBase> {
   const parsed = parseSeoSlugBase(slug);
   if (parsed && RETIRED_KINDS.has(parsed.kind)) return null;
