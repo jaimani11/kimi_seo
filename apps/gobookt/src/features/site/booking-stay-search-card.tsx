@@ -20,7 +20,8 @@ export function BookingStaySearchCard({
   cityName,
   heading,
 }: {
-  cityName: string;
+  /** City to name in the heading/hint. Omit for a generic hub search box. */
+  cityName?: string;
   heading?: string;
 }) {
   return (
@@ -42,7 +43,7 @@ export function BookingStaySearchCard({
           color: '#0c1426',
         }}
       >
-        {heading ?? `Search stays in ${cityName} on Booking.com`}
+        {heading ?? (cityName ? `Search stays in ${cityName} on Booking.com` : 'Search stays on Booking.com')}
       </p>
       <p
         style={{
@@ -53,8 +54,15 @@ export function BookingStaySearchCard({
           color: '#5b6472',
         }}
       >
-        Type <strong style={{ color: '#0c1426' }}>{cityName}</strong> below, pick your dates, and
-        search. Free cancellation on most stays — the price you pay is the same as booking direct.
+        {cityName ? (
+          <>
+            Type <strong style={{ color: '#0c1426' }}>{cityName}</strong> below, pick your dates, and
+            search.{' '}
+          </>
+        ) : (
+          <>Search hundreds of thousands of hotels, homes, and apartments worldwide. </>
+        )}
+        Free cancellation on most stays — the price you pay is the same as booking direct.
       </p>
       <BookingSearchWidget />
     </div>
