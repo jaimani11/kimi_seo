@@ -1,12 +1,9 @@
 {
-  "name": "@adored/affiliate",
+  "name": "@adored/portfolio-revenue",
   "version": "0.1.0",
   "private": true,
   "type": "module",
   "exports": {
     ".": "./src/index.ts"
-  },
-  "dependencies": {
-    "@adored/brand-config": "workspace:*"
   }
 }

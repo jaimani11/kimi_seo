@@ -50,3 +50,7 @@ export {
   resolveCruiseDirectUrl,
   describeCruiseDirectUrl,
 } from './cruisedirect';
+
+// Brand-policy guard — enforces each brand's declared providers (Portfolio
+// Revenue Engine); fails closed on cross-brand / cross-network leakage.
+export { brandAllowsProvider, assertBrandProvider } from './brand-policy';

@@ -29,6 +29,7 @@
   },
   "dependencies": {
     "@adored/affiliate": "workspace:*",
+    "@adored/portfolio-revenue": "workspace:*",
     "@adored/brand-config": "workspace:*",
     "@adored/imagery": "workspace:*",
     "@adored/marketing": "workspace:*",
