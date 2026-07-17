@@ -1,7 +1,13 @@
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { resolveBookingUrl } from '@lib/affiliate/booking-cj-links';
 
-// The GoBookt-specific, browser-verified stays deep-link creative.
+// A deep-link TEMPLATE (with the literal {TARGET}) used to unit-test the resolver's
+// substitution + priority LOGIC. NOTE: in practice NONE of gobookt's CJ creatives
+// honour ?url= — 17293132 (homepage banner) and 17323532 (Advanced Link) BOTH land
+// on the Booking.com homepage in a real browser. The live homepage search therefore
+// uses Booking's affiliate WIDGET (features/site/booking-widget.tsx), which deep-links
+// + tracks via Booking's own SDK. This test still guards the resolver so that IF a
+// genuine deep-link creative is ever provisioned, the substitution wiring stays correct.
 const STAYS_DEEPLINK = 'https://www.tkqlhce.com/click-101803878-17293132?url={TARGET}';
 const STAYS_FIXED = 'https://www.anrdoezrs.net/click-101803878-17288985'; // fixed homepage creative
 const FLIGHTS_FIXED = 'https://www.tkqlhce.com/click-101803878-17288982'; // flights creative
