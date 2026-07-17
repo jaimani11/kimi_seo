@@ -402,27 +402,40 @@ export function VerticalLandingPage({
             <BookingStaySearchCard cityName={city.name} heading={`${ctaLabel} on Booking.com`} />
           </div>
         ) : (
-          <a
-            href={searchUrl}
-            target="_blank"
-            rel="sponsored nofollow noopener noreferrer"
-            className="mt-7 inline-flex items-center gap-2 transition-transform hover:scale-[1.01]"
-            style={{
-              fontFamily: 'var(--font-inter)',
-              fontSize: '0.95rem',
-              fontWeight: 700,
-              letterSpacing: '0.02em',
-              background: '#0071c2',
-              color: '#ffffff',
-              border: 'none',
-              borderRadius: '0.5rem',
-              padding: '0.85rem 1.4rem',
-              textDecoration: 'none',
-              boxShadow: '0 4px 12px rgba(0,113,194,0.32)',
-            }}
-          >
-            {ctaLabel} on Booking.com →
-          </a>
+          <>
+            <a
+              href={searchUrl}
+              target="_blank"
+              rel="sponsored nofollow noopener noreferrer"
+              className="mt-7 inline-flex items-center gap-2 transition-transform hover:scale-[1.01]"
+              style={{
+                fontFamily: 'var(--font-inter)',
+                fontSize: '0.95rem',
+                fontWeight: 700,
+                letterSpacing: '0.02em',
+                background: '#0071c2',
+                color: '#ffffff',
+                border: 'none',
+                borderRadius: '0.5rem',
+                padding: '0.85rem 1.4rem',
+                textDecoration: 'none',
+                boxShadow: '0 4px 12px rgba(0,113,194,0.32)',
+              }}
+            >
+              {ctaLabel} on Booking.com →
+            </a>
+            {/* Stays cross-sell. Booking's affiliate widget is accommodation-only
+              *  (flights/cars/attractions have link creatives, not widgets) and
+              *  gobookt is stays-first — so every flights/cars/attractions page
+              *  still earns via a tracked STAY search. The vertical link above
+              *  keeps the page's own intent. */}
+            <div className="mt-6 max-w-2xl">
+              <BookingStaySearchCard
+                cityName={city.name}
+                heading={`Planning your ${city.name} trip? Book your stay on Booking.com`}
+              />
+            </div>
+          </>
         )}
 
         {/* Why-this-vertical-on-Booking.com bullets */}
