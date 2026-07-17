@@ -2,6 +2,7 @@ import Link from 'next/link';
 import type { SeoCity } from '@lib/seo/cities';
 import { SiteHeader } from '@/features/site/site-header';
 import { SiteFooter } from '@/features/site/site-footer';
+import { BookingStaySearchCard } from '@/features/site/booking-stay-search-card';
 import {
   type HotelTypeRoute,
   siblingTypeLinks,
@@ -117,7 +118,6 @@ function faqsFor(route: HotelTypeRoute): { q: string; a: string }[] {
 export function HotelTypePage({ route }: { route: HotelTypeRoute }) {
   const { type, city } = route;
   const heading = hotelTypeHeading(route);
-  const href = bookingHref(route);
   const siblings = siblingTypeLinks(city, type.slug);
   const sameType = sameTypeCityLinks(type, city.slug);
   const faqs = faqsFor(route);
@@ -149,14 +149,12 @@ export function HotelTypePage({ route }: { route: HotelTypeRoute }) {
               {leadParagraph(route)}
             </p>
 
-            <div className="mt-7" style={{ display: 'flex', flexWrap: 'wrap', gap: '0.8rem' }}>
-              <a href={href} target="_blank" rel="sponsored nofollow noopener noreferrer" style={primaryCtaStyle}>
-                Search {city.name} hotels on Booking.com →
-              </a>
+            <div className="mt-7" style={{ maxWidth: '46rem' }}>
+              <BookingStaySearchCard
+                cityName={city.name}
+                heading={`Search ${city.name} hotels on Booking.com`}
+              />
             </div>
-            <p className="mt-3" style={{ fontFamily: 'var(--font-inter)', fontSize: '0.75rem', color: 'rgba(255,255,255,0.6)', margin: '0.75rem 0 0' }}>
-              Affiliate link · prices may change · the price you pay is the same.
-            </p>
           </div>
         </section>
 
@@ -286,4 +284,3 @@ const h2Style: React.CSSProperties = { fontFamily: 'var(--font-inter)', fontSize
 const chipStyle: React.CSSProperties = { fontFamily: 'var(--font-inter)', fontSize: '0.82rem', fontWeight: 600, color: 'var(--ink-secondary)', background: 'var(--surface-overlay)', border: '1px solid var(--border-subtle)', borderRadius: '999px', padding: '0.4rem 0.9rem' };
 const faqStyle: React.CSSProperties = { borderRadius: '0.6rem', border: '1px solid var(--border-subtle)', padding: '0.95rem 1.15rem', background: 'var(--surface-overlay)' };
 const sideLinkStyle: React.CSSProperties = { fontFamily: 'var(--font-inter)', fontSize: '0.9rem', color: 'var(--ink-secondary)', textDecoration: 'none' };
-const primaryCtaStyle: React.CSSProperties = { display: 'inline-flex', alignItems: 'center', gap: '0.4rem', background: '#febb02', color: '#003b95', fontFamily: 'var(--font-inter)', fontSize: '1rem', fontWeight: 800, padding: '0.9rem 1.6rem', borderRadius: '0.5rem', textDecoration: 'none', boxShadow: '0 12px 30px -12px rgba(254,187,2,0.7)' };

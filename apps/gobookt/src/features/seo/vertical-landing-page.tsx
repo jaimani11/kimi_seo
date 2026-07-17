@@ -5,6 +5,7 @@ import {
   buildBookingComCategoryUrl,
   type BookingComCategory,
 } from '@lib/affiliate/booking-com-multicategory';
+import { BookingStaySearchCard } from '@/features/site/booking-stay-search-card';
 
 /**
  * Programmatic SEO landing pages for the three Booking.com verticals
@@ -392,29 +393,37 @@ export function VerticalLandingPage({
           </p>
         </header>
 
-        {/* Primary CTA — Booking.com search for the right vertical,
-          *  pre-filled with the city. */}
-        <a
-          href={searchUrl}
-          target="_blank"
-          rel="sponsored nofollow noopener noreferrer"
-          className="mt-7 inline-flex items-center gap-2 transition-transform hover:scale-[1.01]"
-          style={{
-            fontFamily: 'var(--font-inter)',
-            fontSize: '0.95rem',
-            fontWeight: 700,
-            letterSpacing: '0.02em',
-            background: '#0071c2',
-            color: '#ffffff',
-            border: 'none',
-            borderRadius: '0.5rem',
-            padding: '0.85rem 1.4rem',
-            textDecoration: 'none',
-            boxShadow: '0 4px 12px rgba(0,113,194,0.32)',
-          }}
-        >
-          {ctaLabel} on Booking.com →
-        </a>
+        {/* Primary CTA. Stays: Booking's tracked WIDGET — a static CJ link
+          *  only reaches the Booking homepage, so the widget is the sole path
+          *  that keeps the city AND the CJ commission. Flights/cars/attractions:
+          *  the vertical search link (widget is stays-only). */}
+        {meta.category === 'hotels' ? (
+          <div className="mt-7 max-w-2xl">
+            <BookingStaySearchCard cityName={city.name} heading={`${ctaLabel} on Booking.com`} />
+          </div>
+        ) : (
+          <a
+            href={searchUrl}
+            target="_blank"
+            rel="sponsored nofollow noopener noreferrer"
+            className="mt-7 inline-flex items-center gap-2 transition-transform hover:scale-[1.01]"
+            style={{
+              fontFamily: 'var(--font-inter)',
+              fontSize: '0.95rem',
+              fontWeight: 700,
+              letterSpacing: '0.02em',
+              background: '#0071c2',
+              color: '#ffffff',
+              border: 'none',
+              borderRadius: '0.5rem',
+              padding: '0.85rem 1.4rem',
+              textDecoration: 'none',
+              boxShadow: '0 4px 12px rgba(0,113,194,0.32)',
+            }}
+          >
+            {ctaLabel} on Booking.com →
+          </a>
+        )}
 
         {/* Why-this-vertical-on-Booking.com bullets */}
         <ul

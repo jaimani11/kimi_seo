@@ -3,7 +3,6 @@ import type { AccommodationCategory } from '@lib/seo/accommodation-categories';
 import { allAccommodationCategories } from '@lib/seo/accommodation-categories';
 import { findCityBySlug, type SeoCity } from '@lib/seo/cities';
 import { resolveDestinationPhoto } from '@lib/imagery/destination-photo';
-import { buildBookingComCategoryUrl } from '@lib/affiliate/booking-com-multicategory';
 import { SiteHeader } from '@/features/site/site-header';
 import { SiteFooter } from '@/features/site/site-footer';
 
@@ -242,18 +241,13 @@ function CityCard({
     ...(city.region ? { region: city.region } : {}),
   });
   const label = `${category.name.replace(/s$/, '')} rentals in ${city.name}`;
-  // Direct VRBO deep link, type-specific: the category searchAnchor +
-  // city lands the traveler on exactly "luxury villa Santorini" results,
-  // one click from the page. Attribution rides the brand's Partnerize
-  // camref inside the builder.
-  const href = buildBookingComCategoryUrl('hotels', {
-    destination: `${category.searchAnchor} ${city.name}, ${city.countryName}`,
-  });
+  // Card links INTERNALLY to the city's stays page (which carries the tracked
+  // Booking.com widget). A direct Booking CJ link only reaches the Booking
+  // homepage, so we keep the click on-site and let the widget run the tracked,
+  // city-correct search.
   return (
-    <a
-      href={href}
-      target="_blank"
-      rel="sponsored nofollow noopener noreferrer"
+    <Link
+      href={`/hotels-in-${city.slug}`}
       style={{
         display: 'flex',
         flexDirection: 'column',
@@ -316,7 +310,7 @@ function CityCard({
           {city.oneLiner}
         </p>
       </div>
-    </a>
+    </Link>
   );
 }
 

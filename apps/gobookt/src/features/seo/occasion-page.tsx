@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { type OccasionRoute, siblingOccasions } from '@adored/seo-data';
 import { SiteHeader } from '@/features/site/site-header';
 import { SiteFooter } from '@/features/site/site-footer';
+import { BookingStaySearchCard } from '@/features/site/booking-stay-search-card';
 
 /**
  * gobookt occasion / celebration page — the Booking.com hotels angle
@@ -38,7 +39,6 @@ function lead(route: OccasionRoute): string {
 export function OccasionPage({ route }: { route: OccasionRoute }) {
   const { occasion, city } = route;
   const heading = occasionHeading(route);
-  const href = bookingHref(route);
   const siblings = siblingOccasions(route);
   const cityFaq = {
     q: `Where should we stay for a ${occasion.name.toLowerCase()} in ${city.name}?`,
@@ -59,14 +59,12 @@ export function OccasionPage({ route }: { route: OccasionRoute }) {
             <p className="mt-4" style={{ fontFamily: 'var(--font-inter)', fontSize: '1.02rem', lineHeight: 1.65, color: 'rgba(255,255,255,0.92)', maxWidth: '48rem', margin: '1rem 0 0' }}>
               {lead(route)}
             </p>
-            <div className="mt-7" style={{ display: 'flex', flexWrap: 'wrap', gap: '0.8rem' }}>
-              <a href={href} target="_blank" rel="sponsored nofollow noopener noreferrer" style={primaryCtaStyle}>
-                Search {city.name} hotels on Booking.com →
-              </a>
+            <div className="mt-7" style={{ maxWidth: '46rem' }}>
+              <BookingStaySearchCard
+                cityName={city.name}
+                heading={`Search ${city.name} hotels on Booking.com`}
+              />
             </div>
-            <p className="mt-3" style={{ fontFamily: 'var(--font-inter)', fontSize: '0.75rem', color: 'rgba(255,255,255,0.6)', margin: '0.75rem 0 0' }}>
-              Affiliate link · prices may change · the price you pay is the same.
-            </p>
           </div>
         </section>
 
@@ -151,4 +149,3 @@ const faqStyle: React.CSSProperties = { borderRadius: '0.6rem', border: '1px sol
 const cardStyle: React.CSSProperties = { borderRadius: '0.85rem', border: '1px solid var(--border-subtle)', background: 'var(--surface-overlay)', padding: '1.1rem 1.25rem' };
 const cardHeadingStyle: React.CSSProperties = { margin: 0, fontFamily: 'var(--font-inter)', fontSize: '0.66rem', letterSpacing: '0.14em', textTransform: 'uppercase', fontWeight: 700, color: 'var(--accent-primary)' };
 const sideLinkStyle: React.CSSProperties = { fontFamily: 'var(--font-inter)', fontSize: '0.9rem', color: 'var(--ink-secondary)', textDecoration: 'none' };
-const primaryCtaStyle: React.CSSProperties = { display: 'inline-flex', alignItems: 'center', gap: '0.4rem', background: '#febb02', color: '#003b95', fontFamily: 'var(--font-inter)', fontSize: '1rem', fontWeight: 800, padding: '0.9rem 1.6rem', borderRadius: '0.5rem', textDecoration: 'none', boxShadow: '0 12px 30px -12px rgba(254,187,2,0.7)' };
