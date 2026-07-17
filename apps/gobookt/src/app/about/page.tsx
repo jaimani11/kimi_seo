@@ -64,7 +64,7 @@ export default function AboutPage() {
 
           <h2 style={h2Style}>Hotel-first, on purpose</h2>
           <p>
-            Plenty of sites try to sell you flights, cars and cruises in the same
+            Plenty of sites try to sell you everything under the sun in the same
             breath. gobookt stays focused on where you sleep — hotels, apartments,
             guesthouses and boutique stays — because that&apos;s the decision that
             makes or breaks a trip, and it deserves a search that isn&apos;t

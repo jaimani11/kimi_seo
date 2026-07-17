@@ -5,7 +5,6 @@
  *   - Hotels & accommodations
  *   - Attractions (tours, day trips, tickets) — competes with Viator
  *   - Flights (powered by Kayak under the Booking.com brand)
- *   - Cruises
  *   - Car rentals
  *   - Airport taxis
  *
@@ -30,7 +29,6 @@ export type BookingComCategory =
   | 'hotels'
   | 'attractions'
   | 'flights'
-  | 'cruises'
   | 'cars'
   | 'taxis';
 
@@ -89,7 +87,6 @@ export function buildBookingComCategoryUrl(
 function surfaceForCategory(category: BookingComCategory): BookingCjSurface | null {
   switch (category) {
     case 'hotels':
-    case 'cruises': // gobookt routes cruises → embarkation-port hotels
       return 'stays';
     case 'attractions':
       return 'attractions';
@@ -115,8 +112,6 @@ function buildCategoryTargetUrl(
       return buildAttractionsUrl(input, config);
     case 'flights':
       return buildFlightsUrl(input, config);
-    case 'cruises':
-      return buildCruisesUrl(input, config);
     case 'cars':
       return buildCarsUrl(input, config);
     case 'taxis':
@@ -167,17 +162,6 @@ function buildFlightsUrl(input: CategorySearchInput, config: BookingComMultiConf
   );
 }
 
-function buildCruisesUrl(input: CategorySearchInput, config: BookingComMultiConfig): string {
-  // Booking.com discontinued their consumer Cruises product (the
-  // /cruises path now 404s and Cruises is no longer in their main
-  // nav). gobookt pivots the "Cruises" tab to **cruise port hotels**
-  // — pre/post-cruise stays at the embarkation port. The visitor
-  // types a port (Miami, Barcelona, Seattle, Athens…) and we route
-  // to Booking.com Hotels for that city — high-intent traffic that
-  // actually books, against the Booking.com inventory that exists.
-  return buildHotelsUrl(input, config);
-}
-
 function buildCarsUrl(input: CategorySearchInput, config: BookingComMultiConfig): string {
   // `cars.booking.com/searchresults` returns 404. The canonical Cars
   // landing lives on the main www domain — `www.booking.com/cars/
@@ -214,9 +198,8 @@ function withAffiliate(url: string, config: BookingComMultiConfig): string {
  * Display label + ordering for the home hero + AI concierge. Single
  * source of truth for which verticals gobookt surfaces and in what
  * order. gobookt is accommodation-first: Stays leads; things-to-do,
- * cars, and flights are supporting. Cruises are removed (Booking.com
- * pays $0 on cruises) — the /cruises route + buildCruisesUrl stay in
- * code but are no longer surfaced here.
+ * cars, and flights are supporting. Cruises are removed entirely
+ * (Booking.com pays $0 on cruises).
  */
 export const CATEGORY_META: ReadonlyArray<{
   id: BookingComCategory;

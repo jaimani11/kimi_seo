@@ -55,7 +55,7 @@ const THEME_REDIRECT: Readonly<Record<string, (citySlug: string) => string>> = {
 /**
  * Retirement action for a parsed route, or null for routes that are NOT retired
  * (all the healthy Booking.com families — hotels, hotel-themed, things-themed,
- * flights, cars, cruise, climate).
+ * flights, cars, climate). Cruises are RETIRED (Booking.com pays $0 on cruises).
  */
 export function retirementFor(parsed: SeoRoute): Retirement {
   switch (parsed.kind) {
@@ -81,6 +81,10 @@ export function retirementFor(parsed: SeoRoute): Retirement {
     case 'comparison':
       // city-vs-city — no single close accommodation target; hold for review.
       return { kind: 'held' };
+    case 'cruise-region':
+      // Cruises removed — Booking.com pays $0 commission on cruises. One-hop 308
+      // to the stays hub; enumerateAllSeoSlugs() drops these from the sitemap.
+      return { kind: 'redirect', to: '/stays' };
     default:
       return null;
   }

@@ -17,7 +17,7 @@ export function GET(): Response {
 
   const body = `# gobookt
 
-> Hotels, flights, car rentals, cruises, and things to do across 190+ countries,
+> Hotels, flights, car rentals, and things to do across 190+ countries,
 > plus research-backed destination guides (best time to visit, budgets,
 > neighborhoods, weather, transport, safety). Powered by Booking.com. Operated
 > by Adored Moments LLC.
@@ -27,7 +27,6 @@ export function GET(): Response {
 - [Flights](${origin}/flights): compare fares across airlines.
 - [Things to do](${origin}/things-to-do): tours, tickets, and activities.
 - [Car rentals](${origin}/cars): airport and city pickups.
-- [Cruises](${origin}/cruises): cruise-port hotels and options.
 - [Destinations](${origin}/destinations): browse all city guides.
 
 ## Destination guides

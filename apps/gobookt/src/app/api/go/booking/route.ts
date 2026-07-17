@@ -15,7 +15,6 @@ const VALID_CATEGORIES: BookingComCategory[] = [
   'flights',
   'attractions',
   'cars',
-  'cruises',
   'taxis',
 ];
 

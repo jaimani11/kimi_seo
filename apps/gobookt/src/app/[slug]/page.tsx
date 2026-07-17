@@ -11,10 +11,6 @@ import {
   type VerticalKind,
 } from '@/features/seo/vertical-landing-page';
 import {
-  CruiseRegionPage,
-  buildCruiseRegionJsonLd,
-} from '@/features/seo/cruise-region-page';
-import {
   BestTimeSeoPage,
   buildBestTimeJsonLd,
   WeatherMonthSeoPage,
@@ -81,8 +77,9 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   // Resolve a destination photo for the Open Graph card. Pinterest,
   // Facebook, X and Slack all read this — without it, rich pins fall
-  // back to the pin's own image (no page-context photo). Cruise-region
-  // pages don't map to a single city so they skip the OG image.
+  // back to the pin's own image (no page-context photo). cruise-region
+  // (retired → redirects) + where-to-go-month don't map to a single city,
+  // so they skip the OG image.
   const ogCity =
     parsed.kind === 'comparison'
       ? parsed.comparison.a
@@ -248,19 +245,6 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     };
   }
 
-  if (parsed.kind === 'cruise-region') {
-    const label = CRUISE_REGION_HEADING[parsed.region];
-    const title = `${label} · gobookt`;
-    const description = `${label} on Booking.com Cruises — every major cruise line, route, and embarkation port. Free cancellation on most rates.`;
-    return {
-      title,
-      description,
-      alternates: { canonical },
-      openGraph: { title, description, url: canonical, type: 'article', images: ogImages },
-      twitter: { card: 'summary_large_image', title, description, images: ogImages },
-    };
-  }
-
   // Any remaining kind is a retired Viator family already handled by the gate
   // above; fall through defensively to noindex.
   return { alternates: { canonical }, robots: { index: false, follow: false } };
@@ -293,14 +277,6 @@ const THINGS_VARIANT_HEADING: Record<string, string> = {
   free: 'Free things to do',
   museums: 'Museums',
   tours: 'Tours',
-};
-
-const CRUISE_REGION_HEADING: Record<string, string> = {
-  mediterranean: 'Mediterranean cruises',
-  caribbean: 'Caribbean cruises',
-  alaska: 'Alaska cruises',
-  'northern-europe': 'Northern Europe cruises',
-  asia: 'Asia cruises',
 };
 
 export default async function ProgrammaticSeoPage({ params }: PageProps) {
@@ -470,23 +446,6 @@ export default async function ProgrammaticSeoPage({ params }: PageProps) {
           }}
         />
         <VerticalLandingPage kind={verticalKind} city={city} />
-      </>
-    );
-  }
-
-  if (parsed.kind === 'cruise-region') {
-    return (
-      <>
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: buildCruiseRegionJsonLd({
-              region: parsed.region,
-              canonical,
-            }),
-          }}
-        />
-        <CruiseRegionPage region={parsed.region} />
       </>
     );
   }

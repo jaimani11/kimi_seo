@@ -78,6 +78,16 @@ export default async function middleware(req: NextRequest) {
   const hostRedirect = canonicalHostRedirect(req);
   if (hostRedirect) return hostRedirect;
 
+  // Cruises retired (Booking.com pays $0 commission on cruises). 308 the old
+  // /cruises hub to the stays hub. The cruise-region SEO pages redirect via
+  // retirementFor() inside the [slug] route.
+  if (req.nextUrl.pathname === '/cruises' || req.nextUrl.pathname === '/cruises/') {
+    const url = req.nextUrl.clone();
+    url.pathname = '/stays';
+    url.search = '';
+    return NextResponse.redirect(url, 308);
+  }
+
   // Reversible per-bot hard block (AI_BOTS_BLOCKED). robots.txt is advisory;
   // a bot that ignores it still costs a function invocation per hit. When an
   // operator lists a bot in AI_BOTS_BLOCKED we 403 it at the edge here, before

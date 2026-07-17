@@ -89,7 +89,7 @@ export default function TermsPage() {
             <Li>Read our destination guides, stay guides, and travel tips.</Li>
             <Li>Save trips for later reference.</Li>
             <Li>
-              Click through to Booking.com to search for stays, flights, attractions, cars, and cruises. Bookings happen
+              Click through to Booking.com to search for stays, flights, attractions, and cars. Bookings happen
               on the partner&apos;s site, on their terms.
             </Li>
             <Li>Share links to our pages with others.</Li>

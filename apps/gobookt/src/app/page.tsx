@@ -13,15 +13,13 @@ import { SiteFooter } from '@/features/site/site-footer';
  * Layout (top → bottom):
  *
  *   SiteHeader              : sticky nav with 5 category links
- *                             (Stays / Flights / Things to do / Cars
- *                             / Cruises) + Destinations + Concierge.
+ *                             (Stays / Flights / Things to do / Cars)
+ *                             + Destinations + Concierge.
  *   HomeStayHero            : accommodation-first stays search. Picks
  *                             destination + dates + party, hands off to
- *                             Booking.com via /api/go/booking. Flights /
- *                             cars / things-to-do are quiet secondary
- *                             links, not equal tabs. (The 5-tab
- *                             MultiCategoryHero is retained for the
- *                             /flights, /cars, /cruises landing pages.)
+ *                             Booking.com via the tracked stays widget.
+ *                             Flights / cars / things-to-do are quiet
+ *                             secondary links, not equal tabs.
  *   StatsBand               : numbered trust strip.
  *   AgenticHero             : AI concierge — frames "plan my whole
  *                             trip" rather than just experiences.
