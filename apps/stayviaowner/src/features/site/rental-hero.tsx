@@ -43,9 +43,12 @@ const POPULAR_DESTINATIONS: readonly string[] = [
 ];
 
 export function RentalHero() {
-  const [destination, setDestination] = useState('Palm Desert, California, USA');
+  // Empty by default — the visitor types their own destination (a pre-filled
+  // city forced them to delete it first). The datalist + placeholder guide them.
+  const [destination, setDestination] = useState('');
   const [checkIn, setCheckIn] = useState('2026-07-20');
   const [checkOut, setCheckOut] = useState('2026-07-27');
+  const canSearch = destination.trim().length > 0;
 
   // One-step handoff: go straight to VRBO via the tracked /api/go/expedia
   // redirect (same route the /vacation-rentals search uses). Previously this
@@ -150,6 +153,7 @@ export function RentalHero() {
                 list="popular-destinations"
                 value={destination}
                 onChange={(e) => setDestination(e.target.value)}
+                placeholder="Search a destination"
                 aria-label="Destination"
                 style={{
                   width: '100%',
@@ -252,8 +256,9 @@ export function RentalHero() {
 
             <button
               type="submit"
+              disabled={!canSearch}
               style={{
-                background: MINT,
+                background: canSearch ? MINT : '#cbd5e1',
                 color: NAVY_DEEP,
                 fontFamily: 'var(--font-inter)',
                 fontSize: '0.95rem',
@@ -262,11 +267,15 @@ export function RentalHero() {
                 textTransform: 'uppercase',
                 padding: '0 2.25rem',
                 border: 'none',
-                cursor: 'pointer',
+                cursor: canSearch ? 'pointer' : 'not-allowed',
                 transition: 'background 120ms ease',
               }}
-              onMouseEnter={(e) => (e.currentTarget.style.background = MINT_HOVER)}
-              onMouseLeave={(e) => (e.currentTarget.style.background = MINT)}
+              onMouseEnter={(e) => {
+                if (canSearch) e.currentTarget.style.background = MINT_HOVER;
+              }}
+              onMouseLeave={(e) => {
+                if (canSearch) e.currentTarget.style.background = MINT;
+              }}
             >
               Show best prices
             </button>
