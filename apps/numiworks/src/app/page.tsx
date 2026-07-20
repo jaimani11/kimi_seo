@@ -62,15 +62,21 @@ export const metadata: Metadata = {
 export default function HomePage() {
   return (
     <>
+      {/* numiworks = the EXPERIENCES brand, so the homepage leads with visual
+          experience DISCOVERY (the photo-tile "browse by type" grid — the
+          load-bearing element on the top-performing experiences sites), not the
+          planner/search-first flow gotript uses. StatsBand drops well down so the
+          two brands don't share the same "hero → strip → stats" rhythm. Live
+          Viator rails stay mid-page (client-fetched, so never the lead). */}
       <SiteHeader />
       <SearchFormHero />
-      <VrboHomepageStrip />
-      <StatsBand />
-      <AgenticHero />
-      <RecentlyViewedRail />
       <BrowseByType />
+      <VrboHomepageStrip />
+      <AgenticHero />
       <PopularDestinationsGrid />
       <LiveExperienceRails />
+      <RecentlyViewedRail />
+      <StatsBand />
       <HowNumiworksWorks />
       <SeoLinkFooter />
       <SiteFooter />
