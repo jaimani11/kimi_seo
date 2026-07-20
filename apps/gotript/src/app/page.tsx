@@ -3,11 +3,9 @@ import { SiteHeader } from '@/features/site/site-header';
 import { MultiCategoryHero } from '@/features/site/multi-category-hero';
 import { PropertyTypeRail } from '@/features/site/property-type-rail';
 import { StatsBand } from '@/features/site/stats-band';
-import { AgenticHero } from '@/features/site/agentic-hero';
 import { RecentlyViewedRail } from '@/features/site/recently-viewed-rail';
 import { PopularDestinationsGrid } from '@/features/site/popular-destinations-grid';
 import { HowGotriptWorks } from '@/features/site/how-it-works';
-import { SeoLinkFooter } from '@/features/site/seo-link-footer';
 import { SiteFooter } from '@/features/site/site-footer';
 
 /**
@@ -22,14 +20,17 @@ import { SiteFooter } from '@/features/site/site-footer';
  *                             dates + party, redirects to Expedia
  *                             for the chosen vertical via /api/go/expedia.
  *   StatsBand               : numbered trust strip.
- *   AgenticHero             : AI concierge — frames "plan my whole
- *                             trip" rather than just experiences.
  *   RecentlyViewedRail      : recently-viewed pickup, only renders
  *                             after the visitor has activity.
  *   PopularDestinationsGrid : 12 destination tiles.
  *   HowGotriptWorks         : 3-step trust strip.
- *   SeoLinkFooter           : indexable link footer.
  *   SiteFooter              : minimal legal footer.
+ *
+ * The Viator AgenticHero (concierge) + SeoLinkFooter (a footer of
+ * /search?q= Viator links with a mis-branded "Viator affiliate"
+ * disclaimer) were removed: experiences belong to numiworks, and gotript
+ * is the Expedia planner. A proper on-brand SEO footer + planning surface
+ * arrive with the gotript planning-brand build.
  */
 // Homepage-specific title/description. Keyword-first for search, brand-
 // suffixed for recognition — overrides the generic layout default. The
@@ -54,11 +55,9 @@ export default function HomePage() {
       <MultiCategoryHero />
       <PropertyTypeRail />
       <StatsBand />
-      <AgenticHero />
       <RecentlyViewedRail />
       <PopularDestinationsGrid />
       <HowGotriptWorks />
-      <SeoLinkFooter />
       <SiteFooter />
     </>
   );

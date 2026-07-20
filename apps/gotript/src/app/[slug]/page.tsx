@@ -5,10 +5,6 @@ import { canonicalUrl } from '@lib/site/origin';
 import { resolveDestinationPhoto } from '@lib/imagery/destination-photo';
 import { viatorProviderFromEnv } from '@/providers/viator';
 import {
-  ThingsToDoSeoPage,
-  buildThingsToDoJsonLd,
-} from '@/features/seo/things-to-do-seo-page';
-import {
   ThemedListSeoPage,
   buildThemedListJsonLd,
   THEME_META,
@@ -37,7 +33,6 @@ import {
   buildWhereToGoMonthJsonLd,
 } from '@/features/seo/climate-seo-pages';
 import {
-  buildThingsToDoFaq,
   findClimate,
   findDestinationGuide,
   monthName,
@@ -603,35 +598,13 @@ export default async function ProgrammaticSeoPage({ params }: PageProps) {
     );
   }
 
-  // things-to-do
+  // things-to-do editorial retired on the Expedia brand — it wrapped Viator
+  // freetext search (broken without VIATOR_API_KEY). "Things to do" belongs to
+  // numiworks (the Viator hub); consolidate this city's intent onto its gotript
+  // destination guide, or the guides index if it has none.
   const { city } = parsed;
-  const result = await fetchExperiences(`${city.viatorQuery} tours`);
-  const faq = buildThingsToDoFaq({
-    cityName: city.name,
-    oneLiner: city.oneLiner,
-    guide: findDestinationGuide(city.slug),
-    topExperienceTitles: result.experiences.slice(0, 3).map((e) => e.title),
-  });
-  return (
-    <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: buildThingsToDoJsonLd({
-            city,
-            experiences: result.experiences,
-            canonical,
-            faq,
-          }),
-        }}
-      />
-      <ThingsToDoSeoPage
-        city={city}
-        experiences={result.experiences}
-        loadError={result.loadError}
-        faq={faq}
-      />
-    </>
+  permanentRedirect(
+    findDestinationGuide(city.slug) ? `/destinations/${city.slug}` : '/destinations',
   );
 }
 

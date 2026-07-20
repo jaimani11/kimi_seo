@@ -46,14 +46,19 @@ const CITIES = [
   'Tokyo', 'New York', 'Dubai', 'Marrakech', 'Reykjavík', 'Cappadocia',
 ];
 
+const citySlug = (c: string) =>
+  c.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/\s+/g, '-');
+
+// Point at each city's destination GUIDE (weather/map/where-to-stay), not the
+// retired Viator /search. On-brand and internal.
 const DEST_COLS: readonly NavCol[] = [
   {
     heading: 'Popular destinations',
-    links: CITIES.slice(0, 6).map((c) => ({ label: c, href: `/search?q=${encodeURIComponent(c)}` })),
+    links: CITIES.slice(0, 6).map((c) => ({ label: c, href: `/destinations/${citySlug(c)}` })),
   },
   {
     heading: 'More destinations',
-    links: CITIES.slice(6).map((c) => ({ label: c, href: `/search?q=${encodeURIComponent(c)}` })),
+    links: CITIES.slice(6).map((c) => ({ label: c, href: `/destinations/${citySlug(c)}` })),
   },
 ];
 

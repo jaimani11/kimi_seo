@@ -116,10 +116,10 @@ export function sitemapSections(): SitemapSection[] {
       name: 'itineraries',
       entries: seo.itineraries.map((slug) => e(base, `/${slug}`, 0.75, 'weekly')),
     },
-    {
-      name: 'things-to-do',
-      entries: seo.thingsToDo.map((slug) => e(base, `/${slug}`, 0.75, 'weekly')),
-    },
+    // 'things-to-do' section retired: those /things-to-do-in-{city} pages now
+    // 308-redirect to the city's destination guide (Viator editorial retired on
+    // the Expedia brand; experiences live on numiworks). A sitemap must not list
+    // redirecting URLs, so the section is dropped.
     {
       name: 'seasonal',
       entries: seo.seasonal.map((slug) => e(base, `/${slug}`, 0.75, 'weekly')),
