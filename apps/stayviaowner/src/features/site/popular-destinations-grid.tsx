@@ -175,6 +175,56 @@ export function PopularDestinationsGrid() {
                 booking right now.
               </em>
             </h2>
+            <p
+              className="mt-3"
+              style={{
+                fontFamily: 'var(--font-inter)',
+                fontSize: '0.92rem',
+                lineHeight: 1.5,
+                color: 'var(--ink-primary)',
+                opacity: 0.72,
+                margin: 0,
+                maxWidth: '34rem',
+              }}
+            >
+              Every destination has a full guide — not just a booking link:
+            </p>
+            <ul
+              className="mt-3 flex flex-wrap gap-2"
+              style={{ listStyle: 'none', padding: 0, margin: 0 }}
+            >
+              {['Month-by-month weather', 'Interactive map', 'Neighborhoods & timing'].map(
+                (feat) => (
+                  <li
+                    key={feat}
+                    style={{
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '0.4rem',
+                      fontFamily: 'var(--font-inter)',
+                      fontSize: '0.72rem',
+                      fontWeight: 600,
+                      color: 'var(--ink-primary)',
+                      background: 'var(--surface-elevated)',
+                      border: '1px solid var(--border-subtle)',
+                      borderRadius: '999px',
+                      padding: '0.34rem 0.7rem',
+                    }}
+                  >
+                    <span
+                      aria-hidden
+                      style={{
+                        width: '0.34rem',
+                        height: '0.34rem',
+                        borderRadius: '999px',
+                        background: 'var(--accent-primary)',
+                      }}
+                    />
+                    {feat}
+                  </li>
+                ),
+              )}
+            </ul>
           </div>
           <Link
             href="/destinations"
@@ -196,7 +246,11 @@ export function PopularDestinationsGrid() {
           {DESTINATIONS.map((d) => (
             <li key={d.name}>
               <Link
-                href={`/search?q=${encodeURIComponent(`${d.name}, ${d.country}`)}`}
+                href={`/destinations/${d.name
+                  .toLowerCase()
+                  .normalize('NFD')
+                  .replace(/[̀-ͯ]/g, '')
+                  .replace(/\s+/g, '-')}`}
                 className="group relative block w-full overflow-hidden"
                 style={{
                   aspectRatio: '3 / 4',
@@ -229,12 +283,14 @@ export function PopularDestinationsGrid() {
                   <span
                     style={{
                       fontFamily: 'var(--font-inter)',
-                      fontSize: '0.68rem',
-                      fontWeight: 600,
+                      fontSize: '0.6rem',
+                      fontWeight: 700,
+                      letterSpacing: '0.14em',
+                      textTransform: 'uppercase',
                       color: '#FFE6B5',
                     }}
                   >
-                    {d.rating}
+                    Guide
                   </span>
                 </div>
                 <div className="absolute inset-x-0 bottom-0 p-5">
@@ -267,18 +323,17 @@ export function PopularDestinationsGrid() {
                     {d.name}
                   </h3>
                   <p
-                    className="mt-2 flex items-baseline gap-3"
+                    className="mt-2"
                     style={{
                       fontFamily: 'var(--font-inter)',
                       fontSize: '0.74rem',
-                      color: 'rgba(237,230,219,0.9)',
+                      fontWeight: 600,
+                      color: 'rgba(237,230,219,0.92)',
                       textShadow: '0 1px 3px rgba(0,0,0,0.55)',
                       margin: 0,
                     }}
                   >
-                    <span style={{ fontWeight: 600 }}>{d.fromPrice}</span>
-                    <span style={{ opacity: 0.75 }}>·</span>
-                    <span>{d.count}</span>
+                    Weather · map · where to stay →
                   </p>
                 </div>
               </Link>
