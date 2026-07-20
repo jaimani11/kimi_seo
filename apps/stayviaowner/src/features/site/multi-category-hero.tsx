@@ -37,17 +37,17 @@ const POPULAR_DESTINATIONS = [
 ] as const;
 
 
-const HERO_BG = 'linear-gradient(135deg, #003580 0%, #006ce4 100%)';
+const HERO_BG = 'linear-gradient(135deg, var(--brand-hero-from) 0%, var(--brand-hero-to) 100%)';
 const PANEL_BG = '#ffffff';
 const PANEL_TEXT = '#0c1426';
 const PANEL_LABEL = '#64748b';
 const PANEL_DIVIDER = '#e2e8f0';
 const PANEL_INPUT_BG = '#ffffff';
-const BTN_BG = '#006ce4';
+const BTN_BG = 'var(--accent-primary)';
 const BTN_BG_HOVER = '#0050a8';
 const BTN_DISABLED = '#cbd5e1';
 const HIGHLIGHT = '#ffd166';
-const TAB_ACTIVE = '#003580';
+const TAB_ACTIVE = 'var(--accent-primary)';
 const TAB_INACTIVE = '#64748b';
 
 export function MultiCategoryHero({

@@ -211,7 +211,7 @@ export function ContactForm() {
           fontSize: '1rem',
           fontWeight: 700,
           letterSpacing: '0.02em',
-          background: status === 'submitting' ? '#94a3b8' : '#003580',
+          background: status === 'submitting' ? '#94a3b8' : 'var(--accent-primary)',
           color: '#ffffff',
           border: 'none',
           borderRadius: '0.5rem',
