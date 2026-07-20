@@ -121,8 +121,19 @@ export async function subscribeEmail(args: {
     if (res.status === 409 || /already|exists/i.test(body)) {
       return { ok: true, status: 'already', message: "You're already subscribed — thanks!" };
     }
+    // Surface the real Resend failure in the server logs so it's diagnosable:
+    // 403 = key lacks contact-write permission (Sending-only key), 404 = wrong
+    // audience id, 401 = bad/expired key. Body truncated; no PII.
+    console.error('[newsletter] Resend add-contact failed', {
+      status: res.status,
+      audienceId: env.audienceId,
+      body: body.slice(0, 300),
+    });
     return { ok: false, status: 'error', message: 'Something went wrong. Please try again.' };
-  } catch {
+  } catch (err) {
+    console.error('[newsletter] Resend add-contact threw', {
+      message: (err as Error)?.message ?? String(err),
+    });
     return { ok: false, status: 'error', message: 'Something went wrong. Please try again.' };
   }
 }
