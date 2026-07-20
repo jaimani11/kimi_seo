@@ -2,6 +2,12 @@ packages:
   - "apps/*"
   - "packages/*"
 
+# Security overrides — force transitive deps onto their patched line.
+#   postcss <8.5.10: XSS via unescaped </style> in CSS (GHSA). Pulled in
+#   transitively by Next.js; pin the whole workspace to the fixed release.
+overrides:
+  "postcss@<8.5.10": ">=8.5.10"
+
 # Build-script approvals — BOTH dialects on purpose:
 #   allowBuilds            → pnpm 11 (what Vercel runs via the
 #                            packageManager pin; v11 HARD-FAILS in CI
