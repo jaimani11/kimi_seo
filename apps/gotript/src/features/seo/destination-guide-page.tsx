@@ -276,6 +276,22 @@ export async function DestinationGuidePage({
               </li>
             ))}
           </ul>
+          <Link
+            href={`/where-to-stay-in-${city.slug}`}
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '0.4rem',
+              marginTop: '0.35rem',
+              fontFamily: 'var(--font-inter)',
+              fontSize: '0.9rem',
+              fontWeight: 700,
+              color: 'var(--accent-primary)',
+              textDecoration: 'none',
+            }}
+          >
+            Not sure which area fits you? Match {city.name}’s neighborhoods to your trip →
+          </Link>
         </Section>
 
         <Section title={`${city.name} Map & Walking Distances`} eyebrow="Get Your Bearings">
