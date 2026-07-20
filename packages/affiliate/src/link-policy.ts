@@ -20,12 +20,14 @@ import {
  *                      guard (gobookt → vrbo.com is a $0-earning leak).
  *   - requiredSignals: the attribution the network needs to credit the sale.
  *
- * Attribution is asserted only where a brand is on a SINGLE network and the
- * rule is unambiguous: Partnerize `camref` for the pure Expedia/VRBO brands,
- * CJ `cjevent` for the Booking brand. A multi-network brand (numiworks =
- * Viator + VRBO) gets host-only coverage for now — per-host attribution is v2.
- * gotript auto-gains the camref requirement the moment its brand-config
- * providers drop the retired viator/getyourguide.
+ * Attribution is asserted only where it's an unambiguous BUILD-time signal: the
+ * Partnerize `camref` (path-encoded in every prf.hn link) for the pure
+ * Expedia/VRBO brands. The Booking brand's CJ attribution is a REDIRECT-time
+ * signal — cjevent is minted by CJ's click redirect, so it is NOT in the built
+ * URL — so Booking gets host + leak coverage here (a runtime CJ-tracking audit
+ * is v2). Multi-network brands (numiworks = Viator + VRBO) are host-only too.
+ * gotript auto-gains the camref rule the moment its brand-config drops the
+ * retired viator/getyourguide.
  */
 
 /** Hosts a link for each provider may legitimately resolve to. */
@@ -57,7 +59,6 @@ export function linkPolicyForBrand(brandKey: string): LinkPolicy {
   const camref = brand?.affiliate.expediaCamref?.trim();
   const isPurePartnerize =
     providers.length > 0 && providers.every((p) => p === 'expedia' || p === 'vrbo');
-  const isPureBooking = providers.length === 1 && providers[0] === 'booking';
   if (isPurePartnerize && camref) {
     requiredSignals.push({
       key: 'camref',
@@ -65,9 +66,9 @@ export function linkPolicyForBrand(brandKey: string): LinkPolicy {
       note: 'Partnerize camref',
     });
   }
-  if (isPureBooking) {
-    requiredSignals.push({ key: 'cjevent', note: 'CJ cjevent' });
-  }
+  // Booking (CJ) attribution is redirect-time (cjevent), not in the built URL,
+  // so the Booking brand gets host + leak coverage only; a runtime CJ-tracking
+  // audit is v2.
 
   return { id: brandKey, allowedHosts, forbiddenHosts, requiredSignals };
 }
