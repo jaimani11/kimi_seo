@@ -22,6 +22,8 @@ export { LocalTimeStrip } from './local-time';
 export { CurrencyStrip } from './currency-strip';
 export type { MapPin } from './destination-map';
 export { DestinationMap } from './destination-map';
+export type { SmartStayOfferProps } from './smart-stay-offer';
+export { SmartStayOffer } from './smart-stay-offer';
 export { WalkDistances } from './walk-distances';
 export { NewsletterSignup } from './newsletter-signup';
 export type { CrossBrandBookingLink } from './cross-brand-booking';

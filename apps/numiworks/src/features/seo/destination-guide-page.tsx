@@ -13,9 +13,11 @@ import {
   DestinationMap,
   WalkDistances,
   CrossBrandBooking,
+  SmartStayOffer,
   type MapPin,
 } from '@adored/ui';
 import { cityBookingLinks } from '@adored/brand-config';
+import { buildVrboSearchUrl } from '@lib/affiliate/vrbo-link';
 import { VrboCityCallout } from '@/features/destinations/vrbo-city-callout';
 import { GygActivitiesWidget } from '@/features/experiences/getyourguide-widget';
 
@@ -74,6 +76,9 @@ export async function DestinationGuidePage({
       detail: distanceLabel(haversineKm(city.coordinates, n)),
     })),
   ];
+
+  // Intent-timed booking nudge (SmartStayOffer) — VRBO stay search for this city.
+  const smartStayHref = buildVrboSearchUrl(city.name);
 
   return (
     <SeoPageShell
@@ -317,6 +322,16 @@ export async function DestinationGuidePage({
         cityName={city.name}
         links={cityBookingLinks(city.slug, { exclude: 'numiworks' })}
       />
+
+      {smartStayHref ? (
+        <SmartStayOffer
+          href={smartStayHref}
+          headline={`Set on ${city.name}? Lock in where you'll stay.`}
+          subline="Whole homes on VRBO — kitchens, space, and the same price as booking direct."
+          ctaLabel={`See ${city.name} homes →`}
+          storageKey={`sso-${city.slug}`}
+        />
+      ) : null}
     </SeoPageShell>
   );
 }
