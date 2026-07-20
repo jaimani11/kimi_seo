@@ -78,6 +78,16 @@ export default async function middleware(req: NextRequest) {
   const hostRedirect = canonicalHostRedirect(req);
   if (hostRedirect) return hostRedirect;
 
+  // /plan retired (interim). The Viator itinerary builder errors on gotript
+  // (Expedia brand, no Viator key) — 307 to home until it's rebuilt on Expedia
+  // in the AI-planner phase (temporary, so it comes back cleanly).
+  if (req.nextUrl.pathname === '/plan') {
+    const url = req.nextUrl.clone();
+    url.pathname = '/';
+    url.search = '';
+    return NextResponse.redirect(url, 307);
+  }
+
   // Reversible per-bot hard block (AI_BOTS_BLOCKED). robots.txt is advisory;
   // a bot that ignores it still costs a function invocation per hit. When an
   // operator lists a bot in AI_BOTS_BLOCKED we 403 it at the edge here, before

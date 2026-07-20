@@ -72,10 +72,8 @@ const INTENT_PAIRS = [
 ];
 
 const STATIC_LINKS = [
-  { label: 'AI concierge', href: '/' },
-  { label: 'Plan a trip', href: '/plan' },
   { label: 'All destinations', href: '/destinations' },
-  { label: 'Search experiences', href: '/search' },
+  { label: 'Vacation rentals', href: '/vacation-rentals' },
 ];
 
 export function SeoLinkFooter() {

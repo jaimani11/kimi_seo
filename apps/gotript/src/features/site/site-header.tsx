@@ -93,26 +93,9 @@ export function SiteHeader() {
         <MegaNav />
 
         <div className="flex items-center gap-2">
-          <Link
-            href="/plan"
-            className="hidden items-center gap-1.5 rounded-full px-4 py-2 transition-all hover:brightness-110 md:inline-flex"
-            style={{
-              fontFamily: 'var(--font-inter)',
-              fontSize: '0.78rem',
-              fontWeight: 700,
-              letterSpacing: '0.04em',
-              textTransform: 'uppercase',
-              background: 'var(--accent-secondary)',
-              color: '#ffffff',
-              textDecoration: 'none',
-              boxShadow: '0 1px 2px rgba(12, 20, 38, 0.12)',
-            }}
-          >
-            Plan now
-            <svg width="11" height="11" viewBox="0 0 16 16" fill="none">
-              <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" />
-            </svg>
-          </Link>
+          {/* "Plan now" CTA retired — the /plan itinerary builder was a Viator
+              leftover that errors on gotript (Expedia brand). Rebuilt on Expedia
+              in the AI-planner phase, then this CTA returns. */}
           <ThemeToggle />
         </div>
       </div>
