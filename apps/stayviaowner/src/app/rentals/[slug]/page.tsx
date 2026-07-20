@@ -4,6 +4,12 @@ import { canonicalUrl } from '@lib/site/origin';
 import { resolveDestinationPhoto } from '@lib/imagery/destination-photo';
 import { parseRentalSlug, staticRentalSlugs, type RentalRoute } from '@lib/seo/rental-routes';
 import { RentalPage, buildRentalJsonLd } from '@/features/seo/rental-page';
+import {
+  parseClusterSlug,
+  enumerateClusterSlugs,
+  type ClusterRoute,
+} from '@lib/seo/rental-clusters';
+import { RentalClusterPage, buildClusterJsonLd } from '@/features/seo/rental-cluster-page';
 
 /**
  * stayviaowner rental matrix route — /rentals/{city} (city hub) and
@@ -20,7 +26,7 @@ export const revalidate = 86400; // 1 day — content is stable, inventory lives
 export const dynamicParams = true; // long tail renders on first request, then caches.
 
 export function generateStaticParams(): { slug: string }[] {
-  return staticRentalSlugs().map((slug) => ({ slug }));
+  return [...staticRentalSlugs(), ...enumerateClusterSlugs()].map((slug) => ({ slug }));
 }
 
 function metaTitle(route: RentalRoute): string {
@@ -36,8 +42,27 @@ function metaDescription(route: RentalRoute): string {
     : `Whole-home vacation rentals in ${city.name}, ${city.countryName} — villas, cabins, cottages, beach houses and more on VRBO. Or compare ${city.name} hotels.`;
 }
 
+function clusterMetadata(route: ClusterRoute, canonical: string): Metadata {
+  const { cluster } = route;
+  const title =
+    route.kind === 'cluster-town'
+      ? `${cluster.name} in ${route.town.town}, ${route.town.state} — Whole-Home Rentals on VRBO · stayviaowner`
+      : `${cluster.hub.h1} · stayviaowner`;
+  const description =
+    route.kind === 'cluster-town' ? route.town.metaDescription : cluster.hub.metaDescription;
+  return {
+    title,
+    description,
+    alternates: { canonical },
+    openGraph: { title, description, url: canonical, type: 'website' },
+    twitter: { card: 'summary_large_image', title, description },
+  };
+}
+
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params;
+  const clusterRoute = parseClusterSlug(slug);
+  if (clusterRoute) return clusterMetadata(clusterRoute, canonicalUrl(`/rentals/${slug}`));
   const route = parseRentalSlug(slug);
   if (!route) return { robots: { index: false, follow: false } };
 
@@ -67,10 +92,22 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
 export default async function Page({ params }: PageProps) {
   const { slug } = await params;
+  const canonical = canonicalUrl(`/rentals/${slug}`);
+
+  const clusterRoute = parseClusterSlug(slug);
+  if (clusterRoute) {
+    const clusterJsonLd = buildClusterJsonLd({ route: clusterRoute, canonical });
+    return (
+      <>
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: clusterJsonLd }} />
+        <RentalClusterPage route={clusterRoute} />
+      </>
+    );
+  }
+
   const route = parseRentalSlug(slug);
   if (!route) notFound();
 
-  const canonical = canonicalUrl(`/rentals/${slug}`);
   const jsonLd = buildRentalJsonLd({ route, canonical });
 
   return (

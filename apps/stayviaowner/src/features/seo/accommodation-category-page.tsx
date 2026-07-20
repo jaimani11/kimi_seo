@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import type { AccommodationCategory } from '@lib/seo/accommodation-categories';
 import { allAccommodationCategories } from '@lib/seo/accommodation-categories';
+import { clustersForCategory } from '@lib/seo/rental-clusters';
 import { findCityBySlug, type SeoCity } from '@lib/seo/cities';
 import { resolveDestinationPhoto } from '@lib/imagery/destination-photo';
 import { SiteHeader } from '@/features/site/site-header';
@@ -23,6 +24,7 @@ export function AccommodationCategoryPage({
   const otherCategories = allAccommodationCategories().filter(
     (c) => c.slug !== category.slug,
   );
+  const collections = clustersForCategory(category.slug);
 
   return (
     <>
@@ -116,6 +118,65 @@ export function AccommodationCategoryPage({
           ))}
         </div>
       </section>
+
+      {/* ── Curated collection (niche-cluster test) ─────────────── */}
+      {collections.length > 0 && (
+        <section
+          className="mx-auto max-w-6xl px-6 py-10"
+          style={{ borderTop: '1px solid var(--border-subtle)' }}
+        >
+          <SectionHeading eyebrow="Featured collection" heading="Curated picks worth a look" />
+          <div
+            className="mt-6 grid gap-3"
+            style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))' }}
+          >
+            {collections.map((cl) => (
+              <Link
+                key={cl.slug}
+                href={`/rentals/${cl.slug}`}
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '0.85rem',
+                  padding: '1rem 1.25rem',
+                  borderRadius: '0.75rem',
+                  border: '1px solid var(--border-subtle)',
+                  background: 'var(--surface-overlay)',
+                  textDecoration: 'none',
+                  color: 'inherit',
+                }}
+              >
+                <span aria-hidden style={{ fontSize: '1.6rem' }}>
+                  {cl.emoji}
+                </span>
+                <div>
+                  <p
+                    style={{
+                      fontFamily: 'var(--font-inter)',
+                      fontSize: '1rem',
+                      fontWeight: 700,
+                      color: 'var(--ink-primary)',
+                      margin: 0,
+                    }}
+                  >
+                    {cl.name}
+                  </p>
+                  <p
+                    style={{
+                      fontFamily: 'var(--font-inter)',
+                      fontSize: '0.8rem',
+                      color: 'var(--ink-tertiary)',
+                      margin: '0.15rem 0 0',
+                    }}
+                  >
+                    {cl.towns.length} hand-picked US destinations →
+                  </p>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </section>
+      )}
 
       {/* ── FAQs ─────────────────────────────────────────────────── */}
       <section

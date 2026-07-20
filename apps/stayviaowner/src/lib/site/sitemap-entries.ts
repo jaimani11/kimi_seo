@@ -6,6 +6,7 @@ import { SEO_CITIES } from '@lib/seo/cities';
 import { hasDestinationGuide } from '@lib/seo/destination-content';
 import { allAccommodationCategories } from '@lib/seo/accommodation-categories';
 import { enumerateRentalSlugs } from '@lib/seo/rental-routes';
+import { clusterSitemapSections } from '@lib/seo/rental-clusters';
 import { enumerateStaysNearSlugs, enumerateOccasionSlugs } from '@adored/seo-data';
 
 /**
@@ -80,6 +81,13 @@ export function sitemapSections(): SitemapSection[] {
       name: 'group-travel',
       entries: enumerateOccasionSlugs().map((slug) => e(base, `/celebrations/${slug}`, 0.6)),
     },
+    // Curated niche clusters (cabins-with-hot-tubs, farm-stays, reunion-villas)
+    // — one sitemap section each so Search Console reports discovery per test
+    // cluster. Hub gets 0.8, town pages 0.7.
+    ...clusterSitemapSections().map((section) => ({
+      name: section.name,
+      entries: section.paths.map((path, i) => e(base, path, i === 0 ? 0.8 : 0.7)),
+    })),
     {
       // Only the differentiated, indexable /[slug] pages remain (hotels-themed =
       // Vrbo whole-home rental themes). The shared cross-brand editorial
