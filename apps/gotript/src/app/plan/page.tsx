@@ -134,16 +134,11 @@ export default async function PlanPage({
           ) : null}
         </header>
 
-        <div className="mt-10">
-          <PlanForm
-            initialDestination={destination}
-            initialNights={parseNights(params.n)}
-            initialVibe={parseVibe(params.v)}
-          />
-        </div>
-
+        {/* Results lead once a plan exists — the itinerary sits right under the
+            header so a submission reads as a result, not something buried below
+            the form. The form drops to the bottom as "plan a different trip". */}
         {plan ? (
-          <div className="mt-12 flex flex-col gap-6">
+          <div className="mt-10 flex flex-col gap-6">
             <div className="flex flex-wrap items-center justify-center gap-3">
               <CtaLink href={plan.thingsToDoHref} label={`Book things to do in ${plan.destination}`} primary />
               <CtaLink href={plan.staysHref} label={`Find your ${plan.destination} stay`} />
@@ -169,6 +164,29 @@ export default async function PlanPage({
             </p>
           </div>
         ) : null}
+
+        <div className={plan ? 'mt-14' : 'mt-10'}>
+          {plan ? (
+            <p
+              className="text-center"
+              style={{
+                fontFamily: 'var(--font-inter)',
+                fontSize: '0.68rem',
+                letterSpacing: '0.18em',
+                textTransform: 'uppercase',
+                color: 'var(--ink-tertiary)',
+                margin: '0 0 0.9rem',
+              }}
+            >
+              Plan a different trip
+            </p>
+          ) : null}
+          <PlanForm
+            initialDestination={destination}
+            initialNights={parseNights(params.n)}
+            initialVibe={parseVibe(params.v)}
+          />
+        </div>
       </section>
 
       <SiteFooter />

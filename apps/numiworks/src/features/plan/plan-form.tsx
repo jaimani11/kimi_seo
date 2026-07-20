@@ -1,9 +1,21 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useTransition } from 'react';
 import { useRouter } from 'next/navigation';
 import { ArrowRight, Sparkle } from '@/features/shared/icons';
 import { track } from '@/lib/analytics/client';
+
+/** Inline SMIL spinner — self-contained, inherits button text color. */
+function Spinner({ size = 15 }: { size?: number }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" aria-hidden="true" style={{ display: 'block' }}>
+      <circle cx="12" cy="12" r="9" stroke="currentColor" strokeOpacity="0.3" strokeWidth="3" />
+      <path d="M21 12a9 9 0 0 0-9-9" stroke="currentColor" strokeWidth="3" strokeLinecap="round">
+        <animateTransform attributeName="transform" type="rotate" from="0 12 12" to="360 12 12" dur="0.7s" repeatCount="indefinite" />
+      </path>
+    </svg>
+  );
+}
 
 const POPULAR_DESTINATIONS = [
   'Rome, Italy',
@@ -39,11 +51,15 @@ export function PlanForm({
   const [destination, setDestination] = useState(initialDestination);
   const [nights, setNights] = useState(initialNights);
   const [vibe, setVibe] = useState<Set<string>>(new Set(initialVibe));
+  // Keeps `isPending` true for the whole server round-trip — including the
+  // multi-second AI itinerary build — so the button gives immediate feedback
+  // instead of looking like the click did nothing.
+  const [isPending, startTransition] = useTransition();
 
   const submit = (e: React.FormEvent) => {
     e.preventDefault();
     const trimmed = destination.trim();
-    if (!trimmed) return;
+    if (!trimmed || isPending) return;
     const params = new URLSearchParams();
     params.set('d', trimmed);
     params.set('n', String(Math.max(1, Math.min(7, nights))));
@@ -53,7 +69,11 @@ export function PlanForm({
       nights,
       vibe: Array.from(vibe).join(','),
     });
-    router.push(`/plan?${params.toString()}`);
+    startTransition(() => {
+      // Default scroll-to-top on navigation lands on the header + itinerary
+      // (results render above the form once a plan exists).
+      router.push(`/plan?${params.toString()}`);
+    });
   };
 
   const toggleVibe = (tag: string) => {
@@ -196,7 +216,8 @@ export function PlanForm({
 
       <button
         type="submit"
-        disabled={!destination.trim()}
+        disabled={!destination.trim() || isPending}
+        aria-busy={isPending}
         className="mt-7 inline-flex w-full items-center justify-center gap-2 rounded-xl px-5 py-3.5 transition-all hover:translate-y-[-1px]"
         style={{
           fontFamily: 'var(--font-inter)',
@@ -209,12 +230,22 @@ export function PlanForm({
             : 'rgba(237,230,219,0.16)',
           color: destination.trim() ? '#1a1a1a' : 'var(--ink-tertiary)',
           border: 'none',
-          cursor: destination.trim() ? 'pointer' : 'not-allowed',
+          cursor: !destination.trim() || isPending ? 'not-allowed' : 'pointer',
+          opacity: isPending ? 0.9 : 1,
         }}
       >
-        <Sparkle size={14} />
-        Plan my trip
-        <ArrowRight size={14} strokeWidth={2.4} />
+        {isPending ? (
+          <>
+            <Spinner size={15} />
+            Building your itinerary…
+          </>
+        ) : (
+          <>
+            <Sparkle size={14} />
+            Plan my trip
+            <ArrowRight size={14} strokeWidth={2.4} />
+          </>
+        )}
       </button>
     </form>
   );

@@ -143,32 +143,11 @@ export default async function PlanPage({
           ) : null}
         </header>
 
-        <div className="mt-10">
-          <PlanForm
-            initialDestination={destination}
-            initialNights={parseNights(params.n)}
-            initialVibe={parseVibe(params.v)}
-          />
-        </div>
-
-        {error ? (
-          <p
-            className="mx-auto mt-8 max-w-3xl rounded-xl border px-5 py-4 text-center"
-            style={{
-              fontFamily: 'var(--font-inter)',
-              fontSize: '0.85rem',
-              color: 'var(--ink-secondary)',
-              borderColor: 'var(--border-subtle)',
-              background: 'var(--surface-elevated)',
-            }}
-          >
-            We couldn&rsquo;t build the plan right now — Viator inventory is temporarily
-            unavailable. Try again in a moment.
-          </p>
-        ) : null}
-
+        {/* Results lead once a plan exists — the day-by-day plan sits right under
+            the header so a submission reads as a result, not something buried
+            below the form. The form drops to the bottom as "plan a different trip". */}
         {plan ? (
-          <div className="mt-12 flex flex-col gap-8">
+          <div className="mt-10 flex flex-col gap-8">
             <div className="flex flex-wrap items-baseline justify-between gap-4">
               <p
                 style={{
@@ -203,6 +182,45 @@ export default async function PlanPage({
               Affiliate links to Viator — same price as direct, commission keeps the site free.
             </p>
           </div>
+        ) : null}
+
+        <div className={plan ? 'mt-14' : 'mt-10'}>
+          {plan ? (
+            <p
+              className="text-center"
+              style={{
+                fontFamily: 'var(--font-inter)',
+                fontSize: '0.68rem',
+                letterSpacing: '0.18em',
+                textTransform: 'uppercase',
+                color: 'var(--ink-tertiary)',
+                margin: '0 0 0.9rem',
+              }}
+            >
+              Plan a different trip
+            </p>
+          ) : null}
+          <PlanForm
+            initialDestination={destination}
+            initialNights={parseNights(params.n)}
+            initialVibe={parseVibe(params.v)}
+          />
+        </div>
+
+        {error ? (
+          <p
+            className="mx-auto mt-8 max-w-3xl rounded-xl border px-5 py-4 text-center"
+            style={{
+              fontFamily: 'var(--font-inter)',
+              fontSize: '0.85rem',
+              color: 'var(--ink-secondary)',
+              borderColor: 'var(--border-subtle)',
+              background: 'var(--surface-elevated)',
+            }}
+          >
+            We couldn&rsquo;t build the plan right now — Viator inventory is temporarily
+            unavailable. Try again in a moment.
+          </p>
         ) : null}
       </section>
 
