@@ -46,16 +46,14 @@
   --ink-secondary: rgba(255, 255, 255, 0.78);
   --ink-tertiary: rgba(255, 255, 255, 0.55);
 
-  /* Dark-mode brand — pine green (stayviaowner = whole-home / cabin / nature
-     specialist), brighter than the light-mode forest so it reads on near-black.
-     Coral stays as the warm secondary — a natural green + coral cabin palette. */
-  --accent-primary: #43c78a;
-  --accent-primary-soft: rgba(67, 199, 138, 0.16);
-  --accent-primary-glow: rgba(67, 199, 138, 0.4);
+  /* Dark-mode brand stays the same blue family for continuity. */
+  --accent-primary: #4ea1ff;
+  --accent-primary-soft: rgba(78, 161, 255, 0.16);
+  --accent-primary-glow: rgba(78, 161, 255, 0.4);
   --accent-secondary: #ff7a5c;
 
-  --brand-hero-from: #0a2c20;
-  --brand-hero-to: #17603f;
+  --brand-hero-from: #0b2547;
+  --brand-hero-to: #1664c8;
 
   /* Warning - used for failure states, cancel-confirm, monitoring alerts.
      Distinct from accent-secondary (which is a cool counterpoint, not a
@@ -73,7 +71,7 @@
   );
   --bloom-cool: radial-gradient(
     ellipse 60% 50% at 20% 90%,
-    rgba(67, 199, 138, 0.12) 0%,
+    rgba(80, 120, 200, 0.1) 0%,
     transparent 60%
   );
 
@@ -105,21 +103,19 @@
   --ink-secondary: #475569;
   --ink-tertiary: #94a3b8;
 
-  /* Brand pine green — stayviaowner is the whole-home / cabin / farm-stay /
-     nature-retreat specialist, so a forest green (not booking-blue) is its
-     identity. Deep enough to clear AA on white as CTA fill AND link text. */
-  --accent-primary: #1f7a54;
-  --accent-primary-soft: rgba(31, 122, 84, 0.10);
-  --accent-primary-glow: rgba(31, 122, 84, 0.30);
+  /* Brand blue — deep confident travel-marketplace blue
+     (Booking.com family). Used for primary CTAs + hero band. */
+  --accent-primary: #006ce4;
+  --accent-primary-soft: rgba(0, 108, 228, 0.10);
+  --accent-primary-glow: rgba(0, 108, 228, 0.30);
 
-  /* Attention accent — bright coral for the header "Plan Now", urgent badges,
-     urgency chips. Green + coral reads as a fresh, natural cabin palette. */
+  /* Attention accent — bright coral that pops against white + blue.
+     Used sparingly: header "Plan Now", urgent badges, urgency chips. */
   --accent-secondary: #ff5e3a;
 
-  /* Hero band gradient — a deep forest sweep. Kept dark enough that white hero
-     text clears AA across the whole gradient. */
-  --brand-hero-from: #0e3b2a;
-  --brand-hero-to: #1c6e4a;
+  /* Hero band gradient (saturated travel blue). */
+  --brand-hero-from: #003b95;
+  --brand-hero-to: #006ce4;
 
   --accent-warning: #d04a1f;
   --accent-warning-soft: rgba(208, 74, 31, 0.10);
@@ -134,7 +130,7 @@
   );
   --bloom-cool: radial-gradient(
     ellipse 60% 50% at 20% 90%,
-    rgba(31, 122, 84, 0.05) 0%,
+    rgba(0, 108, 228, 0.04) 0%,
     transparent 60%
   );
 

@@ -34,7 +34,7 @@ export function AccommodationCategoryPage({
       <section
         className="relative w-full"
         style={{
-          background: 'linear-gradient(135deg, var(--brand-hero-from) 0%, var(--brand-hero-to) 100%)',
+          background: 'linear-gradient(135deg, #003b95 0%, #006ce4 100%)',
           color: '#fff',
         }}
       >

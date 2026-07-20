@@ -418,7 +418,7 @@ export function VerticalLandingPage({
             fontSize: '0.95rem',
             fontWeight: 700,
             letterSpacing: '0.02em',
-            background: 'var(--accent-primary)',
+            background: '#0071c2',
             color: '#ffffff',
             border: 'none',
             borderRadius: '0.5rem',

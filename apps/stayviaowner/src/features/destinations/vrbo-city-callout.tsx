@@ -27,7 +27,7 @@ export function VrboCityCallout({ city }: { city: SeoCity }) {
         rel="noopener noreferrer sponsored"
         className="group block rounded-2xl border-2 transition-transform hover:scale-[1.005]"
         style={{
-          background: 'linear-gradient(135deg, var(--brand-hero-from) 0%, var(--brand-hero-to) 100%)',
+          background: 'linear-gradient(135deg, #005EA6 0%, #0079C1 100%)',
           borderColor: '#FBC700',
           padding: '1.4rem 1.6rem',
           textDecoration: 'none',
