@@ -2,22 +2,20 @@ import type { Metadata } from 'next';
 import { SiteHeader } from '@/features/site/site-header';
 import { SiteFooter } from '@/features/site/site-footer';
 import { PlanForm } from '@/features/plan/plan-form';
-import { PlanDayCard } from '@/features/plan/plan-day-card';
-import { ReserveAllButton } from '@/features/plan/reserve-all-button';
 import { Breadcrumbs } from '@/features/seo/breadcrumbs';
-import { buildPlan } from './build-plan';
-import type { Plan } from '@lib/plan/types';
+import { buildPlan, type Plan, type PlanDay } from './build-plan';
 import { canonicalUrl } from '@lib/site/origin';
 
 /**
- * /plan — agentic itinerary builder.
+ * /plan — AI itinerary planner, Expedia-powered.
  *
- *   - No query params: render the destination/days/vibe form.
- *   - With `?d=…&n=…&v=…`: server-side build a multi-day Viator plan
- *     with theme-driven inventory and per-slot reasoning, plus a
- *     "Reserve all" CTA that opens each /r/[id] redirect in sequence.
+ *   - No query params: the destination / days / vibe form.
+ *   - With `?d=…&n=…&v=…`: server-side, Claude builds a day-by-day itinerary
+ *     (deterministic fallback if the AI is unavailable — never errors), and the
+ *     whole trip hands off to gotript's TRACKED Expedia search.
  *
- * Shareable, indexable. URL fully describes the plan.
+ * The base /plan is indexable; the generated `?d=…` result pages are noindexed
+ * (personalized tool output, not editorial to rank).
  */
 
 export const revalidate = 300;
@@ -36,18 +34,19 @@ export async function generateMetadata({
   const { d, n } = await searchParams;
   if (!d) {
     return {
-      title: 'Plan a trip · Viator-powered itinerary builder',
+      title: 'Plan a trip · AI itinerary builder',
       description:
-        'Describe a trip in one sentence — destination, days, vibe — and the AI concierge builds a day-by-day plan from live Expedia inventory. Reserve every experience in one flow.',
+        'Describe a trip in one sentence — destination, days, vibe — and get an AI-built day-by-day itinerary. Book every piece on Expedia in one flow.',
       alternates: { canonical: canonicalUrl('/plan') },
     };
   }
   const nights = parseNights(n);
-  const title = `${nights} ${nights === 1 ? 'day' : 'days'} in ${d.trim()} · Plan with Viator`;
+  const title = `${nights} ${nights === 1 ? 'day' : 'days'} in ${d.trim()} · AI trip plan`;
   return {
     title,
-    description: `An AI-built ${nights}-day itinerary for ${d.trim()} — live Viator experiences, smart sequencing, reserve every slot in one flow.`,
+    description: `An AI-built ${nights}-day itinerary for ${d.trim()} — day-by-day, book it on Expedia.`,
     alternates: { canonical: canonicalUrl('/plan') },
+    robots: { index: false, follow: true },
   };
 }
 
@@ -60,21 +59,13 @@ export default async function PlanPage({
   const destination = (params.d ?? '').trim();
 
   let plan: Plan | null = null;
-  let error: string | null = null;
-
   if (destination) {
-    try {
-      plan = await buildPlan({
-        destination,
-        nights: parseNights(params.n),
-        vibeTags: parseVibe(params.v),
-      });
-    } catch (e) {
-      error = (e as Error).message;
-    }
+    plan = await buildPlan({
+      destination,
+      nights: parseNights(params.n),
+      vibeTags: parseVibe(params.v),
+    });
   }
-
-  const totalPicks = plan?.days.flatMap((d) => d.slots.flatMap((s) => s.picks)).length ?? 0;
 
   return (
     <>
@@ -89,7 +80,7 @@ export default async function PlanPage({
       />
 
       <section
-        className="mx-auto max-w-6xl px-6 pt-6 pb-12 md:pt-10"
+        className="mx-auto max-w-4xl px-6 pt-6 pb-14 md:pt-10"
         style={{ background: 'var(--surface-base)' }}
       >
         <header className="mx-auto max-w-3xl text-center">
@@ -103,7 +94,7 @@ export default async function PlanPage({
               margin: 0,
             }}
           >
-            AI Itinerary builder · Viator-powered
+            AI itinerary builder · Expedia-powered
           </p>
           <h1
             className="mt-3"
@@ -117,12 +108,12 @@ export default async function PlanPage({
               margin: 0,
             }}
           >
-            {plan
-              ? plan.destination
-              : 'Plan a trip in one sentence,'}
+            {plan ? plan.destination : 'Plan a trip in one sentence,'}
             <br />
             <em style={{ fontStyle: 'italic', color: 'var(--accent-primary)' }}>
-              {plan ? `${plan.nights} ${plan.nights === 1 ? 'day' : 'days'}, planned end to end.` : 'reserve it end to end.'}
+              {plan
+                ? `${plan.nights} ${plan.nights === 1 ? 'day' : 'days'}, planned end to end.`
+                : 'book it end to end.'}
             </em>
           </h1>
           {plan?.summary ? (
@@ -151,56 +142,30 @@ export default async function PlanPage({
           />
         </div>
 
-        {error ? (
-          <p
-            className="mx-auto mt-8 max-w-3xl rounded-xl border px-5 py-4 text-center"
-            style={{
-              fontFamily: 'var(--font-inter)',
-              fontSize: '0.85rem',
-              color: 'var(--ink-secondary)',
-              borderColor: 'var(--border-subtle)',
-              background: 'var(--surface-elevated)',
-            }}
-          >
-            We couldn&rsquo;t build the plan right now — Viator inventory is temporarily
-            unavailable. Try again in a moment.
-          </p>
-        ) : null}
-
         {plan ? (
-          <div className="mt-12 flex flex-col gap-8">
-            <div className="flex flex-wrap items-baseline justify-between gap-4">
-              <p
-                style={{
-                  fontFamily: 'var(--font-inter)',
-                  fontSize: '0.72rem',
-                  letterSpacing: '0.16em',
-                  textTransform: 'uppercase',
-                  color: 'var(--ink-tertiary)',
-                  margin: 0,
-                }}
-              >
-                {totalPicks} live Viator experiences · day-by-day
-              </p>
-              <ReserveAllButton totalPicks={totalPicks} />
+          <div className="mt-12 flex flex-col gap-6">
+            <div className="flex flex-wrap items-center justify-center gap-3">
+              <CtaLink href={plan.thingsToDoHref} label={`Book things to do in ${plan.destination}`} primary />
+              <CtaLink href={plan.staysHref} label={`Find your ${plan.destination} stay`} />
             </div>
 
-            <div className="flex flex-col gap-6">
+            <div className="flex flex-col gap-5">
               {plan.days.map((day) => (
-                <PlanDayCard key={day.dayNumber} day={day} />
+                <DayCard key={day.day} day={day} />
               ))}
             </div>
 
             <p
-              className="mt-2 text-center"
+              className="mt-1 text-center"
               style={{
                 fontFamily: 'var(--font-inter)',
-                fontSize: '0.7rem',
+                fontSize: '0.72rem',
                 color: 'var(--ink-tertiary)',
                 margin: 0,
               }}
             >
-              Affiliate links to Viator — same price as direct, commission keeps the site free.
+              Itinerary is a starting point; book each piece on Expedia — same price as direct,
+              commission keeps the site free.
             </p>
           </div>
         ) : null}
@@ -208,6 +173,111 @@ export default async function PlanPage({
 
       <SiteFooter />
     </>
+  );
+}
+
+function DayCard({ day }: { day: PlanDay }) {
+  return (
+    <div
+      className="rounded-2xl border p-5 md:p-6"
+      style={{ background: 'var(--surface-elevated)', borderColor: 'var(--border-subtle)' }}
+    >
+      <div className="flex items-baseline gap-3">
+        <span
+          style={{
+            fontFamily: 'var(--font-inter)',
+            fontSize: '0.66rem',
+            fontWeight: 700,
+            letterSpacing: '0.16em',
+            textTransform: 'uppercase',
+            color: 'var(--accent-primary)',
+          }}
+        >
+          Day {day.day}
+        </span>
+        <h2
+          style={{
+            fontFamily: 'var(--font-fraunces)',
+            fontSize: '1.3rem',
+            fontWeight: 500,
+            letterSpacing: '-0.01em',
+            color: 'var(--ink-primary)',
+            margin: 0,
+          }}
+        >
+          {day.title}
+        </h2>
+      </div>
+      <ul className="mt-4 flex flex-col gap-3" style={{ listStyle: 'none', padding: 0, margin: 0 }}>
+        {day.items.map((it, i) => (
+          <li key={i} className="flex gap-3">
+            <span
+              style={{
+                flex: '0 0 5.5rem',
+                fontFamily: 'var(--font-inter)',
+                fontSize: '0.7rem',
+                fontWeight: 700,
+                letterSpacing: '0.08em',
+                textTransform: 'uppercase',
+                color: 'var(--ink-tertiary)',
+                paddingTop: '0.15rem',
+              }}
+            >
+              {it.time}
+            </span>
+            <span style={{ minWidth: 0 }}>
+              <span
+                style={{
+                  fontFamily: 'var(--font-inter)',
+                  fontSize: '0.95rem',
+                  lineHeight: 1.5,
+                  color: 'var(--ink-primary)',
+                }}
+              >
+                {it.activity}
+              </span>
+              {it.why ? (
+                <span
+                  className="mt-0.5 block"
+                  style={{
+                    fontFamily: 'var(--font-fraunces)',
+                    fontStyle: 'italic',
+                    fontSize: '0.85rem',
+                    lineHeight: 1.45,
+                    color: 'var(--ink-tertiary)',
+                  }}
+                >
+                  {it.why}
+                </span>
+              ) : null}
+            </span>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+function CtaLink({ href, label, primary }: { href: string; label: string; primary?: boolean }) {
+  return (
+    <a
+      href={href}
+      target="_blank"
+      rel="sponsored nofollow noopener noreferrer"
+      className="inline-flex items-center gap-2 rounded-xl px-5 py-3 transition-transform hover:translate-y-[-1px]"
+      style={{
+        fontFamily: 'var(--font-inter)',
+        fontSize: '0.9rem',
+        fontWeight: 700,
+        letterSpacing: '0.02em',
+        textDecoration: 'none',
+        background: primary ? 'var(--accent-primary)' : 'var(--surface-elevated)',
+        color: primary ? '#1a1a1a' : 'var(--ink-primary)',
+        border: `1px solid ${primary ? 'var(--accent-primary)' : 'var(--border-subtle)'}`,
+      }}
+    >
+      {label} →
+    </a>
   );
 }
 

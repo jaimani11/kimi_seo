@@ -1,14 +1,9 @@
 import type { Metadata } from 'next';
-import { notFound } from 'next/navigation';
+import { notFound, permanentRedirect } from 'next/navigation';
 import { parseSeoSlug, enumerateAllSeoSlugs } from '@lib/seo/route-parser';
 import { canonicalUrl } from '@lib/site/origin';
 import { resolveDestinationPhoto } from '@lib/imagery/destination-photo';
-import { buildPlan } from '@/app/plan/build-plan';
 import { viatorProviderFromEnv } from '@/providers/viator';
-import {
-  ItinerarySeoPage,
-  buildItineraryJsonLd,
-} from '@/features/seo/itinerary-seo-page';
 import {
   ThingsToDoSeoPage,
   buildThingsToDoJsonLd,
@@ -478,35 +473,12 @@ export default async function ProgrammaticSeoPage({ params }: PageProps) {
   }
 
   if (parsed.kind === 'itinerary' || parsed.kind === 'weekend') {
+    // Itinerary/weekend SEO pages retired — the day-by-day builder was Viator-
+    // based (broken on the Expedia brand). The working AI itinerary now lives on
+    // /plan; 308 there, pre-filled with this city + trip length.
     const city = parsed.city;
     const days = parsed.kind === 'weekend' ? 2 : parsed.days;
-    let plan: Plan | null = null;
-    let loadError: string | null = null;
-    try {
-      plan = await buildPlan({
-        destination: `${city.name}, ${city.countryName}`,
-        nights: days,
-        vibeTags: [],
-      });
-    } catch (e) {
-      loadError = (e as Error).message;
-    }
-    return (
-      <>
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: buildItineraryJsonLd({ city, days, plan, canonical }),
-          }}
-        />
-        <ItinerarySeoPage
-          city={city}
-          days={days}
-          plan={plan}
-          loadError={loadError}
-        />
-      </>
-    );
+    permanentRedirect(`/plan?d=${encodeURIComponent(`${city.name}, ${city.countryName}`)}&n=${days}`);
   }
 
   if (parsed.kind === 'themed-list') {
