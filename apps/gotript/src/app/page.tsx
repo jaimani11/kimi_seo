@@ -3,6 +3,7 @@ import { SiteHeader } from '@/features/site/site-header';
 import { MultiCategoryHero } from '@/features/site/multi-category-hero';
 import { PropertyTypeRail } from '@/features/site/property-type-rail';
 import { StatsBand } from '@/features/site/stats-band';
+import { PlanHero } from '@/features/site/plan-hero';
 import { RecentlyViewedRail } from '@/features/site/recently-viewed-rail';
 import { PopularDestinationsGrid } from '@/features/site/popular-destinations-grid';
 import { HowGotriptWorks } from '@/features/site/how-it-works';
@@ -26,11 +27,11 @@ import { SiteFooter } from '@/features/site/site-footer';
  *   HowGotriptWorks         : 3-step trust strip.
  *   SiteFooter              : minimal legal footer.
  *
- * The Viator AgenticHero (concierge) + SeoLinkFooter (a footer of
- * /search?q= Viator links with a mis-branded "Viator affiliate"
- * disclaimer) were removed: experiences belong to numiworks, and gotript
- * is the Expedia planner. A proper on-brand SEO footer + planning surface
- * arrive with the gotript planning-brand build.
+ * PlanHero (below StatsBand) is the flagship planning surface — the AI
+ * itinerary builder that replaces the retired Viator "concierge" hero with
+ * an on-brand, Expedia-powered job. (The old SeoLinkFooter of /search?q=
+ * Viator links with a mis-branded "Viator affiliate" disclaimer was also
+ * removed; a proper on-brand SEO footer arrives with the planning-brand build.)
  */
 // Homepage-specific title/description. Keyword-first for search, brand-
 // suffixed for recognition — overrides the generic layout default. The
@@ -55,6 +56,7 @@ export default function HomePage() {
       <MultiCategoryHero />
       <PropertyTypeRail />
       <StatsBand />
+      <PlanHero />
       <RecentlyViewedRail />
       <PopularDestinationsGrid />
       <HowGotriptWorks />
