@@ -552,6 +552,9 @@ importers:
       '@adored/brand-config':
         specifier: workspace:*
         version: link:../brand-config
+      '@adored/portfolio-revenue':
+        specifier: workspace:*
+        version: link:../portfolio-revenue
 
   packages/brand-config: {}
 

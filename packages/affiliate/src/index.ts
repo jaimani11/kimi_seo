@@ -54,3 +54,7 @@ export {
 // Brand-policy guard — enforces each brand's declared providers (Portfolio
 // Revenue Engine); fails closed on cross-brand / cross-network leakage.
 export { brandAllowsProvider, assertBrandProvider } from './brand-policy';
+
+// Link-health adapter — per-brand URL policy + audit over the domain-neutral
+// checkLink core (@adored/portfolio-revenue): host + attribution + leak guard.
+export { linkPolicyForBrand, auditBrandLinks } from './link-policy';
