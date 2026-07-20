@@ -5,7 +5,7 @@ import type { NextConfig } from 'next';
 // can't break the Leaflet/OSM maps, the Booking.com affiliate SDK, CJ pixels,
 // Plausible, or GTM. Flip the header key to "Content-Security-Policy" to enforce
 // once a violation check comes back clean.
-const CSP_REPORT_ONLY = [
+const CSP = [
   "default-src 'self'",
   "base-uri 'self'",
   "object-src 'none'",
@@ -25,7 +25,7 @@ const SECURITY_HEADERS = [
   { key: 'X-Frame-Options', value: 'SAMEORIGIN' },
   { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
   { key: 'Permissions-Policy', value: 'camera=(), microphone=(), geolocation=(), browsing-topics=()' },
-  { key: 'Content-Security-Policy-Report-Only', value: CSP_REPORT_ONLY },
+  { key: 'Content-Security-Policy', value: CSP },
 ];
 
 const config: NextConfig = {

@@ -6,7 +6,7 @@ import type { NextConfig } from 'next';
 // affiliate pixels. Flip the header key to "Content-Security-Policy" to enforce
 // once a violation check comes back clean. `https:`/`'unsafe-inline'` are the
 // pragmatic allowances for an image-heavy site with lots of inline styles.
-const CSP_REPORT_ONLY = [
+const CSP = [
   "default-src 'self'",
   "base-uri 'self'",
   "object-src 'none'",
@@ -26,7 +26,7 @@ const SECURITY_HEADERS = [
   { key: 'X-Frame-Options', value: 'SAMEORIGIN' },
   { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
   { key: 'Permissions-Policy', value: 'camera=(), microphone=(), geolocation=(), browsing-topics=()' },
-  { key: 'Content-Security-Policy-Report-Only', value: CSP_REPORT_ONLY },
+  { key: 'Content-Security-Policy', value: CSP },
 ];
 
 const config: NextConfig = {
