@@ -12,8 +12,10 @@ import {
   CurrencyStrip,
   DestinationMap,
   WalkDistances,
+  SmartStayOffer,
   type MapPin,
 } from '@adored/ui';
+import { buildExpediaCategoryUrl } from '@lib/affiliate/expedia-multicategory';
 import { VrboCityCallout } from '@/features/destinations/vrbo-city-callout';
 import { GygActivitiesWidget } from '@/features/experiences/getyourguide-widget';
 
@@ -291,6 +293,14 @@ export async function DestinationGuidePage({
           <p style={paragraphStyle}>{guide.safety}</p>
         </Section>
       </article>
+
+      <SmartStayOffer
+        href={buildExpediaCategoryUrl('vacation-rentals', { destination: city.name })}
+        headline={`Set on ${city.name}? Lock in where you'll stay.`}
+        subline="Whole homes on VRBO — kitchens, space, and the same price as booking direct."
+        ctaLabel={`See ${city.name} homes →`}
+        storageKey={`sso-${city.slug}`}
+      />
     </SeoPageShell>
   );
 }

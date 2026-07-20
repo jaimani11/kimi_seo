@@ -12,8 +12,10 @@ import {
   CurrencyStrip,
   DestinationMap,
   WalkDistances,
+  SmartStayOffer,
   type MapPin,
 } from '@adored/ui';
+import { buildBookingComCategoryUrl } from '@lib/affiliate/booking-com-multicategory';
 
 /**
  * Rich destination guide page rendered at `/destinations/{slug}` for
@@ -269,6 +271,14 @@ export async function DestinationGuidePage({
           <p style={paragraphStyle}>{guide.safety}</p>
         </Section>
       </article>
+
+      <SmartStayOffer
+        href={buildBookingComCategoryUrl('hotels', { destination: city.name })}
+        headline={`Set on ${city.name}? Lock in where you'll stay.`}
+        subline="Hotels on Booking.com — free cancellation on most, and the price you pay is the same."
+        ctaLabel={`See ${city.name} hotels →`}
+        storageKey={`sso-${city.slug}`}
+      />
     </SeoPageShell>
   );
 }

@@ -12,8 +12,10 @@ import {
   CurrencyStrip,
   DestinationMap,
   WalkDistances,
+  SmartStayOffer,
   type MapPin,
 } from '@adored/ui';
+import { buildExpediaCategoryUrl } from '@lib/affiliate/expedia-multicategory';
 import { VrboCityCallout } from '@/features/destinations/vrbo-city-callout';
 import { GygActivitiesWidget } from '@/features/experiences/getyourguide-widget';
 
@@ -307,6 +309,14 @@ export async function DestinationGuidePage({
           <p style={paragraphStyle}>{guide.safety}</p>
         </Section>
       </article>
+
+      <SmartStayOffer
+        href={buildExpediaCategoryUrl('hotels', { destination: city.name })}
+        headline={`Set on ${city.name}? Lock in where you'll stay.`}
+        subline="Hotels and homes on Expedia — the price you pay is the same as booking direct."
+        ctaLabel={`See ${city.name} stays →`}
+        storageKey={`sso-${city.slug}`}
+      />
     </SeoPageShell>
   );
 }
