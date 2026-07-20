@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { SeoPageShell } from './seo-page-shell';
+import { WhereToStayDecider } from './where-to-stay-decider';
 import { SiteHeader } from '@/features/site/site-header';
 import { SiteFooter } from '@/features/site/site-footer';
 import type { SeoCity } from '@lib/seo/cities';
@@ -406,7 +407,6 @@ export function WhereToStaySeoPage({
   stayCta?: { label: string; href: string };
 }) {
   const pois = findNeighborhoodPois(city.slug);
-  const poiByName = new Map(pois.map((p) => [p.name, p]));
   const pins: MapPin[] = pois.map((p) => ({
     lat: p.lat,
     lng: p.lng,
@@ -415,6 +415,15 @@ export function WhereToStaySeoPage({
     detail: distanceLabel(haversineKm(city.coordinates, p)),
   }));
   const top = guide.neighborhoods[0];
+  // Walk/drive distance from the city center, keyed by neighborhood name, so the
+  // interactive decider can show it without recomputing haversine client-side.
+  const distanceByName: Record<string, string> = {};
+  for (const p of pois) {
+    distanceByName[p.name] = distanceLabel(haversineKm(city.coordinates, p));
+  }
+  // The stay CTA routes through an internal go-link (e.g. /vacation-rentals);
+  // the decider builds per-neighborhood searches off the same path.
+  const staySearchPath = stayCta?.href.split('?')[0] ?? '/vacation-rentals';
 
   return (
     <SeoPageShell
@@ -440,43 +449,12 @@ export function WhereToStaySeoPage({
           </div>
         ) : null}
 
-        <div style={{ margin: '2rem 0 0', display: 'grid', gap: '1rem' }}>
-          {guide.neighborhoods.map((n, i) => {
-            const poi = poiByName.get(n.name);
-            return (
-              <div
-                key={n.name}
-                style={{
-                  padding: '1.1rem 1.25rem',
-                  borderRadius: '0.85rem',
-                  border: '1px solid var(--border-subtle)',
-                  background: 'var(--surface-elevated)',
-                }}
-              >
-                <p style={{ ...smallHeadingStyle, margin: 0 }}>
-                  {i === 0 ? 'Top pick' : `#${i + 1}`}
-                </p>
-                <h2
-                  style={{
-                    fontFamily: 'var(--font-inter)',
-                    fontSize: '1.2rem',
-                    fontWeight: 800,
-                    color: 'var(--ink-primary)',
-                    margin: '0.25rem 0 0.4rem',
-                  }}
-                >
-                  {n.name}
-                </h2>
-                <p style={{ ...paragraphStyle, margin: 0 }}>{n.blurb}</p>
-                {poi ? (
-                  <p style={{ ...tinyStyle, margin: '0.55rem 0 0' }}>
-                    {distanceLabel(haversineKm(city.coordinates, poi))}
-                  </p>
-                ) : null}
-              </div>
-            );
-          })}
-        </div>
+        <WhereToStayDecider
+          neighborhoods={guide.neighborhoods}
+          distanceByName={distanceByName}
+          cityName={city.name}
+          staySearchPath={staySearchPath}
+        />
 
         {stayCta ? (
           <div style={{ margin: '2rem 0 0', textAlign: 'center' }}>
