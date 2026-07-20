@@ -49,7 +49,7 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
           dangerouslySetInnerHTML={{ __html: siteJsonLd() }}
         />
       </head>
-      <body className="min-h-screen antialiased">
+      <body className="min-h-screen antialiased" suppressHydrationWarning>
         <ThemeProvider initial={theme}>
           <AuthProvider sessionId={sessionId}>
             <MigrateOnSignIn />
