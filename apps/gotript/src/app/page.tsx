@@ -7,6 +7,7 @@ import { PlanHero } from '@/features/site/plan-hero';
 import { RecentlyViewedRail } from '@/features/site/recently-viewed-rail';
 import { PopularDestinationsGrid } from '@/features/site/popular-destinations-grid';
 import { HowGotriptWorks } from '@/features/site/how-it-works';
+import { SeoLinkFooter } from '@/features/site/seo-link-footer';
 import { SiteFooter } from '@/features/site/site-footer';
 
 /**
@@ -29,9 +30,9 @@ import { SiteFooter } from '@/features/site/site-footer';
  *
  * PlanHero (below StatsBand) is the flagship planning surface — the AI
  * itinerary builder that replaces the retired Viator "concierge" hero with
- * an on-brand, Expedia-powered job. (The old SeoLinkFooter of /search?q=
- * Viator links with a mis-branded "Viator affiliate" disclaimer was also
- * removed; a proper on-brand SEO footer arrives with the planning-brand build.)
+ * an on-brand, Expedia-powered job. SeoLinkFooter was rebuilt on-brand too: it
+ * now links the "where to stay in {city}" decision pages, destination guides,
+ * and property-type landings (Expedia disclaimer) — no more Viator /search.
  */
 // Homepage-specific title/description. Keyword-first for search, brand-
 // suffixed for recognition — overrides the generic layout default. The
@@ -60,6 +61,7 @@ export default function HomePage() {
       <RecentlyViewedRail />
       <PopularDestinationsGrid />
       <HowGotriptWorks />
+      <SeoLinkFooter />
       <SiteFooter />
     </>
   );
