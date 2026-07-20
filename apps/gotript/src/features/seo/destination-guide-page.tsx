@@ -64,6 +64,9 @@ export async function DestinationGuidePage({
       label: n.name,
       kind: 'neighborhood' as const,
       detail: distanceLabel(haversineKm(city.coordinates, n)),
+      // Stay22-MAP style: each area pin is a tracked Expedia stay deep-link.
+      href: buildExpediaCategoryUrl('hotels', { destination: `${n.name}, ${city.name}` }),
+      ctaLabel: `Stays in ${n.name} →`,
     })),
   ];
 

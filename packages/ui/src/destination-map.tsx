@@ -26,6 +26,10 @@ const PIN_COLORS = {
   neighborhood: '#2563eb',
 } as const;
 
+/** Bookable-pin colour — an "available/go" green, distinct from every brand
+ *  accent and the accent-coloured city-centre pin. */
+const BOOKABLE_COLOR = '#059669';
+
 export interface MapPin {
   lat: number;
   lng: number;
@@ -33,6 +37,11 @@ export interface MapPin {
   kind: 'attraction' | 'neighborhood';
   /** Secondary popup line, e.g. "14 min walk from center". */
   detail?: string;
+  /** Tracked affiliate deep-link — turns the pin into a bookable "stays here"
+   *  marker with a CTA in its popup (Stay22-MAP style). Optional. */
+  href?: string;
+  /** CTA label for the affiliate link (default "Find stays here →"). */
+  ctaLabel?: string;
 }
 
 export function DestinationMap({
@@ -78,10 +87,10 @@ export function DestinationMap({
           html: `<span style="display:block;width:${size}px;height:${size}px;border-radius:999px;background:${bg};border:2.5px solid rgba(255,255,255,0.95);box-shadow:0 1px 5px rgba(0,0,0,0.45)"></span>`,
         });
 
-      const popupEl = (title: string, detail?: string) => {
+      const popupEl = (title: string, detail?: string, href?: string, cta?: string) => {
         const root = document.createElement('div');
         root.style.cssText =
-          'font-family:var(--font-inter),system-ui,sans-serif;font-size:13px;line-height:1.45;min-width:130px';
+          'font-family:var(--font-inter),system-ui,sans-serif;font-size:13px;line-height:1.45;min-width:140px';
         const strong = document.createElement('strong');
         strong.textContent = title; // textContent — popup input is data, not markup
         root.appendChild(strong);
@@ -90,6 +99,16 @@ export function DestinationMap({
           d.textContent = detail;
           d.style.cssText = 'opacity:0.72;margin-top:2px;font-size:12px';
           root.appendChild(d);
+        }
+        if (href) {
+          const a = document.createElement('a');
+          a.textContent = cta ?? 'Find stays here →';
+          a.href = href; // affiliate deep-link supplied by the page (trusted)
+          a.target = '_blank';
+          a.rel = 'sponsored nofollow noopener noreferrer';
+          a.style.cssText =
+            'display:inline-block;margin-top:7px;font-weight:700;font-size:12.5px;color:var(--accent-primary);text-decoration:none';
+          root.appendChild(a);
         }
         return root;
       };
@@ -102,10 +121,13 @@ export function DestinationMap({
         .bindPopup(popupEl(`${cityName} center`));
 
       for (const pin of pins) {
-        L.marker([pin.lat, pin.lng], { icon: dot(PIN_COLORS[pin.kind], 13) })
+        const bookable = Boolean(pin.href);
+        L.marker([pin.lat, pin.lng], {
+          icon: dot(bookable ? BOOKABLE_COLOR : PIN_COLORS[pin.kind], bookable ? 15 : 13),
+        })
           .addTo(map)
           .bindTooltip(pin.label, { direction: 'top', offset: [0, -8], opacity: 0.92 })
-          .bindPopup(popupEl(pin.label, pin.detail));
+          .bindPopup(popupEl(pin.label, pin.detail, pin.href, pin.ctaLabel));
       }
 
       if (pins.length > 0) {
@@ -161,8 +183,11 @@ export function DestinationMap({
         {pins.some((p) => p.kind === 'attraction') ? (
           <LegendDot color={PIN_COLORS.attraction} label="Attractions" />
         ) : null}
-        {pins.some((p) => p.kind === 'neighborhood') ? (
+        {pins.some((p) => p.kind === 'neighborhood' && !p.href) ? (
           <LegendDot color={PIN_COLORS.neighborhood} label="Neighborhoods" />
+        ) : null}
+        {pins.some((p) => p.href) ? (
+          <LegendDot color={BOOKABLE_COLOR} label="Tap a pin to book stays nearby" />
         ) : null}
         <span>Click the map to enable scroll zoom</span>
       </p>

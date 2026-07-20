@@ -64,6 +64,9 @@ export async function DestinationGuidePage({
       label: n.name,
       kind: 'neighborhood' as const,
       detail: distanceLabel(haversineKm(city.coordinates, n)),
+      // Stay22-MAP style: each area pin is a tracked VRBO whole-home deep-link.
+      href: buildExpediaCategoryUrl('vacation-rentals', { destination: `${n.name}, ${city.name}` }),
+      ctaLabel: `Homes in ${n.name} →`,
     })),
   ];
 
