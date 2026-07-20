@@ -12,7 +12,7 @@ import { SiteFooter } from '@/features/site/site-footer';
  * accommodation siblings), so both CTAs appear. Local to numiworks.
  */
 
-const HERO_BG = 'linear-gradient(135deg, #003b95 0%, #006ce4 100%)';
+const HERO_BG = 'linear-gradient(135deg, var(--brand-hero-from) 0%, var(--brand-hero-to) 100%)';
 
 function hashInt(s: string): number {
   let h = 2166136261;

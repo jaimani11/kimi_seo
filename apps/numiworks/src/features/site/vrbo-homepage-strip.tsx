@@ -21,7 +21,9 @@ import { wrapVrboAffiliate } from '@lib/affiliate/vrbo-link';
  *                               Link Builder-generated bounce URL.
  */
 
-const VRBO_BG = 'linear-gradient(135deg, #005EA6 0%, #0079C1 55%, #00A2E1 100%)';
+// Warm sunset (numiworks = experiences brand) — not VRBO's own blue, so the
+// homepage stays on one coral identity. VRBO is still named in the card copy.
+const VRBO_BG = 'linear-gradient(135deg, #b3360f 0%, #d84315 55%, #f2683a 100%)';
 const CONCIERGE_BG = 'linear-gradient(135deg, #0f172a 0%, #1e293b 60%, #334155 100%)';
 const YELLOW = '#FBC700';
 const INK_ON_DARK = '#ffffff';

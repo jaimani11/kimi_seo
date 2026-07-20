@@ -19,7 +19,7 @@ import {
  * alike and none duplicate the shared themed matrix.
  */
 
-const HERO_BG = 'linear-gradient(135deg, #003b95 0%, #006ce4 100%)';
+const HERO_BG = 'linear-gradient(135deg, var(--brand-hero-from) 0%, var(--brand-hero-to) 100%)';
 
 const REGION_LABEL: Record<SeoCity['region'], string> = {
   asia: 'Asia',

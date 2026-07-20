@@ -34,8 +34,8 @@ export function SiteHeader() {
               width: '1.85rem',
               height: '1.85rem',
               borderRadius: '0.55rem',
-              background: 'linear-gradient(135deg, #003b95 0%, #006ce4 100%)',
-              boxShadow: '0 2px 8px rgba(0, 108, 228, 0.32)',
+              background: 'linear-gradient(135deg, var(--brand-hero-from) 0%, var(--brand-hero-to) 100%)',
+              boxShadow: '0 2px 8px rgba(216, 67, 21, 0.32)',
             }}
           >
             <svg width="15" height="15" viewBox="0 0 16 16" fill="none">

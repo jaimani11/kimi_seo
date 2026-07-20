@@ -40,8 +40,8 @@ export function SiteFooter() {
                   width: '1.65rem',
                   height: '1.65rem',
                   borderRadius: '0.5rem',
-                  background: 'linear-gradient(135deg, #003b95 0%, #006ce4 100%)',
-                  boxShadow: '0 2px 6px rgba(0, 108, 228, 0.28)',
+                  background: 'linear-gradient(135deg, var(--brand-hero-from) 0%, var(--brand-hero-to) 100%)',
+                  boxShadow: '0 2px 6px rgba(216, 67, 21, 0.28)',
                 }}
               >
                 <svg width="13" height="13" viewBox="0 0 16 16" fill="none">

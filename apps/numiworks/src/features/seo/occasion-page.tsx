@@ -13,7 +13,7 @@ import { buildCityContext } from '@lib/seo/city-context';
  * from nav/homepage. Local to numiworks so the four brands don't duplicate.
  */
 
-const HERO_BG = 'linear-gradient(135deg, #003b95 0%, #006ce4 100%)';
+const HERO_BG = 'linear-gradient(135deg, var(--brand-hero-from) 0%, var(--brand-hero-to) 100%)';
 
 export function occasionHeading(route: OccasionRoute): string {
   return `Plan a ${route.occasion.name} in ${route.city.name}`;
