@@ -143,7 +143,7 @@ export async function DestinationGuidePage({
               textShadow: '0 1px 6px rgba(0,0,0,0.55)',
             }}
           >
-            {city.oneLiner}
+            {`Your ${city.name} trip, planned — when to go, how many days you need, and where to base yourself, mapped out before you book.`}
           </p>
           <div className="mt-7 flex flex-wrap items-center justify-center gap-2">
             <Link
