@@ -46,14 +46,15 @@
   --ink-secondary: rgba(255, 255, 255, 0.78);
   --ink-tertiary: rgba(255, 255, 255, 0.55);
 
-  /* Dark-mode brand stays the same blue family for continuity. */
-  --accent-primary: #4ea1ff;
-  --accent-primary-soft: rgba(78, 161, 255, 0.16);
-  --accent-primary-glow: rgba(78, 161, 255, 0.4);
-  --accent-secondary: #ff7a5c;
+  /* Dark-mode brand — CLARET/wine editorial identity (de-twinned from
+     gobookt's blue). Claret lightened so it reads on the dark surface. */
+  --accent-primary: #d98a94;
+  --accent-primary-soft: rgba(217, 138, 148, 0.16);
+  --accent-primary-glow: rgba(217, 138, 148, 0.4);
+  --accent-secondary: #e6b15c;
 
-  --brand-hero-from: #0b2547;
-  --brand-hero-to: #1664c8;
+  --brand-hero-from: #3a0e16;
+  --brand-hero-to: #6b2733;
 
   /* Warning - used for failure states, cancel-confirm, monitoring alerts.
      Distinct from accent-secondary (which is a cool counterpoint, not a
@@ -103,19 +104,20 @@
   --ink-secondary: #475569;
   --ink-tertiary: #94a3b8;
 
-  /* Brand blue — deep confident travel-marketplace blue
-     (Booking.com family). Used for primary CTAs + hero band. */
-  --accent-primary: #006ce4;
-  --accent-primary-soft: rgba(0, 108, 228, 0.10);
-  --accent-primary-glow: rgba(0, 108, 228, 0.30);
+  /* Brand CLARET — deep oxblood/wine editorial identity. Distinct from
+     gobookt (blue), stayviaowner (navy+emerald) and numiworks (coral); reads
+     premium travel-guide (Condé Nast register). Primary CTAs + links. */
+  --accent-primary: #8c2f39;
+  --accent-primary-soft: rgba(140, 47, 57, 0.10);
+  --accent-primary-glow: rgba(140, 47, 57, 0.28);
 
-  /* Attention accent — bright coral that pops against white + blue.
-     Used sparingly: header "Plan Now", urgent badges, urgency chips. */
-  --accent-secondary: #ff5e3a;
+  /* Secondary accent — deeper wine, the pressed/contrast partner to claret.
+     Used for the header "Plan Now" CTA + urgent chips (good white contrast). */
+  --accent-secondary: #6b2733;
 
-  /* Hero band gradient (saturated travel blue). */
-  --brand-hero-from: #003b95;
-  --brand-hero-to: #006ce4;
+  /* Hero band gradient — deep wine → claret (was travel blue). */
+  --brand-hero-from: #5a1520;
+  --brand-hero-to: #8c2f39;
 
   --accent-warning: #d04a1f;
   --accent-warning-soft: rgba(208, 74, 31, 0.10);

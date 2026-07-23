@@ -4,14 +4,15 @@ import { useState } from 'react';
 import { CATEGORY_META, type ExpediaCategory } from '@lib/affiliate/expedia-multicategory';
 
 /**
- * Gotript multi-category search hero.
+ * Gotript multi-category search hero — CLARET editorial identity.
  *
- * Visual sister to numiworks's SearchFormHero — same Expedia /
- * Expedia load-bearing pattern:
+ * De-twinned from gobookt/numiworks: an editorial Fraunces SERIF headline
+ * on a deep wine hero band, with claret primary actions and a brass
+ * highlight border. (Was: bold Inter sans on a blue band.)
  *
- *   - Bold sans-serif Inter headline at maximum contrast
- *   - White panel layered on a blue gradient hero band
- *   - Yellow (highlight) border around the panel
+ *   - Editorial Fraunces serif headline
+ *   - White search panel layered on a wine/claret gradient hero band
+ *   - Brass (highlight) border around the panel
  *   - Hard-coded colors so the render is identical in light + dark
  *     mode (CSS-variable-driven backgrounds were the cause of the
  *     prior \"form goes black in dark mode\" bug)
@@ -37,17 +38,17 @@ const POPULAR_DESTINATIONS = [
 ] as const;
 
 
-const HERO_BG = 'linear-gradient(135deg, #003580 0%, #006ce4 100%)';
+const HERO_BG = 'linear-gradient(135deg, #5a1520 0%, #8c2f39 100%)';
 const PANEL_BG = '#ffffff';
 const PANEL_TEXT = '#0c1426';
 const PANEL_LABEL = '#64748b';
 const PANEL_DIVIDER = '#e2e8f0';
 const PANEL_INPUT_BG = '#ffffff';
-const BTN_BG = '#006ce4';
-const BTN_BG_HOVER = '#0050a8';
+const BTN_BG = '#8c2f39';
+const BTN_BG_HOVER = '#6b2733';
 const BTN_DISABLED = '#cbd5e1';
-const HIGHLIGHT = '#ffd166';
-const TAB_ACTIVE = '#003580';
+const HIGHLIGHT = '#c29a3b';
+const TAB_ACTIVE = '#8c2f39';
 const TAB_INACTIVE = '#64748b';
 
 export function MultiCategoryHero({
@@ -114,11 +115,11 @@ export function MultiCategoryHero({
       >
         <h1
           style={{
-            fontFamily: 'var(--font-inter)',
+            fontFamily: 'var(--font-fraunces)',
             fontSize: 'clamp(2.4rem, 5.4vw, 4rem)',
-            fontWeight: 800,
-            lineHeight: 1.05,
-            letterSpacing: '-0.025em',
+            fontWeight: 600,
+            lineHeight: 1.06,
+            letterSpacing: '-0.015em',
             color: '#ffffff',
             margin: 0,
             maxWidth: '54rem',
@@ -479,7 +480,7 @@ function headlineFor(c: ExpediaCategory): string {
     case 'packages':
       return 'Hotel + flight bundles — save more booking together';
     default:
-      return 'Find vacation homes, hotels, villas and unique stays worldwide';
+      return 'Where to go, when to go, and where to stay';
   }
 }
 
@@ -499,7 +500,7 @@ function subheadFor(c: ExpediaCategory): string {
     case 'packages':
       return `Bundle hotel + flight in one search — Expedia's package deals beat à-la-carte. ${tail}`;
     default:
-      return `Explore whole-home rentals, cabins, beach houses, apartments, resorts and hotels — plus flights, cars and things to do. ${tail}`;
+      return `Real destination guides — month-by-month weather, neighborhood maps, itineraries and the best time to go for 100+ places. ${tail}`;
   }
 }
 
