@@ -5,11 +5,10 @@ import { resolveDestinationPhoto } from '@lib/imagery/destination-photo';
 import type { SeoCity } from '@lib/seo/cities';
 import type { DestinationGuide } from '@lib/seo/destination-content';
 import { findClimate, findNeighborhoodPois, attractionsByCity } from '@adored/seo-data';
-import { getUsdRates, haversineKm, distanceLabel } from '@adored/travel-tools';
+import { haversineKm, distanceLabel } from '@adored/travel-tools';
 import {
   ClimatePanel,
   LocalTimeStrip,
-  CurrencyStrip,
   DestinationMap,
   WalkDistances,
   SmartStayOffer,
@@ -17,25 +16,23 @@ import {
 } from '@adored/ui';
 import { buildExpediaCategoryUrl } from '@lib/affiliate/expedia-multicategory';
 import { VrboCityCallout } from '@/features/destinations/vrbo-city-callout';
-import { GygActivitiesWidget } from '@/features/experiences/getyourguide-widget';
+import {
+  buildGotriptDestinationExperience,
+  buildGotriptDestinationJsonLd,
+} from './gotript-destination-experience';
 
 /**
- * Rich destination guide page rendered at `/destinations/{slug}` for
- * SEO_CITIES that have authored content in DESTINATION_GUIDES.
+ * GoTript destination page rendered at `/destinations/{slug}`.
  *
- * Eight indexable content sections:
- *   1. Hero (photo + name + oneLiner + breadcrumbs via SeoPageShell)
- *   2. Best time to visit
- *   3. Budget
- *   4. Family / couples / solo travel
- *   5. Food
- *   6. Transportation
- *   7. Neighborhoods
- *   8. Safety
+ * GoTript's TRIP-PLANNING experience — not an accommodation catalogue and not
+ * a tours marketplace. It plans the trip (when → how many days → itinerary →
+ * base area → getting around → trip style → practical) and ends on a
+ * hotel-or-whole-home booking decision. Composition/headings/CTAs/JSON-LD are
+ * decided by `buildGotriptDestinationExperience`, so GoTript reads distinctly
+ * from GoBookt on the same city.
  *
- * Each section is its own crawlable H2/H3 — ranks for its own
- * long-tail intent ("best time to visit Tokyo", "Tokyo budget per
- * day", etc.).
+ * Money-path: hotels → Expedia (Partnerize-tracked `buildExpediaCategoryUrl`);
+ * whole homes → Vrbo (`VrboCityCallout`). No Booking.com / Viator / CJ.
  */
 export async function DestinationGuidePage({
   city,
@@ -44,12 +41,10 @@ export async function DestinationGuidePage({
   city: SeoCity;
   guide: DestinationGuide;
 }) {
-  const photo = resolveDestinationPhoto({
-    name: city.name,
-    country: city.countryCode,
-  });
+  const photo = resolveDestinationPhoto({ name: city.name, country: city.countryCode });
   const climate = findClimate(city.slug);
-  const rates = await getUsdRates();
+  const exp = buildGotriptDestinationExperience({ city, guide });
+
   const mapPins: MapPin[] = [
     ...attractionsByCity(city.slug).map((a) => ({
       lat: a.coordinates.lat,
@@ -64,7 +59,6 @@ export async function DestinationGuidePage({
       label: n.name,
       kind: 'neighborhood' as const,
       detail: distanceLabel(haversineKm(city.coordinates, n)),
-      // Stay22-MAP style: each area pin is a tracked Expedia stay deep-link.
       href: buildExpediaCategoryUrl('hotels', { destination: `${n.name}, ${city.name}` }),
       ctaLabel: `Stays in ${n.name} →`,
     })),
@@ -80,17 +74,10 @@ export async function DestinationGuidePage({
         { label: city.name },
       ]}
     >
-      {/* Hero */}
+      {/* Hero — trip-planning */}
       <section className="relative w-full overflow-hidden" style={{ minHeight: '52vh' }}>
         <div className="absolute inset-0">
-          <Image
-            src={photo.url}
-            alt={photo.alt}
-            fill
-            priority
-            sizes="100vw"
-            style={{ objectFit: 'cover' }}
-          />
+          <Image src={photo.url} alt={photo.alt} fill priority sizes="100vw" style={{ objectFit: 'cover' }} />
           <div
             aria-hidden
             className="absolute inset-0"
@@ -128,7 +115,7 @@ export async function DestinationGuidePage({
               textShadow: '0 2px 14px rgba(0,0,0,0.55)',
             }}
           >
-            The {city.name} Travel Guide
+            {exp.hero.heading}
           </h1>
           <p
             className="mx-auto mt-5 max-w-2xl"
@@ -143,35 +130,18 @@ export async function DestinationGuidePage({
               textShadow: '0 1px 6px rgba(0,0,0,0.55)',
             }}
           >
-            {`Your ${city.name} trip, planned — when to go, how many days you need, and where to base yourself, mapped out before you book.`}
+            {exp.hero.subhead}
           </p>
           <div className="mt-7 flex flex-wrap items-center justify-center gap-2">
-            <Link
-              href={`/things-to-do-in-${city.slug}`}
-              style={{
-                fontFamily: 'var(--font-inter)',
-                fontSize: '0.82rem',
-                fontWeight: 700,
-                letterSpacing: '0.04em',
-                textTransform: 'uppercase',
-                padding: '0.6rem 1.15rem',
-                borderRadius: '999px',
-                background: 'var(--accent-primary)',
-                color: '#ffffff',
-                textDecoration: 'none',
-              }}
-            >
-              Things to do →
-            </Link>
-            {[3, 5, 7].map((n) => (
+            {exp.tripLength.options.map((o) => (
               <Link
-                key={n}
-                href={`/${city.slug}-${n}-day-itinerary`}
+                key={o.days}
+                href={o.href}
                 style={{
                   fontFamily: 'var(--font-inter)',
-                  fontSize: '0.78rem',
-                  fontWeight: 600,
-                  padding: '0.55rem 1rem',
+                  fontSize: '0.8rem',
+                  fontWeight: 700,
+                  padding: '0.55rem 1.05rem',
                   borderRadius: '999px',
                   background: 'rgba(255,255,255,0.14)',
                   border: '1px solid rgba(255,255,255,0.32)',
@@ -180,36 +150,16 @@ export async function DestinationGuidePage({
                   backdropFilter: 'blur(6px)',
                 }}
               >
-                {n}-day plan
+                {o.days}-day plan
               </Link>
             ))}
           </div>
         </div>
       </section>
 
-      {/* VRBO callout — VRBO commissions the highest in the Expedia
-        * Group family, so every destination page surfaces it above
-        * the fold. All social traffic sees this on first paint. */}
-      <VrboCityCallout city={city} />
-
-      <GygActivitiesWidget
-        destination={city.name}
-        heading={`Best things to do in ${city.name}`}
-        blurb={`Skip-the-line tickets and guided tours in ${city.name}, bookable on GetYourGuide.`}
-        campaignSlug={`guide-${city.slug}-best-things-to-do`}
-        numberOfItems={6}
-      />
-      <GygActivitiesWidget
-        destination={`day trips from ${city.name}`}
-        heading={`Day trips from ${city.name}`}
-        blurb={`Half-day and full-day excursions bookable through GetYourGuide.`}
-        campaignSlug={`guide-${city.slug}-day-trips`}
-        numberOfItems={6}
-      />
-
-      {/* Sections */}
       <article className="mx-auto max-w-3xl px-6 py-14 md:py-20">
-        <Section title="Best Time to Visit" eyebrow="When to Go">
+        {/* Best time to visit */}
+        <Section title={`When to visit ${city.name}`} eyebrow="Step 1 · Timing">
           {climate ? (
             <LocalTimeStrip
               cityName={city.name}
@@ -218,88 +168,39 @@ export async function DestinationGuidePage({
               lng={city.coordinates.lng}
             />
           ) : null}
-          <p style={paragraphStyle}>
-            <strong style={{ color: 'var(--ink-primary)', fontWeight: 700 }}>
-              {guide.bestTimeToVisit.months}.
-            </strong>{' '}
-            {guide.bestTimeToVisit.blurb}
-          </p>
+          <p style={paragraphStyle}>{exp.bestTime}</p>
           {climate ? <ClimatePanel cityName={city.name} months={climate.months} /> : null}
         </Section>
 
-        <Section title="Budget" eyebrow="Daily Spend in USD">
-          <ul style={budgetGrid}>
-            <BudgetTier label="Budget" value={`$${guide.budget.budgetDailyUSD}`} />
-            <BudgetTier label="Mid-range" value={`$${guide.budget.midDailyUSD}`} />
-            <BudgetTier label="Luxury" value={`$${guide.budget.luxuryDailyUSD}`} />
-          </ul>
-          <CurrencyStrip
-            rates={rates}
-            tiers={[
-              { label: 'Budget', usd: guide.budget.budgetDailyUSD },
-              { label: 'Mid-range', usd: guide.budget.midDailyUSD },
-              { label: 'Luxury', usd: guide.budget.luxuryDailyUSD },
-            ]}
-          />
-          <p style={paragraphStyle}>{guide.budget.blurb}</p>
-        </Section>
-
-        <Section title="Family Travel" eyebrow="With Kids">
-          <p style={paragraphStyle}>{guide.travelStyles.family}</p>
-        </Section>
-
-        <Section title="Couples Travel" eyebrow="Together">
-          <p style={paragraphStyle}>{guide.travelStyles.couples}</p>
-        </Section>
-
-        <Section title="Solo Travel" eyebrow="On Your Own">
-          <p style={paragraphStyle}>{guide.travelStyles.solo}</p>
-        </Section>
-
-        <Section title="What to Eat" eyebrow="Food">
-          <ul style={listStyle}>
-            {guide.food.map((f) => (
-              <li key={f.dish} style={listItemStyle}>
-                <strong style={{ color: 'var(--ink-primary)', fontWeight: 700 }}>{f.dish}.</strong>{' '}
-                {f.note}
+        {/* How many days */}
+        <Section title={`How many days in ${city.name}?`} eyebrow="Step 2 · Trip length">
+          <p style={paragraphStyle}>{exp.tripLength.intro}</p>
+          <ul style={itineraryRow}>
+            {exp.tripLength.options.map((o) => (
+              <li key={o.days}>
+                <Link href={o.href} style={itineraryChip}>
+                  {o.label} →
+                </Link>
               </li>
             ))}
           </ul>
         </Section>
 
-        <Section title="Getting Around" eyebrow="Transportation">
-          <p style={paragraphStyle}>{guide.transportation.primary}</p>
-          <p style={paragraphStyle}>{guide.transportation.tips}</p>
+        {/* Suggested itinerary structure */}
+        <Section title={`Build your ${city.name} itinerary`} eyebrow="Step 3 · Itinerary">
+          <p style={paragraphStyle}>{exp.itineraryIntro}</p>
         </Section>
 
-        <Section title="Neighborhoods" eyebrow="Where to Base Yourself">
+        {/* Where to base yourself */}
+        <Section title="Where to base yourself" eyebrow="Step 4 · Your base">
           <ul style={listStyle}>
-            {guide.neighborhoods.map((n) => (
+            {exp.baseAreas.map((n) => (
               <li key={n.name} style={listItemStyle}>
                 <strong style={{ color: 'var(--ink-primary)', fontWeight: 700 }}>{n.name}.</strong>{' '}
                 {n.blurb}
               </li>
             ))}
           </ul>
-          <Link
-            href={`/where-to-stay-in-${city.slug}`}
-            style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '0.4rem',
-              marginTop: '0.35rem',
-              fontFamily: 'var(--font-inter)',
-              fontSize: '0.9rem',
-              fontWeight: 700,
-              color: 'var(--accent-primary)',
-              textDecoration: 'none',
-            }}
-          >
-            Not sure which area fits you? Match {city.name}’s neighborhoods to your trip →
-          </Link>
-        </Section>
-
-        <Section title={`${city.name} Map & Walking Distances`} eyebrow="Get Your Bearings">
           <DestinationMap cityName={city.name} center={city.coordinates} pins={mapPins} />
           <WalkDistances
             items={mapPins
@@ -308,14 +209,67 @@ export async function DestinationGuidePage({
           />
         </Section>
 
-        <Section title="Safety" eyebrow="What to Know">
-          <p style={paragraphStyle}>{guide.safety}</p>
+        {/* Getting around */}
+        <Section title={`Getting around ${city.name}`} eyebrow="Step 5 · Transport">
+          <p style={paragraphStyle}>{exp.gettingAround}</p>
+        </Section>
+
+        {/* Plan by trip style */}
+        <Section title="Plan by trip style" eyebrow="Step 6 · Your trip">
+          <ul style={listStyle}>
+            {exp.tripStyles.map((t) => (
+              <li key={t.label} style={listItemStyle}>
+                <strong style={{ color: 'var(--ink-primary)', fontWeight: 700 }}>{t.label}.</strong>{' '}
+                {t.text}
+              </li>
+            ))}
+          </ul>
+        </Section>
+
+        {/* Practical planning */}
+        <Section title="Practical planning" eyebrow="Step 7 · Before you go">
+          <p style={paragraphStyle}>{exp.practical}</p>
+        </Section>
+
+        {/* Where to stay — hotel or whole home */}
+        <Section title="Hotel or whole home?" eyebrow="Step 8 · Where to stay">
+          <p style={paragraphStyle}>
+            Two ways to book your {city.name} stay — pick by trip type.
+          </p>
+          <div style={decisionCard}>
+            <div>
+              <p style={decisionTitle}>Hotels & city stays</p>
+              <p style={decisionNote}>
+                Best for short city breaks and central locations — compare {city.name} hotels on
+                Expedia.
+              </p>
+            </div>
+            <a href={exp.whereToStay.hotelHref} rel="sponsored nofollow noopener noreferrer" style={decisionCta}>
+              Compare hotels →
+            </a>
+          </div>
+        </Section>
+
+        {/* Related planning pages */}
+        <Section title="Keep planning" eyebrow="Related">
+          <ul style={{ ...listStyle, gap: '0.5rem' }}>
+            {exp.related.map((r) => (
+              <li key={r.href}>
+                <Link href={r.href} style={relatedLinkStyle}>
+                  {r.label} →
+                </Link>
+              </li>
+            ))}
+          </ul>
         </Section>
       </article>
 
+      {/* Whole-home option — Vrbo (best for groups, space, kitchens) */}
+      {exp.whereToStay.showVrbo ? <VrboCityCallout city={city} /> : null}
+
       <SmartStayOffer
-        href={buildExpediaCategoryUrl('hotels', { destination: city.name })}
-        headline={`Set on ${city.name}? Lock in where you'll stay.`}
+        href={exp.whereToStay.hotelHref}
+        headline={`Ready to plan ${city.name}? Lock in where you'll stay.`}
         subline="Hotels and homes on Expedia — the price you pay is the same as booking direct."
         ctaLabel={`See ${city.name} stays →`}
         storageKey={`sso-${city.slug}`}
@@ -323,6 +277,9 @@ export async function DestinationGuidePage({
     </SeoPageShell>
   );
 }
+
+// Route keeps a single structured-data import surface for this page.
+export { buildGotriptDestinationJsonLd as buildDestinationGuideJsonLd };
 
 function Section({
   title,
@@ -366,57 +323,6 @@ function Section({
   );
 }
 
-function BudgetTier({ label, value }: { label: string; value: string }) {
-  return (
-    <li
-      style={{
-        listStyle: 'none',
-        padding: '1rem 1.25rem',
-        borderRadius: '0.85rem',
-        background: 'var(--surface-elevated)',
-        border: '1px solid var(--border-subtle)',
-        boxShadow: 'var(--elev-card)',
-        textAlign: 'center',
-      }}
-    >
-      <p
-        style={{
-          fontFamily: 'var(--font-inter)',
-          fontSize: '0.66rem',
-          letterSpacing: '0.16em',
-          textTransform: 'uppercase',
-          color: 'var(--ink-tertiary)',
-          fontWeight: 700,
-          margin: 0,
-        }}
-      >
-        {label}
-      </p>
-      <p
-        style={{
-          fontFamily: 'var(--font-inter)',
-          fontSize: '1.7rem',
-          fontWeight: 800,
-          color: 'var(--accent-primary)',
-          margin: '0.35rem 0 0',
-        }}
-      >
-        {value}
-        <span
-          style={{
-            fontSize: '0.85rem',
-            fontWeight: 500,
-            color: 'var(--ink-secondary)',
-            marginLeft: '0.3rem',
-          }}
-        >
-          /day
-        </span>
-      </p>
-    </li>
-  );
-}
-
 const paragraphStyle: React.CSSProperties = {
   fontFamily: 'var(--font-inter)',
   fontSize: '1.02rem',
@@ -441,107 +347,73 @@ const listItemStyle: React.CSSProperties = {
   color: 'var(--ink-secondary)',
 };
 
-const budgetGrid: React.CSSProperties = {
-  display: 'grid',
-  gridTemplateColumns: 'repeat(3, minmax(0, 1fr))',
-  gap: '0.85rem',
+const itineraryRow: React.CSSProperties = {
+  listStyle: 'none',
   padding: 0,
-  margin: '0.5rem 0 1.25rem',
+  margin: '0.5rem 0 0',
+  display: 'flex',
+  flexWrap: 'wrap',
+  gap: '0.6rem',
 };
 
-/**
- * JSON-LD: TouristDestination + FAQPage payload — drives Google's
- * rich-result eligibility for the page. Pair with the visible
- * content above so what the user reads = what Google reads.
- */
-export function buildDestinationGuideJsonLd({
-  city,
-  guide,
-  canonical,
-  imageUrl,
-}: {
-  city: SeoCity;
-  guide: DestinationGuide;
-  canonical: string;
-  imageUrl: string;
-}): string {
-  const destination = {
-    '@context': 'https://schema.org',
-    '@type': 'TouristDestination',
-    name: `${city.name}, ${city.countryName}`,
-    description: city.oneLiner,
-    url: canonical,
-    image: imageUrl,
-    address: {
-      '@type': 'PostalAddress',
-      addressCountry: city.countryCode,
-      addressLocality: city.name,
-    },
-    geo: {
-      '@type': 'GeoCoordinates',
-      latitude: city.coordinates.lat,
-      longitude: city.coordinates.lng,
-    },
-    containedInPlace: {
-      '@type': 'Country',
-      name: city.countryName,
-    },
-    touristType: ['Family', 'Couples', 'Solo'],
-  };
+const itineraryChip: React.CSSProperties = {
+  display: 'inline-flex',
+  fontFamily: 'var(--font-inter)',
+  fontSize: '0.85rem',
+  fontWeight: 700,
+  padding: '0.55rem 1rem',
+  borderRadius: '999px',
+  background: 'var(--surface-elevated)',
+  border: '1px solid var(--border-subtle)',
+  color: 'var(--accent-primary)',
+  textDecoration: 'none',
+};
 
-  const faq = {
-    '@context': 'https://schema.org',
-    '@type': 'FAQPage',
-    mainEntity: [
-      {
-        '@type': 'Question',
-        name: `When is the best time to visit ${city.name}?`,
-        acceptedAnswer: {
-          '@type': 'Answer',
-          text: `${guide.bestTimeToVisit.months}. ${guide.bestTimeToVisit.blurb}`,
-        },
-      },
-      {
-        '@type': 'Question',
-        name: `How much does a trip to ${city.name} cost per day?`,
-        acceptedAnswer: {
-          '@type': 'Answer',
-          text: `Budget travelers can manage on about $${guide.budget.budgetDailyUSD}/day. Mid-range is about $${guide.budget.midDailyUSD}/day, luxury starts around $${guide.budget.luxuryDailyUSD}/day. ${guide.budget.blurb}`,
-        },
-      },
-      {
-        '@type': 'Question',
-        name: `Is ${city.name} good for family travel?`,
-        acceptedAnswer: { '@type': 'Answer', text: guide.travelStyles.family },
-      },
-      {
-        '@type': 'Question',
-        name: `Is ${city.name} safe for travelers?`,
-        acceptedAnswer: { '@type': 'Answer', text: guide.safety },
-      },
-      {
-        '@type': 'Question',
-        name: `What should I eat in ${city.name}?`,
-        acceptedAnswer: {
-          '@type': 'Answer',
-          text: guide.food.map((f) => `${f.dish}: ${f.note}`).join(' '),
-        },
-      },
-      {
-        '@type': 'Question',
-        name: `How do I get around ${city.name}?`,
-        acceptedAnswer: {
-          '@type': 'Answer',
-          text: `${guide.transportation.primary} ${guide.transportation.tips}`,
-        },
-      },
-    ],
-  };
+const decisionCard: React.CSSProperties = {
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'space-between',
+  gap: '1rem',
+  padding: '1rem 1.15rem',
+  borderRadius: '0.85rem',
+  background: 'var(--surface-elevated)',
+  border: '1px solid var(--border-subtle)',
+  marginTop: '0.5rem',
+};
 
-  // Two separate payloads in one string — most JSON-LD parsers
-  // tolerate this in a single <script> tag but Google's preference
-  // is one payload per <script>. The caller renders two tags.
-  return JSON.stringify([destination, faq])
-    .replace(/</g, '\\u003c')
-    .replace(/>/g, '\\u003e');
-}
+const decisionTitle: React.CSSProperties = {
+  fontFamily: 'var(--font-inter)',
+  fontSize: '1rem',
+  fontWeight: 800,
+  color: 'var(--ink-primary)',
+  margin: 0,
+};
+
+const decisionNote: React.CSSProperties = {
+  fontFamily: 'var(--font-inter)',
+  fontSize: '0.9rem',
+  lineHeight: 1.5,
+  color: 'var(--ink-secondary)',
+  margin: '0.2rem 0 0',
+};
+
+const decisionCta: React.CSSProperties = {
+  flexShrink: 0,
+  fontFamily: 'var(--font-inter)',
+  fontSize: '0.8rem',
+  fontWeight: 700,
+  whiteSpace: 'nowrap',
+  padding: '0.5rem 0.9rem',
+  borderRadius: '999px',
+  background: 'var(--accent-primary)',
+  color: '#ffffff',
+  textDecoration: 'none',
+};
+
+const relatedLinkStyle: React.CSSProperties = {
+  fontFamily: 'var(--font-inter)',
+  fontSize: '0.95rem',
+  fontWeight: 600,
+  color: 'var(--accent-primary)',
+  textDecoration: 'none',
+};
