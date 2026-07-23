@@ -4,12 +4,19 @@ import { useState } from 'react';
 import Link from 'next/link';
 
 /**
- * Desktop mega-dropdown nav (BedroomVillas / hotala style) — surfaces
- * gotript's accommodation depth so a visitor can jump straight to a
- * property-type or destination landing. Hover opens a multi-column panel;
- * every link points at a real internal route (SEO internal-linking, no
- * affiliate redirect here). Desktop only — mobile keeps the search-led hero,
- * matching the prior header. Theme-aware via CSS vars.
+ * Desktop mega-dropdown nav — EDITORIAL-FIRST. gotript's job is "teach me
+ * about this destination", so the nav leads with the editorial surfaces that
+ * actually earn its search traffic (destination guides, then trip guides:
+ * best-time / airport / where-to-stay pages) and DEMOTES the accommodation
+ * matrix below them. This restores internal-link prominence + topical
+ * hierarchy to those pages after the accommodation-first repositioning had
+ * quietly pushed them out of the primary nav.
+ *
+ * Every href is a VERIFIED live internal route (direct 200, no redirect) —
+ * the itinerary + things-to-do-in-{city} slugs were deliberately left out
+ * because they 308-redirect. SEO internal-linking, no affiliate redirect
+ * here. Hover opens a multi-column panel. Desktop only — mobile keeps the
+ * search-led hero. Theme-aware via CSS vars.
  */
 
 interface NavCol {
@@ -62,11 +69,56 @@ const DEST_COLS: readonly NavCol[] = [
   },
 ];
 
+// Trip-guide editorial pages — gotript's actual search earners. Every href was
+// verified as a DIRECT 200 against production (best-time / airport / where-to-
+// stay). The itinerary + things-to-do-in-{city} slugs are intentionally NOT
+// here: they 308-redirect (to /plan and to canonical guides), and linking a
+// nav through a redirect wastes crawl budget + adds a hop for users.
+const GUIDE_CITIES = ['Rome', 'Paris', 'Barcelona', 'Tokyo', 'Bali'] as const;
+const guideSlug = (c: string) => c.toLowerCase();
+
+const TRIP_GUIDE_COLS: readonly NavCol[] = [
+  {
+    heading: 'Best time to visit',
+    links: GUIDE_CITIES.map((c) => ({ label: c, href: `/best-time-to-visit-${guideSlug(c)}` })),
+  },
+  {
+    heading: 'Airport guides',
+    links: GUIDE_CITIES.map((c) => ({ label: c, href: `/${guideSlug(c)}-airport-guide` })),
+  },
+  {
+    heading: 'Where to stay',
+    links: GUIDE_CITIES.map((c) => ({ label: c, href: `/where-to-stay-in-${guideSlug(c)}` })),
+  },
+];
+
 export function MegaNav() {
   const [open, setOpen] = useState<string | null>(null);
 
   return (
     <nav className="relative hidden items-center gap-0.5 md:flex" onMouseLeave={() => setOpen(null)}>
+      {/* Editorial-first order: gotript's job is "teach me about this place",
+       *  so Destinations + Trip guides lead. Vacation rentals is demoted below
+       *  the editorial surfaces (it's stayviaowner's core intent, not this
+       *  brand's) — this restores internal-link prominence to the guide,
+       *  best-time and airport pages that actually earn gotript's traffic. */}
+      <MegaItem
+        id="dest"
+        label="Destinations"
+        cols={DEST_COLS}
+        open={open === 'dest'}
+        onHover={setOpen}
+        footer={{ label: 'All destination guides →', href: '/destinations' }}
+      />
+      <MegaItem
+        id="guides"
+        label="Trip guides"
+        cols={TRIP_GUIDE_COLS}
+        open={open === 'guides'}
+        onHover={setOpen}
+        footer={{ label: 'Plan your trip →', href: '/plan' }}
+      />
+      <FlatLink href="/things-to-do" onHover={() => setOpen(null)}>Things to do</FlatLink>
       <MegaItem
         id="stays"
         label="Vacation rentals"
@@ -75,15 +127,6 @@ export function MegaNav() {
         onHover={setOpen}
         footer={{ label: 'Browse all stays →', href: '/vacation-rentals' }}
       />
-      <MegaItem
-        id="dest"
-        label="Destinations"
-        cols={DEST_COLS}
-        open={open === 'dest'}
-        onHover={setOpen}
-        footer={{ label: 'See all destinations →', href: '/destinations' }}
-      />
-      <FlatLink href="/things-to-do" onHover={() => setOpen(null)}>Things to do</FlatLink>
       <FlatLink href="/flights" onHover={() => setOpen(null)}>Flights</FlatLink>
       <FlatLink href="/cars" onHover={() => setOpen(null)}>Cars</FlatLink>
       <FlatLink href="/about" onHover={() => setOpen(null)}>About</FlatLink>
