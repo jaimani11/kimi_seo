@@ -93,8 +93,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       country: seoCity.countryCode,
     });
     const canonical = canonicalUrl(`/destinations/${slug}`);
-    const title = `${seoCity.name} Travel Guide · ${seoCity.countryName} · stayviaowner`;
-    const description = `${seoCity.oneLiner} Best time to visit, daily budget, what to eat, neighborhoods, transportation and safety in ${seoCity.name}.`;
+    const title = `${seoCity.name} Vacation Rentals: Apartments & Whole Homes · ${seoCity.countryName} · stayviaowner`;
+    const description = `Vacation rentals in ${seoCity.name} — the best areas for whole-home apartments and houses, plus the weather, neighborhoods and getting around.`;
     return {
       title,
       description,

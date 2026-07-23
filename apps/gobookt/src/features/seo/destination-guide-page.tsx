@@ -126,7 +126,7 @@ export async function DestinationGuidePage({
               textShadow: '0 2px 14px rgba(0,0,0,0.55)',
             }}
           >
-            The {city.name} Travel Guide
+            Where to stay in {city.name}
           </h1>
           <p
             className="mx-auto mt-5 max-w-2xl"
