@@ -4,7 +4,7 @@ import { ExternalLink } from '@/features/shared/icons';
 import type { Stay } from '@core/stay';
 import type { TripIntent } from '@core/trip-intent';
 import {
-  buildActiveStaySearchUrl,
+  activeStaySearchHref,
   getActiveStayProviderId,
   type ActiveStaySearchInput,
 } from '@lib/affiliate/active-stay-provider';
@@ -69,6 +69,7 @@ export function ExpediaCta({ stay, intent, turnId, variant }: ExpediaCtaProps) {
     url: outboundUrl,
     providerId: activeProviderId,
     stayId: stay.id,
+    intent: 'search',
     ...(turnId ? { turnId } : {}),
   });
   const href = `/r/${id}`;
@@ -177,7 +178,7 @@ function resolveOutboundUrl(stay: Stay, intent: TripIntent): string | null {
     adults,
     ...(ages.length > 0 ? { childrenAges: ages } : {}),
   };
-  return buildActiveStaySearchUrl(input);
+  return activeStaySearchHref(input);
 }
 
 /**

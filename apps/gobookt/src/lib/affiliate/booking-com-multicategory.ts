@@ -23,7 +23,14 @@
  *                                   (default 'gobookt').
  */
 
-import { resolveBookingUrl, type BookingCjSurface } from './booking-cj-links';
+import {
+  resolveBookingUrl,
+  resolveBookingSearchUrl,
+  normalizeStayParty,
+  validateStayDates,
+  type BookingCjSurface,
+  type BookingSearchResolution,
+} from './booking-cj-links';
 
 export type BookingComCategory =
   | 'hotels'
@@ -66,21 +73,59 @@ export interface CategorySearchInput {
 }
 
 /**
- * Build a URL for the given Booking.com vertical. Returns the
- * canonical Booking.com search URL with our affiliate id attached.
+ * Build a URL for a NON-stays Booking.com vertical (attractions / flights /
+ * cars / taxis). `hotels` is deliberately excluded at the type level: a hotel
+ * search is search-intent and must go through `resolveBookingHotelsSearch` /
+ * `bookingHotelsSearchHref` (money-path safe, fail-closed), never this
+ * string-returning path that can drop to a fixed homepage creative.
  */
 export function buildBookingComCategoryUrl(
-  category: BookingComCategory,
+  category: Exclude<BookingComCategory, 'hotels'>,
   input: CategorySearchInput,
   config: BookingComMultiConfig = getBookingComMultiConfig(),
 ): string {
-  // The specific booking.com page we'd ideally land on. Used directly
-  // only as the evergreen deep-link target, or as an untracked fail-safe
-  // when no CJ creative is configured. Otherwise the CJ creative link for
-  // the surface wins — Booking.com is approved via CJ, which tracks
-  // through its own redirect links, not an `aid` param.
   const target = buildCategoryTargetUrl(category, input, config);
   return resolveBookingUrl(surfaceForCategory(category), target);
+}
+
+/**
+ * Resolve a Booking.com HOTELS SEARCH — the money-path-safe entrypoint for
+ * every destination/neighborhood/date/guest hotel CTA. Normalizes guests
+ * (never group_adults=0), drops invalid dates, and routes through
+ * `resolveBookingSearchUrl` (deep-link only; fail-closed; never the fixed
+ * homepage creative; never flights). Returns a typed result.
+ */
+export function resolveBookingHotelsSearch(
+  input: CategorySearchInput,
+  config: BookingComMultiConfig = getBookingComMultiConfig(),
+): BookingSearchResolution {
+  const party = normalizeStayParty(input);
+  const dates = validateStayDates(input.checkIn, input.checkOut);
+  const safeDates = dates.ok
+    ? { ...(dates.checkIn ? { checkIn: dates.checkIn } : {}), ...(dates.checkOut ? { checkOut: dates.checkOut } : {}) }
+    : {};
+  const target = buildHotelsUrl(
+    { destination: input.destination, ...safeDates, adults: party.adults, children: party.children, rooms: party.rooms },
+    config,
+  );
+  return resolveBookingSearchUrl({
+    target,
+    destination: input.destination,
+    ...safeDates,
+    adults: party.adults,
+    children: party.children,
+    rooms: party.rooms,
+  });
+}
+
+/** Href for a hotels search CTA, or `null` when unavailable (fail-closed).
+ *  Callers render the CTA only when non-null. */
+export function bookingHotelsSearchHref(
+  input: CategorySearchInput,
+  config: BookingComMultiConfig = getBookingComMultiConfig(),
+): string | null {
+  const res = resolveBookingHotelsSearch(input, config);
+  return res.status === 'unavailable' ? null : res.url;
 }
 
 /** Maps a vertical to its CJ creative surface (null = no CJ creative yet). */
@@ -120,13 +165,16 @@ function buildCategoryTargetUrl(
 }
 
 function buildHotelsUrl(input: CategorySearchInput, config: BookingComMultiConfig): string {
+  // Normalize guests so the target NEVER emits group_adults=0 (clamps adults≥1,
+  // children≥0, rooms≥1). Idempotent when callers already normalized.
+  const party = normalizeStayParty(input);
   const params = new URLSearchParams();
   params.set('ss', input.destination);
   if (input.checkIn) params.set('checkin', input.checkIn);
   if (input.checkOut) params.set('checkout', input.checkOut);
-  params.set('group_adults', String(input.adults ?? 2));
-  params.set('group_children', String(input.children ?? 0));
-  params.set('no_rooms', String(input.rooms ?? 1));
+  params.set('group_adults', String(party.adults));
+  params.set('group_children', String(party.children));
+  params.set('no_rooms', String(party.rooms));
   return withAffiliate(
     `https://www.booking.com/searchresults.html?${params.toString()}`,
     config,

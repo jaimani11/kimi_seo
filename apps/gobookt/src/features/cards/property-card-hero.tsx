@@ -42,7 +42,7 @@ export function PropertyCardHero({ property }: PropertyCardHeroProps) {
   return (
     <motion.a
       ref={containerRef}
-      href={href}
+      href={href ?? undefined}
       target="_blank"
       rel="sponsored nofollow noopener noreferrer"
       aria-label={`Open details for ${property.name} in ${property.destination}`}

@@ -8,7 +8,11 @@ import {
   getExpediaAffiliateConfig,
   type DestinationSearchInput,
 } from './expedia-link-builder';
-import { resolveBookingUrl } from './booking-cj-links';
+import {
+  resolveBookingSearchUrl,
+  normalizeStayParty,
+  type BookingSearchResolution,
+} from './booking-cj-links';
 
 /**
  * Active-stay-provider abstraction.
@@ -73,7 +77,48 @@ export interface ActiveStaySearchInput {
  * The returned URL is ready for `/r/[id]` encoding (it's already
  * affiliate-tagged + on the partner's domain).
  */
-export function buildActiveStaySearchUrl(input: ActiveStaySearchInput): string {
+/**
+ * Resolve a Booking.com stays SEARCH hand-off through the money-path-safe
+ * search resolver (booking-com provider). Guest counts are normalized so a
+ * search never emits group_adults=0. Returns a typed result — `tracked`,
+ * `untracked`, or `unavailable` — never a homepage creative and never an
+ * empty string. Booking.com is gobookt's active provider; the Expedia branch
+ * lives in `activeStaySearchHref` since it is a different (dormant) program.
+ */
+export function resolveActiveStaySearch(input: ActiveStaySearchInput): BookingSearchResolution {
+  const party = normalizeStayParty({
+    adults: input.adults,
+    children: input.childrenAges?.length ?? 0,
+    rooms: input.rooms,
+  });
+  const bookingInput: BookingComSearchInput = {
+    destination: input.destination,
+    checkIn: input.checkIn,
+    checkOut: input.checkOut,
+    adults: party.adults,
+    children: party.children,
+    rooms: party.rooms,
+    ...(input.inventoryFilter ? { inventoryFilter: input.inventoryFilter } : {}),
+  };
+  const target = buildBookingComSearchUrl(bookingInput, getBookingComAffiliateConfig());
+  return resolveBookingSearchUrl({
+    target,
+    destination: input.destination,
+    checkIn: input.checkIn,
+    checkOut: input.checkOut,
+    adults: party.adults,
+    children: party.children,
+    rooms: party.rooms,
+  });
+}
+
+/**
+ * Href for a stays search CTA, or `null` when the search hand-off is
+ * unavailable (fail-closed). Callers render the CTA only when non-null and
+ * show a retry/unavailable state otherwise — they must NEVER substitute a
+ * homepage link. Expedia (dormant override) always yields a string.
+ */
+export function activeStaySearchHref(input: ActiveStaySearchInput): string | null {
   const provider = getActiveStayProvider();
 
   if (provider === 'expedia') {
@@ -81,7 +126,7 @@ export function buildActiveStaySearchUrl(input: ActiveStaySearchInput): string {
       destination: input.destination,
       checkIn: input.checkIn,
       checkOut: input.checkOut,
-      adults: input.adults,
+      adults: Math.max(1, input.adults),
       ...(input.childrenAges && input.childrenAges.length > 0
         ? { childrenAges: input.childrenAges }
         : {}),
@@ -90,22 +135,8 @@ export function buildActiveStaySearchUrl(input: ActiveStaySearchInput): string {
     return buildExpediaSearchUrl(expediaInput, getExpediaAffiliateConfig());
   }
 
-  // Default: Booking.com (gobookt's CJ affiliate program). gobookt is a
-  // Booking.com *CJ* affiliate — a raw booking.com URL with a label earns
-  // nothing on CJ, so we route through the CJ resolver, which uses the tracked
-  // CJ link (BOOKING_STAYS_AFFILIATE_URL) when configured and falls back to the
-  // plain URL only when it isn't.
-  const bookingInput: BookingComSearchInput = {
-    destination: input.destination,
-    checkIn: input.checkIn,
-    checkOut: input.checkOut,
-    adults: input.adults,
-    children: input.childrenAges?.length ?? 0,
-    ...(typeof input.rooms === 'number' ? { rooms: input.rooms } : {}),
-    ...(input.inventoryFilter ? { inventoryFilter: input.inventoryFilter } : {}),
-  };
-  const target = buildBookingComSearchUrl(bookingInput, getBookingComAffiliateConfig());
-  return resolveBookingUrl('stays', target);
+  const res = resolveActiveStaySearch(input);
+  return res.status === 'unavailable' ? null : res.url;
 }
 
 /**

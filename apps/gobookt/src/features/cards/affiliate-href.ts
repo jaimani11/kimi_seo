@@ -1,5 +1,5 @@
 import {
-  buildActiveStaySearchUrl,
+  activeStaySearchHref,
   getActiveStayProviderId,
 } from '@lib/affiliate/active-stay-provider';
 import { encodeAffiliateLink } from '@lib/affiliate/link-encoder';
@@ -24,18 +24,26 @@ import type { Property } from '@lib/discovery/property';
  * same source so click attribution records the actual destination
  * partner.
  */
-export function buildPropertyAffiliateHref(property: Property): string {
+/**
+ * Build a `/r/[id]` redirect URL for a curated property, or `null` when the
+ * stays search hand-off is unavailable (fail-closed — e.g. the tracked
+ * deep-link isn't configured). Callers render the CTA only when non-null and
+ * must NEVER substitute a homepage link.
+ */
+export function buildPropertyAffiliateHref(property: Property): string | null {
   const { checkIn, checkOut } = defaultDates();
-  const url = buildActiveStaySearchUrl({
+  const url = activeStaySearchHref({
     destination: property.affiliate.searchDestination,
     checkIn,
     checkOut,
     adults: property.affiliate.defaultAdults,
   });
+  if (!url) return null; // search hand-off unavailable — hide the CTA, don't fake one
   const id = encodeAffiliateLink({
     url,
     providerId: getActiveStayProviderId(),
     stayId: property.affiliate.stayId,
+    intent: 'search',
   });
   return `/r/${id}`;
 }

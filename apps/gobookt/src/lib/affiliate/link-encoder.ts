@@ -40,6 +40,10 @@ export interface AffiliateLinkPayload {
   /** Optional conversation id (rarely used; included for future
    *  multi-turn-attribution work). */
   conversationId?: string;
+  /** Optional intent marker. `search` lets the /r/[id] executor apply the
+   *  narrow money-path guard (reject a fixed Booking.com stays homepage
+   *  creative) with a reliable signal rather than inferring from the URL. */
+  intent?: 'search' | 'generic';
 }
 
 const MAX_ENCODED_LEN = 1024;
@@ -57,6 +61,7 @@ export function encodeAffiliateLink(payload: AffiliateLinkPayload): string {
   if (payload.stayId) minimal.s = payload.stayId;
   if (payload.turnId) minimal.t = payload.turnId;
   if (payload.conversationId) minimal.c = payload.conversationId;
+  if (payload.intent) minimal.i = payload.intent;
   const json = JSON.stringify(minimal);
   const encoded = toBase64Url(json);
   if (encoded.length > MAX_ENCODED_LEN) {
@@ -102,6 +107,7 @@ export function decodeAffiliateLink(id: string): AffiliateLinkPayload | null {
   if (typeof obj.s === 'string') out.stayId = obj.s;
   if (typeof obj.t === 'string') out.turnId = obj.t;
   if (typeof obj.c === 'string') out.conversationId = obj.c;
+  if (obj.i === 'search' || obj.i === 'generic') out.intent = obj.i;
   return out;
 }
 

@@ -4,7 +4,7 @@ import { getServerAuth, ownerOf } from '@lib/auth';
 import { getSessionStore } from '@lib/session/factory';
 import { decodeAffiliateLink } from '@lib/affiliate/link-encoder';
 import { decorateOutboundUrl } from '@lib/affiliate/decorate-outbound';
-import { describeBookingCjUrl } from '@lib/affiliate/booking-cj-links';
+import { describeBookingCjUrl, isFixedStaysHomepageCreative } from '@lib/affiliate/booking-cj-links';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -59,6 +59,20 @@ export async function GET(_req: NextRequest, { params }: RouteParams): Promise<R
     ...(payload.stayId ? { content: payload.stayId } : {}),
     ...(payload.turnId ? { turnId: payload.turnId } : {}),
   });
+
+  // Narrow money-path guard (defense-in-depth): a SEARCH-marked click must
+  // never forward the fixed Booking.com stays homepage creative — it would
+  // drop the destination. Enforced ONLY with the explicit `intent: 'search'`
+  // signal in the payload; we never infer search intent from arbitrary URLs.
+  // Primary safety is upstream (search callers build via resolveBookingSearchUrl,
+  // which can't emit the fixed creative); this is the executor backstop.
+  if (payload.intent === 'search' && isFixedStaysHomepageCreative(outbound)) {
+    console.error('[r] refusing fixed stays homepage creative for a search-intent click', {
+      site: 'gobookt',
+      providerId: payload.providerId,
+    });
+    return new Response('Not found', { status: 404 });
+  }
 
   try {
     await getSessionStore().recordClick({

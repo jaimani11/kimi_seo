@@ -27,7 +27,7 @@ export function PropertyCardCompact({ property }: PropertyCardCompactProps) {
 
   return (
     <motion.a
-      href={href}
+      href={href ?? undefined}
       target="_blank"
       rel="sponsored nofollow noopener noreferrer"
       aria-label={`${property.name} in ${property.destination} (affiliate link)`}

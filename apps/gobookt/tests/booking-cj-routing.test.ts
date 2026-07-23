@@ -1,9 +1,9 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import {
   buildBookingComCategoryUrl,
-  type BookingComCategory,
+  resolveBookingHotelsSearch,
 } from '@lib/affiliate/booking-com-multicategory';
-import { buildActiveStaySearchUrl } from '@lib/affiliate/active-stay-provider';
+import { activeStaySearchHref } from '@lib/affiliate/active-stay-provider';
 import { resolveBookingUrl, describeBookingCjUrl } from '@lib/affiliate/booking-cj-links';
 import { isAllowedAffiliateHost } from '@lib/affiliate/allowlist';
 import { encodeAffiliateLink, decodeAffiliateLink } from '@lib/affiliate/link-encoder';
@@ -51,9 +51,11 @@ const SEARCH = {
 };
 
 describe('gobookt Booking.com CJ routing — no monetized CTA emits a raw booking.com URL', () => {
-  it('every category CTA (/api/go/booking) resolves to a CJ domain, not raw booking.com', () => {
+  const STAYS_DEEPLINK = 'https://www.anrdoezrs.net/click-101803878-17293132?url={TARGET}';
+
+  it('every non-stays category CTA resolves to a CJ domain, not raw booking.com', () => {
     stubCjEnv();
-    const categories: BookingComCategory[] = ['hotels', 'attractions', 'flights', 'cars'];
+    const categories = ['attractions', 'flights', 'cars'] as const;
     for (const category of categories) {
       const url = buildBookingComCategoryUrl(category, SEARCH);
       expect(isCjUrl(url), `${category} → ${url} must be a CJ-tracked domain`).toBe(true);
@@ -61,28 +63,42 @@ describe('gobookt Booking.com CJ routing — no monetized CTA emits a raw bookin
     }
   });
 
-  it('the stay/property-card path (active-stay-provider) resolves to a CJ domain', () => {
+  it('hotels search resolves to a CJ deep-link, never the fixed homepage creative', () => {
     stubCjEnv();
-    const url = buildActiveStaySearchUrl({
+    vi.stubEnv('BOOKING_STAYS_CJ_DEEPLINK', STAYS_DEEPLINK);
+    const r = resolveBookingHotelsSearch(SEARCH);
+    expect(r.status).toBe('tracked');
+    if (r.status !== 'tracked') return;
+    expect(isCjUrl(r.url)).toBe(true);
+    expect(r.url).toContain('17293132');
+    expect(r.url).not.toContain('17288985');
+  });
+
+  it('the stay/property-card path resolves to a CJ deep-link (never the fixed creative)', () => {
+    stubCjEnv();
+    vi.stubEnv('BOOKING_STAYS_CJ_DEEPLINK', STAYS_DEEPLINK);
+    const url = activeStaySearchHref({
       destination: 'Rome',
       checkIn: '2026-09-01',
       checkOut: '2026-09-04',
       adults: 2,
-    });
+    }) as string;
     expect(isCjUrl(url), url).toBe(true);
     expect(isRawBooking(url), url).toBe(false);
+    expect(url).not.toContain('17288985');
   });
 
   it('a resolved CJ URL survives encode → decode (would 404 through /r/[id] if not allowlisted)', () => {
     stubCjEnv();
-    const url = buildActiveStaySearchUrl({
+    vi.stubEnv('BOOKING_STAYS_CJ_DEEPLINK', STAYS_DEEPLINK);
+    const url = activeStaySearchHref({
       destination: 'Rome',
       checkIn: '2026-09-01',
       checkOut: '2026-09-04',
       adults: 2,
-    });
+    }) as string;
     expect(isAllowedAffiliateHost(url), `${url} must pass the affiliate allowlist`).toBe(true);
-    const id = encodeAffiliateLink({ url, providerId: 'booking-com', stayId: 'stay-x' });
+    const id = encodeAffiliateLink({ url, providerId: 'booking-com', stayId: 'stay-x', intent: 'search' });
     const decoded = decodeAffiliateLink(id);
     expect(decoded, 'CJ payload must decode (not be rejected as off-allowlist)').not.toBeNull();
     expect(decoded?.url).toBe(url);

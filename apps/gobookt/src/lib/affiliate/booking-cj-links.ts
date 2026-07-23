@@ -152,3 +152,200 @@ export function describeBookingCjUrl(url: string): {
     return { tracked: false, cjDomain: null, creativeId: null };
   }
 }
+
+// ───────────────────────────────────────────────────────────────────────────
+// Search-vs-generic resolver separation (money-path safety).
+//
+// `resolveBookingUrl` above is VERTICAL-safe (a stays request can't select a
+// flights creative) but it is NOT SEARCH-safe: for a stays *search* its
+// preference #2 is the fixed homepage creative, which silently drops the
+// destination/dates/guests. That is fine for a generic "Browse Booking.com"
+// CTA but wrong for any destination/date/guest/neighborhood/property search.
+//
+// The two resolvers below make the intent explicit and impossible to confuse:
+//   - resolveBookingGenericUrl → generic brand CTA; fixed creative is OK.
+//   - resolveBookingSearchUrl  → search intent; NEVER the fixed homepage
+//     creative, NEVER flights, NEVER another PID. Preserves the destination-
+//     correct target via the CJ deep-link, else FAILS CLOSED (typed
+//     `unavailable`) by default — never a misleading homepage redirect.
+// ───────────────────────────────────────────────────────────────────────────
+
+/** The fixed (homepage-level) stays creative id. A SEARCH click must never
+ *  resolve here — it would drop the destination. Named for the executor guard
+ *  + regression tests. The live per-vertical fixed creative is still read from
+ *  BOOKING_STAYS_AFFILIATE_URL; this constant is the known default. */
+export const FIXED_STAYS_HOMEPAGE_CREATIVE_ID = '17288985';
+
+export type SearchHandoffMode = 'fail_closed' | 'untracked_fallback';
+
+/** Search-handoff failure policy. Default `fail_closed`: when the tracked
+ *  deep-link is unavailable a search returns `unavailable` (UI shows a retry
+ *  state) rather than any redirect. `untracked_fallback` opts into a
+ *  destination-correct BUT untracked redirect (explicit + logged). */
+export function searchHandoffMode(): SearchHandoffMode {
+  return env('SEARCH_HANDOFF_MODE') === 'untracked_fallback'
+    ? 'untracked_fallback'
+    : 'fail_closed';
+}
+
+export interface BookingSearchInput {
+  /** Destination-correct booking.com/searchresults URL (already carries
+   *  ss + normalized dates + guests), built by a stays target builder. */
+  target: string;
+  /** Free-text destination. Required, non-empty. */
+  destination: string;
+  checkIn?: string;
+  checkOut?: string;
+  adults: number;
+  children?: number;
+  rooms?: number;
+}
+
+export type BookingSearchResolution =
+  | { status: 'tracked'; url: string; provider: 'booking'; vertical: 'stays' }
+  | {
+      status: 'untracked';
+      url: string;
+      provider: 'booking';
+      vertical: 'stays';
+      reason: 'deep_link_unavailable';
+    }
+  | {
+      status: 'unavailable';
+      provider: 'booking';
+      vertical: 'stays';
+      reason:
+        | 'missing_destination'
+        | 'deep_link_unavailable'
+        | 'invalid_target'
+        | 'invalid_configuration';
+    };
+
+/** True only for a booking.com stays *search-results* URL that carries a
+ *  destination. Rejects the homepage, non-booking hosts, and flights. */
+export function isValidStaysSearchTarget(target: string): boolean {
+  let u: URL;
+  try {
+    u = new URL(target);
+  } catch {
+    return false;
+  }
+  const host = u.hostname.toLowerCase();
+  if (host === 'flights.booking.com') return false;
+  const onBooking =
+    host === 'booking.com' || host === 'www.booking.com' || host.endsWith('.booking.com');
+  const isSearchResults = u.pathname.toLowerCase().includes('/searchresults');
+  const hasDestination = (u.searchParams.get('ss') ?? '').trim().length > 0;
+  return onBooking && isSearchResults && hasDestination;
+}
+
+/**
+ * Resolve a Booking.com STAYS SEARCH hand-off — money-path safe by
+ * construction. It can only ever return: the destination-preserving CJ
+ * deep-link (`tracked`), a destination-correct untracked target (`untracked`,
+ * and only when SEARCH_HANDOFF_MODE=untracked_fallback), or a typed
+ * `unavailable`. It NEVER returns the fixed homepage creative, a flights
+ * creative, another PID, or an empty string.
+ */
+export function resolveBookingSearchUrl(input: BookingSearchInput): BookingSearchResolution {
+  const V = { provider: 'booking' as const, vertical: 'stays' as const };
+  if (!input.destination || input.destination.trim().length === 0) {
+    return { status: 'unavailable', ...V, reason: 'missing_destination' };
+  }
+  if (!isValidStaysSearchTarget(input.target)) {
+    return { status: 'unavailable', ...V, reason: 'invalid_target' };
+  }
+  const deeplink = env('BOOKING_STAYS_CJ_DEEPLINK');
+  if (deeplink) {
+    if (!deeplink.includes('{TARGET}')) {
+      // Configured but malformed — fail closed. Do NOT fall to a fixed creative.
+      return { status: 'unavailable', ...V, reason: 'invalid_configuration' };
+    }
+    // Encode the target exactly once for the CJ `?url=` layer.
+    const url = deeplink.replace('{TARGET}', encodeURIComponent(input.target));
+    return { status: 'tracked', url, ...V };
+  }
+  // Deep-link unavailable. NEVER the fixed homepage creative.
+  if (searchHandoffMode() === 'untracked_fallback') {
+    return { status: 'untracked', url: input.target, ...V, reason: 'deep_link_unavailable' };
+  }
+  return { status: 'unavailable', ...V, reason: 'deep_link_unavailable' };
+}
+
+/** Generic Booking.com landing per vertical (untracked) when no fixed creative
+ *  is configured. Only used by the GENERIC resolver. */
+const GENERIC_BOOKING_LANDING: Record<BookingCjSurface, string> = {
+  stays: 'https://www.booking.com/',
+  attractions: 'https://www.booking.com/attractions/index.html',
+  flights: 'https://flights.booking.com/',
+  cars: 'https://www.booking.com/cars/index.html',
+};
+
+/** Resolve a GENERIC (no search intent) Booking.com CTA — "Browse
+ *  Booking.com". The fixed homepage CJ creative is acceptable here because no
+ *  destination intent needs to survive. */
+export function resolveBookingGenericUrl(input: { vertical: BookingCjSurface }): string {
+  const fixed = bookingCjFixedLink(input.vertical);
+  if (fixed) return fixed;
+  return GENERIC_BOOKING_LANDING[input.vertical];
+}
+
+/** Defense-in-depth for executors: true when `url` is the fixed stays homepage
+ *  creative (either the known default id or whatever BOOKING_STAYS_AFFILIATE_URL
+ *  points at). A SEARCH-marked click must never forward this. */
+export function isFixedStaysHomepageCreative(url: string): boolean {
+  const d = describeBookingCjUrl(url);
+  if (!d.tracked || !d.creativeId) return false;
+  if (d.creativeId === FIXED_STAYS_HOMEPAGE_CREATIVE_ID) return true;
+  const fixed = bookingCjFixedLink('stays');
+  if (fixed) {
+    const fd = describeBookingCjUrl(fixed);
+    if (fd.creativeId && fd.creativeId === d.creativeId) return true;
+  }
+  return false;
+}
+
+// ── Search-input normalization (shared by the target builders + /api/go) ────
+
+/** Clamp guest/room counts to valid Booking.com ranges. Guarantees adults ≥ 1
+ *  (so a search NEVER emits group_adults=0), children ≥ 0, rooms ≥ 1. */
+export function normalizeStayParty(input: {
+  adults?: number;
+  children?: number;
+  rooms?: number;
+}): { adults: number; children: number; rooms: number } {
+  const asInt = (v: unknown) => {
+    const n = Math.floor(Number(v));
+    return Number.isFinite(n) ? n : NaN;
+  };
+  const a = asInt(input.adults);
+  const c = asInt(input.children);
+  const r = asInt(input.rooms);
+  return {
+    adults: !Number.isFinite(a) || a < 1 ? 2 : Math.min(a, 30),
+    children: !Number.isFinite(c) || c < 0 ? 0 : Math.min(c, 10),
+    rooms: !Number.isFinite(r) || r < 1 ? 1 : Math.min(r, 30),
+  };
+}
+
+export type StayDatesCheck =
+  | { ok: true; checkIn?: string; checkOut?: string }
+  | { ok: false; reason: 'malformed' | 'reversed' | 'same_day' };
+
+/** Deterministic date policy. No dates = valid (Booking.com shows a picker).
+ *  Both dates must be ISO `YYYY-MM-DD`, real, and checkout strictly after
+ *  check-in; otherwise the dates are rejected so we never build an invalid
+ *  Booking.com search. */
+export function validateStayDates(checkIn?: string, checkOut?: string): StayDatesCheck {
+  const has = (s?: string) => typeof s === 'string' && s.trim().length > 0;
+  if (!has(checkIn) && !has(checkOut)) return { ok: true };
+  if (!has(checkIn) || !has(checkOut)) return { ok: false, reason: 'malformed' };
+  const iso = /^\d{4}-\d{2}-\d{2}$/;
+  if (!iso.test(checkIn!) || !iso.test(checkOut!)) return { ok: false, reason: 'malformed' };
+  const ci = Date.parse(`${checkIn!}T00:00:00Z`);
+  const co = Date.parse(`${checkOut!}T00:00:00Z`);
+  if (Number.isNaN(ci) || Number.isNaN(co)) return { ok: false, reason: 'malformed' };
+  if (co === ci) return { ok: false, reason: 'same_day' };
+  if (co < ci) return { ok: false, reason: 'reversed' };
+  return { ok: true, checkIn, checkOut };
+}

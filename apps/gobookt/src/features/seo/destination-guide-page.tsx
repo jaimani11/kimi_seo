@@ -15,7 +15,7 @@ import {
   SmartStayOffer,
   type MapPin,
 } from '@adored/ui';
-import { buildBookingComCategoryUrl } from '@lib/affiliate/booking-com-multicategory';
+import { bookingHotelsSearchHref } from '@lib/affiliate/booking-com-multicategory';
 
 /**
  * Rich destination guide page rendered at `/destinations/{slug}` for
@@ -63,10 +63,13 @@ export async function DestinationGuidePage({
       kind: 'neighborhood' as const,
       detail: distanceLabel(haversineKm(city.coordinates, n)),
       // Stay22-MAP style: each area pin is a tracked Booking.com deep-link.
-      href: buildBookingComCategoryUrl('hotels', { destination: `${n.name}, ${city.name}` }),
+      // Money-path safe: null (fail-closed) → pin renders non-bookable.
+      href: bookingHotelsSearchHref({ destination: `${n.name}, ${city.name}` }) ?? undefined,
       ctaLabel: `Hotels in ${n.name} →`,
     })),
   ];
+
+  const staysOfferHref = bookingHotelsSearchHref({ destination: city.name });
 
   return (
     <SeoPageShell
@@ -275,13 +278,15 @@ export async function DestinationGuidePage({
         </Section>
       </article>
 
-      <SmartStayOffer
-        href={buildBookingComCategoryUrl('hotels', { destination: city.name })}
-        headline={`Set on ${city.name}? Lock in where you'll stay.`}
-        subline="Hotels on Booking.com — free cancellation on most, and the price you pay is the same."
-        ctaLabel={`See ${city.name} hotels →`}
-        storageKey={`sso-${city.slug}`}
-      />
+      {staysOfferHref && (
+        <SmartStayOffer
+          href={staysOfferHref}
+          headline={`Set on ${city.name}? Lock in where you'll stay.`}
+          subline="Hotels on Booking.com — free cancellation on most, and the price you pay is the same."
+          ctaLabel={`See ${city.name} hotels →`}
+          storageKey={`sso-${city.slug}`}
+        />
+      )}
     </SeoPageShell>
   );
 }

@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import {
   assertValidSection,
   type DiscoverySection,
@@ -174,13 +174,22 @@ describe('assertValidSection', () => {
 });
 
 describe('buildPropertyAffiliateHref', () => {
-  // gobookt routes the curated property cards to Booking.com hotels
-  // search by default (active stay provider). Viator + Expedia builders
-  // remain in the codebase as one-env-var overrides.
+  // Property cards are stays search-intent. In production (tracked deep-link)
+  // the payload is a CJ redirect; here we assert the destination-correct
+  // target via untracked_fallback so the raw booking.com search URL is
+  // readable in the payload. Fail-closed (no deep-link, default mode) yields
+  // null instead — covered by the resolver matrix.
+  beforeEach(() => {
+    vi.stubEnv('BOOKING_STAYS_CJ_DEEPLINK', '');
+    vi.stubEnv('SEARCH_HANDOFF_MODE', 'untracked_fallback');
+  });
+  afterEach(() => vi.unstubAllEnvs());
+
   it('produces a /r/ redirect URL whose payload points at booking.com', () => {
     const href = buildPropertyAffiliateHref(SAMPLE_PROPERTY);
-    expect(href.startsWith('/r/')).toBe(true);
-    const id = href.slice(3);
+    expect(href).not.toBeNull();
+    expect((href as string).startsWith('/r/')).toBe(true);
+    const id = (href as string).slice(3);
     const payload = decodeAffiliateLink(id);
     expect(payload).not.toBeNull();
     expect(payload!.providerId).toBe('booking-com');
@@ -193,8 +202,9 @@ describe('buildPropertyAffiliateHref', () => {
     for (const section of DISCOVERY_SECTIONS) {
       for (const property of section.properties) {
         const href = buildPropertyAffiliateHref(property);
-        expect(href.startsWith('/r/')).toBe(true);
-        const id = href.slice(3);
+        expect(href, `no href for ${property.id}`).not.toBeNull();
+        expect((href as string).startsWith('/r/')).toBe(true);
+        const id = (href as string).slice(3);
         const payload = decodeAffiliateLink(id);
         expect(payload, `decode failed for ${property.id}`).not.toBeNull();
         expect(payload!.url).toMatch(/^https:\/\/www\.booking\.com\/searchresults\.html\?/);

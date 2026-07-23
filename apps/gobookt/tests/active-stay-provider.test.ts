@@ -1,6 +1,7 @@
-import { afterEach, beforeEach, describe, expect, it } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import {
-  buildActiveStaySearchUrl,
+  activeStaySearchHref,
+  resolveActiveStaySearch,
   getActiveStayProvider,
   getActiveStayProviderId,
 } from '@lib/affiliate/active-stay-provider';
@@ -72,71 +73,69 @@ describe('getActiveStayProvider', () => {
   });
 });
 
-describe('buildActiveStaySearchUrl', () => {
-  const saved: Partial<Record<(typeof MODE_KEYS)[number], string | undefined>> = {};
-  beforeEach(() => {
-    for (const k of MODE_KEYS) saved[k] = process.env[k];
-    for (const k of MODE_KEYS) delete process.env[k];
-  });
-  afterEach(() => {
-    for (const k of MODE_KEYS) {
-      if (saved[k] === undefined) delete process.env[k];
-      else process.env[k] = saved[k];
-    }
+describe('activeStaySearchHref / resolveActiveStaySearch (money-path safe)', () => {
+  afterEach(() => vi.unstubAllEnvs());
+
+  const DEEPLINK = 'https://www.anrdoezrs.net/click-101803878-17293132?url={TARGET}';
+
+  it('default fail_closed with no deep-link → null (never a homepage link)', () => {
+    vi.stubEnv('BOOKING_STAYS_CJ_DEEPLINK', '');
+    vi.stubEnv('NEXT_PUBLIC_STAYSCOUT_ACTIVE_STAY_PROVIDER', 'booking-com');
+    expect(activeStaySearchHref(SAMPLE_INPUT)).toBeNull();
+    expect(resolveActiveStaySearch(SAMPLE_INPUT).status).toBe('unavailable');
   });
 
-  it('routes to booking.com by default', () => {
-    const url = buildActiveStaySearchUrl(SAMPLE_INPUT);
-    expect(url).toMatch(/^https:\/\/www\.booking\.com\//);
+  it('tracked deep-link → CJ url wrapping the destination-correct target (ss= survives)', () => {
+    vi.stubEnv('BOOKING_STAYS_CJ_DEEPLINK', DEEPLINK);
+    const href = activeStaySearchHref(SAMPLE_INPUT);
+    expect(href).toContain('click-101803878-17293132');
+    const inner = new URL(new URL(href as string).searchParams.get('url') as string);
+    expect(inner.pathname).toBe('/searchresults.html');
+    expect(inner.searchParams.get('ss')).toBe('Tuscany');
+    expect(href).not.toContain('17288985');
   });
 
-  it('lands on the Booking.com search endpoint with the destination as ss=', () => {
-    const url = buildActiveStaySearchUrl(SAMPLE_INPUT);
-    expect(url).toContain('/searchresults.html?');
-    expect(url).toContain('ss=Tuscany');
+  it('untracked_fallback → destination-correct booking.com target, never the fixed creative', () => {
+    vi.stubEnv('BOOKING_STAYS_CJ_DEEPLINK', '');
+    vi.stubEnv('SEARCH_HANDOFF_MODE', 'untracked_fallback');
+    const href = activeStaySearchHref(SAMPLE_INPUT) as string;
+    expect(href).toMatch(/^https:\/\/www\.booking\.com\/searchresults\.html\?/);
+    expect(href).toContain('ss=Tuscany');
+    expect(href).toContain('label=gobookt');
+    expect(href).not.toContain('17288985');
   });
 
-  it('attaches the gobookt label for click attribution', () => {
-    const url = buildActiveStaySearchUrl(SAMPLE_INPUT);
-    expect(url).toContain('label=gobookt');
+  it('never emits group_adults=0 (adults defaulted)', () => {
+    vi.stubEnv('BOOKING_STAYS_CJ_DEEPLINK', '');
+    vi.stubEnv('SEARCH_HANDOFF_MODE', 'untracked_fallback');
+    const href = activeStaySearchHref({ destination: 'Rome', checkIn: '2026-09-01', checkOut: '2026-09-05', adults: 0 }) as string;
+    expect(href).toContain('group_adults=2');
+    expect(href).not.toContain('group_adults=0');
   });
 
-  it('forwards date + traveler params to the Booking.com URL', () => {
-    const url = buildActiveStaySearchUrl({ ...SAMPLE_INPUT, childrenAges: [8] });
-    expect(url).toContain('checkin=');
-    expect(url).toContain('checkout=');
-    expect(url).toContain('group_adults=');
-    expect(url).toContain('group_children=1');
-  });
-
-  it('routes to booking.com when the env override is set', () => {
-    process.env.NEXT_PUBLIC_STAYSCOUT_ACTIVE_STAY_PROVIDER = 'booking-com';
-    const url = buildActiveStaySearchUrl(SAMPLE_INPUT);
-    expect(url).toMatch(/^https:\/\/www\.booking\.com\//);
-  });
-
-  it('routes to expedia.com when the env override is set', () => {
-    process.env.NEXT_PUBLIC_STAYSCOUT_ACTIVE_STAY_PROVIDER = 'expedia';
-    const url = buildActiveStaySearchUrl(SAMPLE_INPUT);
-    expect(url).toMatch(/^https:\/\/www\.expedia\.com\//);
+  it('collapses childrenAges to a count on Booking.com', () => {
+    vi.stubEnv('BOOKING_STAYS_CJ_DEEPLINK', '');
+    vi.stubEnv('SEARCH_HANDOFF_MODE', 'untracked_fallback');
+    const href = activeStaySearchHref({ ...SAMPLE_INPUT, childrenAges: [8, 10] }) as string;
+    expect(href).toContain('group_children=2');
   });
 
   it('forwards the inventoryFilter on Booking.com routes', () => {
-    process.env.NEXT_PUBLIC_STAYSCOUT_ACTIVE_STAY_PROVIDER = 'booking-com';
-    const url = buildActiveStaySearchUrl({ ...SAMPLE_INPUT, inventoryFilter: 'apartments' });
-    expect(url).toContain('nflt=ht_id%3D204');
+    vi.stubEnv('BOOKING_STAYS_CJ_DEEPLINK', '');
+    vi.stubEnv('SEARCH_HANDOFF_MODE', 'untracked_fallback');
+    const href = activeStaySearchHref({ ...SAMPLE_INPUT, inventoryFilter: 'apartments' }) as string;
+    expect(href).toContain('nflt=ht_id%3D204');
   });
 
-  it('collapses childrenAges to a count when routing to Booking.com', () => {
-    process.env.NEXT_PUBLIC_STAYSCOUT_ACTIVE_STAY_PROVIDER = 'booking-com';
-    const url = buildActiveStaySearchUrl({ ...SAMPLE_INPUT, childrenAges: [8, 10] });
-    expect(url).toContain('group_children=2');
+  it('expedia override → expedia url (dormant provider, always a string)', () => {
+    vi.stubEnv('NEXT_PUBLIC_STAYSCOUT_ACTIVE_STAY_PROVIDER', 'expedia');
+    const href = activeStaySearchHref(SAMPLE_INPUT) as string;
+    expect(href).toMatch(/^https:\/\/www\.expedia\.com\//);
   });
 
-  it('passes childrenAges through verbatim when routing to Expedia', () => {
-    process.env.NEXT_PUBLIC_STAYSCOUT_ACTIVE_STAY_PROVIDER = 'expedia';
-    const url = buildActiveStaySearchUrl({ ...SAMPLE_INPUT, childrenAges: [8, 10] });
-    // Expedia uses comma-joined ages on `children=`.
-    expect(url).toContain('children=8%2C10');
+  it('expedia passes childrenAges through verbatim', () => {
+    vi.stubEnv('NEXT_PUBLIC_STAYSCOUT_ACTIVE_STAY_PROVIDER', 'expedia');
+    const href = activeStaySearchHref({ ...SAMPLE_INPUT, childrenAges: [8, 10] }) as string;
+    expect(href).toContain('children=8%2C10');
   });
 });

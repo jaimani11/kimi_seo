@@ -183,7 +183,7 @@ export function PropertyDrawerBody({ property, titleId, onClose }: PropertyDrawe
        *  with one env toggle once Booking.com partnership review
        *  completes. */}
       <a
-        href={href}
+        href={href ?? undefined}
         target="_blank"
         rel="sponsored nofollow noopener noreferrer"
         className="group inline-flex items-center justify-between gap-4 transition-all"

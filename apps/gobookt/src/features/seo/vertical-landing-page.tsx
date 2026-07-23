@@ -3,6 +3,7 @@ import { SeoPageShell } from './seo-page-shell';
 import type { SeoCity } from '@lib/seo/cities';
 import {
   buildBookingComCategoryUrl,
+  bookingHotelsSearchHref,
   type BookingComCategory,
 } from '@lib/affiliate/booking-com-multicategory';
 import { BookingStaySearchCard } from '@/features/site/booking-stay-search-card';
@@ -334,9 +335,12 @@ export function VerticalLandingPage({
   const heading = meta.heading(city);
   const intro = meta.intro(city);
   const ctaLabel = meta.ctaLabel(city);
-  const searchUrl = buildBookingComCategoryUrl(meta.category, {
-    destination: city.name,
-  });
+  // Hotels = search intent → money-path-safe resolver (may be null, fail-closed).
+  // Non-stays verticals keep the existing category builder.
+  const searchUrl =
+    meta.category === 'hotels'
+      ? bookingHotelsSearchHref({ destination: city.name })
+      : buildBookingComCategoryUrl(meta.category, { destination: city.name });
 
   return (
     <SeoPageShell
@@ -404,7 +408,7 @@ export function VerticalLandingPage({
         ) : (
           <>
             <a
-              href={searchUrl}
+              href={searchUrl ?? undefined}
               target="_blank"
               rel="sponsored nofollow noopener noreferrer"
               className="mt-7 inline-flex items-center gap-2 transition-transform hover:scale-[1.01]"
