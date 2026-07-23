@@ -404,13 +404,13 @@ export function VerticalLandingPage({
             fontSize: '0.95rem',
             fontWeight: 700,
             letterSpacing: '0.02em',
-            background: '#0071c2',
+            background: '#4a2c4d',
             color: '#ffffff',
             border: 'none',
             borderRadius: '0.5rem',
             padding: '0.85rem 1.4rem',
             textDecoration: 'none',
-            boxShadow: '0 4px 12px rgba(0,113,194,0.32)',
+            boxShadow: '0 4px 12px rgba(74,44,77,0.32)',
           }}
         >
           {ctaLabel} on Expedia →

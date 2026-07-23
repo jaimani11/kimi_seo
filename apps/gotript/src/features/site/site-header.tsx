@@ -22,7 +22,7 @@ export function SiteHeader() {
       <div
         className="w-full"
         style={{
-          background: '#003580',
+          background: '#4a2c4d',
           color: '#ffffff',
           fontFamily: 'var(--font-inter)',
           fontSize: '0.72rem',
@@ -38,8 +38,8 @@ export function SiteHeader() {
             width: '0.5rem',
             height: '0.5rem',
             borderRadius: '999px',
-            background: '#FEBB02',
-            boxShadow: '0 0 6px rgba(254,187,2,0.6)',
+            background: '#b0894f',
+            boxShadow: '0 0 6px rgba(176,137,79,0.6)',
             marginRight: '0.5rem',
             verticalAlign: 'middle',
           }}
@@ -69,8 +69,8 @@ export function SiteHeader() {
               width: '1.85rem',
               height: '1.85rem',
               borderRadius: '0.55rem',
-              background: 'linear-gradient(135deg, #003b95 0%, #006ce4 100%)',
-              boxShadow: '0 2px 8px rgba(0, 108, 228, 0.32)',
+              background: 'linear-gradient(135deg, #3a2140 0%, #4a2c4d 100%)',
+              boxShadow: '0 2px 8px rgba(74, 44, 77, 0.32)',
             }}
           >
             <svg width="15" height="15" viewBox="0 0 16 16" fill="none">

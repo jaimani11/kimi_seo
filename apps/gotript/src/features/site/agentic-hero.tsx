@@ -234,7 +234,7 @@ export function AgenticHero() {
         className="absolute inset-0"
         style={{
           background:
-            'linear-gradient(135deg, #003580 0%, #00489f 55%, #0071c2 100%)',
+            'linear-gradient(135deg, #2a1430 0%, #3a2140 55%, #4a2c4d 100%)',
         }}
       />
 
@@ -256,7 +256,7 @@ export function AgenticHero() {
               width: '0.4rem',
               height: '0.4rem',
               borderRadius: '999px',
-              background: '#FEBB02',
+              background: '#b0894f',
               boxShadow: '0 0 8px rgba(254,187,2,0.6)',
             }}
           />

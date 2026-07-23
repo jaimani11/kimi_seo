@@ -11,7 +11,7 @@ import { SiteFooter } from '@/features/site/site-footer';
  * Local to gotript so the four brands' stays-near pages don't duplicate.
  */
 
-const HERO_BG = 'linear-gradient(135deg, #003b95 0%, #006ce4 100%)';
+const HERO_BG = 'linear-gradient(135deg, #3a2140 0%, #4a2c4d 100%)';
 
 function hashInt(s: string): number {
   let h = 2166136261;
@@ -199,4 +199,4 @@ const faqStyle: React.CSSProperties = { borderRadius: '0.6rem', border: '1px sol
 const cardStyle: React.CSSProperties = { borderRadius: '0.85rem', border: '1px solid var(--border-subtle)', background: 'var(--surface-overlay)', padding: '1.1rem 1.25rem' };
 const cardHeadingStyle: React.CSSProperties = { margin: 0, fontFamily: 'var(--font-inter)', fontSize: '0.66rem', letterSpacing: '0.14em', textTransform: 'uppercase', fontWeight: 700, color: 'var(--accent-primary)' };
 const sideLinkStyle: React.CSSProperties = { fontFamily: 'var(--font-inter)', fontSize: '0.9rem', color: 'var(--ink-secondary)', textDecoration: 'none' };
-const primaryCtaStyle: React.CSSProperties = { display: 'inline-flex', alignItems: 'center', gap: '0.4rem', background: '#ffd166', color: '#003b95', fontFamily: 'var(--font-inter)', fontSize: '1rem', fontWeight: 800, padding: '0.9rem 1.6rem', borderRadius: '0.5rem', textDecoration: 'none', boxShadow: '0 12px 30px -12px rgba(255,209,102,0.7)' };
+const primaryCtaStyle: React.CSSProperties = { display: 'inline-flex', alignItems: 'center', gap: '0.4rem', background: '#4a2c4d', color: '#ffffff', fontFamily: 'var(--font-inter)', fontSize: '1rem', fontWeight: 800, padding: '0.9rem 1.6rem', borderRadius: '0.5rem', textDecoration: 'none', boxShadow: '0 12px 30px -12px rgba(74,44,77,0.5)' };

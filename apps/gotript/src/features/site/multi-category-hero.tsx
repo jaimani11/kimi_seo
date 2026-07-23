@@ -4,15 +4,17 @@ import { useState } from 'react';
 import { CATEGORY_META, type ExpediaCategory } from '@lib/affiliate/expedia-multicategory';
 
 /**
- * Gotript multi-category search hero — CLARET editorial identity.
+ * Gotript multi-category search hero — LIGHT editorial travel-guide identity.
  *
- * De-twinned from gobookt/numiworks: an editorial Fraunces SERIF headline
- * on a deep wine hero band, with claret primary actions and a brass
- * highlight border. (Was: bold Inter sans on a blue band.)
+ * De-twinned from its siblings: an editorial Fraunces SERIF headline on a
+ * LIGHT warm-IVORY hero band (the visual opposite of numiworks' dark rust),
+ * with AUBERGINE/PLUM primary actions and a soft-gold hairline. (Was: a dark
+ * wine/claret gradient band that read too close to numiworks.)
  *
- *   - Editorial Fraunces serif headline
- *   - White search panel layered on a wine/claret gradient hero band
- *   - Brass (highlight) border around the panel
+ *   - Editorial Fraunces serif headline in warm dark ink
+ *   - White search panel lifted off a light ivory/cream hero band
+ *   - Soft-gold (highlight) top accent + subtle warm borders on the panel
+ *   - Aubergine primary button + active tab; plum-tinted popular chips
  *   - Hard-coded colors so the render is identical in light + dark
  *     mode (CSS-variable-driven backgrounds were the cause of the
  *     prior \"form goes black in dark mode\" bug)
@@ -38,18 +40,23 @@ const POPULAR_DESTINATIONS = [
 ] as const;
 
 
-const HERO_BG = 'linear-gradient(135deg, #5a1520 0%, #8c2f39 100%)';
+// LIGHT ivory hero band + aubergine/plum accents. Hard-coded so the render
+// is identical in light + dark mode.
+const HERO_BG = 'linear-gradient(165deg, #fbf8f1 0%, #f3ead9 55%, #eee3cf 100%)';
+const HERO_INK = '#23201c'; // warm dark ink — headline + default hero text
+const HERO_INK_SOFT = '#5a5248'; // subhead, "Popular" label, disclaimer (6.6:1 on band)
 const PANEL_BG = '#ffffff';
-const PANEL_TEXT = '#0c1426';
-const PANEL_LABEL = '#64748b';
-const PANEL_DIVIDER = '#e2e8f0';
+const PANEL_TEXT = '#23201c';
+const PANEL_LABEL = '#726a5c'; // field labels — 5.3:1 on white
+const PANEL_DIVIDER = '#e7decb'; // warm hairline between fields
+const PANEL_BORDER = '#e4d9c4'; // subtle warm border framing the white panel
 const PANEL_INPUT_BG = '#ffffff';
-const BTN_BG = '#8c2f39';
-const BTN_BG_HOVER = '#6b2733';
-const BTN_DISABLED = '#cbd5e1';
-const HIGHLIGHT = '#c29a3b';
-const TAB_ACTIVE = '#8c2f39';
-const TAB_INACTIVE = '#64748b';
+const BTN_BG = '#4a2c4d'; // aubergine — white text 11.9:1
+const BTN_BG_HOVER = '#6e4a78'; // lighter plum on hover — white text 7.2:1
+const BTN_DISABLED = '#d8cbb0';
+const HIGHLIGHT = '#b0894f'; // soft gold hairline (decorative)
+const TAB_ACTIVE = '#4a2c4d'; // aubergine — 11.9:1 on white
+const TAB_INACTIVE = '#726a5c'; // 5.3:1 on white
 
 export function MultiCategoryHero({
   initialCategory = 'hotels',
@@ -98,14 +105,14 @@ export function MultiCategoryHero({
   return (
     <section
       className="relative w-full overflow-hidden"
-      style={{ background: HERO_BG, color: '#ffffff' }}
+      style={{ background: HERO_BG, color: HERO_INK }}
     >
       <div
         aria-hidden
         className="pointer-events-none absolute inset-0"
         style={{
           background:
-            'radial-gradient(ellipse 50% 70% at 80% 20%, rgba(255,255,255,0.10) 0%, transparent 60%), radial-gradient(ellipse 60% 80% at 10% 90%, rgba(255,255,255,0.06) 0%, transparent 60%)',
+            'radial-gradient(ellipse 50% 70% at 80% 20%, rgba(74,44,77,0.06) 0%, transparent 60%), radial-gradient(ellipse 60% 80% at 10% 90%, rgba(176,137,79,0.07) 0%, transparent 60%)',
         }}
       />
 
@@ -120,7 +127,7 @@ export function MultiCategoryHero({
             fontWeight: 600,
             lineHeight: 1.06,
             letterSpacing: '-0.015em',
-            color: '#ffffff',
+            color: HERO_INK,
             margin: 0,
             maxWidth: '54rem',
           }}
@@ -134,7 +141,7 @@ export function MultiCategoryHero({
             fontWeight: 400,
             fontSize: 'clamp(1rem, 1.5vw, 1.15rem)',
             lineHeight: 1.55,
-            color: 'rgba(255,255,255,0.96)',
+            color: HERO_INK_SOFT,
             margin: '1.25rem auto 0',
             maxWidth: '44rem',
           }}
@@ -155,7 +162,9 @@ export function MultiCategoryHero({
             style={{
               background: PANEL_BG,
               borderRadius: '1rem 1rem 0 0',
-              border: `4px solid ${HIGHLIGHT}`,
+              borderTop: `3px solid ${HIGHLIGHT}`,
+              borderLeft: `1px solid ${PANEL_BORDER}`,
+              borderRight: `1px solid ${PANEL_BORDER}`,
               borderBottom: `1px solid ${PANEL_DIVIDER}`,
               padding: '0.6rem 0.4rem 0',
               display: 'flex',
@@ -196,11 +205,11 @@ export function MultiCategoryHero({
             style={{
               background: PANEL_BG,
               borderRadius: '0 0 1rem 1rem',
-              borderLeft: `4px solid ${HIGHLIGHT}`,
-              borderRight: `4px solid ${HIGHLIGHT}`,
-              borderBottom: `4px solid ${HIGHLIGHT}`,
+              borderLeft: `1px solid ${PANEL_BORDER}`,
+              borderRight: `1px solid ${PANEL_BORDER}`,
+              borderBottom: `1px solid ${PANEL_BORDER}`,
               boxShadow:
-                '0 24px 60px -16px rgba(0,0,0,0.45), 0 8px 16px rgba(0,0,0,0.14)',
+                '0 20px 48px -18px rgba(35,32,28,0.28), 0 6px 14px rgba(35,32,28,0.10)',
               overflow: 'hidden',
               display: 'grid',
               gridTemplateColumns: gridTemplateFor(showDates, showTravelers, showOrigin),
@@ -337,7 +346,7 @@ export function MultiCategoryHero({
               fontSize: '0.66rem',
               letterSpacing: '0.2em',
               textTransform: 'uppercase',
-              color: 'rgba(255,255,255,0.78)',
+              color: HERO_INK_SOFT,
               fontWeight: 700,
               marginRight: '0.4rem',
             }}
@@ -356,13 +365,12 @@ export function MultiCategoryHero({
                 fontFamily: 'var(--font-inter)',
                 fontSize: '0.86rem',
                 fontWeight: 500,
-                background: 'rgba(255,255,255,0.14)',
-                color: '#ffffff',
-                border: '1px solid rgba(255,255,255,0.34)',
+                background: 'rgba(74, 44, 77, 0.06)',
+                color: '#4a2c4d',
+                border: '1px solid rgba(74, 44, 77, 0.20)',
                 borderRadius: '999px',
                 padding: '0.45rem 1rem',
                 cursor: 'pointer',
-                backdropFilter: 'blur(8px)',
                 transition: 'background-color 140ms ease, transform 140ms ease',
               }}
             >
@@ -375,12 +383,12 @@ export function MultiCategoryHero({
           style={{
             fontFamily: 'var(--font-inter)',
             fontSize: '0.78rem',
-            color: 'rgba(255,255,255,0.82)',
+            color: HERO_INK_SOFT,
             marginTop: '1.5rem',
             marginBottom: 0,
           }}
         >
-          Search hands off to <strong style={{ fontWeight: 700, color: '#ffd166' }}>Expedia</strong>. Affiliate link;
+          Search hands off to <strong style={{ fontWeight: 700, color: '#4a2c4d' }}>Expedia</strong>. Affiliate link;
           the price you pay is the same.
         </p>
       </div>
