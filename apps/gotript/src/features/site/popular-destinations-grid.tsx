@@ -172,7 +172,7 @@ export function PopularDestinationsGrid() {
             >
               Where travelers are{' '}
               <em style={{ fontStyle: 'italic', color: 'var(--accent-primary)' }}>
-                booking right now.
+                heading next.
               </em>
             </h2>
             <p
@@ -187,13 +187,13 @@ export function PopularDestinationsGrid() {
                 maxWidth: '34rem',
               }}
             >
-              Every destination has a full guide — not just a booking link:
+              Every destination gets a full guide — weather, neighborhoods and when to go:
             </p>
             <ul
               className="mt-3 flex flex-wrap gap-2"
               style={{ listStyle: 'none', padding: 0, margin: 0 }}
             >
-              {['Month-by-month weather', 'Interactive map', 'Neighborhoods & timing'].map(
+              {['Best time to go', 'Interactive map', 'Neighborhoods & itineraries'].map(
                 (feat) => (
                   <li
                     key={feat}

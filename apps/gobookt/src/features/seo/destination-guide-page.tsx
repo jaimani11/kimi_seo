@@ -141,7 +141,7 @@ export async function DestinationGuidePage({
               textShadow: '0 1px 6px rgba(0,0,0,0.55)',
             }}
           >
-            {city.oneLiner}
+            {`Where to stay in ${city.name} — the neighborhoods that put you closest to what you came for, compared side by side.`}
           </p>
           <div className="mt-7 flex flex-wrap items-center justify-center gap-2">
             <Link
