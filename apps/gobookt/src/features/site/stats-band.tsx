@@ -1,34 +1,31 @@
 /**
- * Stats trust band — the loud numbered strip that every successful
- * affiliate marketplace runs near the top of the home page. Surfaces
- * social proof at a glance without requiring the visitor to scroll
- * past the fold.
+ * Assurance band — the strip below the hero that tells a first-time visitor
+ * what gobookt is and how the Booking.com handoff works.
  *
- * Numbers reference Booking.com's publicly stated scale (28M+ reported
- * listings, 190+ countries). Conservative phrasing so the band stays
- * honest.
+ * Deliberately NON-NUMERIC. It carries no scale / support / fee / price /
+ * cancellation / inventory figures, because every such commercial claim would
+ * need a current, authoritative Booking.com source, an accurate scope, wording
+ * permitted for affiliate use, and a documented review date — none of which we
+ * maintain. Durable, verifiable statements only, so the band never silently
+ * goes stale or overpromises.
  */
 
-const STATS = [
+const ASSURANCES = [
   {
-    value: '28M+',
-    label: 'Stays bookable',
-    sublabel: 'Live from Booking.com',
+    title: 'Accommodation-focused search',
+    body: 'Hotels, apartments, villas, resorts and unique stays.',
   },
   {
-    value: '190+',
-    label: 'Countries covered',
-    sublabel: 'Global inventory',
+    title: 'Destination & dates preserved',
+    body: 'Your search details carry into the Booking.com handoff where supported.',
   },
   {
-    value: '4.6★',
-    label: 'Average rating',
-    sublabel: 'From real travelers',
+    title: 'Booking handled by Booking.com',
+    body: 'Availability, payment and reservation terms are shown by Booking.com.',
   },
   {
-    value: '24/7',
-    label: 'Booking.com support',
-    sublabel: 'Real humans, every timezone',
+    title: 'Independent affiliate',
+    body: 'We may earn a commission from completed bookings.',
   },
 ] as const;
 
@@ -43,43 +40,42 @@ export function StatsBand() {
       }}
     >
       <div className="mx-auto max-w-6xl px-6 py-8 md:py-10">
-        <ul className="grid grid-cols-2 gap-6 md:grid-cols-4">
-          {STATS.map((s) => (
-            <li key={s.label} className="flex flex-col items-center text-center md:items-start md:text-left">
+        <ul className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-4">
+          {ASSURANCES.map((a) => (
+            <li key={a.title} className="flex flex-col items-start text-left">
+              <span
+                aria-hidden
+                style={{
+                  width: '1.6rem',
+                  height: '2px',
+                  borderRadius: '999px',
+                  background: 'var(--accent-primary)',
+                  marginBottom: '0.7rem',
+                }}
+              />
               <p
                 style={{
-                  fontFamily: 'var(--font-fraunces)',
-                  fontSize: 'clamp(1.8rem, 3.4vw, 2.6rem)',
-                  fontWeight: 500,
-                  letterSpacing: '-0.025em',
-                  lineHeight: 1,
-                  color: 'var(--accent-primary)',
+                  fontFamily: 'var(--font-inter)',
+                  fontSize: '0.92rem',
+                  fontWeight: 600,
+                  lineHeight: 1.25,
+                  color: 'var(--ink-primary)',
                   margin: 0,
                 }}
               >
-                {s.value}
+                {a.title}
               </p>
               <p
                 className="mt-1.5"
                 style={{
                   fontFamily: 'var(--font-inter)',
-                  fontSize: '0.85rem',
-                  fontWeight: 500,
-                  color: 'var(--ink-primary)',
-                  margin: 0,
-                }}
-              >
-                {s.label}
-              </p>
-              <p
-                style={{
-                  fontFamily: 'var(--font-inter)',
-                  fontSize: '0.7rem',
+                  fontSize: '0.78rem',
+                  lineHeight: 1.45,
                   color: 'var(--ink-tertiary)',
                   margin: 0,
                 }}
               >
-                {s.sublabel}
+                {a.body}
               </p>
             </li>
           ))}

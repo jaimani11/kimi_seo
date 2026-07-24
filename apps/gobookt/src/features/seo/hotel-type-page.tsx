@@ -74,10 +74,10 @@ function leadParagraph(route: HotelTypeRoute): string {
     `Booking a ${type.singular} in ${city.name}? ${type.angle}`,
   ];
   const closers = [
-    `Compare them on Booking.com with real guest scores and free cancellation on most rooms.`,
-    `We send you to Booking.com to check live prices and availability — the price you pay is the same as booking direct.`,
+    `Compare them on Booking.com with real guest scores and verified reviews.`,
+    `We send you to Booking.com to check prices and availability for your dates.`,
     `${city.oneLiner}`,
-    `Filter by guest rating on Booking.com, read recent reviews, and book a free-cancellation rate so you can lock the room and still adjust.`,
+    `Filter by guest rating on Booking.com, read recent reviews, and choose a flexible rate where offered so you can lock the room and still adjust.`,
   ];
   return `${pick(openers, seed)} ${pick(closers, seed >> 3)}`;
 }
@@ -88,7 +88,7 @@ function whyParagraph(route: HotelTypeRoute): string {
   const label = type.name.toLowerCase();
   const options = [
     `The trick with ${label} in ${city.name} is to sort by guest score rather than price alone — a slightly higher-rated ${type.singular} usually costs a few dollars more and reads far better in the reviews. On Booking.com you can filter to the exact facilities that matter and see them plotted on a map of ${city.name}.`,
-    `Book early for the best ${label} in ${city.name}: the top-rated rooms go first, especially in peak season. A free-cancellation rate lets you hold a great ${type.singular} now and keep an eye out for a better deal without any risk.`,
+    `Book early for the best ${label} in ${city.name}: the top-rated rooms go first, especially in peak season. A flexible rate, where offered, lets you hold a great ${type.singular} now and keep an eye out for a better deal.`,
     `${city.oneLiner} For a ${type.singular} specifically, read the most recent reviews — they're the honest signal on whether the property still delivers, and Booking.com surfaces verified stays only.`,
     `Where you stay shapes the trip as much as the ${type.singular} itself. Use Booking.com's map view to keep ${city.name}'s best areas and transport within reach, then filter for the features that make a ${label.replace(/s$/, '')} worth it.`,
   ];
@@ -97,7 +97,7 @@ function whyParagraph(route: HotelTypeRoute): string {
 
 /** Feature chips: the facet-specific "what to look for" + Booking staples. */
 function featureChips(route: HotelTypeRoute): string[] {
-  return [...route.type.lookFor, 'Verified guest reviews', 'Free cancellation on most rooms'].slice(0, 6);
+  return [...route.type.lookFor, 'Verified guest reviews', 'Flexible rates where offered'].slice(0, 6);
 }
 
 /** City-specific FAQ layered on top of the facet FAQs, for uniqueness. */

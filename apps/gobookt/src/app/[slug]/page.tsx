@@ -154,7 +154,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   if (parsed.kind === 'hotels-in') {
     const title = `Hotels in ${parsed.city.name}, ${parsed.city.countryName} · gobookt`;
-    const description = `Find hotels, apartments and vacation rentals in ${parsed.city.name}, ${parsed.city.countryName}. Free cancellation on most stays · Powered by Booking.com.`;
+    const description = `Find hotels, apartments and vacation rentals in ${parsed.city.name}, ${parsed.city.countryName}. Powered by Booking.com.`;
     return {
       title,
       description,

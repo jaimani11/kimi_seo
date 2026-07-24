@@ -21,7 +21,7 @@ export async function generateMetadata(): Promise<Metadata> {
   return {
     title: 'gobookt · Hotels, Vacation Rentals & Unique Stays Worldwide',
     description:
-      'Find hotels, apartments, villas, resorts and vacation rentals across 190+ countries — powered by Booking.com. Free cancellation on most stays.',
+      'Find hotels, apartments, villas, resorts and vacation rentals worldwide — search powered by Booking.com.',
     metadataBase: new URL(getSiteOrigin()),
     ...(pathname ? { alternates: { canonical: `${getSiteOrigin()}${pathname}` } } : {}),
   };

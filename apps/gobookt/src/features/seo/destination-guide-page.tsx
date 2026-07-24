@@ -75,7 +75,7 @@ export function DestinationGuidePage({ city, guide }: { city: SeoCity; guide: De
         <SmartStayOffer
           href={handoffHref}
           headline={`Set on ${city.name}? Compare stays on Booking.com.`}
-          subline="Search live availability and prices — the price you pay is the same as booking direct."
+          subline="Compare stays and prices on Booking.com."
           ctaLabel={`Search ${city.name} stays →`}
           storageKey={`sso-${city.slug}`}
         />

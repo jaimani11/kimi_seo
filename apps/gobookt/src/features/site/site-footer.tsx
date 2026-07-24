@@ -15,7 +15,11 @@ export function SiteFooter() {
       }}
     >
       <div className="mx-auto flex max-w-6xl flex-col gap-10 px-6 py-12 md:py-16">
-        <NewsletterSignup compact />
+        <NewsletterSignup
+          compact
+          heading="New places to stay, quietly worth booking."
+          blurb="A few times a month: standout hotels, apartments and villas — and the best time to book them. No spam, unsubscribe anytime."
+        />
         <div className="flex flex-col items-start justify-between gap-6 md:flex-row md:items-end">
           <div>
             <Link
@@ -66,18 +70,15 @@ export function SiteFooter() {
                 color: 'var(--ink-secondary)',
               }}
             >
-              Official <strong style={{ fontWeight: 600, color: '#003580' }}>Booking.com</strong>{' '}
-              affiliate. Search hotels, apartments, villas, and unique stays across 175+
-              destinations. Affiliate links; the price you pay is the same.
+              Independent <strong style={{ fontWeight: 600, color: '#003580' }}>Booking.com</strong>{' '}
+              affiliate. Search hotels, apartments, villas, and unique stays worldwide.
+              Affiliate links — we may earn a commission from completed bookings.
             </p>
           </div>
 
           <nav className="flex flex-col gap-2 md:items-end">
             <FooterLink href="/stays">Stays</FooterLink>
             <FooterLink href="/destinations">Destinations</FooterLink>
-            <FooterLink href="/things-to-do">Things to do</FooterLink>
-            <FooterLink href="/flights">Flights</FooterLink>
-            <FooterLink href="/cars">Car rentals</FooterLink>
             <FooterLink href="/about">About</FooterLink>
             <FooterLink href="/contact">Contact</FooterLink>
             <FooterLink href="/profile/memory">Your memory</FooterLink>
@@ -97,7 +98,7 @@ export function SiteFooter() {
           }}
         >
           <p>
-            gobookt is an independent travel publisher and an official Booking.com affiliate.
+            gobookt is an independent travel publisher and an independent Booking.com affiliate.
             All searches route through Booking.com under their Partner Programme. We earn a
             commission on completed bookings; the price you pay is unchanged.
           </p>

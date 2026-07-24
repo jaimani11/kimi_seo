@@ -17,7 +17,7 @@ export function GET(): Response {
 
   const body = `# gobookt
 
-> Hotels, flights, car rentals, and things to do across 190+ countries,
+> Hotels, apartments, and vacation rentals worldwide,
 > plus research-backed destination guides (best time to visit, budgets,
 > neighborhoods, weather, transport, safety). Powered by Booking.com. Operated
 > by Adored Moments LLC.

@@ -15,7 +15,7 @@ export function SiteHeader() {
       {/* Booking.com attribution strip — narrow band above the
        *  header. Reads at first glance for every visitor (and the
        *  Booking.com affiliate-program reviewer): "this site is
-       *  an official Booking.com affiliate." Without this band the
+       *  an independent Booking.com affiliate." Without this band the
        *  affiliate application gets rejected for being too brand-
        *  ambiguous, which is what happened with the prior submission. */}
       <div
@@ -43,8 +43,8 @@ export function SiteHeader() {
             verticalAlign: 'middle',
           }}
         />
-        Official <strong style={{ fontWeight: 600 }}>Booking.com</strong> affiliate ·
-        Hotels, apartments, villas &amp; unique stays worldwide · The price you pay is the same
+        Independent <strong style={{ fontWeight: 600 }}>Booking.com</strong> affiliate ·
+        Hotels, apartments, villas &amp; unique stays worldwide
       </div>
     <header
       className="sticky top-0 z-30 w-full"
@@ -97,7 +97,6 @@ export function SiteHeader() {
         <nav className="hidden items-center gap-1 md:flex">
           <NavLink href="/stays">Stays</NavLink>
           <NavLink href="/destinations">Destinations</NavLink>
-          <NavLink href="/things-to-do">Things to do</NavLink>
           <NavLink href="/about">About</NavLink>
           <NavLink href="/contact">Contact</NavLink>
         </nav>

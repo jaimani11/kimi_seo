@@ -62,7 +62,7 @@ export function BookingStaySearchCard({
         ) : (
           <>Search hundreds of thousands of hotels, homes, and apartments worldwide. </>
         )}
-        Free cancellation on most stays — the price you pay is the same as booking direct.
+        Prices, availability and cancellation terms are shown and handled by Booking.com.
       </p>
       <BookingSearchWidget />
     </div>

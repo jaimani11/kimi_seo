@@ -68,9 +68,9 @@ export function PopularDestinationsGrid() {
                 margin: 0,
               }}
             >
-              Where travelers are{' '}
+              Popular places{' '}
               <em style={{ fontStyle: 'italic', color: 'var(--accent-primary)' }}>
-                booking right now.
+                to stay.
               </em>
             </h2>
             <p
@@ -85,13 +85,13 @@ export function PopularDestinationsGrid() {
                 maxWidth: '34rem',
               }}
             >
-              Every destination has a full guide — not just a booking link:
+              Compare hotels, apartments and villas in the cities travelers book most:
             </p>
             <ul
               className="mt-3 flex flex-wrap gap-2"
               style={{ listStyle: 'none', padding: 0, margin: 0 }}
             >
-              {['Month-by-month weather', 'Interactive map', 'Neighborhoods & timing'].map(
+              {['Best areas to stay', 'Hotels to villas', 'Live Booking.com prices'].map(
                 (feat) => (
                   <li
                     key={feat}

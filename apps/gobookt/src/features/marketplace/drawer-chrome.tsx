@@ -32,7 +32,7 @@ export function DrawerChrome({
   onClose,
   hero,
   children,
-  disclosure = 'Affiliate link. Prices and availability come from our partner. The price you pay is the same.',
+  disclosure = 'Affiliate link. Prices, availability and reservation terms are shown by our partner.',
 }: DrawerChromeProps) {
   return (
     <div className="relative flex min-h-full flex-col">

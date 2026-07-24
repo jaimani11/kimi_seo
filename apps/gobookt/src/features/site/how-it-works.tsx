@@ -8,18 +8,18 @@
 const STEPS = [
   {
     number: '01',
-    title: 'Browse or describe',
-    body: 'Browse stays by destination and area, or tell the concierge your dates and budget. Real Booking.com inventory, real-time prices.',
+    title: 'Enter destination & dates',
+    body: 'Tell us where and when. gobookt searches accommodation on Booking.com for your destination.',
   },
   {
     number: '02',
-    title: 'Compare what fits',
-    body: 'Weigh guest scores, location, cancellation and price across hotels, aparthotels, B&Bs and apartments. Save a shortlist.',
+    title: 'Compare areas & stay types',
+    body: 'Look across the best areas to stay — hotels, aparthotels, B&Bs and apartments — before you decide.',
   },
   {
     number: '03',
-    title: 'Book on Booking.com',
-    body: 'One tap hands you off to Booking.com. Same price as booking direct, and free cancellation on most rooms.',
+    title: 'Continue to Booking.com',
+    body: 'One tap hands you off to Booking.com. Availability, price and reservation terms are shown and handled there.',
   },
 ] as const;
 
@@ -126,7 +126,7 @@ export function HowGobooktWorks() {
             margin: 0,
           }}
         >
-          Affiliate links to Booking.com. Prices identical to booking.com. Commission keeps the site free.
+          Affiliate links to Booking.com. We may earn a commission from completed bookings, which keeps the site free.
         </p>
       </div>
     </section>

@@ -15,9 +15,10 @@ import { BookingSearchWidget } from './booking-widget';
  * (homepage banner 17293132, Advanced-Link 17323532) deep-links ONLY to the
  * Booking.com homepage — a hand-rolled form can track but always lost the city.
  *
- * Flights / cars / things-to-do are NOT equal tabs; they're a quiet "plan the
- * rest of your trip" secondary row (the multi-category hero still serves the
- * /flights, /cars vertical landing pages).
+ * The hero stays single-purpose: find a place to stay, then hand off to
+ * Booking.com. It deliberately does NOT surface flights / cars / things-to-do
+ * cross-sells (those vertical landing pages still exist, but they don't belong
+ * on the stays-conversion hero).
  *
  * Popular cities link to our OWN /hotels-in-{slug} accommodation pages — good
  * for crawl + UX. They can't drive the iframe widget, and the old "click a chip
@@ -43,13 +44,6 @@ const POPULAR_CITIES = [
   { label: 'Hong Kong', slug: 'hong-kong' },
   { label: 'Las Vegas', slug: 'las-vegas' },
   { label: 'Madrid', slug: 'madrid' },
-] as const;
-
-/** Secondary trip-planning links — deliberately quiet, not equal tabs. */
-const SECONDARY_LINKS = [
-  { label: 'Things to do', href: '/things-to-do' },
-  { label: 'Car rentals', href: '/cars' },
-  { label: 'Flights', href: '/flights' },
 ] as const;
 
 const HERO_BG = 'linear-gradient(135deg, #003580 0%, #006ce4 100%)';
@@ -164,39 +158,6 @@ export function HomeStayHero() {
           ))}
         </div>
 
-        {/* Secondary trip-planning — quiet links, not equal tabs. */}
-        <div
-          className="flex flex-wrap items-center justify-center"
-          style={{ gap: '0.35rem 1rem', margin: '1.6rem auto 0' }}
-        >
-          <span
-            style={{
-              fontFamily: 'var(--font-inter)',
-              fontSize: '0.8rem',
-              color: 'rgba(255,255,255,0.72)',
-            }}
-          >
-            Planning the rest of your trip?
-          </span>
-          {SECONDARY_LINKS.map((s) => (
-            <Link
-              key={s.href}
-              href={s.href}
-              style={{
-                fontFamily: 'var(--font-inter)',
-                fontSize: '0.82rem',
-                fontWeight: 600,
-                color: '#ffffff',
-                textDecoration: 'underline',
-                textUnderlineOffset: '3px',
-                textDecorationColor: 'rgba(255,255,255,0.45)',
-              }}
-            >
-              {s.label}
-            </Link>
-          ))}
-        </div>
-
         <p
           style={{
             fontFamily: 'var(--font-inter)',
@@ -208,7 +169,7 @@ export function HomeStayHero() {
         >
           Search powered by{' '}
           <strong style={{ fontWeight: 700, color: '#ffd166' }}>Booking.com</strong>. Affiliate
-          link; the price you pay is the same.
+          link — we may earn a commission from completed bookings.
         </p>
       </div>
     </section>
