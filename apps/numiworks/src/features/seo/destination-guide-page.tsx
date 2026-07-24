@@ -20,6 +20,7 @@ import { cityBookingLinks } from '@adored/brand-config';
 import { buildVrboSearchUrl } from '@lib/affiliate/vrbo-link';
 import { VrboCityCallout } from '@/features/destinations/vrbo-city-callout';
 import { BrowseByType } from '@/features/site/browse-by-type';
+import { numiworksDestinationCopy } from '@lib/seo/destination-copy';
 
 /**
  * Rich destination guide page rendered at `/destinations/{slug}` for
@@ -58,6 +59,9 @@ export async function DestinationGuidePage({
     name: city.name,
     country: city.countryCode,
   });
+  // Per-brand experiences VOICE for the hero — unique per city, distinct from
+  // the shared seo-data copy the sibling brands render (anti-duplicate).
+  const copy = numiworksDestinationCopy(city.name, city.slug);
   const climate = findClimate(city.slug);
   const rates = await getUsdRates();
   const mapPins: MapPin[] = [
@@ -126,7 +130,7 @@ export async function DestinationGuidePage({
               textShadow: '0 1px 2px rgba(0,0,0,0.6)',
             }}
           >
-            {city.countryName} · {city.region.toUpperCase()}
+            {copy.eyebrow} · {city.countryName}
           </p>
           <h1
             className="mt-3"
@@ -156,7 +160,7 @@ export async function DestinationGuidePage({
               textShadow: '0 1px 6px rgba(0,0,0,0.55)',
             }}
           >
-            {`The best of ${city.name} — the experiences, tours and day trips worth planning a whole trip around.`}
+            {copy.body}
           </p>
           <div className="mt-7 flex flex-wrap items-center justify-center gap-2">
             <Link
@@ -314,7 +318,7 @@ export async function DestinationGuidePage({
         <SmartStayOffer
           href={smartStayHref}
           headline={`Set on ${city.name}? Lock in where you'll stay.`}
-          subline="Whole homes on VRBO — kitchens, space, and the same price as booking direct."
+          subline="Whole homes on Vrbo — kitchens, space, and room for the whole group."
           ctaLabel={`See ${city.name} homes →`}
           storageKey={`sso-${city.slug}`}
         />
