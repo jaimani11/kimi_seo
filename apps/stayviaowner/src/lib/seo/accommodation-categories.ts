@@ -91,6 +91,10 @@ export const ACCOMMODATION_CATEGORIES: readonly AccommodationCategory[] = [
       'Log cabin rentals across the mountains, national forests, and remote lakes of North America and beyond. Wood-burning stoves, hot tubs on the deck, cell-signal optional. Bookable through VRBO with real guest reviews. Best-fit destinations: Great Smokies, Colorado Rockies, Adirondacks, Blue Ridge, Canadian mountain towns, and Alpine chalets in Europe.',
     searchAnchor: 'cabin',
     topCitySlugs: [
+      'gatlinburg',
+      'blue-ridge',
+      'broken-bow',
+      'lake-tahoe',
       'banff',
       'whistler',
       'zermatt',
@@ -179,6 +183,9 @@ export const ACCOMMODATION_CATEGORIES: readonly AccommodationCategory[] = [
       'Beach house rentals steps from the ocean — Outer Banks porches, Malibu decks, Amalfi terraces, or a cabana in Tulum. Every house on stayviaowner is bookable through VRBO with verified guest reviews and free cancellation on most stays. Best-fit destinations: Outer Banks, 30A, Cape Cod, Malibu, Costa Rica, Tulum, Amalfi, Positano.',
     searchAnchor: 'beach house',
     topCitySlugs: [
+      'destin',
+      'outer-banks',
+      'myrtle-beach',
       'tulum',
       'cancun',
       'maui',
@@ -221,6 +228,7 @@ export const ACCOMMODATION_CATEGORIES: readonly AccommodationCategory[] = [
       'Ski-in / ski-out lodges and chalets in the world\'s top mountain resorts. Wood-clad interiors, hot tub after the slopes, ski room for boots + poles. Bookable through Expedia + VRBO for peak season and shoulder weeks. Best-fit destinations: Whistler, Banff, Jackson Hole, Aspen, Zermatt, St. Moritz, Chamonix, Val d\'Isère, Niseko, Hakuba.',
     searchAnchor: 'ski lodge',
     topCitySlugs: [
+      'lake-tahoe',
       'zermatt',
       'st-moritz',
       'grindelwald',
@@ -267,6 +275,8 @@ export const ACCOMMODATION_CATEGORIES: readonly AccommodationCategory[] = [
       'Lake house rentals on private docks and mountain lakes across North America, Alpine Europe, and beyond. Kayaks, pontoons, fire-pit evenings, and slow mornings on the water. Bookable through VRBO. Best-fit destinations: Lake Tahoe, Lake George, Lake of the Ozarks, Ontario lake country, Lake Como, Lake Bled, Lake Geneva, Lake Lucerne.',
     searchAnchor: 'lake house',
     topCitySlugs: [
+      'lake-tahoe',
+      'broken-bow',
       'lake-como',
       'lake-bled',
       'lucerne',
