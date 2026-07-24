@@ -55,7 +55,7 @@ const TYPES: readonly {
     emoji: '⛷️',
     tagline: 'Ski-in ski-out, fireplace roaring.',
     imageUrl:
-      'https://images.unsplash.com/photo-1548786811-dc0dfd9d59a3?w=1200&q=80&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1502786129293-79981df4e689?w=1200&q=80&auto=format&fit=crop',
   },
   {
     slug: 'lake-houses',

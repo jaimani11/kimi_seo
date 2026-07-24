@@ -119,7 +119,7 @@ const CATEGORIES: readonly CategoryTile[] = [
     blurb: 'Kid-paced, age-appropriate, room for nap time.',
     searchQuery: 'family kids',
     photoUrl:
-      'https://images.unsplash.com/photo-1538099404960-d83c2adf1c61?w=900&q=70&fit=crop&auto=format',
+      'https://images.unsplash.com/photo-1476234251651-f353703a034d?w=900&q=70&fit=crop&auto=format',
   },
   {
     slug: 'nightlife',
