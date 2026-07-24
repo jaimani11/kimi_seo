@@ -12,8 +12,8 @@ import { resolveDestinationPhoto } from '@lib/imagery/destination-photo';
  */
 
 const ROSTER: readonly string[] = [
-  'marrakech', 'cusco', 'oaxaca', 'hanoi', 'chiang-mai', 'fes',
-  'luang-prabang', 'siem-reap', 'mexico-city', 'hoi-an', 'jaipur', 'cartagena',
+  'lisbon', 'venice', 'vienna', 'dublin', 'budapest', 'athens',
+  'florence', 'seville', 'marrakech', 'rio-de-janeiro', 'buenos-aires', 'mexico-city',
 ];
 
 interface Destination {

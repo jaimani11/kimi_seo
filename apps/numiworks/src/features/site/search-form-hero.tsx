@@ -20,18 +20,18 @@ import { buildVrboSearchUrl } from '@lib/affiliate/vrbo-link';
 // homepage grid). The first six render as the visible "Popular" chips, which
 // seed a Viator experience search; all twelve are destination autocomplete.
 const POPULAR_DESTINATIONS = [
+  'Lisbon',
+  'Venice',
+  'Vienna',
+  'Dublin',
+  'Budapest',
+  'Athens',
+  'Florence',
+  'Seville',
   'Marrakech',
-  'Cusco',
-  'Oaxaca',
-  'Hanoi',
-  'Chiang Mai',
-  'Fes',
-  'Luang Prabang',
-  'Siem Reap',
+  'Rio de Janeiro',
+  'Buenos Aires',
   'Mexico City',
-  'Hoi An',
-  'Jaipur',
-  'Cartagena',
 ] as const;
 
 const HERO_BG = 'linear-gradient(135deg, var(--brand-hero-from) 0%, var(--brand-hero-to) 100%)';
