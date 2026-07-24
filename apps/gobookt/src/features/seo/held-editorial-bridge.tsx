@@ -73,7 +73,7 @@ export function HeldEditorialBridge({
             }}
           >
             gobookt is a Booking.com stays specialist. Start with where to stay —
-            real availability and prices, free cancellation on most bookings.
+            real availability and prices.
           </p>
 
           {cities.map((c) => (

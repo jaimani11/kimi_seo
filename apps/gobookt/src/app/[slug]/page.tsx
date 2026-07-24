@@ -69,7 +69,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     return {
       title: `${heldPageTitle(parsed)} · gobookt`,
       description:
-        'Find where to stay on gobookt — real Booking.com availability and prices, free cancellation on most bookings.',
+        'Find where to stay on gobookt — Booking.com availability and prices for your dates.',
       alternates: { canonical },
       robots: { index: false, follow: true },
     };
@@ -178,7 +178,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   if (parsed.kind === 'cars-in') {
     const title = `Car rentals in ${parsed.city.name}, ${parsed.city.countryName} · gobookt`;
-    const description = `Rent a car at ${parsed.city.name}'s airports and city pick-up points. Every major rental company · Free cancellation on most bookings · Powered by Booking.com.`;
+    const description = `Rent a car at ${parsed.city.name}'s airports and city pick-up points. Every major rental company · Powered by Booking.com.`;
     return {
       title,
       description,
@@ -192,7 +192,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     const { city, theme } = parsed;
     const heading = HOTEL_THEME_HEADING[theme];
     const title = `${heading} in ${city.name}, ${city.countryName} · gobookt`;
-    const description = `${heading} in ${city.name}, ${city.countryName} — real Booking.com guest reviews, free cancellation on most stays. ${HOTEL_THEME_TAGLINE[theme]}`;
+    const description = `${heading} in ${city.name}, ${city.countryName} — real Booking.com guest reviews. ${HOTEL_THEME_TAGLINE[theme]}`;
     return {
       title,
       description,
@@ -205,7 +205,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   if (parsed.kind === 'flights-themed') {
     const { city } = parsed;
     const title = `Cheap flights to ${city.name}, ${city.countryName} · gobookt`;
-    const description = `The lowest available fares to ${city.name} on Booking.com Flights. Compare every major carrier, see the cheapest weekday, no add-on fees.`;
+    const description = `The lowest available fares to ${city.name} on Booking.com Flights. Compare every major carrier, see the cheapest weekday.`;
     return {
       title,
       description,
@@ -220,7 +220,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     const label = theme === 'cheap' ? 'Cheap car rental' : 'Airport car rental';
     const title = `${label} in ${city.name}, ${city.countryName} · gobookt`;
     const description = theme === 'cheap'
-      ? `Lowest daily rates on rental cars in ${city.name}. Every major brand on Booking.com Cars, free cancellation on most bookings.`
+      ? `Lowest daily rates on rental cars in ${city.name}. Every major brand on Booking.com Cars.`
       : `Pick up a rental car at ${city.name}'s airport terminals. Every major counter on arrivals via Booking.com Cars.`;
     return {
       title,
@@ -235,7 +235,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     const { city, variant } = parsed;
     const label = THINGS_VARIANT_HEADING[variant];
     const title = `${label} in ${city.name}, ${city.countryName} · gobookt`;
-    const description = `${label} in ${city.name}, ${city.countryName} — bookable through Booking.com Attractions. Skip-the-line, verified guides, free cancellation on most tickets.`;
+    const description = `${label} in ${city.name}, ${city.countryName} — bookable through Booking.com Attractions. Skip-the-line, verified guides.`;
     return {
       title,
       description,

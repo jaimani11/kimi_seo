@@ -29,7 +29,7 @@ function metaDescription(poi: StaysNearPoi): string {
       : poi.kind === 'city-centre'
         ? `in central ${poi.city.name}`
         : `near ${poi.poiName} in ${poi.city.name}`;
-  return `Compare hotels ${where}, ${poi.city.countryName} on Booking.com — live prices, real guest reviews and free cancellation on most rooms. Find the best place to stay ${where}.`;
+  return `Compare hotels ${where}, ${poi.city.countryName} on Booking.com — live prices and real guest reviews. Find the best place to stay ${where}.`;
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {

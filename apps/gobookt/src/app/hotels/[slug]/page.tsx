@@ -28,7 +28,7 @@ export function generateStaticParams(): { slug: string }[] {
 
 function metaDescription(route: HotelTypeRoute): string {
   const { type, city } = route;
-  return `Looking for ${type.name.toLowerCase()} in ${city.name}, ${city.countryName}? Compare them on Booking.com — real guest scores, free cancellation on most rooms, and where to stay. ${type.tagline}.`;
+  return `Looking for ${type.name.toLowerCase()} in ${city.name}, ${city.countryName}? Compare them on Booking.com — real guest scores and where to stay. ${type.tagline}.`;
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {

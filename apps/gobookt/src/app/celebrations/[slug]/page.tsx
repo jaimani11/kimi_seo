@@ -23,7 +23,7 @@ export function generateStaticParams(): { slug: string }[] {
 
 function metaDescription(route: OccasionRoute): string {
   const { occasion, city } = route;
-  return `${occasion.name} in ${city.name}? Compare hotels on Booking.com for the group — real guest reviews, free cancellation on most rooms. Where to stay, what to look for and when to book.`;
+  return `${occasion.name} in ${city.name}? Compare hotels on Booking.com for the group — real guest reviews. Where to stay, what to look for and when to book.`;
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {

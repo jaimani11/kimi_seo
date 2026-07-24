@@ -57,12 +57,12 @@ const META: Record<
     heading: (c) => `Hotels in ${c.name}`,
     eyebrow: (c) => `${c.countryName} · stays`,
     intro: (c) =>
-      `Find hotels, apartments, and vacation rentals across ${c.name}, ${c.countryName}. Free cancellation on most stays, no booking fees. Powered by Booking.com — the price you pay is the same.`,
+      `Find hotels, apartments, and vacation rentals across ${c.name}, ${c.countryName}. Powered by Booking.com.`,
     ctaLabel: (c) => `Search hotels in ${c.name}`,
     bullets: (c) => [
-      `Real-time availability across thousands of ${c.name} properties`,
-      'Free cancellation on most stays — flexible plans for changing trips',
-      'No booking fees — the price you pay on Booking.com is the price you get',
+      `Availability across thousands of ${c.name} properties`,
+      'Compare cancellation policies before you book',
+      'Guest scores and verified reviews on every listing',
       `Honest reviews from real travelers who stayed in ${c.name}`,
     ],
   },
@@ -78,7 +78,7 @@ const META: Record<
       `Compare fares to ${c.name} across hundreds of airlines`,
       'Round-trip, one-way, or multi-city — every cabin class',
       'See the cheapest weekday for your route at a glance',
-      'No add-on fees at checkout — what you see is what you pay',
+      'Fares and fees shown by Booking.com Flights',
     ],
   },
   'cars-in': {
@@ -87,12 +87,12 @@ const META: Record<
     heading: (c) => `Car rentals in ${c.name}`,
     eyebrow: (c) => `${c.countryName} · cars`,
     intro: (c) =>
-      `Rent a car at ${c.name}'s airports and city pick-up points. Booking.com Cars compares rates across every major rental company. Free cancellation on most bookings, full insurance options at the counter.`,
+      `Rent a car at ${c.name}'s airports and city pick-up points. Booking.com Cars compares rates across every major rental company. Full insurance options at the counter.`,
     ctaLabel: (c) => `Search car rentals in ${c.name}`,
     bullets: (c) => [
       `Airport and city pick-up locations across ${c.name}`,
       'Every major rental company in one search',
-      'Free cancellation on most bookings — pay later, flexible plans',
+      'Compare cancellation policies before you book',
       'Optional full insurance at checkout — no surprises at the counter',
     ],
   },
@@ -102,13 +102,13 @@ const META: Record<
     heading: (c) => `Best hotels in ${c.name}`,
     eyebrow: (c) => `${c.countryName} · top picks`,
     intro: (c) =>
-      `The highest-rated, best-reviewed places to stay in ${c.name}, ${c.countryName}. We surface Booking.com properties scoring 8+ out of 10 from real travelers, sorted by review density. Free cancellation on most.`,
+      `The highest-rated, best-reviewed places to stay in ${c.name}, ${c.countryName}. We surface Booking.com properties scoring 8+ out of 10 from real travelers, sorted by review density.`,
     ctaLabel: (c) => `See top-rated hotels in ${c.name}`,
     bullets: (c) => [
       `Only properties scoring 8.0+ in real ${c.name} guest reviews`,
       'Sorted by review density — the more reviews, the more reliable the score',
-      'Free cancellation on most stays — book now, decide later',
-      'No booking fees · Powered by Booking.com',
+      'Compare cancellation policies before you book',
+      'Booked and managed on Booking.com',
     ],
   },
   'cheap-hotels': {
@@ -117,13 +117,13 @@ const META: Record<
     heading: (c) => `Cheap hotels in ${c.name}`,
     eyebrow: (c) => `${c.countryName} · budget stays`,
     intro: (c) =>
-      `Budget-friendly hotels, hostels, and guest houses in ${c.name}, ${c.countryName}. Booking.com surfaces the lowest nightly rates with no booking fees — many with free cancellation if your plans change.`,
+      `Budget-friendly hotels, hostels, and guest houses in ${c.name}, ${c.countryName}. Booking.com surfaces the lowest nightly rates.`,
     ctaLabel: (c) => `See cheap hotels in ${c.name}`,
     bullets: (c) => [
       `Lowest nightly rates across ${c.name} hostels, guesthouses, and budget hotels`,
-      'Free cancellation on most bookings — flexible if plans change',
+      'Compare cancellation policies before you book',
       `Real reviews so you don't accidentally book the wrong end of ${c.name}`,
-      'No booking fees · Powered by Booking.com',
+      'Booked and managed on Booking.com',
     ],
   },
   'luxury-hotels': {
@@ -132,13 +132,13 @@ const META: Record<
     heading: (c) => `Luxury hotels in ${c.name}`,
     eyebrow: (c) => `${c.countryName} · 5-star stays`,
     intro: (c) =>
-      `5-star hotels, boutique stays, and design-led properties in ${c.name}, ${c.countryName}. The Booking.com luxury collection — concierge service, spa access, and the city's best addresses, free cancellation on most rates.`,
+      `5-star hotels, boutique stays, and design-led properties in ${c.name}, ${c.countryName}. The Booking.com luxury collection — concierge service, spa access, and the city's best addresses.`,
     ctaLabel: (c) => `See luxury hotels in ${c.name}`,
     bullets: (c) => [
       `5-star and boutique properties across ${c.name}`,
       'Spa, pool, and concierge service on most listings',
       `The city's most-loved addresses, ranked by ${c.name} guest reviews`,
-      'Free cancellation on most rates · Powered by Booking.com',
+      'Booked and managed on Booking.com',
     ],
   },
   'family-hotels': {
@@ -153,7 +153,7 @@ const META: Record<
       `Family rooms, connecting rooms, and apartments in ${c.name}`,
       'Cribs, kids\' clubs, and child-safe pools on filtered listings',
       'Travel-with-kids reviews from other families',
-      'Free cancellation on most stays · Powered by Booking.com',
+      'Booked and managed on Booking.com',
     ],
   },
   'boutique-hotels': {
@@ -168,7 +168,7 @@ const META: Record<
       `Independent, design-led properties across ${c.name}`,
       'Smaller room counts, more attentive service',
       `Curated picks based on real ${c.name} guest reviews`,
-      'Free cancellation on most rates · Powered by Booking.com',
+      'Booked and managed on Booking.com',
     ],
   },
   'pet-friendly-hotels': {
@@ -183,7 +183,7 @@ const META: Record<
       `Pet-allowing hotels and apartments across ${c.name}`,
       'On-site walking areas, pet beds, and treats on some listings',
       'Pet-fee details visible up-front, no surprises at check-in',
-      'Free cancellation on most stays · Powered by Booking.com',
+      'Booked and managed on Booking.com',
     ],
   },
   'beach-hotels': {
@@ -198,7 +198,7 @@ const META: Record<
       `Beachfront properties and sea-view rooms across ${c.name}`,
       'Beach-club access and on-site sun loungers on most listings',
       'Walking distance to the water — no taxis to the beach',
-      'Free cancellation on most stays · Powered by Booking.com',
+      'Booked and managed on Booking.com',
     ],
   },
   apartments: {
@@ -213,7 +213,7 @@ const META: Record<
       `Full-kitchen apartments and aparthotels across ${c.name}`,
       `Per-neighborhood filtering for the ${c.name} area you want`,
       'Weekly and monthly rates on longer-stay bookings',
-      'Free cancellation on most bookings · Powered by Booking.com',
+      'Booked and managed on Booking.com',
     ],
   },
   'cheap-flights': {
@@ -222,13 +222,13 @@ const META: Record<
     heading: (c) => `Cheap flights to ${c.name}`,
     eyebrow: (c) => `${c.countryName} · low fares`,
     intro: (c) =>
-      `The lowest fares to ${c.name}, ${c.countryName} on Booking.com Flights. Compare every major carrier, see the cheapest weekday for your route, and book without add-on fees at checkout.`,
+      `The lowest fares to ${c.name}, ${c.countryName} on Booking.com Flights. Compare every major carrier, see the cheapest weekday for your route.`,
     ctaLabel: (c) => `See cheap flights to ${c.name}`,
     bullets: (c) => [
       `Lowest available fares to ${c.name} across every major airline`,
       'Cheapest-weekday view — see when to fly for the best price',
       'One-way, round-trip, or multi-city — flexible cabin filters',
-      'No add-on fees at checkout · Powered by Booking.com Flights',
+      'Booked and managed on Booking.com Flights',
     ],
   },
   'cheap-cars': {
@@ -237,13 +237,13 @@ const META: Record<
     heading: (c) => `Cheap car rental in ${c.name}`,
     eyebrow: (c) => `${c.countryName} · budget cars`,
     intro: (c) =>
-      `The lowest daily rates on car rentals in ${c.name}, ${c.countryName}. Booking.com Cars compares budget brands against the majors — economy cars, free cancellation on most, no hidden fees.`,
+      `The lowest daily rates on car rentals in ${c.name}, ${c.countryName}. Booking.com Cars compares budget brands against the majors — economy cars.`,
     ctaLabel: (c) => `See cheap car rental in ${c.name}`,
     bullets: (c) => [
       `Cheapest daily rates across ${c.name}'s rental fleets`,
       'Economy, compact, and intermediate filters',
-      'Free cancellation on most bookings — pay later, flexible plans',
-      'No hidden fees · Powered by Booking.com Cars',
+      'Compare cancellation policies before you book',
+      'Booked and managed on Booking.com Cars',
     ],
   },
   'airport-cars': {
@@ -257,7 +257,7 @@ const META: Record<
     bullets: (c) => [
       `On-airport counters at every ${c.name} terminal`,
       'No off-site shuttles for the major brands',
-      'Free cancellation on most bookings — flexible flight changes',
+      'Compare rental terms before you book',
       'One-way drop-off available · Powered by Booking.com Cars',
     ],
   },
@@ -273,7 +273,7 @@ const META: Record<
       `The most-booked sights and experiences in ${c.name}`,
       'Skip-the-line tickets for the biggest draws',
       'Guided tours and audio guides for context',
-      'Free cancellation on most tickets · Powered by Booking.com',
+      'Booked and managed on Booking.com',
     ],
   },
   'free-things': {

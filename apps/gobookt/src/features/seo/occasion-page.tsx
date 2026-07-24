@@ -33,7 +33,7 @@ function lead(route: OccasionRoute): string {
   if (occasion.vibe === 'romantic') {
     return `Planning a ${occasion.name.toLowerCase()} in ${city.name}? Compare hotels on Booking.com — a romantic boutique stay or a suite with a view, whatever makes the trip special. ${occasion.tagline}`;
   }
-  return `Planning a ${occasion.name.toLowerCase()} in ${city.name}? Book a block of hotel rooms for the group on Booking.com — real guest reviews, free cancellation on most rooms, and everyone close to the action. ${occasion.tagline}`;
+  return `Planning a ${occasion.name.toLowerCase()} in ${city.name}? Book a block of hotel rooms for the group on Booking.com — real guest reviews and everyone close to the action. ${occasion.tagline}`;
 }
 
 export function OccasionPage({ route }: { route: OccasionRoute }) {
@@ -42,7 +42,7 @@ export function OccasionPage({ route }: { route: OccasionRoute }) {
   const siblings = siblingOccasions(route);
   const cityFaq = {
     q: `Where should we stay for a ${occasion.name.toLowerCase()} in ${city.name}?`,
-    a: `Choose a central, walkable area of ${city.name} so you're near the restaurants and nightlife. ${city.oneLiner} On Booking.com, filter by guest score and free cancellation, and if you're a group, ask about adjoining rooms or a group rate.`,
+    a: `Choose a central, walkable area of ${city.name} so you're near the restaurants and nightlife. ${city.oneLiner} On Booking.com, filter by guest score, and if you're a group, ask about adjoining rooms or a group rate.`,
   };
   const faqs = [...occasion.faqs, cityFaq];
 

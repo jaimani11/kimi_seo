@@ -62,7 +62,7 @@ export function PlanTripCta({ destination }: PlanTripCtaProps) {
           }}
         >
           Compare hotels, apartments and vacation rentals in {destination.name} — real Booking.com
-          prices, free cancellation on most stays.
+          prices.
         </p>
         <Link
           href={href}

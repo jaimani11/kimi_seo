@@ -4,7 +4,7 @@ import { CategoryLanding } from '@/features/site/category-landing';
 export const metadata: Metadata = {
   title: 'Flights · gobookt',
   description:
-    'Search flights across every major carrier. One-way, round-trip, multi-city. Booking.com Flights — the price you pay is the same.',
+    'Search flights across every major carrier. One-way, round-trip, multi-city. Booking.com Flights.',
 };
 
 export default function FlightsPage() {

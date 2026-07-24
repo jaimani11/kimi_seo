@@ -65,7 +65,7 @@ function lead(poi: StaysNearPoi): string {
   const blurb = poi.blurb ? ` ${poi.blurb}` : '';
   return pick(
     [
-      `${poi.poiName} is one of ${city.name}'s most-loved areas to stay.${blurb} Compare hotels near ${poi.poiName} on Booking.com — real guest reviews, live prices and free cancellation on most rooms.`,
+      `${poi.poiName} is one of ${city.name}'s most-loved areas to stay.${blurb} Compare hotels near ${poi.poiName} on Booking.com — real guest reviews and live prices.`,
       `Book a hotel in ${poi.poiName}, ${city.name} and wake up right where you want to be.${blurb} Browse live Booking.com rates and availability for the neighbourhood.`,
     ],
     seed,
@@ -77,7 +77,7 @@ function faqs(poi: StaysNearPoi): { q: string; a: string }[] {
   return [
     {
       q: `Are hotels ${where} expensive?`,
-      a: `Prices ${where} span budget to luxury. Booking.com shows live rates across the range with free cancellation on most rooms, so you can compare before you commit — filter by price, guest score and star rating to fit your budget.`,
+      a: `Prices ${where} span budget to luxury. Booking.com shows live rates across the range, so you can compare before you commit — filter by price, guest score and star rating to fit your budget.`,
     },
     {
       q: `How do I find the best hotel deal ${where}?`,
