@@ -30,7 +30,11 @@ function seedOf(slug: string): number {
 }
 
 function pick<T>(pool: readonly T[], seed: number): T {
-  return pool[seed % pool.length] as T;
+  // Sign-safe modulo: the bit-shifted seeds passed in can be negative (JS `>>`
+  // is a SIGNED shift), and a negative index → undefined → crash when the
+  // BODIES entry (a function) is then called. Normalise to [0, len).
+  const i = ((seed % pool.length) + pool.length) % pool.length;
+  return pool[i] as T;
 }
 
 // The italic hero sub-headline — the whole-home promise, city-agnostic so it
