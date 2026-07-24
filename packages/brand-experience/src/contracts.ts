@@ -19,7 +19,13 @@
  */
 
 export type BrandId = 'gobookt' | 'gotript' | 'numiworks' | 'stayviaowner';
-export type ProviderId = 'booking' | 'expedia' | 'vrbo' | 'viator';
+/**
+ * Every affiliate provider the validator can recognize from an outbound host.
+ * `getyourguide` is intentionally listed but is NOT a brand's allowed provider
+ * anywhere — numiworks' experiences money-path is Viator, so a GetYourGuide
+ * link on any engine page is a cross-provider leak the validator must flag.
+ */
+export type ProviderId = 'booking' | 'expedia' | 'vrbo' | 'viator' | 'getyourguide';
 
 // ── Layer 1: pure facts ─────────────────────────────────────────────────────
 

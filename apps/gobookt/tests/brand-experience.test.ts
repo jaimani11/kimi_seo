@@ -80,8 +80,30 @@ describe('@adored/brand-experience engine', () => {
     expect(result.errors.some((e) => e.includes('ai-prompt'))).toBe(true);
   });
 
+  it('numiworks composes an experiences-first, valid experience (Viator, AI concierge)', () => {
+    const exp = buildBrandPlan('numiworks', FACTS, adapters, ctx);
+    expect(validateBrandExperience(exp).pass).toBe(true);
+    const kinds = exp.sections.map((s) => s.data.kind);
+    // ai-prompt is numiworks' signature — and it's FORBIDDEN on gobookt/gotript.
+    expect(kinds).toContain('ai-prompt');
+    expect(kinds).toContain('area-cards');
+    // gotript's signatures must never appear on numiworks.
+    expect(kinds).not.toContain('itinerary-links');
+    expect(kinds).not.toContain('decision-card');
+    expect(exp.hero.heading).toBe('Things to do in Paris');
+    expect(exp.jsonLd).toContain('bookable on Viator');
+  });
+
+  it('numiworks lead section is the AI concierge, unlike the accommodation brands', () => {
+    const nm = buildBrandPlan('numiworks', FACTS, adapters, ctx);
+    const go = buildBrandPlan('gobookt', FACTS, adapters, ctx);
+    expect(nm.sections[0]!.data.kind).toBe('ai-prompt');
+    expect(go.sections[0]!.data.kind).not.toBe('ai-prompt');
+    expect(nm.hero.heading).not.toBe(go.hero.heading);
+  });
+
   it('throws for a brand with no registered spec yet', () => {
-    expect(() => buildBrandPlan('numiworks' as BrandId, FACTS, adapters, ctx)).toThrow();
+    expect(() => buildBrandPlan('stayviaowner' as BrandId, FACTS, adapters, ctx)).toThrow();
   });
 
   it('the same CityFacts yields meaningfully different experiences per brand', () => {
@@ -112,5 +134,16 @@ describe('@adored/brand-experience engine', () => {
     const result = validateBrandExperience(gt);
     expect(result.pass).toBe(false);
     expect(result.errors.some((e) => e.includes('booking'))).toBe(true);
+  });
+
+  it('validator flags a GetYourGuide CTA on numiworks (enforces the Viator switch)', () => {
+    const nm = buildBrandPlan('numiworks', FACTS, adapters, ctx);
+    const cards = nm.sections.find((s) => s.data.kind === 'area-cards');
+    if (cards && cards.data.kind === 'area-cards') {
+      cards.data.areas[0]!.href = 'https://www.getyourguide.com/paris-l16/?partner_id=SL52HD5';
+    }
+    const result = validateBrandExperience(nm);
+    expect(result.pass).toBe(false);
+    expect(result.errors.some((e) => e.includes('getyourguide'))).toBe(true);
   });
 });

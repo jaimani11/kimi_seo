@@ -291,7 +291,139 @@ const GOTRIPT: BrandSpec = {
   requiredSections: ['itinerary-links', 'decision-card'],
 };
 
+// ── numiworks: experiences discovery (AI concierge) ─────────────────────────
+
+/**
+ * Viator experience themes. Each becomes a linked card whose href is the
+ * brand's primary search adapter (numiworks injects a Viator destination
+ * search). The adapter returns null when the hand-off is unconfigured, so a
+ * card fails closed to a controlled state rather than an untracked link.
+ */
+const EXPERIENCE_THEMES: ReadonlyArray<{ theme: string; query: string; blurb: string }> = [
+  { theme: 'Food tours & tastings', query: 'food tours', blurb: 'Street eats, market walks and tastings led by locals.' },
+  { theme: 'Cooking classes', query: 'cooking classes', blurb: 'Hands-on classes — learn a dish you can make back home.' },
+  { theme: 'Private & small-group tours', query: 'private tours', blurb: 'Your pace, your guide, none of the big-coach crowds.' },
+  { theme: 'Day trips', query: 'day trips', blurb: 'Half- and full-day excursions just beyond the city.' },
+  { theme: 'Skip-the-line tickets', query: 'skip the line tickets', blurb: 'Timed-entry tickets to the sights worth queueing for.' },
+  { theme: 'Culture & history', query: 'culture and history tours', blurb: 'Museums, ruins and neighborhood walks with a story.' },
+];
+
+const NUMIWORKS: BrandSpec = {
+  brand: 'numiworks',
+  purpose: 'Help someone discover what to do.',
+  audience: 'Travelers deciding which tours, food and experiences to book.',
+  primaryQuestion: 'What should I do here?',
+  narrative: 'Discover experiences with the AI concierge, then continue to Viator to book. Whole-home lodging is a secondary hand-off to Vrbo.',
+  providers: { primary: 'viator', secondary: 'vrbo' },
+  hero: (f) => ({
+    eyebrow: `${f.countryName} · ${f.region.toUpperCase()}`,
+    heading: `Things to do in ${f.name}`,
+    subhead: `The best experiences, tours and day trips in ${f.name} — ask the concierge to shape a plan, then continue to Viator to book.`,
+  }),
+  sections: [
+    {
+      id: 'concierge',
+      kind: 'ai-prompt',
+      eyebrow: 'Plan with AI',
+      heading: (f) => `Ask the ${f.name} concierge`,
+      build: (f) => ({
+        kind: 'ai-prompt',
+        placeholder: `e.g. 3 food-focused days in ${f.name} with one great day trip`,
+        ctaLabel: 'Plan my experiences',
+      }),
+    },
+    {
+      id: 'things-to-do',
+      kind: 'area-cards',
+      eyebrow: 'What to do',
+      heading: (f) => `Top things to do in ${f.name}`,
+      build: (f, a) => ({
+        kind: 'area-cards',
+        intro: `Browse ${f.name} by the kind of experience you're after — each opens live availability on Viator.`,
+        areas: EXPERIENCE_THEMES.map((t) => ({
+          name: t.theme,
+          blurb: t.blurb,
+          href: a.primarySearchHref(`${t.query} in ${f.name}`),
+          ctaLabel: 'Browse on Viator',
+        })),
+      }),
+    },
+    {
+      id: 'eat',
+      kind: 'chip-grid',
+      eyebrow: 'What to eat',
+      heading: (f) => `Taste of ${f.name}`,
+      build: (f) =>
+        f.foods.length
+          ? { kind: 'chip-grid', intro: 'Dishes worth planning a food tour around.', chips: f.foods.map((food) => ({ label: food.dish, note: food.note })) }
+          : null,
+    },
+    {
+      id: 'when',
+      kind: 'climate',
+      eyebrow: 'When to go',
+      heading: (f) => `Best time for ${f.name} experiences`,
+      build: (f) =>
+        f.climate
+          ? {
+              kind: 'climate',
+              intro: `${f.bestTime.months} are popular times to visit ${f.name}. ${f.bestTime.blurb} Outdoor tours and day trips are most rewarding in these windows — plan around them, then check live experience availability on Viator.`,
+            }
+          : null,
+    },
+    {
+      id: 'who',
+      kind: 'profile-list',
+      eyebrow: 'Match your trip',
+      heading: () => 'Experiences by traveler',
+      build: (f) => ({
+        kind: 'profile-list',
+        items: [
+          { label: 'Families', text: f.travelStyles.family },
+          { label: 'Couples', text: f.travelStyles.couples },
+          { label: 'Solo travelers', text: f.travelStyles.solo },
+        ],
+      }),
+    },
+    {
+      id: 'getting-around',
+      kind: 'prose',
+      eyebrow: 'Getting around',
+      heading: (f) => `Getting around ${f.name}`,
+      build: (f) => ({
+        kind: 'prose',
+        paragraphs: [
+          `${f.transportation.primary} ${f.transportation.tips} Factor this into which experiences you group together each day. ${f.safety}`,
+        ],
+      }),
+    },
+  ],
+  faqPolicy: (f) => [
+    {
+      question: `What are the best things to do in ${f.name}?`,
+      answer: `Popular experiences in ${f.name} span food tours and tastings, cooking classes, private and small-group tours, day trips, skip-the-line tickets and culture-and-history walks. Browse by theme and check live availability on Viator.`,
+    },
+    { question: `When is the best time to visit ${f.name} for tours and day trips?`, answer: `${f.bestTime.months}. ${f.bestTime.blurb}` },
+    {
+      question: `What food is ${f.name} known for?`,
+      answer: f.foods.length
+        ? `${f.name} is known for dishes like ${f.foods.map((food) => food.dish).join(', ')}. A food tour or tasting is one of the best ways to try them.`
+        : `Join a local food tour or tasting to eat your way through ${f.name}.`,
+    },
+    { question: `How do I get around ${f.name}?`, answer: `${f.transportation.primary} ${f.transportation.tips}` },
+  ],
+  schemaDescription: (f) => `Things to do in ${f.name}: top experiences, tours and day trips, bookable on Viator.`,
+  crossLinksHeading: 'Keep exploring',
+  linkPolicy: (f) => [
+    { label: `Things to do in ${f.name}`, href: `/things-to-do-in-${f.slug}` },
+    { label: 'All destinations', href: '/destinations' },
+  ],
+  forbiddenSections: ['itinerary-links', 'decision-card'],
+  requiredSections: ['ai-prompt', 'area-cards'],
+};
+
 export const BRAND_SPECS: Partial<Record<BrandId, BrandSpec>> = {
   gobookt: GOBOOKT,
   gotript: GOTRIPT,
+  numiworks: NUMIWORKS,
 };

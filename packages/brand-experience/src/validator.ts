@@ -28,6 +28,7 @@ export function providerOfHref(href: string): ProviderId | null {
   if (host.includes('expedia.com')) return 'expedia';
   if (host.includes('vrbo.com')) return 'vrbo';
   if (host.includes('viator.com')) return 'viator';
+  if (host.includes('getyourguide.com') || host.includes('gyg.me')) return 'getyourguide';
   return null;
 }
 
