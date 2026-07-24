@@ -197,28 +197,13 @@ const GOTRIPT: BrandSpec = {
     },
     {
       id: 'base',
-      kind: 'area-cards',
+      kind: 'compare-map',
       eyebrow: 'Step 4 · Your base',
       heading: () => 'Where to base yourself',
       build: (f, a) => ({
-        kind: 'area-cards',
-        intro: 'A central base cuts travel time between sights. Compare areas, then check stays.',
-        areas: f.neighborhoods.map((n) => ({
-          name: n.name,
-          blurb: n.blurb,
-          href: a.primarySearchHref(`${n.name}, ${f.name}`),
-          ctaLabel: `Stays in ${n.name}`,
-        })),
-      }),
-    },
-    {
-      id: 'map',
-      kind: 'compare-map',
-      eyebrow: 'On the map',
-      heading: (f) => `${f.name} at a glance`,
-      build: (f, a) => ({
         kind: 'compare-map',
-        intro: 'Neighborhoods and landmarks with walking distances from the centre.',
+        intro: 'A central base cuts travel time between sights.',
+        areas: f.neighborhoods.map((n) => ({ name: n.name, blurb: n.blurb })),
         pins: f.neighborhoodPois.map((n) => ({
           name: n.name,
           lat: n.lat,
@@ -276,12 +261,6 @@ const GOTRIPT: BrandSpec = {
             note: `Best for short city breaks and central locations — compare ${f.name} hotels on Expedia.`,
             href: a.primarySearchHref(f.name),
             ctaLabel: 'Compare hotels',
-          },
-          {
-            title: 'Whole homes',
-            note: 'Best for groups, families and longer stays that want space and a kitchen — browse whole homes on Vrbo.',
-            href: a.wholeHomeHref ? a.wholeHomeHref(f.name) : null,
-            ctaLabel: 'Browse rentals',
           },
         ],
       }),

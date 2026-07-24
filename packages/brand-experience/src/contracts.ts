@@ -106,7 +106,7 @@ export interface MapPinModel {
 export type SectionData =
   | { kind: 'climate'; intro: string }
   | { kind: 'area-cards'; intro: string; areas: AreaCard[] }
-  | { kind: 'compare-map'; intro: string; pins: MapPinModel[] }
+  | { kind: 'compare-map'; intro: string; areas?: Array<{ name: string; blurb: string }>; pins: MapPinModel[] }
   | { kind: 'chip-grid'; intro: string; chips: Chip[] }
   | { kind: 'profile-list'; items: Array<{ label: string; text: string }> }
   | { kind: 'itinerary-links'; intro: string; options: ItineraryOption[] }

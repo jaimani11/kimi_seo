@@ -138,6 +138,15 @@ function renderSection(data: SectionData, p: DestinationExperiencePresentation, 
       return (
         <>
           {data.intro ? <p style={paragraphStyle}>{data.intro}</p> : null}
+          {data.areas && data.areas.length ? (
+            <ul style={{ ...listStyle, marginBottom: '1rem' }}>
+              {data.areas.map((n) => (
+                <li key={n.name} style={listItemStyle}>
+                  <strong style={{ color: 'var(--ink-primary)', fontWeight: 700 }}>{n.name}.</strong> {n.blurb}
+                </li>
+              ))}
+            </ul>
+          ) : null}
           <DestinationMap cityName={p.cityName} center={p.center} pins={pins} />
           <WalkDistances items={pins.filter((x) => x.detail).map((x) => ({ name: x.label, kind: x.kind, label: x.detail ?? '' }))} />
         </>
