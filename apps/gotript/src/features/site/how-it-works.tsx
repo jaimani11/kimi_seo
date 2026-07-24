@@ -8,18 +8,18 @@
 const STEPS = [
   {
     number: '01',
-    title: 'Describe or browse',
-    body: 'Type a sentence into the concierge, or browse the catalog by destination and type. Real Expedia inventory, real-time prices.',
+    title: 'Map your trip',
+    body: 'Start with a destination guide — when to go, how many days, which neighborhood — and build a day-by-day itinerary.',
   },
   {
     number: '02',
-    title: 'Pick what fits',
-    body: 'See reasoning chips on every card — ratings, group size, cancellation, urgency. Save shortlists. Plan a multi-day trip.',
+    title: 'Choose your base',
+    body: 'Compare hotels and whole homes for your dates, weigh location against your itinerary, and shortlist where to stay.',
   },
   {
     number: '03',
     title: 'Book on Expedia',
-    body: 'One tap hands you off through an affiliate redirect. Same price as booking direct. Free cancellation on most stays.',
+    body: 'One tap hands you off to Expedia. Same price as booking direct, and free cancellation on most stays.',
   },
 ] as const;
 
@@ -58,9 +58,9 @@ export function HowGotriptWorks() {
               margin: 0,
             }}
           >
-            Three steps,{' '}
+            Plan first,{' '}
             <em style={{ fontStyle: 'italic', color: 'var(--accent-primary)' }}>
-              no booking fees.
+              book when you&rsquo;re ready.
             </em>
           </h2>
         </header>

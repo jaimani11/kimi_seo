@@ -8,18 +8,18 @@
 const STEPS = [
   {
     number: '01',
-    title: 'Describe or browse',
-    body: 'Type a sentence into the concierge, or browse the catalog by destination and type. Real Vrbo inventory, real-time prices.',
+    title: 'Browse by area',
+    body: 'Browse whole homes by destination and neighborhood — villas, cabins, cottages and beach houses. Real Vrbo inventory, real-time prices.',
   },
   {
     number: '02',
-    title: 'Pick what fits',
-    body: 'See reasoning chips on every card — ratings, group size, cancellation, urgency. Save shortlists. Plan a multi-day trip.',
+    title: 'Match your group',
+    body: 'Compare space, bedrooms and amenities — kitchens, hot tubs, pools — for your dates and party size. Save a shortlist.',
   },
   {
     number: '03',
-    title: 'Reserve on Viator',
-    body: 'One tap hands you off through an affiliate redirect. Same price as booking direct. Free cancellation on most experiences.',
+    title: 'Book on Vrbo',
+    body: 'One tap hands you off to Vrbo. Same price as booking direct, and the whole place to yourselves — no shared spaces.',
   },
 ] as const;
 
@@ -58,9 +58,9 @@ export function HowGotriptWorks() {
               margin: 0,
             }}
           >
-            Three steps,{' '}
+            Find your whole home,{' '}
             <em style={{ fontStyle: 'italic', color: 'var(--accent-primary)' }}>
-              no booking fees.
+              book the whole place.
             </em>
           </h2>
         </header>
@@ -126,7 +126,7 @@ export function HowGotriptWorks() {
             margin: 0,
           }}
         >
-          Affiliate links to Viator. Prices identical to viator.com. Commission keeps the site free.
+          Affiliate links to Vrbo. Prices identical to vrbo.com. Commission keeps the site free.
         </p>
       </div>
     </section>

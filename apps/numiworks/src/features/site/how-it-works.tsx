@@ -8,18 +8,18 @@
 const STEPS = [
   {
     number: '01',
-    title: 'Describe or browse',
-    body: 'Type a sentence into the concierge, or browse the catalog by destination and type. Real Viator inventory, real-time prices.',
+    title: 'Ask or browse',
+    body: 'Tell the AI concierge what you want, or browse by type — food tours, cooking classes, day trips, skip-the-line.',
   },
   {
     number: '02',
-    title: 'Pick what fits',
-    body: 'See reasoning chips on every card — ratings, group size, cancellation, urgency. Save shortlists. Plan a multi-day trip.',
+    title: 'Compare experiences',
+    body: 'See live Viator experiences with ratings, duration and the details that matter. Save a shortlist for each day.',
   },
   {
     number: '03',
-    title: 'Reserve on Viator',
-    body: 'One tap hands you off through an affiliate redirect. Same price as booking direct. Free cancellation on most experiences.',
+    title: 'Book on Viator',
+    body: 'One tap hands you off to Viator. Same price as booking direct, and free cancellation on most experiences.',
   },
 ] as const;
 
@@ -58,9 +58,9 @@ export function HowNumiworksWorks() {
               margin: 0,
             }}
           >
-            Three steps,{' '}
+            Find what to do,{' '}
             <em style={{ fontStyle: 'italic', color: 'var(--accent-primary)' }}>
-              no booking fees.
+              book it in seconds.
             </em>
           </h2>
         </header>

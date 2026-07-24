@@ -8,18 +8,18 @@
 const STEPS = [
   {
     number: '01',
-    title: 'Describe or browse',
-    body: 'Type a sentence into the concierge, or browse the catalog by destination and type. Real Booking.com inventory, real-time prices.',
+    title: 'Browse or describe',
+    body: 'Browse stays by destination and area, or tell the concierge your dates and budget. Real Booking.com inventory, real-time prices.',
   },
   {
     number: '02',
-    title: 'Pick what fits',
-    body: 'See reasoning chips on every card — ratings, group size, cancellation, urgency. Save shortlists. Plan a multi-day trip.',
+    title: 'Compare what fits',
+    body: 'Weigh guest scores, location, cancellation and price across hotels, aparthotels, B&Bs and apartments. Save a shortlist.',
   },
   {
     number: '03',
     title: 'Book on Booking.com',
-    body: 'One tap hands you off through an affiliate redirect. Same price as booking direct. Free cancellation on most stays.',
+    body: 'One tap hands you off to Booking.com. Same price as booking direct, and free cancellation on most rooms.',
   },
 ] as const;
 
@@ -58,9 +58,9 @@ export function HowGobooktWorks() {
               margin: 0,
             }}
           >
-            Three steps,{' '}
+            Compare every stay,{' '}
             <em style={{ fontStyle: 'italic', color: 'var(--accent-primary)' }}>
-              no booking fees.
+              book at the direct price.
             </em>
           </h2>
         </header>
