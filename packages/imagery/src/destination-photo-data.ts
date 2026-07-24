@@ -23,12 +23,12 @@ export interface DestinationPhotoEntry {
 export const DESTINATION_PHOTOS: Readonly<Record<string, DestinationPhotoEntry>> = {
   // ============== Cities (alphabetical) ==============
   amsterdam: {
-    id: '1534351590666-13e3e96c5017',
+    id: '1459679749680-18eb1eb37418',
     alt: 'Amsterdam canals at golden hour',
     photographer: 'Adrien Olichon',
   },
   austin: {
-    id: '1492033998562-c84a1147eef0',
+    id: '1531218150217-54595bc2b934',
     alt: 'Austin skyline at dusk',
     photographer: 'Carlos Alfonso',
   },
@@ -48,7 +48,7 @@ export const DESTINATION_PHOTOS: Readonly<Record<string, DestinationPhotoEntry>>
     photographer: 'Florian Wehde',
   },
   boston: {
-    id: '1538485399081-7c8ce013b933',
+    id: '1501979376754-2ff867a4f659',
     alt: 'Boston Beacon Hill row houses',
     photographer: 'Lance Anderson',
   },
@@ -73,12 +73,12 @@ export const DESTINATION_PHOTOS: Readonly<Record<string, DestinationPhotoEntry>>
     photographer: 'David Rodrigo',
   },
   edinburgh: {
-    id: '1506377585622-bed95e7d3a8b',
+    id: '1444723121867-7a241cacace9',
     alt: 'Edinburgh Old Town at golden hour',
     photographer: 'Connor Mollison',
   },
   florence: {
-    id: '1543429776-7bb1ddffd35a',
+    id: '1476362174823-3a23f4aa6d76',
     alt: 'Florence Duomo from above',
     photographer: 'Heidi Kaden',
   },
@@ -88,12 +88,12 @@ export const DESTINATION_PHOTOS: Readonly<Record<string, DestinationPhotoEntry>>
     photographer: 'Tron Le',
   },
   helsinki: {
-    id: '1565699049516-eaa9bff63b3e',
+    id: '1538332576228-eb5b4c4de6f5',
     alt: 'Helsinki cathedral and harbor',
     photographer: 'Tapio Haaja',
   },
   'hong-kong': {
-    id: '1506461883365-d1c64fa6dec5',
+    id: '1536599018102-9f803c140fc1',
     alt: 'Hong Kong harbor skyline',
     photographer: 'Florian Wehde',
   },
@@ -128,7 +128,7 @@ export const DESTINATION_PHOTOS: Readonly<Record<string, DestinationPhotoEntry>>
     photographer: 'Marcin Nowak',
   },
   'los-angeles': {
-    id: '1542317854-d33c7b88f7be',
+    id: '1580655653885-65763b2597d0',
     alt: 'Los Angeles palm-lined boulevard',
     photographer: 'Cedric Letsch',
   },
@@ -138,7 +138,7 @@ export const DESTINATION_PHOTOS: Readonly<Record<string, DestinationPhotoEntry>>
     photographer: 'Florian Wehde',
   },
   marrakech: {
-    id: '1539020140153-e8c81bb6b8a4',
+    id: '1539020140153-e479b8c22e70',
     alt: 'Marrakech medina rooftops',
     photographer: 'Heidi Kaden',
   },
@@ -148,7 +148,7 @@ export const DESTINATION_PHOTOS: Readonly<Record<string, DestinationPhotoEntry>>
     photographer: 'Denise Jans',
   },
   'mexico-city': {
-    id: '1518105779142-d975f22f1b00',
+    id: '1518659526054-190340b32735',
     alt: 'Mexico City colonial architecture',
     photographer: 'Bárbara Cascão',
   },
@@ -163,7 +163,7 @@ export const DESTINATION_PHOTOS: Readonly<Record<string, DestinationPhotoEntry>>
     photographer: 'Andrea Cau',
   },
   montreal: {
-    id: '1519178614-6e8e2e6e2d96',
+    id: '1541447271487-09612b3f49f7',
     alt: 'Montreal Old Port stone streets',
     photographer: 'Joey Banks',
   },
@@ -178,7 +178,7 @@ export const DESTINATION_PHOTOS: Readonly<Record<string, DestinationPhotoEntry>>
     photographer: 'Patrick Tomasso',
   },
   oslo: {
-    id: '1565008442290-5c5e1c4e2e90',
+    id: '1513622470522-26c3c8a854bc',
     alt: 'Oslo fjord and opera house',
     photographer: 'Henrique Ferreira',
   },
@@ -188,7 +188,7 @@ export const DESTINATION_PHOTOS: Readonly<Record<string, DestinationPhotoEntry>>
     photographer: 'Jonas Jacobsson',
   },
   porto: {
-    id: '1555881400-69a2c1e22e9e',
+    id: '1601758228041-f3b2795255f1',
     alt: 'Porto Douro river bridge',
     photographer: 'Joran Quinten',
   },
@@ -198,7 +198,7 @@ export const DESTINATION_PHOTOS: Readonly<Record<string, DestinationPhotoEntry>>
     photographer: 'Anthony DELANOIX',
   },
   reykjavik: {
-    id: '1551193020-9a2dcbeb9d77',
+    id: '1504829857797-ddff29c27927',
     alt: 'Reykjavík harbor + Hallgrímskirkja',
     photographer: 'Stephen Leonardi',
   },
@@ -208,17 +208,17 @@ export const DESTINATION_PHOTOS: Readonly<Record<string, DestinationPhotoEntry>>
     photographer: 'David Köhler',
   },
   'san-francisco': {
-    id: '1538401601217-d2c6e57b3a04',
+    id: '1521747116042-5a810fda9664',
     alt: 'San Francisco Painted Ladies + skyline',
     photographer: 'Hardik Pandya',
   },
   seoul: {
-    id: '1538485399081-7c8ce013b933',
+    id: '1517154421773-0529f29ea451',
     alt: 'Seoul Bukchon hanok village',
     photographer: 'Daniel Bernard',
   },
   shanghai: {
-    id: '1545569310-3097dfa39e08',
+    id: '1474181487882-5abf3f0ba6c2',
     alt: 'Shanghai Pudong skyline',
     photographer: 'Edward He',
   },
@@ -253,12 +253,12 @@ export const DESTINATION_PHOTOS: Readonly<Record<string, DestinationPhotoEntry>>
     photographer: 'Mike Benna',
   },
   venice: {
-    id: '1503348593974-1ffc4082bfcd',
+    id: '1523906834658-6e24ef2386f9',
     alt: 'Venice canal + gondolas',
     photographer: 'Sandro Gonzalez',
   },
   vienna: {
-    id: '1565693413579-8a73fff833e1',
+    id: '1516550893923-42d28e5677af',
     alt: 'Vienna Schönbrunn at golden hour',
     photographer: 'Tobias Reich',
   },
@@ -280,12 +280,12 @@ export const DESTINATION_PHOTOS: Readonly<Record<string, DestinationPhotoEntry>>
     photographer: 'Cassie Matias',
   },
   'cinque-terre': {
-    id: '1543429776-7bb1ddffd35a',
+    id: '1533656338503-b22f63e96cd8',
     alt: 'Cinque Terre cliff villages',
     photographer: 'Carlos Alfonso',
   },
   'costa-rica': {
-    id: '1518095043920-bccaa6f6c95b',
+    id: '1518259102261-b40117eabbc9',
     alt: 'Costa Rica jungle waterfall',
     photographer: 'Etienne Delorieux',
   },
@@ -370,7 +370,7 @@ export const DESTINATION_PHOTOS: Readonly<Record<string, DestinationPhotoEntry>>
     photographer: 'Robert Bye',
   },
   '__country:SE': {
-    id: '1545569310-3097dfa39e08',
+    id: '1509356843151-3e7d96241e11',
     alt: 'Stockholm waterfront',
     photographer: 'Linus Mimietz',
   },
@@ -395,7 +395,7 @@ export const DESTINATION_PHOTOS: Readonly<Record<string, DestinationPhotoEntry>>
     photographer: 'Vlada Karpovich',
   },
   '__country:PT': {
-    id: '1513735718075-2e2d54f8de80',
+    id: '1513735492246-483525079686',
     alt: 'Portuguese tilework + tram',
     photographer: 'Tom Byrom',
   },
@@ -430,7 +430,7 @@ export const DESTINATION_PHOTOS: Readonly<Record<string, DestinationPhotoEntry>>
     photographer: 'Pablo Heimplatz',
   },
   '__country:MX': {
-    id: '1518105779142-d975f22f1b00',
+    id: '1518659526054-190340b32735',
     alt: 'Mexican colonial architecture',
     photographer: 'Bárbara Cascão',
   },
@@ -440,7 +440,7 @@ export const DESTINATION_PHOTOS: Readonly<Record<string, DestinationPhotoEntry>>
     photographer: 'Sander Crombach',
   },
   '__country:BR': {
-    id: '1483729548744-7f3b9d31e2e3',
+    id: '1483729558449-99ef09a8c325',
     alt: 'Rio coastline',
     photographer: 'Raphael Nogueira',
   },

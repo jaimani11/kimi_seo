@@ -30,8 +30,8 @@ const CATEGORY_POOL: Readonly<Record<PhotoCategory, readonly string[]>> = {
   ],
   countryside: [
     '1500382017468-9049fed747ef',
-    '1418065460487-3d54b4bd0d1b',
-    '1444930694458-01babe71870e',
+    '1470071459604-3b5ec3a7fe05',
+    '1441974231531-c6227db76b6e',
   ],
 };
 
