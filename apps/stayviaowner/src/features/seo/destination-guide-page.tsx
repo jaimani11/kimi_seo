@@ -17,7 +17,7 @@ import {
 } from '@adored/ui';
 import { buildExpediaCategoryUrl } from '@lib/affiliate/expedia-multicategory';
 import { VrboCityCallout } from '@/features/destinations/vrbo-city-callout';
-import { GygActivitiesWidget } from '@/features/experiences/getyourguide-widget';
+import { stayviaownerDestinationCopy } from '@lib/seo/destination-copy';
 
 /**
  * Rich destination guide page rendered at `/destinations/{slug}` for
@@ -48,6 +48,9 @@ export async function DestinationGuidePage({
     name: city.name,
     country: city.countryCode,
   });
+  // Per-brand whole-home VOICE for the hero — unique per city, and unlike the
+  // shared seo-data copy the sibling brands render (anti-duplicate).
+  const copy = stayviaownerDestinationCopy(city.name, city.slug);
   const climate = findClimate(city.slug);
   const rates = await getUsdRates();
   const mapPins: MapPin[] = [
@@ -113,7 +116,7 @@ export async function DestinationGuidePage({
               textShadow: '0 1px 2px rgba(0,0,0,0.6)',
             }}
           >
-            {city.countryName} · {city.region.toUpperCase()}
+            {copy.eyebrow} · {city.countryName}
           </p>
           <h1
             className="mt-3"
@@ -143,11 +146,11 @@ export async function DestinationGuidePage({
               textShadow: '0 1px 6px rgba(0,0,0,0.55)',
             }}
           >
-            {`Where to rent a whole home in ${city.name} — the best areas for apartments, villas and houses, compared.`}
+            {copy.body}
           </p>
           <div className="mt-7 flex flex-wrap items-center justify-center gap-2">
             <Link
-              href={`/things-to-do-in-${city.slug}`}
+              href={`/rentals/${city.slug}`}
               style={{
                 fontFamily: 'var(--font-inter)',
                 fontSize: '0.82rem',
@@ -161,28 +164,25 @@ export async function DestinationGuidePage({
                 textDecoration: 'none',
               }}
             >
-              Things to do →
+              Browse whole homes →
             </Link>
-            {[3, 5, 7].map((n) => (
-              <Link
-                key={n}
-                href={`/${city.slug}-${n}-day-itinerary`}
-                style={{
-                  fontFamily: 'var(--font-inter)',
-                  fontSize: '0.78rem',
-                  fontWeight: 600,
-                  padding: '0.55rem 1rem',
-                  borderRadius: '999px',
-                  background: 'rgba(255,255,255,0.14)',
-                  border: '1px solid rgba(255,255,255,0.32)',
-                  color: '#ffffff',
-                  textDecoration: 'none',
-                  backdropFilter: 'blur(6px)',
-                }}
-              >
-                {n}-day plan
-              </Link>
-            ))}
+            <Link
+              href={`/rentals/villas-in-${city.slug}`}
+              style={{
+                fontFamily: 'var(--font-inter)',
+                fontSize: '0.78rem',
+                fontWeight: 600,
+                padding: '0.55rem 1rem',
+                borderRadius: '999px',
+                background: 'rgba(255,255,255,0.14)',
+                border: '1px solid rgba(255,255,255,0.32)',
+                color: '#ffffff',
+                textDecoration: 'none',
+                backdropFilter: 'blur(6px)',
+              }}
+            >
+              Villas in {city.name}
+            </Link>
           </div>
         </div>
       </section>
@@ -191,21 +191,6 @@ export async function DestinationGuidePage({
         * Group family, so every destination page surfaces it above
         * the fold. All social traffic sees this on first paint. */}
       <VrboCityCallout city={city} />
-
-      <GygActivitiesWidget
-        destination={city.name}
-        heading={`Best things to do in ${city.name}`}
-        blurb={`Skip-the-line tickets and guided tours in ${city.name}, bookable on GetYourGuide.`}
-        campaignSlug={`guide-${city.slug}-best-things-to-do`}
-        numberOfItems={6}
-      />
-      <GygActivitiesWidget
-        destination={`day trips from ${city.name}`}
-        heading={`Day trips from ${city.name}`}
-        blurb={`Half-day and full-day excursions bookable through GetYourGuide.`}
-        campaignSlug={`guide-${city.slug}-day-trips`}
-        numberOfItems={6}
-      />
 
       {/* Sections */}
       <article className="mx-auto max-w-3xl px-6 py-14 md:py-20">
@@ -300,7 +285,7 @@ export async function DestinationGuidePage({
       <SmartStayOffer
         href={buildExpediaCategoryUrl('vacation-rentals', { destination: city.name })}
         headline={`Set on ${city.name}? Lock in where you'll stay.`}
-        subline="Whole homes on VRBO — kitchens, space, and the same price as booking direct."
+        subline="Whole homes on Vrbo — kitchens, space, and room for the whole group."
         ctaLabel={`See ${city.name} homes →`}
         storageKey={`sso-${city.slug}`}
       />
