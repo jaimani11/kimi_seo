@@ -19,7 +19,7 @@ const STEPS = [
   {
     number: '03',
     title: 'Book on Viator',
-    body: 'One tap hands you off to Viator. Same price as booking direct, and free cancellation on most experiences.',
+    body: 'One tap hands you off to Viator. Availability, price and cancellation terms are shown and handled there.',
   },
 ] as const;
 

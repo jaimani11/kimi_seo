@@ -93,8 +93,8 @@ export function SiteFooter() {
           }}
         >
           <p>
-            Experiences are reserved through our travel-experience partner. Affiliate links;
-            the price you pay is the same.
+            Experiences are reserved through our travel-experience partner. Affiliate links —
+            we may earn a commission from completed bookings.
           </p>
           <p>© {new Date().getUTCFullYear()} numiworks.</p>
         </div>

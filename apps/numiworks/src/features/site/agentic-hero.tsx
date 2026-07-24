@@ -1298,8 +1298,8 @@ function OpportunityBoard({ panel }: { panel: OpportunityPanel }) {
           }}
         >
           {panel.destination
-            ? `Pick a category to jump straight into bookable Viator experiences in ${panel.destination} — same price as direct, free cancellation on most.`
-            : 'Pick a category to jump into bookable Viator experiences for this destination — same price as direct, free cancellation on most.'}
+            ? `Pick a category to jump straight into bookable Viator experiences in ${panel.destination}.`
+            : 'Pick a category to jump into bookable Viator experiences for this destination.'}
         </p>
         <ul className="mt-4 grid grid-cols-1 gap-2 sm:grid-cols-3">
           {panel.providers.map((p) => (
@@ -1359,7 +1359,7 @@ function OpportunityBoard({ panel }: { panel: OpportunityPanel }) {
             margin: '0.85rem 0 0',
           }}
         >
-          Live Viator search · affiliate links · we may earn a commission · the price you pay is the same.
+          Live Viator search · affiliate links · we may earn a commission from completed bookings.
         </p>
       </div>
     </div>

@@ -24,8 +24,9 @@ import { SiteFooter } from '@/features/site/site-footer';
  *                             (destination · check-in · check-out ·
  *                             travelers · Search). Reference-site
  *                             load-bearing surface.
- *   StatsBand               : numbered trust strip
- *                             (300K+ · 190+ · 4.6★ · 24/7)
+ *   StatsBand               : non-numeric assurance strip (experiences-
+ *                             first · plan-then-book · provider handles
+ *                             booking · independent affiliate)
  *   AgenticHero             : "AI concierge feature" section — dark
  *                             cinematic photo, streaming agent steps,
  *                             reasoning capsules. Sits as the page's
@@ -49,11 +50,11 @@ import { SiteFooter } from '@/features/site/site-footer';
 export const metadata: Metadata = {
   title: 'Vacation Homes, Villas & Whole-Home Rentals + AI Trip Planning | numiworks',
   description:
-    'Discover villas, cabins, cottages and beach homes on VRBO, then use AI to plan the rest of your trip — tours, hotels and things to do across 190+ countries.',
+    'Discover villas, cabins, cottages and beach homes on Vrbo, then use AI to plan the rest of your trip — tours, activities and things to do worldwide.',
   openGraph: {
     title: 'Discover whole homes worth traveling for — numiworks',
     description:
-      'Villas, cabins, cottages and beach-home vacation rentals on VRBO, plus AI trip planning and things to do across 190+ countries.',
+      'Villas, cabins, cottages and beach-home vacation rentals on Vrbo, plus AI trip planning and things to do worldwide.',
     type: 'website',
     siteName: 'numiworks',
   },
