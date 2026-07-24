@@ -29,10 +29,11 @@
   },
   "dependencies": {
     "@adored/affiliate": "workspace:*",
-    "@adored/portfolio-revenue": "workspace:*",
     "@adored/brand-config": "workspace:*",
+    "@adored/brand-experience": "workspace:*",
     "@adored/imagery": "workspace:*",
     "@adored/marketing": "workspace:*",
+    "@adored/portfolio-revenue": "workspace:*",
     "@adored/seo-data": "workspace:*",
     "@adored/seo-routing": "workspace:*",
     "@adored/travel-tools": "workspace:*",

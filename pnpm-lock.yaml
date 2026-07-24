@@ -26,6 +26,9 @@ importers:
       '@adored/brand-config':
         specifier: workspace:*
         version: link:../../packages/brand-config
+      '@adored/brand-experience':
+        specifier: workspace:*
+        version: link:../../packages/brand-experience
       '@adored/imagery':
         specifier: workspace:*
         version: link:../../packages/imagery
@@ -159,6 +162,9 @@ importers:
       '@adored/brand-config':
         specifier: workspace:*
         version: link:../../packages/brand-config
+      '@adored/brand-experience':
+        specifier: workspace:*
+        version: link:../../packages/brand-experience
       '@adored/imagery':
         specifier: workspace:*
         version: link:../../packages/imagery
@@ -560,6 +566,8 @@ importers:
         version: link:../portfolio-revenue
 
   packages/brand-config: {}
+
+  packages/brand-experience: {}
 
   packages/imagery: {}
 
