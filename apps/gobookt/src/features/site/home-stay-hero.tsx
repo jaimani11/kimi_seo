@@ -19,24 +19,30 @@ import { BookingSearchWidget } from './booking-widget';
  * rest of your trip" secondary row (the multi-category hero still serves the
  * /flights, /cars vertical landing pages).
  *
- * Popular cities link to our OWN /destinations/[slug] guides — good for crawl +
- * UX. They can't drive the iframe widget, and the old "click a chip → search"
- * path only ever reached the Booking homepage, so an internal link is strictly
- * better.
+ * Popular cities link to our OWN /hotels-in-{slug} accommodation pages — good
+ * for crawl + UX. They can't drive the iframe widget, and the old "click a chip
+ * → search" path only ever reached the Booking homepage, so an internal link is
+ * strictly better.
  *
  * Visual base preserved from the previous hero: bold Inter headline, white panel
  * on a blue gradient band, yellow highlight border, hard-coded colors so the
  * render is identical in light + dark mode.
  */
 
-/** Popular cities — each has a /destinations/[slug] guide (confirmed present). */
+/**
+ * Popular cities — gobookt's OWN city-break / hotel-hub roster (mirrors the
+ * homepage grid so the two surfaces feel like one brand). Each links to its
+ * /hotels-in-{slug} accommodation page, not an editorial guide: that's
+ * gobookt's commercial job, and it's valid for every SEO city (unlike
+ * /destinations/[slug], which is gated to guide-backed cities).
+ */
 const POPULAR_CITIES = [
-  { label: 'Tokyo', slug: 'tokyo' },
-  { label: 'Rome', slug: 'rome' },
-  { label: 'Paris', slug: 'paris' },
-  { label: 'Bali', slug: 'bali' },
-  { label: 'Lisbon', slug: 'lisbon' },
-  { label: 'Barcelona', slug: 'barcelona' },
+  { label: 'Dubai', slug: 'dubai' },
+  { label: 'Singapore', slug: 'singapore' },
+  { label: 'Bangkok', slug: 'bangkok' },
+  { label: 'Hong Kong', slug: 'hong-kong' },
+  { label: 'Las Vegas', slug: 'las-vegas' },
+  { label: 'Madrid', slug: 'madrid' },
 ] as const;
 
 /** Secondary trip-planning links — deliberately quiet, not equal tabs. */
@@ -117,7 +123,7 @@ export function HomeStayHero() {
           <BookingSearchWidget />
         </div>
 
-        {/* Popular cities → our own destination guides (internal links). */}
+        {/* Popular cities → our own /hotels-in accommodation pages (internal links). */}
         <div
           className="flex flex-wrap items-center justify-center"
           style={{ gap: '0.55rem', margin: '1.75rem auto 0' }}
@@ -138,7 +144,7 @@ export function HomeStayHero() {
           {POPULAR_CITIES.map((c) => (
             <Link
               key={c.slug}
-              href={`/destinations/${c.slug}`}
+              href={`/hotels-in-${c.slug}`}
               style={{
                 fontFamily: 'var(--font-inter)',
                 fontSize: '0.86rem',

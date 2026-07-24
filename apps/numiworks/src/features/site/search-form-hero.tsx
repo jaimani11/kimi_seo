@@ -16,19 +16,22 @@ import { buildVrboSearchUrl } from '@lib/affiliate/vrbo-link';
  * themes and isn't subject to CSS variable resolution timing.
  */
 
+// numiworks' OWN roster — culture / food / things-to-do cities (mirrors the
+// homepage grid). The first six render as the visible "Popular" chips, which
+// seed a Viator experience search; all twelve are destination autocomplete.
 const POPULAR_DESTINATIONS = [
-  'Tokyo',
-  'Rome',
-  'Paris',
-  'Bali',
-  'Cappadocia',
-  'Reykjavík',
-  'Lisbon',
-  'New York',
-  'Santorini',
   'Marrakech',
-  'Dubai',
-  'Barcelona',
+  'Cusco',
+  'Oaxaca',
+  'Hanoi',
+  'Chiang Mai',
+  'Fes',
+  'Luang Prabang',
+  'Siem Reap',
+  'Mexico City',
+  'Hoi An',
+  'Jaipur',
+  'Cartagena',
 ] as const;
 
 const HERO_BG = 'linear-gradient(135deg, var(--brand-hero-from) 0%, var(--brand-hero-to) 100%)';

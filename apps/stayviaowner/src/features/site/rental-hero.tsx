@@ -33,13 +33,16 @@ const PROPERTY_CHIPS: readonly { label: string; emoji: string; href: string }[] 
   { label: 'Lake houses', emoji: '🛶', href: '/lake-houses' },
 ];
 
+// stayviaowner's OWN roster — whole-home / villa-and-cabin destinations
+// (mirrors the homepage grid). Used as the destination-field autocomplete; the
+// visible chips below the search are property types, not cities.
 const POPULAR_DESTINATIONS: readonly string[] = [
-  'Palm Desert, California',
-  'Miami, Florida',
   'Santorini, Greece',
+  'Lake Como, Italy',
+  'Positano, Italy',
   'Tulum, Mexico',
   'Whistler, Canada',
-  'Lake Como, Italy',
+  'Banff, Canada',
 ];
 
 export function RentalHero() {

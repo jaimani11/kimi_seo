@@ -24,19 +24,22 @@ import { CATEGORY_META, type ExpediaCategory } from '@lib/affiliate/expedia-mult
  * grid so a single hero search covers every Expedia vertical.
  */
 
+// gotript's OWN roster — first-time / bucket-list planning cities (mirrors the
+// homepage grid). The first six render as the visible "Popular" chips, which
+// seed the trip planner; all twelve are search-field autocomplete.
 const POPULAR_DESTINATIONS = [
-  'Tokyo',
-  'Rome',
   'Paris',
-  'Bali',
-  'Cappadocia',
-  'Reykjavík',
-  'Lisbon',
+  'Rome',
+  'Tokyo',
+  'London',
   'New York',
-  'Santorini',
-  'Marrakech',
-  'Dubai',
   'Barcelona',
+  'Kyoto',
+  'Istanbul',
+  'Prague',
+  'Sydney',
+  'Amsterdam',
+  'Cairo',
 ] as const;
 
 
