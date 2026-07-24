@@ -7,16 +7,13 @@ interface PlanTripCtaProps {
 }
 
 /**
- * Bottom-of-page call-to-action. Lands the visitor in the workspace
- * with a destination-specific prompt seeded - `UrlInit` (B3) consumes
- * `?prompt=` on first paint and clears it from the URL.
- *
- * The prompt mirrors how a user would phrase the search themselves:
- * "{Name}, 7 nights, couple, walkable" - short, structured.
+ * Bottom-of-page call-to-action — stayviaowner's WHOLE-HOME angle (villas,
+ * cabins, cottages), deliberately NOT gotript's "plan your trip / concierge"
+ * clone, so the /destinations page reads as a rental brand and doesn't
+ * duplicate the sibling. Sends the visitor to the vacation-rentals search.
  */
 export function PlanTripCta({ destination }: PlanTripCtaProps) {
-  const prompt = `${destination.name}, 7 nights, couple, walkable`;
-  const href = `/?prompt=${encodeURIComponent(prompt)}`;
+  const href = '/vacation-rentals';
 
   return (
     <section className="mx-auto max-w-3xl px-6 pt-4 pb-14 md:px-8 md:pb-20">
@@ -36,7 +33,7 @@ export function PlanTripCta({ destination }: PlanTripCtaProps) {
             color: 'var(--ink-tertiary)',
           }}
         >
-          Start planning
+          Where to stay
         </p>
         <h2
           className="mt-1 mb-3"
@@ -49,7 +46,7 @@ export function PlanTripCta({ destination }: PlanTripCtaProps) {
             lineHeight: 1.15,
           }}
         >
-          Plan your trip to {destination.name}
+          Rent a whole home in {destination.name}
         </h2>
         <p
           className="mb-5 max-w-xl"
@@ -62,8 +59,8 @@ export function PlanTripCta({ destination }: PlanTripCtaProps) {
             lineHeight: 1.55,
           }}
         >
-          Tell the concierge what you&apos;re after - a few words is enough. Stays materialize, you
-          compare, you save what fits.
+          Villas, cabins, cottages and beach houses in {destination.name} — book the whole place
+          through Vrbo, with room for the group and a kitchen of your own.
         </p>
         <Link
           href={href}
@@ -76,7 +73,7 @@ export function PlanTripCta({ destination }: PlanTripCtaProps) {
             fontWeight: 500,
           }}
         >
-          Open the concierge
+          Browse whole-home rentals
           <ArrowRight size={16} strokeWidth={2.2} />
         </Link>
       </div>
