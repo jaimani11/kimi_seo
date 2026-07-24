@@ -597,6 +597,9 @@ importers:
       '@adored/brand-config':
         specifier: workspace:*
         version: link:../brand-config
+      '@adored/brand-experience':
+        specifier: workspace:*
+        version: link:../brand-experience
       '@adored/travel-tools':
         specifier: workspace:*
         version: link:../travel-tools

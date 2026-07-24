@@ -42,6 +42,7 @@ export function buildBrandPlan(
     sections,
     faq,
     jsonLd: buildJsonLd(spec, facts, faq, ctx),
+    crossLinksHeading: spec.crossLinksHeading,
     crossLinks: spec.linkPolicy(facts),
   };
 }

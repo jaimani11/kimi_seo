@@ -138,6 +138,7 @@ const GOBOOKT: BrandSpec = {
     { question: `When are popular times to visit ${f.name}?`, answer: `${f.bestTime.months} are popular times to visit ${f.name}. ${f.bestTime.blurb}` },
   ],
   schemaDescription: (f) => `Where to stay in ${f.name}: compare the best areas and accommodation types, then book on Booking.com.`,
+  crossLinksHeading: 'Keep exploring stays',
   linkPolicy: (f) => [
     { label: `Hotels in ${f.name}`, href: `/hotels-in-${f.slug}` },
     { label: 'All destinations', href: '/destinations' },
@@ -301,6 +302,7 @@ const GOTRIPT: BrandSpec = {
     { question: `How do I get around ${f.name}?`, answer: `${f.transportation.primary} ${f.transportation.tips}` },
   ],
   schemaDescription: (f) => `Plan a trip to ${f.name}: when to go, how many days you need, a suggested itinerary, and where to base yourself.`,
+  crossLinksHeading: 'Keep planning',
   linkPolicy: (f) => [
     { label: `${f.name} itineraries`, href: `/${f.slug}-5-day-itinerary` },
     { label: `Where to stay in ${f.name}`, href: `/where-to-stay-in-${f.slug}` },

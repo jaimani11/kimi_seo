@@ -8,6 +8,7 @@
   },
   "dependencies": {
     "@adored/brand-config": "workspace:*",
+    "@adored/brand-experience": "workspace:*",
     "@adored/travel-tools": "workspace:*",
     "leaflet": "^1.9.4"
   },

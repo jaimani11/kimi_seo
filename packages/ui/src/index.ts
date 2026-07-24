@@ -28,3 +28,9 @@ export { WalkDistances } from './walk-distances';
 export { NewsletterSignup } from './newsletter-signup';
 export type { CrossBrandBookingLink } from './cross-brand-booking';
 export { CrossBrandBooking } from './cross-brand-booking';
+export type {
+  DestinationExperiencePresentation,
+  DestinationExperienceSlots,
+  DestinationExperienceRendererProps,
+} from './destination-experience-renderer';
+export { DestinationExperienceRenderer } from './destination-experience-renderer';

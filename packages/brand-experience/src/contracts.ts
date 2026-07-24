@@ -129,6 +129,7 @@ export interface DestinationExperience {
   faq: Array<{ question: string; answer: string }>;
   /** JSON-LD string (TouristDestination + FAQPage), brand-framed. */
   jsonLd: string;
+  crossLinksHeading: string;
   crossLinks: Array<{ label: string; href: string }>;
 }
 
@@ -161,6 +162,8 @@ export interface BrandSpec {
   faqPolicy: (facts: CityFacts) => Array<{ question: string; answer: string }>;
   /** Crawler-facing TouristDestination description (brand-framed). */
   schemaDescription: (facts: CityFacts) => string;
+  /** Heading for the related-links block (e.g. "Keep exploring stays"). */
+  crossLinksHeading: string;
   linkPolicy: (facts: CityFacts) => Array<{ label: string; href: string }>;
   /** Section kinds this brand must NEVER emit (enforced by the validator). */
   forbiddenSections: SectionKind[];
