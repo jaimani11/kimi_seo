@@ -145,6 +145,14 @@ export interface SectionSpec {
   build: (facts: CityFacts, adapters: ProviderAdapters) => SectionData | null;
 }
 
+/**
+ * The BrandSpec contract version — FROZEN at v1 (see BRANDSPEC.md). Required
+ * fields, optional fields, and invariants are documented there and enforced by
+ * `validateBrandSpec`. Future page types evolve this deliberately; ad-hoc field
+ * additions should bump the version, not slip in.
+ */
+export const BRANDSPEC_VERSION = '1.0' as const;
+
 export interface BrandSpec {
   brand: BrandId;
   /** What job this brand performs. */

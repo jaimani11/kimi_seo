@@ -3,6 +3,9 @@ import {
   toCityFacts,
   buildBrandPlan,
   validateBrandExperience,
+  validateBrandSpec,
+  BRAND_SPECS,
+  BRANDSPEC_VERSION,
   type ProviderAdapters,
   type BrandId,
 } from '@adored/brand-experience';
@@ -89,6 +92,15 @@ describe('@adored/brand-experience engine', () => {
     const gtKinds = gt.sections.map((s) => s.data.kind);
     expect(goKinds[0]).not.toBe(gtKinds[0]); // different lead section
     expect(JSON.stringify(goKinds)).not.toBe(JSON.stringify(gtKinds)); // structurally distinct
+  });
+
+  it('every registered BrandSpec satisfies the v1 invariants', () => {
+    expect(BRANDSPEC_VERSION).toBe('1.0');
+    for (const [brand, spec] of Object.entries(BRAND_SPECS)) {
+      if (!spec) continue;
+      const r = validateBrandSpec(spec);
+      expect(r.pass, `${brand}: ${r.errors.join('; ')}`).toBe(true);
+    }
   });
 
   it('validator flags a wrong-provider CTA (leakage)', () => {

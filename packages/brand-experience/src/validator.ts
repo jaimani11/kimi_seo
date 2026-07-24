@@ -1,4 +1,4 @@
-import type { DestinationExperience, ProviderId, SectionData } from './contracts';
+import type { BrandSpec, DestinationExperience, ProviderId, SectionData } from './contracts';
 import { BRAND_SPECS } from './specs';
 
 export interface ValidationResult {
@@ -92,6 +92,38 @@ export function validateBrandExperience(exp: DestinationExperience): ValidationR
         );
       }
     }
+  }
+
+  return { pass: errors.length === 0, errors };
+}
+
+/**
+ * validateBrandSpec — the BrandSpec-v1 invariants. A spec is well-formed only
+ * if: its identity fields are non-empty; it declares a primary provider and at
+ * least one section; a kind is never both required AND forbidden; every
+ * required kind is actually emittable by the spec's sections; and no declared
+ * section is also in the forbidden list. Run over every registered spec in a
+ * test so a malformed spec fails the build, not production.
+ */
+export function validateBrandSpec(spec: BrandSpec): ValidationResult {
+  const errors: string[] = [];
+  const nonEmpty = (v: string, name: string) => {
+    if (!v || !v.trim()) errors.push(`${spec.brand}: BrandSpec.${name} is empty`);
+  };
+  nonEmpty(spec.purpose, 'purpose');
+  nonEmpty(spec.audience, 'audience');
+  nonEmpty(spec.primaryQuestion, 'primaryQuestion');
+  nonEmpty(spec.crossLinksHeading, 'crossLinksHeading');
+  if (!spec.providers?.primary) errors.push(`${spec.brand}: BrandSpec.providers.primary missing`);
+  if (spec.sections.length === 0) errors.push(`${spec.brand}: BrandSpec.sections is empty`);
+
+  const emittable = new Set(spec.sections.map((s) => s.kind));
+  for (const r of spec.requiredSections) {
+    if (spec.forbiddenSections.includes(r)) errors.push(`${spec.brand}: '${r}' is both required and forbidden`);
+    if (!emittable.has(r)) errors.push(`${spec.brand}: requiredSection '${r}' is not emittable by any spec section`);
+  }
+  for (const f of spec.forbiddenSections) {
+    if (emittable.has(f)) errors.push(`${spec.brand}: forbidden kind '${f}' is also declared in sections`);
   }
 
   return { pass: errors.length === 0, errors };
