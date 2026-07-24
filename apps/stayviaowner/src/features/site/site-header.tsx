@@ -313,7 +313,7 @@ function DestinationsMenu() {
             textDecoration: 'none',
           }}
         >
-          Explore all 187+ destinations →
+          Explore all destinations →
         </Link>
       </div>
     </MenuPanel>
@@ -348,7 +348,7 @@ function OwnersMenu() {
               color: 'rgba(15,35,64,0.7)',
             }}
           >
-            List with Vrbo · reach hundreds of millions of travelers a month.
+            List with Vrbo · reach travelers looking for whole-home stays.
           </p>
         </div>
         <div>

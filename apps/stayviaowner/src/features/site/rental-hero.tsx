@@ -33,16 +33,16 @@ const PROPERTY_CHIPS: readonly { label: string; emoji: string; href: string }[] 
   { label: 'Lake houses', emoji: '🛶', href: '/lake-houses' },
 ];
 
-// stayviaowner's OWN roster — whole-home / villa-and-cabin destinations
-// (mirrors the homepage grid). Used as the destination-field autocomplete; the
-// visible chips below the search are property types, not cities.
+// stayviaowner's OWN roster — the whole-home vacation-rental market (mirrors
+// the homepage grid). Used as the destination-field autocomplete; the visible
+// chips below the search are property types, not cities.
 const POPULAR_DESTINATIONS: readonly string[] = [
-  'Santorini, Greece',
-  'Lake Como, Italy',
-  'Positano, Italy',
-  'Tulum, Mexico',
+  'Maui, Hawaii',
+  'Nashville, Tennessee',
+  'Charleston, South Carolina',
+  'Miami, Florida',
+  'San Diego, California',
   'Whistler, Canada',
-  'Banff, Canada',
 ];
 
 export function RentalHero() {

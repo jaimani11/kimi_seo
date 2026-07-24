@@ -70,14 +70,13 @@ export function SiteFooter() {
             >
               Independent <strong style={{ fontWeight: 600, color: '#2fbb90' }}>Vrbo</strong>{' '}
               affiliate. Compare whole homes, villas, cabins and cottages across thousands of
-              destinations. Affiliate links; the price you pay is the same as booking on Vrbo direct.
+              destinations. Affiliate links — we may earn a commission from completed bookings.
             </p>
           </div>
 
           <nav className="flex flex-col gap-2 md:items-end">
             <FooterLink href="/vacation-rentals">Vacation rentals</FooterLink>
             <FooterLink href="/destinations">Destinations</FooterLink>
-            <FooterLink href="/things-to-do">Things to do</FooterLink>
             <FooterLink href="/about">About</FooterLink>
             <FooterLink href="/contact">Contact</FooterLink>
             <FooterLink href="/profile/memory">Your memory</FooterLink>

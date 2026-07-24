@@ -31,11 +31,11 @@ import { SiteFooter } from '@/features/site/site-footer';
 export const metadata: Metadata = {
   title: 'Vacation Rentals by Owner — Villas, Cabins & Cottages | stayviaowner',
   description:
-    'Book vacation rentals worldwide — villas, cabins, beach houses, cottages and whole homes. Real-time availability and prices across 190+ countries.',
+    'Book vacation rentals worldwide — villas, cabins, beach houses, cottages and whole homes. Powered by Vrbo.',
   openGraph: {
     title: 'Vacation Rentals by Owner — Villas, Cabins & Beach Houses Worldwide',
     description:
-      'Whole-home vacation rentals across 190+ countries — villas, cabins, beach houses and cottages with real-time availability and prices.',
+      'Whole-home vacation rentals worldwide — villas, cabins, beach houses and cottages. Powered by Vrbo.',
     type: 'website',
     siteName: 'stayviaowner',
   },

@@ -5,15 +5,22 @@ import { resolveDestinationPhoto } from '@lib/imagery/destination-photo';
 
 /**
  * Popular destinations grid — the photo-rich tiles that carry the homepage's
- * visual weight. stayviaowner's roster is deliberately its OWN (whole-home /
- * villa-and-cabin destinations) so no two brands' grids look alike; photos
- * resolve per-city from @adored/imagery. Each tile deep-links to that city's
- * whole-home rental guide. No fabricated prices/ratings/counts — evidence-safe.
+ * visual weight. stayviaowner's roster is deliberately its OWN: the whole-home
+ * VACATION-RENTAL market (US beach / city / mountain hubs where people book an
+ * entire cabin, condo or beach house — not a hotel room), so no two brands'
+ * grids look alike. Photos resolve per-city from @adored/imagery. Each tile
+ * deep-links to that city's whole-home rental guide.
+ *
+ * Every slug here is verified to (a) resolve in @adored/seo-data and (b) have a
+ * live /destinations/{slug} guide (200) — so no tile 404s or drops. Smaller
+ * rental markets (Gatlinburg, Destin, Outer Banks, Broken Bow, Lake Tahoe,
+ * Palm Springs, Scottsdale…) are NOT in the shared city dataset yet and need a
+ * data+guide task before they can appear. No fabricated prices/ratings/counts.
  */
 
 const ROSTER: readonly string[] = [
-  'santorini', 'lake-como', 'positano', 'tulum', 'whistler', 'banff',
-  'mallorca', 'madeira', 'cinque-terre', 'sorrento', 'zermatt', 'mykonos',
+  'maui', 'nashville', 'new-orleans', 'miami', 'charleston', 'austin',
+  'san-diego', 'whistler', 'honolulu', 'savannah', 'banff', 'santorini',
 ];
 
 interface Destination {
