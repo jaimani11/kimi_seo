@@ -118,7 +118,7 @@ export const DESTINATION_PHOTOS: Readonly<Record<string, DestinationPhotoEntry>>
     // breaks too, the SearchOpportunityBoard hero falls back to a
     // destination-themed gradient via its `onError` handler, so the
     // page stays clean even if Unsplash repurposes another id.
-    id: '1588535525394-44edbc7a87a8',
+    id: '1513735492246-483525079686',
     alt: 'Lisbon yellow tram',
     photographer: 'Daniel Mota',
   },
