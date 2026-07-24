@@ -16,34 +16,63 @@ import { DESTINATION_PHOTOS } from './destination-photo-data';
  */
 type PhotoCategory = 'cityscape' | 'beach' | 'mountains' | 'countryside';
 
+// Six HTTP-verified photos per category (was three) — enough that a per-brand
+// offset (variant 0-3) lands each of the four brands on a DIFFERENT image for
+// the same city, instead of all four sharing one hero. Every id below returned
+// 200 from images.unsplash.com at authoring time (dead ids render black tiles).
 const CATEGORY_POOL: Readonly<Record<PhotoCategory, readonly string[]>> = {
   cityscape: [
     '1502602898657-3e91760cbb34', // generic city
     '1480714378408-67cf0d13bc1b',
     '1444723121867-7a241cacace9',
+    '1449824913935-59a10b8d2000',
+    '1477959858617-67f85cf4f1df',
+    '1519501025264-65ba15a82390',
   ],
-  beach: ['1507525428034-b723cf961d3e', '1519046904884-53103b34b206', '1505228395891-9a51e7e86bf6'],
+  beach: [
+    '1507525428034-b723cf961d3e',
+    '1519046904884-53103b34b206',
+    '1505228395891-9a51e7e86bf6',
+    '1473116763249-2faaef81ccda',
+    '1520250497591-112f2f40a3f4',
+    '1509233725247-49e657c54213',
+  ],
   mountains: [
     '1551524559-8af4e6624178',
     '1464822759023-fed622ff2c3b',
     '1486870591958-9b9d0d1dda99',
+    '1454496522488-7a8e488e8606',
+    '1483728642387-6c3bdd6c93e5',
+    '1506905925346-21bda4d32df4',
   ],
   countryside: [
     '1500382017468-9049fed747ef',
     '1470071459604-3b5ec3a7fe05',
     '1441974231531-c6227db76b6e',
+    '1418065460487-3e41a6c84dc5',
+    '1501785888041-af3ef285b470',
+    '1490750967868-88aa4486c946',
   ],
 };
 
-/** FNV-1a 32-bit. Deterministic; same slug → same photo. */
-function pickFromPool(category: PhotoCategory, slug: string): string {
+/**
+ * FNV-1a 32-bit. Deterministic; same (slug, variant) → same photo.
+ *
+ * `variant` is the per-brand offset (0-3): the same city lands each brand on a
+ * DIFFERENT photo in the pool, so the four sites don't share one hero image.
+ * The index is normalised to [0, len) — the raw `(hash + variant)` is a large
+ * unsigned int, but the sign-safe wrap keeps it defensive against any negative
+ * input (a negative index → undefined → crash, which we will not repeat).
+ */
+function pickFromPool(category: PhotoCategory, slug: string, variant = 0): string {
   const pool = CATEGORY_POOL[category];
   let hash = 2166136261;
   for (let i = 0; i < slug.length; i++) {
     hash ^= slug.charCodeAt(i);
     hash = (hash * 16777619) >>> 0;
   }
-  return pool[hash % pool.length]!;
+  const idx = (((hash + variant) % pool.length) + pool.length) % pool.length;
+  return pool[idx]!;
 }
 
 /**
@@ -94,34 +123,45 @@ const UNSPLASH_PARAMS = '?w=1600&q=80&fit=crop&auto=format';
  * Resolve the best photo for a destination. Stable: same input →
  * same photo across renders.
  */
-export function resolveDestinationPhoto(query: DestinationPhotoQuery): ResolvedDestinationPhoto {
-  // (1) Exact name match (case-insensitive, normalized).
+export function resolveDestinationPhoto(
+  query: DestinationPhotoQuery,
+  variant = 0,
+): ResolvedDestinationPhoto {
   const normalizedName = normalize(query.name);
-  const exact = DESTINATION_PHOTOS[normalizedName];
-  if (exact) {
-    return {
-      url: makeUnsplashUrl(exact.id),
-      alt: exact.alt,
-      credit: `Unsplash · ${exact.photographer}`,
-    };
+
+  // Variant 0 (the "primary" brand) keeps the hand-curated / country photo when
+  // one exists — the best-matched image, and BACKWARD-COMPATIBLE (variant
+  // defaults to 0, so any caller that doesn't pass one is unchanged).
+  //
+  // Variants 1-3 always draw from the category pool with a per-variant offset:
+  // a curated city otherwise returns ONE fixed photo shared by every brand, so
+  // routing the non-primary brands through the offset pool is what actually
+  // gives four DIFFERENT hero images per city.
+  if (variant === 0) {
+    // (1) Exact name match (case-insensitive, normalized).
+    const exact = DESTINATION_PHOTOS[normalizedName];
+    if (exact) {
+      return {
+        url: makeUnsplashUrl(exact.id),
+        alt: exact.alt,
+        credit: `Unsplash · ${exact.photographer}`,
+      };
+    }
+    // (2) Country-level — unknown cities in known countries.
+    const country = `__country:${query.country.toUpperCase()}`;
+    const countryHit = DESTINATION_PHOTOS[country];
+    if (countryHit) {
+      return {
+        url: makeUnsplashUrl(countryHit.id),
+        alt: countryHit.alt,
+        credit: `Unsplash · ${countryHit.photographer}`,
+      };
+    }
   }
 
-  // (2) Country-level - useful for unknown cities in known countries.
-  //     e.g. "Klosters, Austria" without an entry falls through to
-  //     the canonical Austria photo (typically alpine).
-  const country = `__country:${query.country.toUpperCase()}`;
-  const countryHit = DESTINATION_PHOTOS[country];
-  if (countryHit) {
-    return {
-      url: makeUnsplashUrl(countryHit.id),
-      alt: countryHit.alt,
-      credit: `Unsplash · ${countryHit.photographer}`,
-    };
-  }
-
-  // (3) Category fallback via destination-name + country heuristics.
+  // (3) Category pool — variant-offset so each brand gets a distinct image.
   const category = inferCategory(query);
-  const id = pickFromPool(category, normalizedName);
+  const id = pickFromPool(category, normalizedName, variant);
   return {
     url: makeUnsplashUrl(id),
     alt: `${query.name} - ${category}`,
