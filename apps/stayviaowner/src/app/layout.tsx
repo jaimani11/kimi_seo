@@ -65,14 +65,6 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
           </AuthProvider>
         </ThemeProvider>
         <AnalyticsScript />
-        {/* GetYourGuide global loader — hydrates every `.gyg-widget`
-          * element on the page. Partner id SL52HD5 (approved). */}
-        <script
-          async
-          defer
-          src="https://widget.getyourguide.com/dist/pa.umd.production.min.js"
-          data-gyg-partner-id={(process.env.NEXT_PUBLIC_GYG_PARTNER_ID ?? 'SL52HD5').trim()}
-        />
       </body>
     </html>
   );
