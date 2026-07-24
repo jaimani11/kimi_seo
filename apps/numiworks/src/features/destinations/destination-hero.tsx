@@ -10,6 +10,9 @@ interface DestinationHeroProps {
   /** First photo of any featured stay - used as the hero background. */
   heroImageUrl?: string;
   heroImageAlt?: string;
+  /** Optional eyebrow override — carries numiworks's experiences voice so the
+   *  hero doesn't render identically to the sibling brands' shared facts. */
+  eyebrow?: string;
 }
 
 /**
@@ -17,7 +20,7 @@ interface DestinationHeroProps {
  * scale-in (mirrors the Trip Board's materialize choreography).
  * Headline is a Fraunces-italic fragment; oneLiner is editorial copy.
  */
-export function DestinationHero({ destination, heroImageUrl, heroImageAlt }: DestinationHeroProps) {
+export function DestinationHero({ destination, heroImageUrl, heroImageAlt, eyebrow }: DestinationHeroProps) {
   const reduced = useReducedMotion();
 
   return (
@@ -64,7 +67,7 @@ export function DestinationHero({ destination, heroImageUrl, heroImageAlt }: Des
             color: 'rgba(255,255,255,0.72)',
           }}
         >
-          {destination.region} · {destination.country}
+          {eyebrow ?? `${destination.region} · ${destination.country}`}
         </p>
         <h1
           className="mt-2"

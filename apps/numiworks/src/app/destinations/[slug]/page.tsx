@@ -6,6 +6,7 @@ import { resolveDestinationPhoto } from '@lib/imagery/destination-photo';
 import { DestinationHero } from '@/features/destinations/destination-hero';
 import { PlanTripCta } from '@/features/destinations/plan-trip-cta';
 import { DestinationThingsToDoRail } from '@/features/destinations/destination-things-to-do-rail';
+import { numiworksDestinationCopy } from '@lib/seo/destination-copy';
 import { DestinationJsonLd } from './destination-jsonld';
 import { SEO_CITIES, findCityBySlug } from '@lib/seo/cities';
 import { findDestinationGuide } from '@lib/seo/destination-content';
@@ -130,13 +131,19 @@ export default async function DestinationPage({ params }: PageProps) {
       country: 'IT',
       region: italian.region,
     });
+    // Anti-duplicate: override the shared seo-data headline/oneLiner with
+    // numiworks's experiences voice so the hero doesn't read identically to the
+    // sibling brands. (The photo is already per-brand via the imagery shim.)
+    const copy = numiworksDestinationCopy(italian.name, slug);
+    const heroDestination = { ...italian, headline: copy.headline, oneLiner: copy.body };
     return (
       <main>
         <DestinationJsonLd destination={italian} baseUrl={siteUrl()} imageUrl={heroPhoto.url} />
         <DestinationHero
-          destination={italian}
+          destination={heroDestination}
           heroImageUrl={heroPhoto.url}
           heroImageAlt={heroPhoto.alt}
+          eyebrow={copy.eyebrow}
         />
         <DestinationThingsToDoRail destinationName={italian.name} />
         <PlanTripCta destination={italian} />
