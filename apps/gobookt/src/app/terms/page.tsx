@@ -119,8 +119,8 @@ export default function TermsPage() {
           <P>
             When you click a &ldquo;Search on Booking.com&rdquo; or similar CTA, you leave gobookt
             and book with the partner directly. The partner&apos;s terms, cancellation policies,
-            pricing, and refund rights govern the booking. We may earn an affiliate commission on
-            bookings — the price you pay is the same as if you had visited the partner directly.
+            pricing, and refund rights govern the booking. We may earn a commission when you
+            complete an eligible booking through one of our links.
           </P>
         </Section>
 
