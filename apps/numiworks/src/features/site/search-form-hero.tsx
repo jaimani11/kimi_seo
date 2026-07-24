@@ -57,7 +57,7 @@ export function SearchFormHero() {
   const [checkOut, setCheckOut] = useState(defaultOut);
   const [travelers, setTravelers] = useState(2);
   const [hover, setHover] = useState(false);
-  const [mode, setMode] = useState<SearchMode>('homes');
+  const [mode, setMode] = useState<SearchMode>('experiences');
 
   // Run a search for a destination in the active mode: whole homes open
   // VRBO (tracked, sponsored, new tab); experiences route to the internal
@@ -124,7 +124,7 @@ export function SearchFormHero() {
             maxWidth: '48rem',
           }}
         >
-          Discover whole homes worth traveling for.
+          Discover tours, tastings &amp; things to do worldwide.
         </h1>
 
         <p
@@ -138,12 +138,12 @@ export function SearchFormHero() {
             maxWidth: '38rem',
           }}
         >
-          Villas, cabins, cottages &amp; beach homes on VRBO — then plan the rest of your trip with AI.
+          Book experiences on Viator — tours, tastings, classes &amp; day trips. Whole homes to stay in, and AI to plan the rest.
         </p>
 
-        {/* Search-mode toggle — whole homes (VRBO) is numiworks's primary
-          * theme, so it's selected by default; experiences run on Viator.
-          * The form below submits to whichever mode is active. */}
+        {/* Search-mode toggle — EXPERIENCES (Viator) is numiworks's primary
+          * theme, so it leads and is selected by default; whole homes (Vrbo)
+          * are the secondary mode. The form submits to whichever is active. */}
         <div
           role="tablist"
           aria-label="Search type"
@@ -158,7 +158,7 @@ export function SearchFormHero() {
             backdropFilter: 'blur(6px)',
           }}
         >
-          {(['homes', 'experiences'] as const).map((m) => {
+          {(['experiences', 'homes'] as const).map((m) => {
             const active = mode === m;
             return (
               <button
@@ -317,8 +317,8 @@ export function SearchFormHero() {
           ) : (
             <>
               🎟️ Powered by{' '}
-              <strong style={{ fontWeight: 700, color: '#ffffff' }}>Viator</strong> — 300,000+ tours
-              &amp; experiences worldwide.
+              <strong style={{ fontWeight: 700, color: '#ffffff' }}>Viator</strong> — tours,
+              activities &amp; things to do worldwide.
             </>
           )}
         </p>

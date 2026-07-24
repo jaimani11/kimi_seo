@@ -48,13 +48,13 @@ import { SiteFooter } from '@/features/site/site-footer';
 // suffixed for recognition — overrides the generic layout default. The
 // self-referencing canonical still comes from the layout (x-pathname).
 export const metadata: Metadata = {
-  title: 'Vacation Homes, Villas & Whole-Home Rentals + AI Trip Planning | numiworks',
+  title: 'Things to Do, Tours & AI Trip Planning + Whole-Home Rentals | numiworks',
   description:
-    'Discover villas, cabins, cottages and beach homes on Vrbo, then use AI to plan the rest of your trip — tours, activities and things to do worldwide.',
+    'Book tours, tastings, classes and day trips on Viator, plan your trip with AI, and find whole-home rentals on Vrbo — all in one place.',
   openGraph: {
-    title: 'Discover whole homes worth traveling for — numiworks',
+    title: 'Tours, things to do & AI trip planning — numiworks',
     description:
-      'Villas, cabins, cottages and beach-home vacation rentals on Vrbo, plus AI trip planning and things to do worldwide.',
+      'Tours, activities and things to do worldwide with AI trip planning — plus whole-home vacation rentals on Vrbo.',
     type: 'website',
     siteName: 'numiworks',
   },
@@ -63,22 +63,23 @@ export const metadata: Metadata = {
 export default function HomePage() {
   return (
     <>
-      {/* numiworks = the EXPERIENCES brand, so the homepage leads with visual
-          experience DISCOVERY (the photo-tile "browse by type" grid — the
-          load-bearing element on the top-performing experiences sites), not the
-          planner/search-first flow gotript uses. StatsBand drops well down so the
-          two brands don't share the same "hero → strip → stats" rhythm. Live
-          Viator rails stay mid-page (client-fetched, so never the lead). */}
+      {/* numiworks = the EXPERIENCES brand. The homepage leads experiences-first:
+          the search hero defaults to Viator experiences, then the "browse by
+          type" experience categories, the AI concierge, destination discovery,
+          and live Viator rails, then how numiworks helps. Vrbo whole-home
+          rentals are a SECONDARY support section (VrboHomepageStrip), demoted
+          BELOW the experience flow so the brand reads as things-to-do first,
+          not a vacation-home site (that's stayviaowner's job). */}
       <SiteHeader />
       <SearchFormHero />
       <BrowseByType />
-      <VrboHomepageStrip />
       <AgenticHero />
       <PopularDestinationsGrid />
       <LiveExperienceRails />
+      <HowNumiworksWorks />
+      <VrboHomepageStrip />
       <RecentlyViewedRail />
       <StatsBand />
-      <HowNumiworksWorks />
       <SeoLinkFooter />
       <SiteFooter />
     </>

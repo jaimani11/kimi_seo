@@ -238,23 +238,7 @@ export function BrowseByType({ destination }: BrowseByTypeProps = {}) {
                   }}
                 />
                 <div className="absolute inset-x-0 bottom-0 p-4">
-                  {!destination && (
-                    <p
-                      style={{
-                        fontFamily: 'var(--font-inter)',
-                        fontSize: '0.6rem',
-                        letterSpacing: '0.16em',
-                        textTransform: 'uppercase',
-                        color: 'rgba(237,230,219,0.78)',
-                        textShadow: '0 1px 2px rgba(0,0,0,0.6)',
-                        margin: 0,
-                      }}
-                    >
-                      {cat.count} live
-                    </p>
-                  )}
                   <h3
-                    className={destination ? undefined : 'mt-1'}
                     style={{
                       fontFamily: 'var(--font-fraunces)',
                       fontSize: '1.15rem',

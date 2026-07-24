@@ -22,7 +22,7 @@ export function GET(): Response {
 
 > AI travel planner and in-depth destination guides. Describe a trip in one
 > sentence and get a day-by-day itinerary; or browse research-backed guides for
-> 200+ cities covering the best time to visit, daily budgets, neighborhoods,
+> cities worldwide covering the best time to visit, daily budgets, neighborhoods,
 > food, transport, weather, and safety. Experiences booked via Viator;
 > whole-home stays via VRBO. Operated by Adored Moments LLC.
 

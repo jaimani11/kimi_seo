@@ -39,7 +39,34 @@ export function MegaNav() {
 
   return (
     <nav className="relative hidden items-center gap-0.5 md:flex" onMouseLeave={() => setOpen(null)}>
-      {/* Vacation homes -> VRBO (external, tracked) */}
+      {/* Destinations -> Viator experience search (experiences lead the nav) */}
+      <div style={{ position: 'relative' }} onMouseEnter={() => setOpen('dest')}>
+        <button type="button" aria-expanded={open === 'dest'} style={triggerStyle(open === 'dest')}>
+          Destinations
+          <Chevron open={open === 'dest'} />
+        </button>
+        {open === 'dest' && (
+          <Panel>
+            {[CITIES.slice(0, 6), CITIES.slice(6)].map((col, i) => (
+              <div key={i}>
+                <p style={colHeadingStyle}>{i === 0 ? 'Popular destinations' : 'More destinations'}</p>
+                <ul style={listStyle}>
+                  {col.map((c) => (
+                    <li key={c}>
+                      <Link href={`/search?q=${encodeURIComponent(c)}`} style={panelLinkStyle}>{c}</Link>
+                    </li>
+                  ))}
+                </ul>
+                {i === 1 && (
+                  <Link href="/destinations" style={footerLinkStyle}>See all destinations →</Link>
+                )}
+              </div>
+            ))}
+          </Panel>
+        )}
+      </div>
+
+      {/* Vacation homes -> VRBO (external, tracked) — secondary to experiences */}
       <div style={{ position: 'relative' }} onMouseEnter={() => setOpen('homes')}>
         <button type="button" aria-expanded={open === 'homes'} style={triggerStyle(open === 'homes')}>
           Vacation homes
@@ -66,33 +93,6 @@ export function MegaNav() {
                 Browse all on VRBO →
               </a>
             </div>
-          </Panel>
-        )}
-      </div>
-
-      {/* Destinations -> Viator experience search */}
-      <div style={{ position: 'relative' }} onMouseEnter={() => setOpen('dest')}>
-        <button type="button" aria-expanded={open === 'dest'} style={triggerStyle(open === 'dest')}>
-          Destinations
-          <Chevron open={open === 'dest'} />
-        </button>
-        {open === 'dest' && (
-          <Panel>
-            {[CITIES.slice(0, 6), CITIES.slice(6)].map((col, i) => (
-              <div key={i}>
-                <p style={colHeadingStyle}>{i === 0 ? 'Popular destinations' : 'More destinations'}</p>
-                <ul style={listStyle}>
-                  {col.map((c) => (
-                    <li key={c}>
-                      <Link href={`/search?q=${encodeURIComponent(c)}`} style={panelLinkStyle}>{c}</Link>
-                    </li>
-                  ))}
-                </ul>
-                {i === 1 && (
-                  <Link href="/destinations" style={footerLinkStyle}>See all destinations →</Link>
-                )}
-              </div>
-            ))}
           </Panel>
         )}
       </div>

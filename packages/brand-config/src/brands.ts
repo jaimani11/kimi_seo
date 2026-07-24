@@ -13,10 +13,10 @@ export const NUMIWORKS: BrandConfig = {
   name: 'numiworks',
   domain: 'numiworks.com',
   siteUrl: 'https://www.numiworks.com',
-  tagline: 'Tours, hotels & whole homes worldwide — planned by AI, booked in one place.',
+  tagline: 'Tours & things to do worldwide — planned by AI, with whole homes to stay in.',
   legalName: 'Adored Moments LLC',
   description:
-    'numiworks is an AI-powered travel planner that brings tours, activities, hotels, and whole-home rentals into one place — plan a trip by chatting, then book real inventory from partners like Viator and Vrbo.',
+    'numiworks is an AI-powered travel planner for tours, activities and things to do — plan a trip by chatting, then book real experiences on Viator, with whole-home stays on Vrbo.',
   logoPath: '/logo.svg',
   social: { sameAs: [] },
   colors: {
