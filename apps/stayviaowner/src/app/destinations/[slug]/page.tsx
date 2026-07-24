@@ -66,12 +66,15 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       country: 'IT',
       region: italian.region,
     });
+    // Brand voice for the meta/OG description too (not just the visible hero),
+    // so the shared seo-data oneLiner doesn't duplicate across brands.
+    const description = stayviaownerDestinationCopy(italian.name, slug).body;
     return {
       title: `${italian.name} · stayviaowner`,
-      description: italian.oneLiner,
+      description,
       openGraph: {
         title: `${italian.name} · stayviaowner`,
-        description: italian.oneLiner,
+        description,
         url: `${siteUrl()}/destinations/${italian.slug}`,
         type: 'article',
         images: [{ url: heroPhoto.url }],
@@ -79,7 +82,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       twitter: {
         card: 'summary_large_image',
         title: `${italian.name} · stayviaowner`,
-        description: italian.oneLiner,
+        description,
         images: [heroPhoto.url],
       },
     };
@@ -138,7 +141,7 @@ export default async function DestinationPage({ params }: PageProps) {
     const heroDestination = { ...italian, headline: copy.headline, oneLiner: copy.body };
     return (
       <main>
-        <DestinationJsonLd destination={italian} baseUrl={siteUrl()} imageUrl={heroPhoto.url} />
+        <DestinationJsonLd destination={heroDestination} baseUrl={siteUrl()} imageUrl={heroPhoto.url} />
         <DestinationHero
           destination={heroDestination}
           heroImageUrl={stayviaownerHeroPhoto(heroPhoto.url)}
