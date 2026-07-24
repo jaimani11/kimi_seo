@@ -19,7 +19,7 @@ import {
 import { cityBookingLinks } from '@adored/brand-config';
 import { buildVrboSearchUrl } from '@lib/affiliate/vrbo-link';
 import { VrboCityCallout } from '@/features/destinations/vrbo-city-callout';
-import { GygActivitiesWidget } from '@/features/experiences/getyourguide-widget';
+import { BrowseByType } from '@/features/site/browse-by-type';
 
 /**
  * Rich destination guide page rendered at `/destinations/{slug}` for
@@ -206,28 +206,12 @@ export async function DestinationGuidePage({
         * captures traffic that hotels alone wouldn't monetize. */}
       <VrboCityCallout city={city} />
 
-      {/* Best things to do — GetYourGuide activity carousel keyed by
-        * city name. Duplicate coverage with the Viator rail below is
-        * intentional: GYG converts differently than Viator on the
-        * same query and per-partner attribution rolls up cleanly via
-        * the `campaignSlug` we pass. */}
-      <GygActivitiesWidget
-        destination={city.name}
-        heading={`Best things to do in ${city.name}`}
-        blurb={`Skip-the-line tickets, guided tours and small-group experiences in ${city.name}.`}
-        campaignSlug={`guide-${city.slug}-best-things-to-do`}
-        numberOfItems={6}
-      />
-
-      {/* Day trips carousel — separate campaign tag so the partner
-        * dashboard can compare which section earns more. */}
-      <GygActivitiesWidget
-        destination={`day trips from ${city.name}`}
-        heading={`Day trips from ${city.name}`}
-        blurb={`Half-day and full-day excursions bookable through GetYourGuide.`}
-        campaignSlug={`guide-${city.slug}-day-trips`}
-        numberOfItems={6}
-      />
+      {/* Best things to do — Viator experience categories keyed to this city.
+        * numiworks' experiences money-path is Viator (BrandSpec-enforced in
+        * @adored/brand-experience); the old GetYourGuide carousels were retired
+        * here. Each card deep-links to a Viator search for "{category} in
+        * {city}" with the affiliate pid + sponsored rel. */}
+      <BrowseByType destination={city.name} />
 
       {/* Sections */}
       <article className="mx-auto max-w-3xl px-6 py-14 md:py-20">

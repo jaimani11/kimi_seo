@@ -1,16 +1,26 @@
 import Link from 'next/link';
 import Image from 'next/image';
+import { buildViatorStaySearchUrl, getViatorStayLinkConfig } from '@lib/affiliate/viator-stay-link-builder';
 
 /**
- * "Browse by type" tile grid — the photo-backed category cards that
- * are the load-bearing visual element on rentbyowner / varoom / hotala
- * / bedroomvillas. Each tile carries an aspirational photo, the
- * category name, an approximate count, and a deep link to a curated
- * /search query that surfaces that category on Viator.
+ * "Browse by type" tile grid — the photo-backed Viator experience-category
+ * cards. Two modes:
  *
- * Counts are conservative-honest — the published Viator catalog
- * covers each of these categories at sustained five-figure volume.
+ *   1. Homepage (no props) — a generic taxonomy; each tile carries an
+ *      approximate catalog count and links to an on-site `/search` query.
+ *      Counts are conservative-honest (the published Viator catalog covers
+ *      each category at sustained five-figure volume).
+ *   2. Destination mode (`destination` set) — the SAME categories keyed to a
+ *      city, each linking DIRECTLY to a Viator search for "{category} in
+ *      {city}". No counts (a global catalog number isn't true per-city), and
+ *      the affiliate `rel`/`target` the money path requires. This is what
+ *      replaced the GetYourGuide widgets on the destination guide.
  */
+
+interface BrowseByTypeProps {
+  /** When set, city-keys every card to a direct Viator deep-link. */
+  destination?: string;
+}
 
 interface CategoryTile {
   slug: string;
@@ -132,7 +142,25 @@ const CATEGORIES: readonly CategoryTile[] = [
   },
 ];
 
-export function BrowseByType() {
+const SEE_ALL_STYLE = {
+  fontFamily: 'var(--font-inter)',
+  fontSize: '0.78rem',
+  fontWeight: 600,
+  letterSpacing: '0.04em',
+  color: 'var(--accent-primary)',
+  textDecoration: 'underline',
+  textUnderlineOffset: '3px',
+} as const;
+
+const TILE_STYLE = {
+  aspectRatio: '4 / 5',
+  borderRadius: '0.95rem',
+  background: '#0c0c0e',
+  textDecoration: 'none',
+} as const;
+
+export function BrowseByType({ destination }: BrowseByTypeProps = {}) {
+  const viatorCfg = destination ? getViatorStayLinkConfig() : null;
   return (
     <section
       className="relative w-full"
@@ -165,44 +193,38 @@ export function BrowseByType() {
                 margin: 0,
               }}
             >
-              Twelve ways to spend a day,{' '}
+              {destination ? `Experiences in ${destination}, ` : 'Twelve ways to spend a day, '}
               <em style={{ fontStyle: 'italic', color: 'var(--accent-primary)' }}>
                 live on Viator.
               </em>
             </h2>
           </div>
-          <Link
-            href="/search"
-            style={{
-              fontFamily: 'var(--font-inter)',
-              fontSize: '0.78rem',
-              fontWeight: 600,
-              letterSpacing: '0.04em',
-              color: 'var(--accent-primary)',
-              textDecoration: 'underline',
-              textUnderlineOffset: '3px',
-            }}
-          >
-            See all 300,000+ experiences →
-          </Link>
+          {destination ? (
+            <a
+              href={buildViatorStaySearchUrl({ destination }, viatorCfg!)}
+              target="_blank"
+              rel="sponsored nofollow noopener noreferrer"
+              style={SEE_ALL_STYLE}
+            >
+              See all {destination} experiences →
+            </a>
+          ) : (
+            <Link href="/search" style={SEE_ALL_STYLE}>
+              See all 300,000+ experiences →
+            </Link>
+          )}
         </header>
 
         <ul className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
-          {CATEGORIES.map((cat) => (
-            <li key={cat.slug}>
-              <Link
-                href={`/search?q=${encodeURIComponent(cat.searchQuery)}`}
-                className="group relative block w-full overflow-hidden"
-                style={{
-                  aspectRatio: '4 / 5',
-                  borderRadius: '0.95rem',
-                  background: '#0c0c0e',
-                  textDecoration: 'none',
-                }}
-              >
+          {CATEGORIES.map((cat) => {
+            const href = destination
+              ? buildViatorStaySearchUrl({ destination: `${cat.searchQuery} in ${destination}` }, viatorCfg!)
+              : `/search?q=${encodeURIComponent(cat.searchQuery)}`;
+            const inner = (
+              <>
                 <Image
                   src={cat.photoUrl}
-                  alt={cat.title}
+                  alt={destination ? `${cat.title} in ${destination}` : cat.title}
                   fill
                   sizes="(max-width: 640px) 45vw, (max-width: 1024px) 30vw, 22vw"
                   className="object-cover transition-transform duration-500 group-hover:scale-105"
@@ -216,21 +238,23 @@ export function BrowseByType() {
                   }}
                 />
                 <div className="absolute inset-x-0 bottom-0 p-4">
-                  <p
-                    style={{
-                      fontFamily: 'var(--font-inter)',
-                      fontSize: '0.6rem',
-                      letterSpacing: '0.16em',
-                      textTransform: 'uppercase',
-                      color: 'rgba(237,230,219,0.78)',
-                      textShadow: '0 1px 2px rgba(0,0,0,0.6)',
-                      margin: 0,
-                    }}
-                  >
-                    {cat.count} live
-                  </p>
+                  {!destination && (
+                    <p
+                      style={{
+                        fontFamily: 'var(--font-inter)',
+                        fontSize: '0.6rem',
+                        letterSpacing: '0.16em',
+                        textTransform: 'uppercase',
+                        color: 'rgba(237,230,219,0.78)',
+                        textShadow: '0 1px 2px rgba(0,0,0,0.6)',
+                        margin: 0,
+                      }}
+                    >
+                      {cat.count} live
+                    </p>
+                  )}
                   <h3
-                    className="mt-1"
+                    className={destination ? undefined : 'mt-1'}
                     style={{
                       fontFamily: 'var(--font-fraunces)',
                       fontSize: '1.15rem',
@@ -264,9 +288,32 @@ export function BrowseByType() {
                     {cat.blurb}
                   </p>
                 </div>
-              </Link>
-            </li>
-          ))}
+              </>
+            );
+            return (
+              <li key={cat.slug}>
+                {destination ? (
+                  <a
+                    href={href}
+                    target="_blank"
+                    rel="sponsored nofollow noopener noreferrer"
+                    className="group relative block w-full overflow-hidden"
+                    style={TILE_STYLE}
+                  >
+                    {inner}
+                  </a>
+                ) : (
+                  <Link
+                    href={href}
+                    className="group relative block w-full overflow-hidden"
+                    style={TILE_STYLE}
+                  >
+                    {inner}
+                  </Link>
+                )}
+              </li>
+            );
+          })}
         </ul>
       </div>
     </section>
