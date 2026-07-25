@@ -210,7 +210,7 @@ export function BrowseByType({ destination }: BrowseByTypeProps = {}) {
             </a>
           ) : (
             <Link href="/search" style={SEE_ALL_STYLE}>
-              See all 300,000+ experiences →
+              Browse all experiences →
             </Link>
           )}
         </header>

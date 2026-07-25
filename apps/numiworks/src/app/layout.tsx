@@ -65,18 +65,11 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
           </AuthProvider>
         </ThemeProvider>
         <AnalyticsScript />
-        {/* GetYourGuide global loader — hydrates every `.gyg-widget`
-          * element on the page. Partner id also declared on each
-          * widget's `data-gyg-partner-id`; the script requires both
-          * so we set them consistently. Env-overridable via
-          * NEXT_PUBLIC_GYG_PARTNER_ID; falls back to the approved id
-          * baked in code so a fresh clone still commissions. */}
-        <script
-          async
-          defer
-          src="https://widget.getyourguide.com/dist/pa.umd.production.min.js"
-          data-gyg-partner-id={(process.env.NEXT_PUBLIC_GYG_PARTNER_ID ?? 'SL52HD5').trim()}
-        />
+        {/* GetYourGuide loader intentionally NOT global: numiworks is
+          * Viator-first, so the GYG script would be third-party weight +
+          * provider-identity noise on the homepage and most routes. Pages
+          * that render a GYG widget load it via <GygLoaderScript /> inside
+          * the widget component itself. */}
       </body>
     </html>
   );

@@ -1,3 +1,5 @@
+import Script from 'next/script';
+
 import { GYG_PARTNER_ID, buildGygSearchUrl } from '@lib/affiliate/getyourguide';
 import { TrackedGygLink } from './tracked-gyg-link';
 
@@ -116,9 +118,19 @@ export function GygActivitiesWidget({
         ) : null}
       </header>
 
-      {/* The div below is GetYourGuide's target — their global script
-        * (`pa.umd.production.min.js` loaded in RootLayout) finds every
-        * `.gyg-widget[data-gyg-partner-id]` element on the page and
+      {/* GYG loader — scoped to pages that actually render a widget
+        * (deliberately not in RootLayout so the homepage and other
+        * Viator-first routes never ship this third-party script).
+        * next/script dedupes by src, so multiple widgets on one page
+        * still load it exactly once. */}
+      <Script
+        src="https://widget.getyourguide.com/dist/pa.umd.production.min.js"
+        strategy="lazyOnload"
+        data-gyg-partner-id={(process.env.NEXT_PUBLIC_GYG_PARTNER_ID ?? GYG_PARTNER_ID).trim()}
+      />
+
+      {/* The div below is GetYourGuide's target — the script above finds
+        * every `.gyg-widget[data-gyg-partner-id]` element on the page and
         * mounts the widget into it. Keep the class name + partner id
         * attribute stable or the widget will not hydrate. */}
       <div
