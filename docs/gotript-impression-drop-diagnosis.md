@@ -65,3 +65,37 @@ At position 54 with ~zero authority, on-page work cannot move the needle. What d
   cadence on demand-targeted pages.
 - Selective itinerary re-index only for genuinely distinct itineraries (self-canonical, hub-linked);
   low priority — the family never earned traffic.
+
+---
+
+## Measurement window log (2026-07-24 → ~2026-08-07)
+
+**Deployments in flight (recorded for crawl-date comparison):**
+- `7660961` — 2026-07-23 00:40 CT — gotript editorial-first MegaNav (the structural experiment)
+- `1679822` — 2026-07-24 22:47 CT — gotript claims hygiene (copy-only, ~67 replacements)
+- `a6e8223` — 2026-07-24 22:47 CT — numiworks GYG loader scoped to widget pages + 300,000+ removed
+
+**Frozen for 10–14 days (no further gotript title / sitemap / route / nav changes,
+no new broad cleanup passes).** Weekly checks instead:
+1. URL-Inspect each homepage: compare **Last crawl** date, **View crawled page**
+   (may still show pre-cleanup markup — that is Google's stored snapshot, not a
+   deployment problem), and **Test live URL** (must show cleaned copy).
+2. Indexing → Pages: indexed count vs "Crawled/Discovered – currently not indexed"
+   (falling indexed count = cluster de-selection signal).
+3. Impressions by page family.
+
+**Queued structural experiments (strictly after the window, one at a time):**
+- gotript: title/positioning reposition — trip planning, where-to-stay decisions,
+  itineraries, stays+activities; drop generic provider-category keywords from the
+  title. (H1 is already planner-voiced.)
+- numiworks: 8–12 curated `/experiences/{category}` landing pages (food-tours,
+  cooking-classes, day-trips, private-tours, …) to replace the highest-value
+  `/search?q=` links — unique intro copy, destination recommendations, internal
+  links, self-canonical; NOT a 154-page programmatic sweep, no auto city-name
+  substitution.
+- stayviaowner: convert primary-nav `<button>` categories to server-rendered
+  anchor links (low urgency; crawlable anchors exist elsewhere).
+
+Residual risks are no longer fabricated claims or provider leakage; they are
+cross-site similarity, weak programmatic landing-page value, and gotript's
+still-broad topical identity.
