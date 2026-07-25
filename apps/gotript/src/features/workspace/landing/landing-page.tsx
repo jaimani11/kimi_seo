@@ -581,8 +581,8 @@ function LandingFooter() {
       }}
     >
       <div className="mx-auto max-w-3xl text-center">
-        Affiliate links. Prices and availability come from our partners and may change. StayScout
-        earns a small commission when you book through us; the price you pay is the same.
+        Affiliate links. Prices and availability come from our partners and may change. We
+        may earn a commission when you book through us.
       </div>
     </footer>
   );

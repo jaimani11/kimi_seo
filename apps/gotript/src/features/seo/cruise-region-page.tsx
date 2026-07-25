@@ -32,10 +32,10 @@ const REGION_META: Record<
     label: 'Mediterranean cruise port hotels',
     eyebrow: 'Europe · pre & post-cruise stays',
     intro:
-      "Sailing the Med? Lock in your pre-cruise night at the embarkation port — Barcelona, Civitavecchia (Rome), Athens (Piraeus), or Venice. Walk onboard rested, not airport-tired. Every major Expedia hotel in each port city, free cancellation on most rates.",
+      "Sailing the Med? Lock in your pre-cruise night at the embarkation port — Barcelona, Civitavecchia (Rome), Athens (Piraeus), or Venice. Walk onboard rested, not airport-tired. Every major Expedia hotel in each port city.",
     bullets: [
       'Hotels at every major Western & Eastern Med embarkation port',
-      'Free cancellation on most rates — book early, decide later',
+      'Refundable rates labelled per property — book early, decide later',
       'Filter by airport-proximity, port-proximity, or city center',
       'Real Expedia guest reviews from past cruise travelers',
     ],
@@ -49,7 +49,7 @@ const REGION_META: Record<
     bullets: [
       'Hotels at every Caribbean embarkation port (Miami, Lauderdale, Tampa, SJU, Galveston)',
       'Most properties offer free port shuttles to the cruise terminal',
-      'Free cancellation on most rates — flexible if your cruise rebooks',
+      'Refundable rates labelled per property — flexible if your cruise rebooks',
       "Hotels with 'cruise-and-snooze' parking packages on filtered listings",
     ],
     seasonHint: 'Caribbean cruise season runs year-round; peak Nov–Apr.',
@@ -58,7 +58,7 @@ const REGION_META: Record<
     label: 'Alaska cruise port hotels',
     eyebrow: 'North America · pre & post-cruise stays',
     intro:
-      "Alaska cruises embark from Seattle (round-trip Inside Passage) or Vancouver (one-way Gulf of Alaska). Both port cities deserve a night or two on either end — Seattle's Pike Place, Vancouver's seawall + Stanley Park. Expedia hotels at both, free cancellation on most.",
+      "Alaska cruises embark from Seattle (round-trip Inside Passage) or Vancouver (one-way Gulf of Alaska). Both port cities deserve a night or two on either end — Seattle's Pike Place, Vancouver's seawall + Stanley Park. Expedia hotels at both.",
     bullets: [
       'Seattle and Vancouver hotels within an easy ride of the cruise terminal',
       'Most one-way Alaska sailings warrant 1-2 nights at the disembarkation port',
@@ -75,7 +75,7 @@ const REGION_META: Record<
     bullets: [
       'Southampton, Copenhagen, and Bergen hotels near each cruise terminal',
       'Most Northern Europe ports are walkable city centers — skip the rental car',
-      'Free cancellation on most rates · summer-only sailing season',
+      'Summer-only sailing season · refundable rates labelled per property',
       'Pair with a city-break on either side of your cruise',
     ],
     seasonHint: 'Norwegian fjord + Baltic season runs May through September.',
@@ -84,11 +84,11 @@ const REGION_META: Record<
     label: 'Asia cruise port hotels',
     eyebrow: 'Asia-Pacific · pre & post-cruise stays',
     intro:
-      "Asia cruises typically embark from Singapore, Hong Kong, or Yokohama (Tokyo). Each is a destination in its own right — most travelers extend their cruise with 2-3 nights in the embarkation city. Expedia lists every major hotel near each port, free cancellation on most rates.",
+      "Asia cruises typically embark from Singapore, Hong Kong, or Yokohama (Tokyo). Each is a destination in its own right — most travelers extend their cruise with 2-3 nights in the embarkation city. Expedia lists every major hotel near each port.",
     bullets: [
       'Singapore, Hong Kong, and Yokohama (Tokyo) hotels near each terminal',
       'Asia cruises run October through April — outside typhoon season',
-      'Free cancellation on most rates · easy local taxi to the port',
+      'Easy local taxi to the port · refundable rates labelled per property',
       'Most cruise passengers extend their trip with 2-3 port-city nights',
     ],
     seasonHint: 'Asia cruise season runs October through April.',

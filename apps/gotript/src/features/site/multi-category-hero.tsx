@@ -391,8 +391,8 @@ export function MultiCategoryHero({
             marginBottom: 0,
           }}
         >
-          Search hands off to <strong style={{ fontWeight: 700, color: '#4a2c4d' }}>Expedia</strong>. Affiliate link;
-          the price you pay is the same.
+          Search hands off to <strong style={{ fontWeight: 700, color: '#4a2c4d' }}>Expedia</strong>. Affiliate link —
+          we may earn a commission from completed bookings.
         </p>
       </div>
     </section>

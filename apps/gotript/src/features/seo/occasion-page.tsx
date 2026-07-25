@@ -64,7 +64,7 @@ export function OccasionPage({ route }: { route: OccasionRoute }) {
               </a>
             </div>
             <p className="mt-3" style={{ fontFamily: 'var(--font-inter)', fontSize: '0.75rem', color: 'rgba(255,255,255,0.6)', margin: '0.75rem 0 0' }}>
-              Affiliate link · prices may change · the price you pay is the same.
+              Affiliate link · prices may change · we may earn a commission from completed bookings.
             </p>
           </div>
         </section>

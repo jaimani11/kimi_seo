@@ -206,7 +206,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   if (parsed.kind === 'hotels-in') {
     const title = `Hotels in ${parsed.city.name}, ${parsed.city.countryName} · gotript`;
-    const description = `Find hotels, apartments and vacation rentals in ${parsed.city.name}, ${parsed.city.countryName}. Free cancellation on most stays · Powered by Expedia.`;
+    const description = `Find hotels, apartments and vacation rentals in ${parsed.city.name}, ${parsed.city.countryName}. Powered by Expedia.`;
     return {
       title,
       description,
@@ -230,7 +230,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   if (parsed.kind === 'cars-in') {
     const title = `Car rentals in ${parsed.city.name}, ${parsed.city.countryName} · gotript`;
-    const description = `Rent a car at ${parsed.city.name}'s airports and city pick-up points. Every major rental company · Free cancellation on most bookings · Powered by Expedia.`;
+    const description = `Rent a car at ${parsed.city.name}'s airports and city pick-up points. Every major rental company · Powered by Expedia.`;
     return {
       title,
       description,
@@ -244,7 +244,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     const { city, theme } = parsed;
     const heading = HOTEL_THEME_HEADING[theme];
     const title = `${heading} in ${city.name}, ${city.countryName} · gotript`;
-    const description = `${heading} in ${city.name}, ${city.countryName} — real Expedia guest reviews, free cancellation on most stays. ${HOTEL_THEME_TAGLINE[theme]}`;
+    const description = `${heading} in ${city.name}, ${city.countryName} — real Expedia guest reviews. ${HOTEL_THEME_TAGLINE[theme]}`;
     return {
       title,
       description,
@@ -272,7 +272,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     const label = theme === 'cheap' ? 'Cheap car rental' : 'Airport car rental';
     const title = `${label} in ${city.name}, ${city.countryName} · gotript`;
     const description = theme === 'cheap'
-      ? `Lowest daily rates on rental cars in ${city.name}. Every major brand on Expedia Cars, free cancellation on most bookings.`
+      ? `Rental cars in ${city.name}. Every major brand on Expedia Cars, compared side by side.`
       : `Pick up a rental car at ${city.name}'s airport terminals. Every major counter on arrivals via Expedia Cars.`;
     return {
       title,
@@ -287,7 +287,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     const { city, variant } = parsed;
     const label = THINGS_VARIANT_HEADING[variant];
     const title = `${label} in ${city.name}, ${city.countryName} · gotript`;
-    const description = `${label} in ${city.name}, ${city.countryName} — bookable through Expedia Attractions. Skip-the-line, verified guides, free cancellation on most tickets.`;
+    const description = `${label} in ${city.name}, ${city.countryName} — bookable through Expedia Attractions. Skip-the-line options and verified guides.`;
     return {
       title,
       description,
@@ -300,7 +300,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   if (parsed.kind === 'cruise-region') {
     const label = CRUISE_REGION_HEADING[parsed.region];
     const title = `${label} · gotript`;
-    const description = `${label} on Expedia Cruises — every major cruise line, route, and embarkation port. Free cancellation on most rates.`;
+    const description = `${label} on Expedia Cruises — every major cruise line, route, and embarkation port.`;
     return {
       title,
       description,

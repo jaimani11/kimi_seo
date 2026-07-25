@@ -40,11 +40,11 @@ import { SiteFooter } from '@/features/site/site-footer';
 export const metadata: Metadata = {
   title: 'Vacation Rentals, Hotels & Things to Do Worldwide | gotript',
   description:
-    'Find vacation rentals, whole homes and hotels, plus flights, cars and things to do across 190+ countries. Powered by Expedia.',
+    'Find vacation rentals, whole homes and hotels, plus flights, cars and things to do worldwide — with research-backed destination guides. Searches hand off to Expedia.',
   openGraph: {
     title: 'Vacation Rentals, Hotels & Things to Do Worldwide',
     description:
-      'Whole homes, villas and hotels plus flights, cars and things to do across 190+ countries. Powered by Expedia.',
+      'Whole homes, villas and hotels plus flights, cars and things to do worldwide. Searches hand off to Expedia.',
     type: 'website',
     siteName: 'gotript',
   },

@@ -19,7 +19,7 @@ const STEPS = [
   {
     number: '03',
     title: 'Book on Expedia',
-    body: 'One tap hands you off to Expedia. Same price as booking direct, and free cancellation on most stays.',
+    body: 'One tap hands you off to Expedia. Availability, price and cancellation terms are shown and handled there.',
   },
 ] as const;
 

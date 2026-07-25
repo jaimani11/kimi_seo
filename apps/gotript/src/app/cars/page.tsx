@@ -4,7 +4,7 @@ import { CategoryLanding } from '@/features/site/category-landing';
 export const metadata: Metadata = {
   title: 'Car rentals · gotript',
   description:
-    'Rent a car at airports and city pick-up locations worldwide. Expedia Cars — full insurance options, free cancellation on most rentals.',
+    'Rent a car at airports and city pick-up locations worldwide. Expedia Cars — full insurance options at the counter.',
 };
 
 export default function CarsPage() {
@@ -12,7 +12,7 @@ export default function CarsPage() {
     <CategoryLanding
       category="cars"
       heading="Car rentals — airport and city pick-up."
-      subhead="Expedia Cars compares rates across every major rental company. Free cancellation on most bookings."
+      subhead="Expedia Cars compares rates across every major rental company."
     />
   );
 }

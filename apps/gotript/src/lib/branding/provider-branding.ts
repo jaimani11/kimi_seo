@@ -248,9 +248,9 @@ export function affiliateDisclosure(providerId: string, modeOverride?: BrandingM
   if (mode === 'explicit') {
     const name = EXPLICIT_NAMES[providerId];
     if (name)
-      return `Affiliate link. Prices and availability come from ${name}. The price you pay is the same.`;
+      return `Affiliate link. Prices and availability come from ${name}. We may earn a commission from completed bookings.`;
   }
-  return 'Affiliate link. Prices and availability come from our partner. The price you pay is the same.';
+  return 'Affiliate link. Prices and availability come from our partner. We may earn a commission from completed bookings.';
 }
 
 // ============== Provider-card naming (opportunity board) ==============

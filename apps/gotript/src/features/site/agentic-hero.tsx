@@ -260,7 +260,7 @@ export function AgenticHero() {
               boxShadow: '0 0 8px rgba(254,187,2,0.6)',
             }}
           />
-          Official Expedia affiliate · AI trip planner
+          Independent Expedia affiliate · AI trip planner
         </p>
 
         <h2
@@ -1156,8 +1156,8 @@ function OpportunityBoard({ panel }: { panel: OpportunityPanel }) {
           }}
         >
           {panel.destination
-            ? `Pick a category to jump straight into bookable Viator experiences in ${panel.destination} — same price as direct, free cancellation on most.`
-            : 'Pick a category to jump into bookable Viator experiences for this destination — same price as direct, free cancellation on most.'}
+            ? `Pick a category to jump straight into bookable Viator experiences in ${panel.destination}.`
+            : 'Pick a category to jump into bookable Viator experiences for this destination.'}
         </p>
         <ul className="mt-4 grid grid-cols-1 gap-2 sm:grid-cols-3">
           {panel.providers.map((p) => (

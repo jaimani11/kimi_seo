@@ -81,7 +81,7 @@ export function DestinationGuidePage({ city, guide }: { city: SeoCity; guide: De
       <SmartStayOffer
         href={handoffHref}
         headline={`Ready to plan ${city.name}? Lock in where you'll stay.`}
-        subline="Hotels and homes on Expedia — the price you pay is the same as booking direct."
+        subline="Hotels and homes on Expedia — availability, prices and terms shown by Expedia."
         ctaLabel={`See ${city.name} stays →`}
         storageKey={`sso-${city.slug}`}
       />

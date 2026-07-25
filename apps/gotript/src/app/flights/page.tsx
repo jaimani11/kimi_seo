@@ -4,7 +4,7 @@ import { CategoryLanding } from '@/features/site/category-landing';
 export const metadata: Metadata = {
   title: 'Flights · gotript',
   description:
-    'Search flights across every major carrier. One-way, round-trip, multi-city. Expedia Flights — the price you pay is the same.',
+    'Search flights across every major carrier. One-way, round-trip, multi-city. Searches hand off to Expedia Flights.',
 };
 
 export default function FlightsPage() {

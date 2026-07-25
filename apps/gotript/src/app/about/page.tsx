@@ -6,7 +6,7 @@ import { SiteFooter } from '@/features/site/site-footer';
 export const metadata: Metadata = {
   title: 'About gotript · one search across every Expedia vertical',
   description:
-    'gotript is an independent travel-search site and official Expedia affiliate — hotels, vacation rentals, flights, cars and things to do compared in a single place.',
+    'gotript is an independent travel-search site and Expedia affiliate — hotels, vacation rentals, flights, cars and things to do compared in a single place.',
 };
 
 const eyebrow: React.CSSProperties = {
@@ -56,7 +56,7 @@ export default function AboutPage() {
         >
           <p>
             gotript is an independent travel-search site and an{' '}
-            <strong>official Expedia affiliate</strong>. Most trips get booked across
+            <strong>independent Expedia affiliate</strong>. Most trips get booked across
             half a dozen tabs — a hotel here, a flight there, the rental car forgotten
             until the last minute. gotript pulls Expedia&apos;s travel verticals onto
             one screen so you can line up the whole trip and compare it in a single

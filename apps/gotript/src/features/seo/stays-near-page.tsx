@@ -42,7 +42,7 @@ function lead(poi: StaysNearPoi): string {
     return pick(
       [
         `Landing in ${city.name}? Book a stay near ${city.name} Airport for a stress-free first or last night — quick transfers and Expedia's hotels + rentals side by side, so you can compare in one place.`,
-        `Stays near ${city.name} Airport, ${city.countryName} keep your arrival simple: browse hotels and apartments on Expedia, filter by shuttle and free cancellation, and lock in a rate before you fly.`,
+        `Stays near ${city.name} Airport, ${city.countryName} keep your arrival simple: browse hotels and apartments on Expedia, filter by shuttle and refundable rates, and lock in a rate before you fly.`,
       ],
       seed,
     );
@@ -59,7 +59,7 @@ function lead(poi: StaysNearPoi): string {
   const blurb = poi.blurb ? ` ${poi.blurb}` : '';
   return pick(
     [
-      `${poi.poiName} is a favourite place to stay in ${city.name}.${blurb} Compare hotels and vacation rentals near ${poi.poiName} on Expedia — real reviews, live prices, free cancellation on most stays.`,
+      `${poi.poiName} is a favourite place to stay in ${city.name}.${blurb} Compare hotels and vacation rentals near ${poi.poiName} on Expedia — real guest reviews, with cancellation terms shown per property.`,
       `Base yourself in ${poi.poiName}, ${city.name} and wake up where you want to be.${blurb} Expedia shows hotels, apartments and homes for the neighbourhood in a single search.`,
     ],
     seed,
@@ -75,7 +75,7 @@ function faqs(poi: StaysNearPoi): { q: string; a: string }[] {
     },
     {
       q: `How do I get the best rate ${where}?`,
-      a: `Set your dates, sort by guest rating, and check Expedia's member prices and bundle-with-flight deals — they often beat the first listing. Free cancellation on most stays lets you book early and adjust later.`,
+      a: `Set your dates, sort by guest rating, and check Expedia's member prices and bundle-with-flight deals. Refundable rates, where offered, let you book early and adjust later.`,
     },
   ];
 }
@@ -116,7 +116,7 @@ export function StaysNearPage({ poi }: { poi: StaysNearPoi }) {
               </a>
             </div>
             <p className="mt-3" style={{ fontFamily: 'var(--font-inter)', fontSize: '0.75rem', color: 'rgba(255,255,255,0.6)', margin: '0.75rem 0 0' }}>
-              Affiliate link · prices may change · the price you pay is the same.
+              Affiliate link · prices may change · we may earn a commission from completed bookings.
             </p>
           </div>
         </section>

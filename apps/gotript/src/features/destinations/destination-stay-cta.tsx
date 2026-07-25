@@ -84,8 +84,9 @@ export function DestinationStayCta({
             margin: 0,
           }}
         >
-          We hand off to {partnerProvenancePhrase(providerId)} for real-time stay inventory. The
-          link below carries the partner id automatically; the price you pay is the same.
+          We hand off to {partnerProvenancePhrase(providerId)} for stay inventory. The link
+          below carries the partner id automatically; we may earn a commission from
+          completed bookings.
         </p>
 
         <a

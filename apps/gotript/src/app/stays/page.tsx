@@ -4,7 +4,7 @@ import { CategoryLanding } from '@/features/site/category-landing';
 export const metadata: Metadata = {
   title: 'Hotels & stays · gotript',
   description:
-    'Search hotels, apartments, and vacation rentals across 175+ destinations. Expedia inventory, the price you pay is the same.',
+    'Search hotels, apartments, and vacation rentals worldwide. Searches hand off to Expedia.',
 };
 
 export default function StaysPage() {
@@ -12,7 +12,7 @@ export default function StaysPage() {
     <CategoryLanding
       category="hotels"
       heading="Stays — hotels, apartments, rentals."
-      subhead="Search Expedia's full inventory of hotels, apart-hotels, vacation rentals, and resorts. Free cancellation on most stays."
+      subhead="Search Expedia's full inventory of hotels, apart-hotels, vacation rentals, and resorts. Refundable rates are labelled per property."
     />
   );
 }

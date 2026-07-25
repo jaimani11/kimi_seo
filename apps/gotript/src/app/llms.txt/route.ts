@@ -17,8 +17,8 @@ export function GET(): Response {
 
   const body = `# gotript
 
-> Vacation rentals, hotels, flights, packages, cars, and things to do across
-> 190+ countries, plus research-backed destination guides (best time to visit,
+> Vacation rentals, hotels, flights, packages, cars, and things to do
+> worldwide, plus research-backed destination guides (best time to visit,
 > budgets, neighborhoods, weather, transport, safety). Whole-home rentals via
 > VRBO; everything else via Expedia. Operated by Adored Moments LLC.
 

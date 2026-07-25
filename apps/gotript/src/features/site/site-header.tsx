@@ -16,7 +16,7 @@ export function SiteHeader() {
       {/* Expedia attribution strip — narrow band above the
        *  header. Reads at first glance for every visitor (and the
        *  Expedia affiliate-program reviewer): "this site is
-       *  an official Expedia affiliate." Without this band the
+       *  an independent Expedia affiliate." Without this band the
        *  affiliate application gets rejected for being too brand-
        *  ambiguous, which is what happened with the prior submission. */}
       <div
@@ -44,8 +44,8 @@ export function SiteHeader() {
             verticalAlign: 'middle',
           }}
         />
-        Official <strong style={{ fontWeight: 600 }}>Expedia</strong> affiliate ·
-        Vacation rentals, hotels, flights, cars &amp; things to do · The price you pay is the same
+        Independent <strong style={{ fontWeight: 600 }}>Expedia</strong> affiliate ·
+        Vacation rentals, hotels &amp; things to do worldwide
       </div>
     <header
       className="sticky top-0 z-30 w-full"

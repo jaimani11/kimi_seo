@@ -55,11 +55,11 @@ const META: Record<
     heading: (c) => `Hotels in ${c.name}`,
     eyebrow: (c) => `${c.countryName} · stays`,
     intro: (c) =>
-      `Find hotels, apartments, and vacation rentals across ${c.name}, ${c.countryName}. Free cancellation on most stays, no booking fees. Powered by Expedia — the price you pay is the same.`,
+      `Find hotels, apartments, and vacation rentals across ${c.name}, ${c.countryName}. Powered by Expedia — availability, prices and cancellation terms shown per property.`,
     ctaLabel: (c) => `Search hotels in ${c.name}`,
     bullets: (c) => [
       `Real-time availability across thousands of ${c.name} properties`,
-      'Free cancellation on most stays — flexible plans for changing trips',
+      'Refundable rates labelled per property — flexible plans for changing trips',
       'No booking fees — the price you pay on Expedia is the price you get',
       `Honest reviews from real travelers who stayed in ${c.name}`,
     ],
@@ -85,12 +85,12 @@ const META: Record<
     heading: (c) => `Car rentals in ${c.name}`,
     eyebrow: (c) => `${c.countryName} · cars`,
     intro: (c) =>
-      `Rent a car at ${c.name}'s airports and city pick-up points. Expedia Cars compares rates across every major rental company. Free cancellation on most bookings, full insurance options at the counter.`,
+      `Rent a car at ${c.name}'s airports and city pick-up points. Expedia Cars compares rates across every major rental company. Full insurance options at the counter.`,
     ctaLabel: (c) => `Search car rentals in ${c.name}`,
     bullets: (c) => [
       `Airport and city pick-up locations across ${c.name}`,
       'Every major rental company in one search',
-      'Free cancellation on most bookings — pay later, flexible plans',
+      'Pay-later and flexible plans shown per booking',
       'Optional full insurance at checkout — no surprises at the counter',
     ],
   },
@@ -100,12 +100,12 @@ const META: Record<
     heading: (c) => `Best hotels in ${c.name}`,
     eyebrow: (c) => `${c.countryName} · top picks`,
     intro: (c) =>
-      `The highest-rated, best-reviewed places to stay in ${c.name}, ${c.countryName}. We surface Expedia properties scoring 8+ out of 10 from real travelers, sorted by review density. Free cancellation on most.`,
+      `The highest-rated, best-reviewed places to stay in ${c.name}, ${c.countryName}. We surface Expedia properties scoring 8+ out of 10 from real travelers, sorted by review density.`,
     ctaLabel: (c) => `See top-rated hotels in ${c.name}`,
     bullets: (c) => [
       `Only properties scoring 8.0+ in real ${c.name} guest reviews`,
       'Sorted by review density — the more reviews, the more reliable the score',
-      'Free cancellation on most stays — book now, decide later',
+      'Refundable rates labelled per stay — book now, decide later',
       'No booking fees · Powered by Expedia',
     ],
   },
@@ -115,11 +115,11 @@ const META: Record<
     heading: (c) => `Cheap hotels in ${c.name}`,
     eyebrow: (c) => `${c.countryName} · budget stays`,
     intro: (c) =>
-      `Budget-friendly hotels, hostels, and guest houses in ${c.name}, ${c.countryName}. Expedia surfaces the lowest nightly rates with no booking fees — many with free cancellation if your plans change.`,
+      `Budget-friendly hotels, hostels, and guest houses in ${c.name}, ${c.countryName}. Expedia surfaces budget-friendly nightly rates — refundable options are labelled per property.`,
     ctaLabel: (c) => `See cheap hotels in ${c.name}`,
     bullets: (c) => [
       `Lowest nightly rates across ${c.name} hostels, guesthouses, and budget hotels`,
-      'Free cancellation on most bookings — flexible if plans change',
+      'Refundable options labelled per booking — flexible if plans change',
       `Real reviews so you don't accidentally book the wrong end of ${c.name}`,
       'No booking fees · Powered by Expedia',
     ],
@@ -130,13 +130,13 @@ const META: Record<
     heading: (c) => `Luxury hotels in ${c.name}`,
     eyebrow: (c) => `${c.countryName} · 5-star stays`,
     intro: (c) =>
-      `5-star hotels, boutique stays, and design-led properties in ${c.name}, ${c.countryName}. The Expedia luxury collection — concierge service, spa access, and the city's best addresses, free cancellation on most rates.`,
+      `5-star hotels, boutique stays, and design-led properties in ${c.name}, ${c.countryName}. The Expedia luxury collection — concierge service, spa access, and the city's best addresses.`,
     ctaLabel: (c) => `See luxury hotels in ${c.name}`,
     bullets: (c) => [
       `5-star and boutique properties across ${c.name}`,
       'Spa, pool, and concierge service on most listings',
       `The city's most-loved addresses, ranked by ${c.name} guest reviews`,
-      'Free cancellation on most rates · Powered by Expedia',
+      'Powered by Expedia',
     ],
   },
   'family-hotels': {
@@ -151,7 +151,7 @@ const META: Record<
       `Family rooms, connecting rooms, and apartments in ${c.name}`,
       'Cribs, kids\' clubs, and child-safe pools on filtered listings',
       'Travel-with-kids reviews from other families',
-      'Free cancellation on most stays · Powered by Expedia',
+      'Powered by Expedia',
     ],
   },
   'boutique-hotels': {
@@ -166,7 +166,7 @@ const META: Record<
       `Independent, design-led properties across ${c.name}`,
       'Smaller room counts, more attentive service',
       `Curated picks based on real ${c.name} guest reviews`,
-      'Free cancellation on most rates · Powered by Expedia',
+      'Powered by Expedia',
     ],
   },
   'pet-friendly-hotels': {
@@ -181,7 +181,7 @@ const META: Record<
       `Pet-allowing hotels and apartments across ${c.name}`,
       'On-site walking areas, pet beds, and treats on some listings',
       'Pet-fee details visible up-front, no surprises at check-in',
-      'Free cancellation on most stays · Powered by Expedia',
+      'Powered by Expedia',
     ],
   },
   'beach-hotels': {
@@ -196,7 +196,7 @@ const META: Record<
       `Beachfront properties and sea-view rooms across ${c.name}`,
       'Beach-club access and on-site sun loungers on most listings',
       'Walking distance to the water — no taxis to the beach',
-      'Free cancellation on most stays · Powered by Expedia',
+      'Powered by Expedia',
     ],
   },
   apartments: {
@@ -211,7 +211,7 @@ const META: Record<
       `Full-kitchen apartments and aparthotels across ${c.name}`,
       `Per-neighborhood filtering for the ${c.name} area you want`,
       'Weekly and monthly rates on longer-stay bookings',
-      'Free cancellation on most bookings · Powered by Expedia',
+      'Powered by Expedia',
     ],
   },
   'cheap-flights': {
@@ -235,12 +235,12 @@ const META: Record<
     heading: (c) => `Cheap car rental in ${c.name}`,
     eyebrow: (c) => `${c.countryName} · budget cars`,
     intro: (c) =>
-      `The lowest daily rates on car rentals in ${c.name}, ${c.countryName}. Expedia Cars compares budget brands against the majors — economy cars, free cancellation on most, no hidden fees.`,
+      `The lowest daily rates on car rentals in ${c.name}, ${c.countryName}. Expedia Cars compares budget brands against the majors — economy cars and the majors side by side.`,
     ctaLabel: (c) => `See cheap car rental in ${c.name}`,
     bullets: (c) => [
       `Cheapest daily rates across ${c.name}'s rental fleets`,
       'Economy, compact, and intermediate filters',
-      'Free cancellation on most bookings — pay later, flexible plans',
+      'Pay-later and flexible plans shown per booking',
       'No hidden fees · Powered by Expedia Cars',
     ],
   },
@@ -255,7 +255,7 @@ const META: Record<
     bullets: (c) => [
       `On-airport counters at every ${c.name} terminal`,
       'No off-site shuttles for the major brands',
-      'Free cancellation on most bookings — flexible flight changes',
+      'Flexible fare options shown per flight',
       'One-way drop-off available · Powered by Expedia Cars',
     ],
   },
@@ -271,7 +271,7 @@ const META: Record<
       `The most-booked sights and experiences in ${c.name}`,
       'Skip-the-line tickets for the biggest draws',
       'Guided tours and audio guides for context',
-      'Free cancellation on most tickets · Powered by Expedia',
+      'Powered by Expedia',
     ],
   },
   'free-things': {

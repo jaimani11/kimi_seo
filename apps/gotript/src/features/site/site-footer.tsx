@@ -66,9 +66,9 @@ export function SiteFooter() {
                 color: 'var(--ink-secondary)',
               }}
             >
-              Official <strong style={{ fontWeight: 600, color: '#4a2c4d' }}>Expedia</strong>{' '}
-              affiliate. Search hotels, flights, things to do, car rentals, and cruises across
-              175+ destinations. Affiliate links; the price you pay is the same.
+              Independent <strong style={{ fontWeight: 600, color: '#4a2c4d' }}>Expedia</strong>{' '}
+              affiliate. Search hotels, vacation rentals, flights and things to do, with
+              research-backed destination guides. We may earn a commission from completed bookings.
             </p>
           </div>
 
@@ -99,9 +99,9 @@ export function SiteFooter() {
           }}
         >
           <p>
-            gotript is an independent travel publisher and an official Expedia affiliate.
-            All searches route through Expedia under their Partner Programme. We earn a
-            commission on completed bookings; the price you pay is unchanged.
+            gotript is an independent travel publisher and an Expedia affiliate. Searches
+            route through Expedia under their Partner Programme. We may earn a commission
+            when you complete an eligible booking through one of our links.
           </p>
           <p>© {new Date().getUTCFullYear()} gotript. Expedia is a trademark of Expedia B.V.</p>
         </div>

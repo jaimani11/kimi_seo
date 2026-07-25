@@ -169,7 +169,7 @@ export function CruisesLanding() {
           >
             Cruise day starts early. Fly in the night before, sleep at the embarkation port, and
             avoid the cancelled-flight nightmare that costs you the ship. We list hotels at every
-            major cruise port — all bookable through Expedia, free cancellation on most.
+            major cruise port — all bookable through Expedia.
           </p>
         </header>
       </section>
