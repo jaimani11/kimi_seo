@@ -31,7 +31,9 @@ export function enumerateAllSeoSlugs(): string[] {
   return enumerateAllSeoSlugsBase().filter((slug) => {
     const parsed = parseSeoSlugBase(slug);
     if (!parsed) return true;
-    return retirementFor(parsed)?.kind !== 'redirect';
+    // Drop BOTH redirect and held: held pages render a noindex bridge, so
+    // listing them in the sitemap is a noindex-URL-in-sitemap conflict.
+    return retirementFor(parsed) === null;
   });
 }
 
