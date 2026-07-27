@@ -1,10 +1,13 @@
 import type { BrandId, BrandSpec, CityFacts, Chip } from './contracts';
 
 /**
- * BRAND_SPECS — the declarative identity of each brand. Only the two shipped
- * brands (gobookt, gotript) are specced here; numiworks + stayviaowner are
- * added when their pages are refactored onto the engine (their entries are
- * absent until then, and the planner/validator guard against that).
+ * BRAND_SPECS — the declarative identity of each brand. gobookt, gotript and
+ * numiworks are specced here (their /destinations pages run on this engine).
+ * stayviaowner is INTENTIONALLY absent: its /destinations renders via the
+ * per-app DestinationGuidePage + @adored/brand-config applyGuideVoice, not this
+ * engine — so it never calls buildBrandPlan('stayviaowner'). The planner throws
+ * for any unregistered brand and brand-experience.test.ts asserts that guard,
+ * so a stray engine call on stayviaowner fails loudly in tests, not in prod.
  */
 
 // ── gobookt: accommodation-decision ─────────────────────────────────────────
