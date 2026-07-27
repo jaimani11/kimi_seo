@@ -69,7 +69,10 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     'where-to-go-month',
   ]);
   if (CLIMATE_NOINDEX.has(parsed.kind)) {
-    return { alternates: { canonical }, robots: { index: false, follow: true } };
+    // Keep a real title (don't inherit the homepage title). Slug-derived so it
+    // needs no per-kind city plumbing (where-to-go-month has no city).
+    const label = slug.replace(/-/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase());
+    return { title: `${label} · gobookt`, alternates: { canonical }, robots: { index: false, follow: true } };
   }
 
   // Viator retirement: redirected families never render their own metadata

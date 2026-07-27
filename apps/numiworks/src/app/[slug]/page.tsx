@@ -88,7 +88,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     'where-to-stay',
   ]);
   if (CLIMATE_NOINDEX.has(parsed.kind)) {
-    return { alternates: { canonical }, robots: { index: false, follow: true } };
+    const label = slug.replace(/-/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase());
+    return { title: `${label} · numiworks`, alternates: { canonical }, robots: { index: false, follow: true } };
   }
 
   // Resolve a destination photo for the Open Graph card. Pinterest,
