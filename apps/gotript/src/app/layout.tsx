@@ -19,9 +19,9 @@ export async function generateMetadata(): Promise<Metadata> {
   // Absent (e.g. the Clerk-auth path) → no canonical emitted, no regression.
   const pathname = (await headers()).get('x-pathname');
   return {
-    title: 'gotript · Find tours, day trips & experiences worldwide',
+    title: 'gotript · Plan your trip — where to stay, what to do & itineraries',
     description:
-      'AI-native travel orchestration. Describe your trip in a sentence; specialized agents handle the rest.',
+      'Plan a trip end to end: when to go, where to stay, what to do, and day-by-day itineraries for cities worldwide.',
     metadataBase: new URL(getSiteOrigin()),
     ...(pathname ? { alternates: { canonical: `${getSiteOrigin()}${pathname}` } } : {}),
   };

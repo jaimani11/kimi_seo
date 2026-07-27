@@ -12,6 +12,8 @@ export { cityBookingLinks } from './network';
 export { buildSiteJsonLd } from './site-schema';
 export {
   destinationCopy,
+  applyGuideVoice,
   type DestinationCopy,
   type DestinationCopyBrand,
+  type SectionVoiceBrand,
 } from './destination-copy';

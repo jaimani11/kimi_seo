@@ -15,6 +15,7 @@ import {
   buildDestinationGuideJsonLd,
 } from '@/features/seo/destination-guide-page';
 import { canonicalUrl } from '@lib/site/origin';
+import { applyGuideVoice } from '@adored/brand-config';
 
 /**
  * Destination detail page. Generated at build time for each curated
@@ -175,7 +176,7 @@ export default async function DestinationPage({ params }: PageProps) {
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: jsonLd }}
         />
-        <DestinationGuidePage city={seoCity} guide={guide} />
+        <DestinationGuidePage city={seoCity} guide={applyGuideVoice(guide, 'stayviaowner', seoCity.slug)} />
       </>
     );
   }

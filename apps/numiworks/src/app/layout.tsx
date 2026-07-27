@@ -21,7 +21,7 @@ export async function generateMetadata(): Promise<Metadata> {
   return {
     title: 'numiworks · Find tours, day trips & experiences worldwide',
     description:
-      'AI-native travel orchestration. Describe your trip in a sentence; specialized agents handle the rest.',
+      'Discover tours, food tastings, day trips and things to do worldwide — bookable experiences, plus AI to plan the days.',
     metadataBase: new URL(getSiteOrigin()),
     ...(pathname ? { alternates: { canonical: `${getSiteOrigin()}${pathname}` } } : {}),
   };

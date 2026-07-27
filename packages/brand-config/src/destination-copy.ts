@@ -130,3 +130,111 @@ export function destinationCopy(
     body: pick(v.bodies, s >> 11)(name),
   };
 }
+
+/* ───────────────────────────────────────────────────────────────────────────
+ * SECTION VOICE — anti-duplicate body framing.
+ *
+ * The eight body sections of /destinations/{city} render shared @adored/seo-data
+ * prose (bestTime / budget / travel-styles / transport / safety blurbs) BYTE-
+ * IDENTICALLY across all four brands — the real duplicate-content surface (the
+ * hero copy above was differentiated earlier; the body was not). This layer
+ * prepends a short, deterministic, brand-true lead-in to each prose field so the
+ * rendered body diverges per brand. FACTS are untouched: numbers, months, dish
+ * names, neighborhood names, and climate data all pass through unchanged. No
+ * fabricated prices / ratings / counts / availability — evidence-safe.
+ *
+ * gotript is included here (unlike the hero engine): its body is live and was
+ * the identical baseline, so it needs its own voice too.
+ * ─────────────────────────────────────────────────────────────────────────── */
+
+export type SectionVoiceBrand = 'gotript' | 'gobookt' | 'numiworks' | 'stayviaowner';
+
+type LeadPools = Record<
+  'bestTime' | 'budget' | 'family' | 'couples' | 'solo' | 'transportation' | 'safety',
+  readonly string[]
+>;
+
+const SECTION_VOICE: Record<SectionVoiceBrand, LeadPools> = {
+  // gotript = broad trip planning / editorial.
+  gotript: {
+    bestTime: ['For planning the trip, timing matters:', 'When to go, in planning terms:'],
+    budget: ['Budgeting the whole trip:', 'For the trip budget:'],
+    family: ['Travelling as a family:', 'With kids in tow:'],
+    couples: ['For couples:', 'Travelling as a pair:'],
+    solo: ['Going solo:', 'On your own:'],
+    transportation: ['Getting around while you explore:', 'Moving between sights:'],
+    safety: ['Practical precautions for the trip:', 'Worth knowing before you go:'],
+  },
+  // gobookt = accommodation decision (Booking.com).
+  gobookt: {
+    bestTime: ['Season shapes room rates and availability:', 'For picking dates and a rate:'],
+    budget: ['What a stay tends to cost:', 'Nightly spend, by comfort level:'],
+    family: ['Booking for a family stay:', 'For a family-friendly base:'],
+    couples: ['For a couples’ stay:', 'Choosing a base for two:'],
+    solo: ['For a solo stay:', 'Basing yourself solo:'],
+    transportation: ['Reaching your stay and getting about:', 'Transit links from most areas:'],
+    safety: ['When choosing which area to stay in:', 'For picking a safe base:'],
+  },
+  // numiworks = experiences / things to do (Viator).
+  numiworks: {
+    bestTime: ['For catching the best experiences:', 'When the good tours run:'],
+    budget: ['Budgeting for tours and activities:', 'What experiences tend to cost:'],
+    family: ['Experiences with kids:', 'For family-friendly activities:'],
+    couples: ['Experiences for two:', 'For couples looking to book:'],
+    solo: ['Solo-friendly experiences:', 'Booking activities on your own:'],
+    transportation: ['Reaching tour meeting points:', 'Getting to and from activities:'],
+    safety: ['While out exploring on tours:', 'On activity days:'],
+  },
+  // stayviaowner = whole-home rentals (Vrbo).
+  stayviaowner: {
+    bestTime: ['For a whole-home stay, timing to weigh:', 'When rental demand shifts:'],
+    budget: ['What a whole-home rental runs:', 'Rental spend, by size and season:'],
+    family: ['For a family renting a home:', 'A whole home for the family:'],
+    couples: ['For couples wanting their own place:', 'A private home for two:'],
+    solo: ['For a solo home rental:', 'Renting a place of your own:'],
+    transportation: ['Reaching your rental and getting about:', 'Access from most rental areas:'],
+    safety: ['For families and groups in a rental:', 'Choosing a rental neighborhood:'],
+  },
+};
+
+interface GuideVoiceShape {
+  bestTimeToVisit: { blurb: string };
+  budget: { blurb: string };
+  travelStyles: { family: string; couples: string; solo: string };
+  transportation: { tips: string };
+  safety: string;
+}
+
+/**
+ * Return a copy of a destination guide with brand-voiced lead-ins prepended to
+ * each prose section. Facts (numbers, months, dish/neighborhood names) untouched.
+ * Deterministic per (brand, slug) so static generation stays stable.
+ */
+export function applyGuideVoice<G extends GuideVoiceShape>(
+  guide: G,
+  brand: SectionVoiceBrand,
+  slug: string,
+): G {
+  const v = SECTION_VOICE[brand];
+  const s = seedOf(slug);
+  const lead = (pool: readonly string[], offset: number) => pick(pool, s >> offset);
+  return {
+    ...guide,
+    bestTimeToVisit: {
+      ...guide.bestTimeToVisit,
+      blurb: `${lead(v.bestTime, 2)} ${guide.bestTimeToVisit.blurb}`,
+    },
+    budget: { ...guide.budget, blurb: `${lead(v.budget, 4)} ${guide.budget.blurb}` },
+    travelStyles: {
+      ...guide.travelStyles,
+      family: `${lead(v.family, 6)} ${guide.travelStyles.family}`,
+      couples: `${lead(v.couples, 8)} ${guide.travelStyles.couples}`,
+      solo: `${lead(v.solo, 10)} ${guide.travelStyles.solo}`,
+    },
+    transportation: {
+      ...guide.transportation,
+      tips: `${lead(v.transportation, 12)} ${guide.transportation.tips}`,
+    },
+    safety: `${lead(v.safety, 14)} ${guide.safety}`,
+  } as G;
+}

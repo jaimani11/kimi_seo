@@ -19,9 +19,9 @@ export async function generateMetadata(): Promise<Metadata> {
   // Absent (e.g. the Clerk-auth path) → no canonical emitted, no regression.
   const pathname = (await headers()).get('x-pathname');
   return {
-    title: 'stayviaowner · Find tours, day trips & experiences worldwide',
+    title: 'stayviaowner · Whole-home vacation rentals — villas, cabins & cottages',
     description:
-      'AI-native travel orchestration. Describe your trip in a sentence; specialized agents handle the rest.',
+      'Rent the whole place: villas, cabins, cottages and beach houses worldwide, with room for the group and your own kitchen.',
     metadataBase: new URL(getSiteOrigin()),
     ...(pathname ? { alternates: { canonical: `${getSiteOrigin()}${pathname}` } } : {}),
   };
