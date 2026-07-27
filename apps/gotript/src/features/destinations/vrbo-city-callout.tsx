@@ -24,7 +24,7 @@ export function VrboCityCallout({ city }: { city: SeoCity }) {
       <a
         href={vrboUrl}
         target="_blank"
-        rel="noopener noreferrer sponsored"
+        rel="noopener noreferrer sponsored nofollow"
         className="group block rounded-2xl border-2 transition-transform hover:scale-[1.005]"
         style={{
           background: 'linear-gradient(135deg, #005EA6 0%, #0079C1 100%)',

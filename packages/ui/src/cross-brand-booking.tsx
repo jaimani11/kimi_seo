@@ -91,7 +91,7 @@ export function CrossBrandBooking({
           }}
         >
           {links.map((l) => (
-            <a key={l.name} href={l.href} target="_blank" rel="noopener" style={cardStyle}>
+            <a key={l.name} href={l.href} target="_blank" rel="noopener noreferrer sponsored nofollow" style={cardStyle}>
               <span
                 style={{
                   fontFamily: 'var(--font-inter)',

@@ -20,7 +20,7 @@ export function VrboCityCallout({ city }: { city: SeoCity }) {
       <a
         href={href}
         target="_blank"
-        rel="noopener noreferrer sponsored"
+        rel="noopener noreferrer sponsored nofollow"
         className="group flex items-center justify-between gap-4 rounded-xl border p-4 transition-colors hover:border-[color:var(--accent-primary)]"
         style={{
           background: 'var(--surface-elevated)',
