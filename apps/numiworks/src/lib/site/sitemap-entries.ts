@@ -1,7 +1,7 @@
 import type { SitemapEntry } from '@adored/seo-routing/sitemap';
 import { ITALIAN_DESTINATIONS } from '@lib/curation/destinations';
 import { getSiteOrigin } from '@lib/site/origin';
-import { enumerateAllSeoSlugs } from '@lib/seo/route-parser';
+import { enumerateAllSeoSlugs, parseSeoSlug } from '@lib/seo/route-parser';
 import { SEO_CITIES } from '@lib/seo/cities';
 import { hasDestinationGuide } from '@lib/seo/destination-content';
 import { allAttractions } from '@lib/seo/attractions';
@@ -78,7 +78,12 @@ export function sitemapSections(): SitemapSection[] {
     },
     {
       name: 'editorial',
-      entries: enumerateAllSeoSlugs().map((slug) => e(base, `/${slug}`, 0.75, 'weekly')),
+      entries: enumerateAllSeoSlugs()
+        .filter((slug) => {
+          const p = parseSeoSlug(slug);
+          return !p || !['best-time', 'weather-month', 'where-to-go-month', 'where-to-stay'].includes(p.kind);
+        })
+        .map((slug) => e(base, `/${slug}`, 0.75, 'weekly')),
     },
   ];
 

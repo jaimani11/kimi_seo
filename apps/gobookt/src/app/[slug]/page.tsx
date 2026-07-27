@@ -59,6 +59,19 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   const canonical = canonicalUrl(`/${slug}`);
 
+  // Climate + where-to-go families are identical shared facts; gotript (broad
+  // editorial) is their single indexed owner. gobookt keeps where-to-stay (its
+  // own accommodation intent) indexable but noindexes the pure-climate families
+  // so the portfolio has ONE indexed owner per family, not four duplicates.
+  const CLIMATE_NOINDEX: ReadonlySet<string> = new Set([
+    'best-time',
+    'weather-month',
+    'where-to-go-month',
+  ]);
+  if (CLIMATE_NOINDEX.has(parsed.kind)) {
+    return { alternates: { canonical }, robots: { index: false, follow: true } };
+  }
+
   // Viator retirement: redirected families never render their own metadata
   // (they 308 at request time and are dropped from generateStaticParams). Held
   // pure-experience pages get a clean, Viator-free title and are noindexed while

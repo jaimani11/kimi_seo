@@ -78,6 +78,19 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   const canonical = canonicalUrl(`/${slug}`);
 
+  // Climate + accommodation families are identical shared facts owned by gotript
+  // (climate) / gobookt (where-to-stay). numiworks (experiences) is not their
+  // owner, so it noindexes them — ONE indexed owner per family across 4 sites.
+  const CLIMATE_NOINDEX: ReadonlySet<string> = new Set([
+    'best-time',
+    'weather-month',
+    'where-to-go-month',
+    'where-to-stay',
+  ]);
+  if (CLIMATE_NOINDEX.has(parsed.kind)) {
+    return { alternates: { canonical }, robots: { index: false, follow: true } };
+  }
+
   // Resolve a destination photo for the Open Graph card. Pinterest,
   // Facebook, X and Slack all read this — without it, rich pins fall
   // back to the pin's own image (no page-context photo).
