@@ -90,8 +90,9 @@ export function ItinerarySeoPage({
               margin: '1rem auto 0',
             }}
           >
-            {city.oneLiner} A {days}-day rhythm of bookable Viator experiences — each day
-            themed, each slot stamped with reasoning and an affiliate-tracked reserve link.
+            {city.oneLiner} A {days}-day rhythm built the numiworks way — each day themed around
+            what {city.name} does best, morning to evening, every stop a real bookable Viator
+            experience rather than a generic checklist, with reasoning on each pick.
           </p>
         </header>
       </section>

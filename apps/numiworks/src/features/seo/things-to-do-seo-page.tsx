@@ -79,8 +79,9 @@ export function ThingsToDoSeoPage({
               margin: '1rem auto 0',
             }}
           >
-            {city.oneLiner} A live, curated grid from Viator — tours, day trips, food
-            experiences, skip-the-line tickets — every card bookable, every price real-time.
+            {city.oneLiner} Numiworks curates {city.name}&apos;s experiences the way a local
+            would plan a day out — food tours, cooking classes, day trips and skip-the-line
+            tickets, grouped by the kind of day you want and bookable on Viator.
           </p>
           <div className="mt-6 flex flex-wrap items-center justify-center gap-2">
             {[2, 3, 5, 7].map((n) => (

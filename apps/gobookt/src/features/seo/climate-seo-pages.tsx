@@ -431,7 +431,7 @@ export function WhereToStaySeoPage({
         <PageHeading
           eyebrow="Neighborhood guide"
           title={`Where to Stay in ${city.name}`}
-          lede={`The ${guide.neighborhoods.length} areas worth basing yourself in ${city.name}, ${city.countryName} — ranked by our editors, with walking distances from the center. ${top ? `First-timers: start with ${top.name}.` : ''}`}
+          lede={`Where you book in ${city.name} shapes the whole stay. These ${guide.neighborhoods.length} areas — ranked for access, character and walking distance to the center — help you match a neighborhood to your trip before you pick a place. ${top ? `First-timers: start with ${top.name}.` : ''}`}
         />
 
         {pins.length > 0 ? (

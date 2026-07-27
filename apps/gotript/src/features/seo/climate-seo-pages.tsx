@@ -109,6 +109,12 @@ export function BestTimeSeoPage({
 
         <BookingCta cta={bookCta} />
 
+        <p style={paragraphStyle}>
+          Timing is the first real decision when planning {city.name} — it drives crowds, prices
+          and what&apos;s actually open. Here&apos;s how the year breaks down so you can pick dates
+          that fit the trip you&apos;re building, not just the weather.
+        </p>
+
         {guide ? (
           <p style={{ ...paragraphStyle, marginTop: '1.4rem' }}>
             <strong style={{ color: 'var(--ink-primary)', fontWeight: 700 }}>

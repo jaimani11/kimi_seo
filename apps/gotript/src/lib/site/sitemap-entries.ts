@@ -151,6 +151,8 @@ export function sitemapSections(): SitemapSection[] {
   return raw.map((s) => ({
     name: s.name,
     entries: s.entries.filter((entry) => {
+      // where-to-stay is owned by gobookt (noindex here) — keep it out of sitemap.
+      if (/\/where-to-stay-in-/.test(entry.url)) return false;
       if (seen.has(entry.url)) return false;
       seen.add(entry.url);
       return true;

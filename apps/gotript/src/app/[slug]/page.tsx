@@ -136,6 +136,9 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     return {
       title,
       description,
+      // where-to-stay is accommodation intent — gobookt is the single indexed
+      // owner; gotript noindexes(follow) so it isn't double-indexed portfolio-wide.
+      robots: { index: false, follow: true },
       alternates: { canonical },
       openGraph: { title, description, url: canonical, type: 'article', images: ogImages },
       twitter: { card: 'summary_large_image', title, description, images: ogImages },
