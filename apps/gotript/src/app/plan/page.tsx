@@ -159,7 +159,7 @@ export default async function PlanPage({
                 margin: 0,
               }}
             >
-              Itinerary is a starting point; book each piece on Expedia — same price as direct,
+              Itinerary is a starting point; book each piece on Expedia,
               commission keeps the site free.
             </p>
           </div>

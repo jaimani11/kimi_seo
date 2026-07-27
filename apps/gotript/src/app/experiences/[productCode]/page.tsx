@@ -433,7 +433,7 @@ export default async function ExperienceDetailPage({ params }: PageProps) {
                   margin: 0,
                 }}
               >
-                Affiliate link · same price as direct
+                Affiliate link
               </p>
               <WhyViatorTooltip align="right" />
             </div>

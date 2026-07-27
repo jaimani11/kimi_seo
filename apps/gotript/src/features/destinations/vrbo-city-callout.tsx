@@ -73,8 +73,8 @@ export function VrboCityCallout({ city }: { city: SeoCity }) {
                 margin: 0,
               }}
             >
-              Full kitchens, more space, better prices for groups. Free
-              cancellation on most stays.
+              Full kitchens and room for the whole group — whole-home
+              rentals on Vrbo.
             </p>
           </div>
           <div

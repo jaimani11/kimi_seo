@@ -59,7 +59,7 @@ function lead(poi: StaysNearPoi): string {
   const blurb = poi.blurb ? ` ${poi.blurb}` : '';
   return pick(
     [
-      `${poi.poiName} is a favourite ${city.name} neighbourhood to call home for a few nights.${blurb} Browse whole-home vacation rentals near ${poi.poiName} on VRBO — kitchens, space and free cancellation on most stays.`,
+      `${poi.poiName} is a favourite ${city.name} neighbourhood to call home for a few nights.${blurb} Browse whole-home vacation rentals near ${poi.poiName} on VRBO — kitchens and space for the group.`,
       `Stay like a local in ${poi.poiName}, ${city.name} — a villa, apartment or house of your own.${blurb} VRBO lists whole-home rentals for the neighbourhood with real photos and guest reviews.`,
     ],
     seed,

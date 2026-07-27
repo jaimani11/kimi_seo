@@ -95,7 +95,7 @@ export function ReserveAllButton({ totalPicks }: { totalPicks: number }) {
             margin: 0,
           }}
         >
-          Opens each reservation in a new tab — same price as direct.
+          Opens each reservation in a new tab.
         </p>
       )}
     </div>

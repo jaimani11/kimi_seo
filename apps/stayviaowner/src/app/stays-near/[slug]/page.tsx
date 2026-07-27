@@ -27,7 +27,7 @@ function metaDescription(poi: StaysNearPoi): string {
       : poi.kind === 'city-centre'
         ? `in central ${poi.city.name}`
         : `near ${poi.poiName} in ${poi.city.name}`;
-  return `Whole-home vacation rentals ${where}, ${poi.city.countryName} on VRBO — villas, apartments and houses with kitchens, space and free cancellation on most stays. Find a rental ${where}.`;
+  return `Whole-home vacation rentals ${where}, ${poi.city.countryName} on VRBO — villas, apartments and houses with kitchens and space for the group. Find a rental ${where}.`;
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {

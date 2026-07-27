@@ -12,7 +12,7 @@ export default function StaysPage() {
     <CategoryLanding
       category="hotels"
       heading="Stays — whole homes, villas & cabins."
-      subhead="Book whole-home rentals with full kitchens and room for the group, or compare hotels, apart-hotels and resorts across 175+ destinations. Free cancellation on most stays."
+      subhead="Book whole-home rentals with full kitchens and room for the group, or compare hotels, apart-hotels and resorts worldwide."
     />
   );
 }

@@ -42,7 +42,7 @@ export const ACCOMMODATION_CATEGORIES: readonly AccommodationCategory[] = [
     tagline: 'Private pool. Full staff optional. Just you.',
     emoji: '🏛️',
     intro:
-      'Private villa rentals — from a 2-bedroom Tuscan farmhouse to a 12-bedroom estate in Mykonos with a full staff on call. Every villa on gobookt is bookable through Booking.com, with real photos, verified guest reviews, and free cancellation on most stays. Best-fit destinations: Italy (Tuscany, Puglia, Amalfi), Greek islands, Bali, Provence, and the Caribbean.',
+      'Private villa rentals — from a 2-bedroom Tuscan farmhouse to a 12-bedroom estate in Mykonos with a full staff on call. Every villa on gobookt is bookable through Booking.com, with real photos, verified guest reviews. Best-fit destinations: Italy (Tuscany, Puglia, Amalfi), Greek islands, Bali, Provence, and the Caribbean.',
     searchAnchor: 'villa',
     topCitySlugs: [
       'santorini',
@@ -176,7 +176,7 @@ export const ACCOMMODATION_CATEGORIES: readonly AccommodationCategory[] = [
     tagline: 'Sand outside the door. Sunset from the deck.',
     emoji: '🏖️',
     intro:
-      'Beach house rentals steps from the ocean — Outer Banks porches, Malibu decks, Amalfi terraces, or a cabana in Tulum. Every house on gobookt is bookable through Booking.com with verified guest reviews and free cancellation on most stays. Best-fit destinations: Outer Banks, 30A, Cape Cod, Malibu, Costa Rica, Tulum, Amalfi, Positano.',
+      'Beach house rentals steps from the ocean — Outer Banks porches, Malibu decks, Amalfi terraces, or a cabana in Tulum. Every house on gobookt is bookable through Booking.com with verified guest reviews. Best-fit destinations: Outer Banks, 30A, Cape Cod, Malibu, Costa Rica, Tulum, Amalfi, Positano.',
     searchAnchor: 'beach house',
     topCitySlugs: [
       'tulum',
@@ -323,7 +323,7 @@ export const ACCOMMODATION_CATEGORIES: readonly AccommodationCategory[] = [
     tagline: 'Full staff, infinity pool, zero compromises.',
     emoji: '🥂',
     intro:
-      'The top tier of villa rentals — private chefs, daily housekeeping, infinity pools and concierge teams. These are the homes people book for milestone trips and multi-family getaways. Every property is bookable through Booking.com with verified reviews and free cancellation on most stays. Best-fit destinations: Santorini, Mykonos, Bali, the Côte d\'Azur, Lake Como, and Marrakech.',
+      'The top tier of villa rentals — private chefs, daily housekeeping, infinity pools and concierge teams. These are the homes people book for milestone trips and multi-family getaways. Every property is bookable through Booking.com with verified reviews. Best-fit destinations: Santorini, Mykonos, Bali, the Côte d\'Azur, Lake Como, and Marrakech.',
     searchAnchor: 'luxury villa',
     topCitySlugs: ['santorini', 'mykonos', 'bali', 'dubai', 'nice', 'ibiza', 'st-moritz', 'mallorca', 'lake-como', 'marrakech', 'cape-town', 'positano'],
     faqs: [

@@ -83,7 +83,7 @@ function leadParagraph(route: RentalRoute): string {
     `Booking a ${noun} in ${city.name} puts you in a real neighbourhood, with a kitchen for slow mornings and living space to come back to after a long day out.`,
   ];
   const closers = [
-    `Every stay is bookable through VRBO with real photos, verified guest reviews, and free cancellation on most listings.`,
+    `Every stay is bookable through VRBO with real photos and verified guest reviews.`,
     `Browse Vrbo's whole-home inventory for ${city.name} — or, if you'd rather have daily housekeeping, compare local hotels too.`,
     `${city.oneLiner}`,
     `We send you straight to VRBO to check live prices and dates — the price you pay is the same as booking direct.`,
@@ -107,7 +107,7 @@ function whyParagraph(route: RentalRoute): string {
 
 /** Short, type-aware "what you get" chips. */
 function featureChips(route: RentalRoute): string[] {
-  const base = ['Full kitchen', 'Private space', 'Room for groups', 'Free cancellation on most stays'];
+  const base = ['Full kitchen', 'Private space', 'Room for groups'];
   if (route.kind !== 'type') return base;
   const extra: Record<string, string[]> = {
     villas: ['Private pool options', 'Optional concierge'],

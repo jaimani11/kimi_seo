@@ -305,7 +305,7 @@ export const THEME_META: Record<
     eyebrow: (c) => `${c.countryName} · with kids`,
     heading: (c) => `${c.name} with Kids: Family-Friendly Tours &amp; Activities`,
     intro: (c) =>
-      `${c.oneLiner} Kid-safe, age-appropriate experiences in ${c.name} — zoos, aquariums, hands-on museums, kid-friendly walking tours, cooking classes. Bookable through Viator, most with free cancellation.`,
+      `${c.oneLiner} Kid-safe, age-appropriate experiences in ${c.name} — zoos, aquariums, hands-on museums, kid-friendly walking tours, cooking classes. Bookable through Viator.`,
     viatorQuery: (c) => `kids family ${c.viatorQuery}`,
   },
   'with-teens': {
