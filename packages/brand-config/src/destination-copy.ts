@@ -150,7 +150,15 @@ export function destinationCopy(
 export type SectionVoiceBrand = 'gotript' | 'gobookt' | 'numiworks' | 'stayviaowner';
 
 type LeadPools = Record<
-  'bestTime' | 'budget' | 'family' | 'couples' | 'solo' | 'transportation' | 'safety',
+  | 'bestTime'
+  | 'budget'
+  | 'family'
+  | 'couples'
+  | 'solo'
+  | 'transportation'
+  | 'safety'
+  | 'neighborhood'
+  | 'food',
   readonly string[]
 >;
 
@@ -164,6 +172,8 @@ const SECTION_VOICE: Record<SectionVoiceBrand, LeadPools> = {
     solo: ['Going solo:', 'On your own:'],
     transportation: ['Getting around while you explore:', 'Moving between sights:'],
     safety: ['Practical precautions for the trip:', 'Worth knowing before you go:'],
+    neighborhood: ['Base yourself here:', 'An area to consider:', 'For your itinerary:'],
+    food: ['Worth a meal:', 'One for the food trail:', 'Add it to the plan:'],
   },
   // gobookt = accommodation decision (Booking.com).
   gobookt: {
@@ -174,6 +184,8 @@ const SECTION_VOICE: Record<SectionVoiceBrand, LeadPools> = {
     solo: ['For a solo stay:', 'Basing yourself solo:'],
     transportation: ['Reaching your stay and getting about:', 'Transit links from most areas:'],
     safety: ['When choosing which area to stay in:', 'For picking a safe base:'],
+    neighborhood: ['A handy base:', 'Good area to book a stay:', 'Stay around here:'],
+    food: ['Dining near the stays:', 'A table close by:', 'Eat well nearby:'],
   },
   // numiworks = experiences / things to do (Viator).
   numiworks: {
@@ -184,6 +196,8 @@ const SECTION_VOICE: Record<SectionVoiceBrand, LeadPools> = {
     solo: ['Solo-friendly experiences:', 'Booking activities on your own:'],
     transportation: ['Reaching tour meeting points:', 'Getting to and from activities:'],
     safety: ['While out exploring on tours:', 'On activity days:'],
+    neighborhood: ['Experiences cluster here:', 'Wander this area:', 'Good base for activities:'],
+    food: ['Taste it on a food tour:', 'A local bite worth seeking:', 'One for the tasting list:'],
   },
   // stayviaowner = whole-home rentals (Vrbo).
   stayviaowner: {
@@ -194,6 +208,8 @@ const SECTION_VOICE: Record<SectionVoiceBrand, LeadPools> = {
     solo: ['For a solo home rental:', 'Renting a place of your own:'],
     transportation: ['Reaching your rental and getting about:', 'Access from most rental areas:'],
     safety: ['For families and groups in a rental:', 'Choosing a rental neighborhood:'],
+    neighborhood: ['Rentals cluster here:', 'A good rental area:', 'Home base for a whole-home stay:'],
+    food: ['Cook in or dine nearby:', 'A neighborhood table near your rental:', 'Stock the kitchen or eat out:'],
   },
 };
 
@@ -203,6 +219,8 @@ interface GuideVoiceShape {
   travelStyles: { family: string; couples: string; solo: string };
   transportation: { tips: string };
   safety: string;
+  neighborhoods: ReadonlyArray<{ blurb: string }>;
+  food: ReadonlyArray<{ note: string }>;
 }
 
 /**
@@ -236,5 +254,13 @@ export function applyGuideVoice<G extends GuideVoiceShape>(
       tips: `${lead(v.transportation, 12)} ${guide.transportation.tips}`,
     },
     safety: `${lead(v.safety, 14)} ${guide.safety}`,
+    neighborhoods: guide.neighborhoods.map((nb, i) => ({
+      ...nb,
+      blurb: `${pick(v.neighborhood, (s >> 3) + i * 101)} ${nb.blurb}`,
+    })),
+    food: guide.food.map((f, i) => ({
+      ...f,
+      note: `${pick(v.food, (s >> 7) + i * 89)} ${f.note}`,
+    })),
   } as G;
 }
