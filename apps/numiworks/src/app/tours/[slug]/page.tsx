@@ -28,7 +28,7 @@ export function generateStaticParams(): { slug: string }[] {
 
 function metaDescription(route: TourCategoryRoute): string {
   const { category, city } = route;
-  return `Booking ${category.name.toLowerCase()} in ${city.name}, ${city.countryName}? Compare and book on Viator — free cancellation on most, real reviews — plus where to stay on VRBO. ${category.tagline}.`;
+  return `Booking ${category.name.toLowerCase()} in ${city.name}, ${city.countryName}? Compare and book on Viator — real reviews — plus where to stay on VRBO. ${category.tagline}.`;
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {

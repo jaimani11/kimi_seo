@@ -6,7 +6,7 @@ import { SiteFooter } from '@/features/site/site-footer';
 export const metadata: Metadata = {
   title: 'About numiworks · AI-native travel & Viator affiliate',
   description:
-    'numiworks is an independent travel publisher and official Viator affiliate. AI-native trip planning with bookable Viator experiences across 175+ destinations worldwide.',
+    'numiworks is an independent travel publisher and official Viator affiliate. AI-native trip planning with bookable Viator experiences in destinations worldwide.',
 };
 
 export default function AboutPage() {
@@ -79,7 +79,7 @@ export default function AboutPage() {
           </p>
           <ul style={{ marginLeft: '1.25rem' }}>
             <li>300K+ Viator experiences — tours, day trips, skip-the-line tickets, food walks</li>
-            <li>190+ countries with live inventory and real-time pricing</li>
+            <li>Worldwide inventory, with prices and availability from our booking partners</li>
             <li>AI concierge that turns free-text prompts into day-by-day plans</li>
             <li>Curated destination guides — itineraries, budgets, neighborhoods, when to go</li>
             <li>Whole-home rentals via VRBO for groups who want kitchens + space</li>

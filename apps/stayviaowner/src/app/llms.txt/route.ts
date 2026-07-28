@@ -18,7 +18,7 @@ export function GET(): Response {
   const body = `# stayviaowner
 
 > Vacation rentals by owner — whole homes, villas, cabins, beach houses,
-> cottages, and lake houses across 190+ countries, plus research-backed
+> cottages, and lake houses worldwide, plus research-backed
 > destination guides (best time to visit, budgets, neighborhoods, weather,
 > transport, safety). Whole-home rentals via VRBO/Expedia. Operated by Adored
 > Moments LLC.

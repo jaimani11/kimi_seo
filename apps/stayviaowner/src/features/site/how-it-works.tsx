@@ -9,7 +9,7 @@ const STEPS = [
   {
     number: '01',
     title: 'Browse by area',
-    body: 'Browse whole homes by destination and neighborhood — villas, cabins, cottages and beach houses. Real Vrbo inventory, real-time prices.',
+    body: 'Browse whole homes by destination and neighborhood — villas, cabins, cottages and beach houses. Real Vrbo inventory.',
   },
   {
     number: '02',
@@ -19,7 +19,7 @@ const STEPS = [
   {
     number: '03',
     title: 'Book on Vrbo',
-    body: 'One tap hands you off to Vrbo. Same price as booking direct, and the whole place to yourselves — no shared spaces.',
+    body: 'One tap hands you off to Vrbo. Book the whole place to yourselves — no shared spaces.',
   },
 ] as const;
 

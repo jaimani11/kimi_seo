@@ -4,7 +4,7 @@ import { CategoryLanding } from '@/features/site/category-landing';
 export const metadata: Metadata = {
   title: 'Stays & vacation rentals · stayviaowner',
   description:
-    'Whole-home vacation rentals — villas, cabins and cottages — plus hotels, apartments and resorts across 175+ destinations, at the same price you would pay booking direct.',
+    'Whole-home vacation rentals — villas, cabins and cottages — plus hotels, apartments and resorts in destinations worldwide.',
 };
 
 export default function StaysPage() {

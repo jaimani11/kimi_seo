@@ -140,7 +140,7 @@ export function ItinerarySeoPage({
               margin: 0,
             }}
           >
-            Affiliate links to Viator. Same price as direct. Commission keeps numiworks free.
+            Affiliate links to Viator. We may earn a commission from completed bookings.
           </p>
         </section>
       ) : (

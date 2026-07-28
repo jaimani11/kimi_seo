@@ -76,7 +76,7 @@ function leadParagraph(route: TourCategoryRoute): string {
     `Looking for a ${category.singular} in ${city.name}? ${category.angle}`,
   ];
   const closers = [
-    `Browse and book on Viator with free cancellation on most experiences — reserve the good ones early, they sell out.`,
+    `Browse and book on Viator — reserve the good ones early, they sell out.`,
     `We send you to Viator to check live times and prices; the price you pay is the same as booking direct.`,
     `${city.oneLiner}`,
     `Compare options on Viator by rating and duration, and book a free-cancellation slot so you can lock it in and still stay flexible.`,
@@ -99,7 +99,7 @@ function whyParagraph(route: TourCategoryRoute): string {
 
 /** Feature chips: category-specific "what to know" + Viator staples. */
 function featureChips(route: TourCategoryRoute): string[] {
-  return [...route.category.lookFor, 'Free cancellation on most', 'Reserve now, pay later'].slice(0, 6);
+  return [...route.category.lookFor, 'Reserve now, pay later'].slice(0, 6);
 }
 
 /** City-specific FAQ layered on top of the category FAQs, for uniqueness. */

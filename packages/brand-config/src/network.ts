@@ -37,7 +37,7 @@ const BOOKING_ROLES: ReadonlyArray<{
   {
     key: 'gobookt',
     books: 'Hotels',
-    blurb: 'Compare hotel prices with free cancellation on most stays.',
+    blurb: 'Compare hotel prices across providers.',
     partner: 'Booking.com',
   },
   {

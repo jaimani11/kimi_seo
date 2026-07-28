@@ -92,12 +92,12 @@ export const META: Record<
     heading: (c) => `Car rentals in ${c.name}`,
     eyebrow: (c) => `${c.countryName} · cars`,
     intro: (c) =>
-      `Rent a car at ${c.name}'s airports and city pick-up points. Expedia Cars compares rates across every major rental company. Free cancellation on most bookings, full insurance options at the counter.`,
+      `Rent a car at ${c.name}'s airports and city pick-up points. Expedia Cars compares rates across every major rental company, with full insurance options at the counter.`,
     ctaLabel: (c) => `Search car rentals in ${c.name}`,
     bullets: (c) => [
       `Airport and city pick-up locations across ${c.name}`,
       'Every major rental company in one search',
-      'Free cancellation on most bookings — pay later, flexible plans',
+      'Pay later, flexible plans',
       'Optional full insurance at checkout — no surprises at the counter',
     ],
   },
@@ -242,12 +242,12 @@ export const META: Record<
     heading: (c) => `Cheap car rental in ${c.name}`,
     eyebrow: (c) => `${c.countryName} · budget cars`,
     intro: (c) =>
-      `The lowest daily rates on car rentals in ${c.name}, ${c.countryName}. Expedia Cars compares budget brands against the majors — economy cars, free cancellation on most, no hidden fees.`,
+      `The lowest daily rates on car rentals in ${c.name}, ${c.countryName}. Expedia Cars compares budget brands against the majors — economy cars, no hidden fees.`,
     ctaLabel: (c) => `See cheap car rental in ${c.name}`,
     bullets: (c) => [
       `Cheapest daily rates across ${c.name}'s rental fleets`,
       'Economy, compact, and intermediate filters',
-      'Free cancellation on most bookings — pay later, flexible plans',
+      'Pay later, flexible plans',
       'No hidden fees · Powered by Expedia Cars',
     ],
   },
@@ -262,7 +262,7 @@ export const META: Record<
     bullets: (c) => [
       `On-airport counters at every ${c.name} terminal`,
       'No off-site shuttles for the major brands',
-      'Free cancellation on most bookings — flexible flight changes',
+      'Flexible flight changes',
       'One-way drop-off available · Powered by Expedia Cars',
     ],
   },
@@ -278,7 +278,7 @@ export const META: Record<
       `The most-booked sights and experiences in ${c.name}`,
       'Skip-the-line tickets for the biggest draws',
       'Guided tours and audio guides for context',
-      'Free cancellation on most tickets · Powered by Viator',
+      'Powered by Viator',
     ],
   },
   'free-things': {

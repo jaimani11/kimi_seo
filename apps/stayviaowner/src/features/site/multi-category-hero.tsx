@@ -484,7 +484,7 @@ function headlineFor(c: ExpediaCategory): string {
 }
 
 function subheadFor(c: ExpediaCategory): string {
-  const tail = 'Powered by Vrbo. Real-time prices, free cancellation on most bookings.';
+  const tail = 'Powered by Vrbo.';
   switch (c) {
     case 'vacation-rentals':
       return `More space, kitchens, room to spread out — VRBO's 2M+ whole-home listings. ${tail.replace('Expedia', 'Expedia Group')}`;

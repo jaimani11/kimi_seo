@@ -179,7 +179,7 @@ export default async function PlanPage({
                 margin: 0,
               }}
             >
-              Affiliate links to Viator — same price as direct, commission keeps the site free.
+              Affiliate links to Viator — we may earn a commission from completed bookings.
             </p>
           </div>
         ) : null}

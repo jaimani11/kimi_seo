@@ -118,7 +118,7 @@ export function SearchFormHero() {
             maxWidth: '40rem',
           }}
         >
-          Bookable on Viator. Real-time prices. Free cancellation on most experiences.
+          Bookable on Viator.
         </p>
 
         <form

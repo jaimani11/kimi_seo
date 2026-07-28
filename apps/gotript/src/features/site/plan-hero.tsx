@@ -83,7 +83,7 @@ export function PlanHero() {
             margin: '1rem 0 0',
           }}
         >
-          Free · no account · same prices as booking direct.
+          Free · no account needed.
         </p>
       </div>
     </section>

@@ -183,7 +183,7 @@ export function BrowseByType() {
               textUnderlineOffset: '3px',
             }}
           >
-            See all 300,000+ experiences →
+            See all experiences →
           </Link>
         </header>
 

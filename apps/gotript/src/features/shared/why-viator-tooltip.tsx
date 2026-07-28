@@ -92,7 +92,7 @@ export function WhyViatorTooltip({
           >
             <Row label="Price" value="Identical to Viator direct." />
             <Row label="Cancellation" value="Free on most experiences." />
-            <Row label="Support" value="24/7, through Viator." />
+            <Row label="Support" value="Handled by Viator." />
             <Row label="Why us" value="We earn a small fee; that keeps this site free." />
           </ul>
         </div>

@@ -411,7 +411,7 @@ export const THEME_META: Record<
     eyebrow: (c) => `${c.countryName} · budget`,
     heading: (c) => `${c.name} Budget Per Day: How Much Does a Trip Cost?`,
     intro: (c) =>
-      `${c.oneLiner} What a day in ${c.name} costs — meals, transit, top attractions, and the bookable activities worth adding to the budget. Real-time prices from Viator so the numbers stay current.`,
+      `${c.oneLiner} What a day in ${c.name} costs — meals, transit, top attractions, and the bookable activities worth adding to the budget. Prices and availability come from Viator.`,
     viatorQuery: (c) => `budget cheap ${c.viatorQuery}`,
   },
   'bachelor-party': {
