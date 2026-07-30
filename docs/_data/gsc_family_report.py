@@ -88,14 +88,14 @@ def main():
     ap.add_argument("csv_dir", help="dir of <brand>_<window>.csv GSC Pages exports")
     ap.add_argument("--out", default="gsc_family_report.csv")
     ap.add_argument("--sitemap-dir", default=None,
-        help="dir of live sitemap .xml files (the DENOMINATOR). Enables gsc_present/gsc_zero/gsc_missing per family.")
+        help="dir of live sitemap .xml files (the DENOMINATOR). Enables gsc_reported/gsc_not_reported per family.")
     ap.add_argument("--before-days", type=int, default=17, help="days in the 'before' window (Jul 1-17 = 17)")
     ap.add_argument("--after-days", type=int, default=10, help="days in the 'after' window (Jul 18-27 = 10)")
     a=ap.parse_args()
     day_map={"before":a.before_days,"after":a.after_days}
 
     # DENOMINATOR: classify the full sitemap URL inventory per (brand, family).
-    # GSC is JOINED onto this — a URL absent from GSC is 'gsc_missing', not zero.
+    # GSC is JOINED onto this — a URL absent from the export is 'gsc_not_reported' (status UNKNOWN).
     sm_paths=collections.defaultdict(set)  # (brand,family) -> {paths}
     if a.sitemap_dir:
         for xf in glob.glob(os.path.join(a.sitemap_dir,"*.xml")):
@@ -105,10 +105,13 @@ def main():
                 if not b: continue
                 sm_paths[(b,family(path_of(loc)))].add(path_of(loc))
 
-    # (brand,window,family) -> aggregates + path sets for present/zero
+    # (brand,window,family) -> aggregates + reported-path sets.
+    # A GSC Performance export reports only pages Google SURFACED (>=1 impression) in
+    # the window, as TOP/representative rows. It CANNOT tell you crawl/index status.
+    # So we only distinguish: reported vs not-reported (status UNKNOWN, not "crawl gap").
     agg=collections.defaultdict(lambda: {"pages":0,"impr":0.0,"clicks":0.0,"pos_wsum":0.0,"pos_w":0.0})
-    gsc_impr=collections.defaultdict(set)  # (brand,window,family)->{paths with impr>0}
-    gsc_zero=collections.defaultdict(set)  # (brand,window,family)->{paths seen with impr==0}
+    gsc_reported=collections.defaultdict(set)       # (brand,window,family)->{paths present in export}
+    gsc_reported_clicks=collections.defaultdict(set)# subset with >=1 click
     windows=set(); brands=set(); provenance=[]
     for fp in sorted(glob.glob(os.path.join(a.csv_dir,"*.csv"))):
         base=os.path.basename(fp)[:-4]
@@ -121,10 +124,10 @@ def main():
             pth=path_of(url); fam=family(pth); k=(brand,window,fam); d=agg[k]
             if fam=="OTHER": unclassified+=1
             else: classified+=1
+            gsc_reported[k].add(pth)
+            if clicks>0: gsc_reported_clicks[k].add(pth)
             if impr>0:
-                d["pages"]+=1; d["pos_wsum"]+=pos*impr; d["pos_w"]+=impr; gsc_impr[k].add(pth)
-            else:
-                gsc_zero[k].add(pth)
+                d["pages"]+=1; d["pos_wsum"]+=pos*impr; d["pos_w"]+=impr
             d["impr"]+=impr; d["clicks"]+=clicks
         # POSSIBLE UI truncation — only a heuristic (a real property may return exactly 1,000).
         truncated = 999<=rows_imported<=1001
@@ -146,45 +149,61 @@ def main():
         print("     capped at ~1,000 representative rows. If this CSV came from the UI it is truncated")
         print("     for a 46,604-URL portfolio; use the API export (gsc_pages_export.py). If it came")
         print("     from the API and the property is genuinely small, ~1,000 may be legitimate.")
-    print("\n  NOTE: rows are what the API/UI made available — NOT guaranteed to be every URL. A URL")
-    print("  absent from the export = 'no GSC row' (gsc_missing), NOT proven zero. Use a mature window")
-    print("  (Before Jul 1-17, After Jul 18-27); rerun once recent days finalize.")
+    print("\n  NOTE: a Performance export lists only pages Google SURFACED (>=1 impression), as TOP/")
+    print("  representative rows. 'gsc_not_reported' = in sitemap but not in this export — status is")
+    print("  UNKNOWN (could be zero-impressions, truncated-out, or indexed-but-never-surfaced). It is")
+    print("  NOT proof of 'never crawled' / 'not indexed' — that needs the Page Indexing report.")
     if not a.sitemap_dir:
-        print("  TIP: pass --sitemap-dir <dir of live *.xml> to get gsc_present/gsc_zero/gsc_missing.\n")
+        print("  TIP: pass --sitemap-dir <dir of live *.xml> to add sitemap_urls + gsc_reported columns.\n")
     else: print()
 
+    prov={(p["file"].split("_",1)[0], p["file"].split("_",1)[1]):p for p in provenance}
     rows=[]
     for (brand,window,fam),d in sorted(agg.items(), key=lambda kv:(-kv[1]["impr"])):
         k=(brand,window,fam)
-        avgpos=round(d["pos_wsum"]/d["pos_w"],1) if d["pos_w"] else ""
+        wpos=round(d["pos_wsum"]/d["pos_w"],1) if d["pos_w"] else ""
         days=day_map.get(window)
-        row={"brand":brand,"window":window,"family":fam,
-             "pages_with_impr":d["pages"],"impressions":int(d["impr"]),
-             "impr_per_day": round(d["impr"]/days,1) if days else "",
-             "clicks":int(d["clicks"]),"avg_position":avgpos}
+        pv=prov.get((brand,window),{})
+        row={"domain":brand,"window":window,"family":fam,
+             "impressions":int(d["impr"]),
+             "impressions_per_day": round(d["impr"]/days,1) if days else "",
+             "clicks":int(d["clicks"]),
+             "clicks_per_day": round(d["clicks"]/days,2) if days else "",
+             "weighted_position":wpos,
+             "export_row_count":pv.get("rows_imported",""),
+             "export_cap_reached":"YES" if pv.get("possible_UI_truncation")=="POSSIBLE" else "no"}
         if a.sitemap_dir:
-            sm=sm_paths.get((brand,fam),set())
-            present=gsc_impr[k]; zero=gsc_zero[k]-present; seen=present|gsc_zero[k]
+            sm=sm_paths.get((brand,fam),set()); reported=gsc_reported[k]
+            rc=len(gsc_reported_clicks[k])
             row["sitemap_urls"]=len(sm)
-            row["gsc_present"]=len(present)          # in GSC with impressions>0
-            row["gsc_zero"]=len(zero)                # in GSC, 0 impressions (Google saw it)
-            row["gsc_missing"]=len(sm-seen)          # in sitemap, no GSC row (crawl/index gap)
+            row["gsc_reported_urls"]=len(reported)               # in sitemap AND in export (surfaced >=1 impr)
+            row["gsc_not_reported_urls"]=len(sm-reported)        # in sitemap, NOT in export — STATUS UNKNOWN
+            row["gsc_reported_with_clicks"]=rc
+            row["gsc_reported_zero_clicks"]=len(reported)-rc
         rows.append(row)
-    fields=["brand","window","family","sitemap_urls","gsc_present","gsc_zero","gsc_missing",
-            "pages_with_impr","impressions","impr_per_day","clicks","avg_position"]
-    if not a.sitemap_dir: fields=[c for c in fields if c not in ("sitemap_urls","gsc_present","gsc_zero","gsc_missing")]
+    fields=["domain","family","window","sitemap_urls","gsc_reported_urls","gsc_not_reported_urls",
+            "gsc_reported_with_clicks","gsc_reported_zero_clicks","impressions","clicks",
+            "impressions_per_day","clicks_per_day","weighted_position","export_row_count","export_cap_reached"]
+    if not a.sitemap_dir: fields=[c for c in fields if not c.startswith("sitemap_") and not c.startswith("gsc_")]
     with open(a.out,"w",newline="",encoding="utf-8") as f:
         w=csv.DictWriter(f, fieldnames=fields); w.writeheader()
         for r in rows: w.writerow({c:r.get(c,"") for c in fields})
 
-    print(f"windows={sorted(windows)}  brands={sorted(brands)}  rows={len(rows)}  wrote {a.out}\n")
-    print(f"{'brand':<12}{'window':<7}{'family':<32}{'impr':>8}{'/day':>7}{'clk':>5}{'pos':>6}")
-    print("-"*77)
+    print(f"windows={sorted(windows)}  domains={sorted(brands)}  rows={len(rows)}  wrote {a.out}\n")
+    print(f"{'domain':<12}{'window':<7}{'family':<30}{'impr':>7}{'clk':>4}{'wpos':>6}{'capped':>7}")
+    print("-"*73)
     for r in rows[:40]:
-        print(f"{r['brand']:<12}{r['window']:<7}{r['family']:<32}{r['impressions']:>8}{str(r['impr_per_day']):>7}{r['clicks']:>5}{str(r['avg_position']):>6}")
+        print(f"{r['domain']:<12}{r['window']:<7}{r['family']:<30}{r['impressions']:>7}{r['clicks']:>4}{str(r['weighted_position']):>6}{r['export_cap_reached']:>7}")
     if len(rows)>40: print(f"... (+{len(rows)-40} more rows in {a.out})")
-    print("\nClassify A/B/C/D using: sitemap_urls, gsc_present/zero/missing, impr_per_day (windows are")
-    print("unequal — 17 vs 10 days), avg_position, cross-brand overlap, affiliate value. Not URL count alone.")
+    # per-dataset cap warnings
+    for p in provenance:
+        if p["possible_UI_truncation"]=="POSSIBLE":
+            print(f"\n  !! {p['file']} reached the ~1,000-row UI limit. Family totals for it are LOWER BOUNDS")
+            print(f"     for reported-page coverage; lower-volume pages are omitted.")
+    print("\n  DISCLAIMER: Search Performance presence is NOT an index-status signal. Use GSC Page")
+    print("  Indexing or URL Inspection for crawl/index classifications. This is a PRELIMINARY family")
+    print("  review (37 total clicks, ~23 days, capped gotript, tiny samples) — it identifies CANDIDATES,")
+    print("  not a mandate to noindex. Weight avg_position + clicks + cross-brand overlap + owner.")
 
 if __name__=="__main__":
     main()
