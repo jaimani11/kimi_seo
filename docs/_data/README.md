@@ -46,15 +46,15 @@ done
 ```
 
 ## 4. Build the family report (join GSC onto the sitemap denominator)
-Download the 4 live sitemaps into a dir (so `gsc_missing` can be computed), then:
+Download the 4 live sitemaps into a dir (the denominator), then:
 ```bash
 python3 docs/_data/gsc_family_report.py docs/_data/gsc_csv \
   --sitemap-dir docs/_data/sitemaps --out docs/_data/report.csv
 ```
-Output columns: `sitemap_urls, gsc_present (impr>0), gsc_zero (in GSC, 0 impr),
-gsc_missing (in sitemap, no GSC row), pages_with_impr, impressions, impr_per_day,
-clicks, avg_position`. Windows are unequal (17 vs 10 days) — **compare `impr_per_day`,
-not raw totals.**
+Output columns: `sitemap_urls, gsc_reported (in export), gsc_reported_w_clicks,
+gsc_not_reported (in sitemap, NOT in export — status UNKNOWN), pages_with_impr,
+impressions, impr_per_day, clicks, avg_position`. Windows unequal (17 vs 10 days) —
+**compare `impr_per_day`, not raw totals.**
 
 ## 5. Classify each family → send `report.csv` back
 - **A — keep & improve:** differentiated, clearly owned, real demand.
