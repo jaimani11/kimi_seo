@@ -92,19 +92,44 @@ def main():
 
     # (brand,window,family) -> aggregates
     agg=collections.defaultdict(lambda: {"pages":0,"impr":0.0,"clicks":0.0,"pos_wsum":0.0,"pos_w":0.0})
-    windows=set(); brands=set()
+    windows=set(); brands=set(); provenance=[]
     for fp in sorted(glob.glob(os.path.join(a.csv_dir,"*.csv"))):
         base=os.path.basename(fp)[:-4]
         if "_" not in base:
             print(f"skip (need <brand>_<window>.csv): {base}", file=sys.stderr); continue
         brand,window=base.split("_",1); brands.add(brand); windows.add(window)
+        rows_imported=0; classified=0; unclassified=0
         for url,clicks,impr,pos in read_gsc_csv(fp):
+            rows_imported+=1
             fam=family(path_of(url)); k=(brand,window,fam); d=agg[k]
+            if fam=="OTHER": unclassified+=1
+            else: classified+=1
             if impr>0: d["pages"]+=1
             d["impr"]+=impr; d["clicks"]+=clicks
             if impr>0: d["pos_wsum"]+=pos*impr; d["pos_w"]+=impr
+        # Truncation heuristic: GSC *UI* Pages export caps at ~1,000 representative rows.
+        truncated = 999<=rows_imported<=1001
+        provenance.append({"file":base,"rows_imported":rows_imported,
+                           "urls_classified":classified,"unclassified":unclassified,
+                           "likely_UI_truncated_1000_cap":"YES" if truncated else "no"})
     if not agg:
         print("No data parsed. Check CSV filenames and format.", file=sys.stderr); sys.exit(1)
+
+    # --- provenance / metadata (ChatGPT caveats: source completeness + immature data) ---
+    print("=== IMPORT PROVENANCE (record source; verify completeness) ===")
+    print(f"{'file':<26}{'rows':>7}{'classfd':>9}{'unclass':>8}  UI-1000-cap?")
+    any_trunc=False
+    for p in provenance:
+        if p["likely_UI_truncated_1000_cap"]=="YES": any_trunc=True
+        print(f"{p['file']:<26}{p['rows_imported']:>7}{p['urls_classified']:>9}{p['unclassified']:>8}  {p['likely_UI_truncated_1000_cap']}")
+    if any_trunc:
+        print("\n  !! WARNING: a file hit ~1,000 rows. The GSC *UI* Pages export is capped at ~1,000")
+        print("     representative rows — for a 46,604-URL portfolio that is TRUNCATED and understates")
+        print("     long-tail families. Use the API export (docs/_data/gsc_pages_export.py:")
+        print("     rowLimit=25000 + startRow pagination) for a complete dataset.")
+    print("\n  NOTE: a URL absent from the export = 'no GSC row', NOT proven zero traffic — especially")
+    print("  for immature recent dates. Use a mature window (Before Jul 1-17, After Jul 18-27), then")
+    print("  rerun once recent days finalize. Record: source(UI/API), date range, latest-complete-date.\n")
 
     rows=[]
     for (brand,window,fam),d in sorted(agg.items(), key=lambda kv:(-kv[1]["impr"])):

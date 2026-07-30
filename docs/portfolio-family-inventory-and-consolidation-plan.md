@@ -76,9 +76,13 @@ Because gotript overlaps every sibling, the largest single dedup win is **removi
 
 **Decision rule (agreed):** a family is a **cut (C)** only if it is *all* of: thousands of URLs · ~0 impressions · no search demand · heavy cross-brand overlap · thin/templated · no affiliate value. Otherwise retain/improve. **Do not cut on URL count alone.**
 
-Add these columns per family from GSC (Performance + Pages, filtered by URL pattern):
+**Data source — use the API, not the UI export.** The GSC **UI** Pages export is capped at **~1,000 representative rows**; for a 46,604-URL portfolio that silently truncates the long tail and would understate low-traffic families. Use `docs/_data/gsc_pages_export.py` (Search Analytics API, `rowLimit=25000` + `startRow` pagination) → then `docs/_data/gsc_family_report.py` maps every URL to these 68 families. The report records source (UI/API), rows imported, URLs classified/unclassified, and warns if any file looks UI-truncated.
 
-`Family | Total URLs | Indexed | Crawled-not-indexed | Discovered-not-indexed | Pages w/ ≥1 impression | Total impressions | Clicks | Cross-brand overlap (Y/N) | Affiliate value | → Class (A/B/C/D)`
+**Date windows — recent data is immature.** Use **Before = 2026-07-01…07-17** and, initially, **After = 2026-07-18…07-27** (mature); rerun `After` once 07-28…07-31 finalize. A URL absent from the export is *"no GSC row,"* **not** proven zero traffic. Record the **latest-complete-data date** with each run.
+
+Columns per family:
+
+`Family | Total URLs | Indexed | Crawled-not-indexed | Discovered-not-indexed | Pages w/ ≥1 impression | Impressions (before/after) | Clicks | Avg position | Cross-brand overlap (Y/N) | Affiliate value | → Class (A/B/C/D)`
 
 Classes: **A** retain & improve · **B** retain on one owner only · **C** noindex + remove from sitemap (keep URL live) · **D** redirect/retire.
 
@@ -120,6 +124,7 @@ Full 68-family table with exact per-brand counts is in the appendix export (`doc
 | Canonical correctness | Self-canonical on all sampled pages, all 4 brands |
 | Unsupported commercial claims | Swept & removed across all 4 brands (commits `b18c6a1`, `04173ac`); only JSDoc references remain |
 | stayviaowner "missing brand config" (earlier flag) | Disproven — no `buildBrandPlan('stayviaowner')` calls; builds pass |
+| Deploy safety of this audit branch | Production `main` untouched. NOTE: a branch push can create a Vercel **Preview** deployment — confirm in each project's Deployments that new builds are **Preview**, never **Production**, and custom domains stay on `main`. (Docs-only files render no new pages regardless.) |
 
 ---
 
