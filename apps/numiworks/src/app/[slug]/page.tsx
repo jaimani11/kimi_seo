@@ -168,12 +168,17 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   }
 
   if (parsed.kind === 'itinerary') {
+    // Single-owner cleanup (seo-recovery-phase-1): general itineraries belong to
+    // gotript, not the experiences-focused numiworks. This family drew 2 impressions /
+    // 0 clicks across 1,125 URLs. noindex + follow (kept crawlable so Google observes
+    // the directive; NOT blocked in robots.txt); also dropped from the sitemap.
     const title = `${parsed.days}-Day ${parsed.city.name} Itinerary · numiworks`;
     const description = `Day-by-day ${parsed.days}-day ${parsed.city.name}, ${parsed.city.countryName} itinerary with bookable Viator experiences in every slot. ${parsed.city.oneLiner}`;
     return {
       title,
       description,
       alternates: { canonical },
+      robots: { index: false, follow: true },
       openGraph: { title, description, url: canonical, type: 'article', images: ogImages },
       twitter: { card: 'summary_large_image', title, description, images: ogImages },
     };
