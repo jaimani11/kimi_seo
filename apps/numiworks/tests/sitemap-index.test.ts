@@ -9,7 +9,7 @@ import { getSiteOrigin } from '@lib/site/origin';
 import { enumerateOccasionSlugs, enumerateStaysNearSlugs } from '@adored/seo-data';
 import { enumerateTourCategorySlugs } from '@lib/seo/tour-category-routes';
 import { allAttractions } from '@lib/seo/attractions';
-import { enumerateAllSeoSlugs } from '@lib/seo/route-parser';
+import { enumerateAllSeoSlugs, parseSeoSlug } from '@lib/seo/route-parser';
 
 const origin = getSiteOrigin();
 const sections = sitemapSections();
@@ -46,13 +46,28 @@ describe('numiworks sitemap index', () => {
     expect(all.every((x) => x.lastModified === undefined)).toBe(true);
   });
 
-  it('parity: the split preserves every programmatic URL (nothing dropped)', () => {
+  it('parity: the split preserves every indexable programmatic URL', () => {
     const urlset = new Set(all.map((x) => x.url));
     for (const slug of enumerateOccasionSlugs()) expect(urlset.has(`${origin}/celebrations/${slug}`)).toBe(true);
     for (const slug of enumerateTourCategorySlugs()) expect(urlset.has(`${origin}/tours/${slug}`)).toBe(true);
     for (const slug of enumerateStaysNearSlugs()) expect(urlset.has(`${origin}/stays-near/${slug}`)).toBe(true);
     for (const a of allAttractions()) expect(urlset.has(`${origin}/attractions/${a.slug}`)).toBe(true);
-    for (const slug of enumerateAllSeoSlugs()) expect(urlset.has(`${origin}/${slug}`)).toBe(true);
+    // Families that are intentionally NOINDEXED + excluded from the sitemap while
+    // still rendering (200) for crawling. Must match the exclusion list in
+    // lib/site/sitemap-entries.ts. Climate = single-owner gotript (added earlier);
+    // itinerary = single-owner gotript (seo-recovery-phase-1).
+    const SITEMAP_EXCLUDED_KINDS = new Set([
+      'best-time', 'weather-month', 'where-to-go-month', 'where-to-stay', 'itinerary',
+    ]);
+    for (const slug of enumerateAllSeoSlugs()) {
+      const p = parseSeoSlug(slug);
+      const inSitemap = urlset.has(`${origin}/${slug}`);
+      if (p && SITEMAP_EXCLUDED_KINDS.has(p.kind)) {
+        expect(inSitemap).toBe(false);
+      } else {
+        expect(inSitemap).toBe(true);
+      }
+    }
     expect(all.length).toBe(sections.reduce((n, s) => n + s.entries.length, 0));
   });
 

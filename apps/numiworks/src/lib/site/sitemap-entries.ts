@@ -81,7 +81,9 @@ export function sitemapSections(): SitemapSection[] {
       entries: enumerateAllSeoSlugs()
         .filter((slug) => {
           const p = parseSeoSlug(slug);
-          return !p || !['best-time', 'weather-month', 'where-to-go-month', 'where-to-stay'].includes(p.kind);
+          // 'itinerary' dropped (seo-recovery-phase-1): single-owner = gotript; the
+          // family drew 2 impressions / 0 clicks across 1,125 numiworks URLs.
+          return !p || !['best-time', 'weather-month', 'where-to-go-month', 'where-to-stay', 'itinerary'].includes(p.kind);
         })
         .map((slug) => e(base, `/${slug}`, 0.75, 'weekly')),
     },
