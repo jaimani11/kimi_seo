@@ -54,17 +54,24 @@ def build_service(creds_path, oauth):
     return build("searchconsole","v1",credentials=creds,cache_discovery=False)
 
 def fetch_all_pages(svc, site, start, end):
-    rows=[]; start_row=0; PAGE=25000
+    """Retrieve all rows the Search Analytics API MAKES AVAILABLE for this query
+    (page dimension). This is NOT the full site corpus: Google returns top rows
+    subject to internal limits (~50k/day/type) and may drop some rows. The complete
+    URL corpus must come from the sitemap inventory; this is performance evidence to
+    JOIN onto it. Returns (rows, raw_pages) — raw_pages is each API response for backup."""
+    rows=[]; raw=[]; start_row=0; PAGE=25000
     while True:
         resp=svc.searchanalytics().query(siteUrl=site, body={
             "startDate":start,"endDate":end,"dimensions":["page"],
+            "type":"web","aggregationType":"auto","dataState":"final",
             "rowLimit":PAGE,"startRow":start_row}).execute()
+        raw.append(resp)
         batch=resp.get("rows",[])
         if not batch: break
         rows.extend(batch)
         if len(batch)<PAGE: break
         start_row+=PAGE
-    return rows
+    return rows, raw
 
 def main():
     ap=argparse.ArgumentParser()
@@ -76,7 +83,7 @@ def main():
     a=ap.parse_args()
     os.makedirs(a.out,exist_ok=True)
     svc=build_service(a.creds,a.oauth)
-    rows=fetch_all_pages(svc,a.site,a.start,a.end)
+    rows, raw=fetch_all_pages(svc,a.site,a.start,a.end)
     out=os.path.join(a.out,f"{a.brand}_{a.window}.csv")
     with open(out,"w",newline="",encoding="utf-8") as f:
         w=csv.writer(f); w.writerow(["Top pages","Clicks","Impressions","CTR","Position"])
@@ -84,15 +91,21 @@ def main():
             page=r["keys"][0]
             w.writerow([page, int(r.get("clicks",0)), int(r.get("impressions",0)),
                         f'{r.get("ctr",0)*100:.2f}%', round(r.get("position",0),1)])
-    # provenance sidecar (fields ChatGPT asked to record)
-    latest_complete = (datetime.date.fromisoformat(a.end))
+    # raw API JSON backup (avoids re-hitting rate limits to reclassify later)
+    import json
+    with open(out[:-4]+".raw.json","w",encoding="utf-8") as j:
+        json.dump(raw,j)
+    # provenance sidecar
+    days=(datetime.date.fromisoformat(a.end)-datetime.date.fromisoformat(a.start)).days+1
     with open(out[:-4]+".meta.txt","w",encoding="utf-8") as m:
-        m.write(f"property={a.site}\nexport_source=API (Search Analytics, page dimension)\n")
-        m.write(f"requested_date_range={a.start}..{a.end}\nrows_exported={len(rows)}\n")
+        m.write(f"property={a.site}\nexport_source=API (Search Analytics: page dim, type=web, dataState=final)\n")
+        m.write(f"requested_date_range={a.start}..{a.end} ({days} days)\nrows_exported={len(rows)}\n")
         m.write(f"row_page_size=25000 (paginated via startRow)\n")
-        m.write(f"note=GSC finalizes recent days with a lag; confirm '{a.end}' is a complete date.\n")
-    print(f"wrote {out}  rows={len(rows)}")
-    if len(rows)>=25000: print("  (paginated — full corpus captured across multiple API pages)")
+        m.write(f"caveat=API returns top rows subject to internal limits; NOT guaranteed to be every URL.\n")
+        m.write(f"caveat=A missing URL = 'no GSC row', not proven zero. Confirm '{a.end}' is a finalized date.\n")
+    print(f"wrote {out}  rows={len(rows)}  ({days} days; +.raw.json +.meta.txt)")
+    print("  (rows = all the API made available for this query, subject to Google's internal limits —")
+    print("   NOT necessarily every site URL. Join onto the sitemap inventory for the full denominator.)")
 
 if __name__=="__main__":
     main()

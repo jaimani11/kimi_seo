@@ -87,11 +87,28 @@ def main():
     ap=argparse.ArgumentParser()
     ap.add_argument("csv_dir", help="dir of <brand>_<window>.csv GSC Pages exports")
     ap.add_argument("--out", default="gsc_family_report.csv")
-    ap.add_argument("--sitemap-inventory", default=None, help="family-inventory.txt to join sitemap URL counts (optional)")
+    ap.add_argument("--sitemap-dir", default=None,
+        help="dir of live sitemap .xml files (the DENOMINATOR). Enables gsc_present/gsc_zero/gsc_missing per family.")
+    ap.add_argument("--before-days", type=int, default=17, help="days in the 'before' window (Jul 1-17 = 17)")
+    ap.add_argument("--after-days", type=int, default=10, help="days in the 'after' window (Jul 18-27 = 10)")
     a=ap.parse_args()
+    day_map={"before":a.before_days,"after":a.after_days}
 
-    # (brand,window,family) -> aggregates
+    # DENOMINATOR: classify the full sitemap URL inventory per (brand, family).
+    # GSC is JOINED onto this — a URL absent from GSC is 'gsc_missing', not zero.
+    sm_paths=collections.defaultdict(set)  # (brand,family) -> {paths}
+    if a.sitemap_dir:
+        for xf in glob.glob(os.path.join(a.sitemap_dir,"*.xml")):
+            txt=open(xf,encoding="utf-8",errors="ignore").read()
+            for loc in re.findall(r"<loc>([^<]+)</loc>", txt):
+                b=next((br for br in ("gotript","gobookt","numiworks","stayviaowner") if br in loc), None)
+                if not b: continue
+                sm_paths[(b,family(path_of(loc)))].add(path_of(loc))
+
+    # (brand,window,family) -> aggregates + path sets for present/zero
     agg=collections.defaultdict(lambda: {"pages":0,"impr":0.0,"clicks":0.0,"pos_wsum":0.0,"pos_w":0.0})
+    gsc_impr=collections.defaultdict(set)  # (brand,window,family)->{paths with impr>0}
+    gsc_zero=collections.defaultdict(set)  # (brand,window,family)->{paths seen with impr==0}
     windows=set(); brands=set(); provenance=[]
     for fp in sorted(glob.glob(os.path.join(a.csv_dir,"*.csv"))):
         base=os.path.basename(fp)[:-4]
@@ -101,55 +118,73 @@ def main():
         rows_imported=0; classified=0; unclassified=0
         for url,clicks,impr,pos in read_gsc_csv(fp):
             rows_imported+=1
-            fam=family(path_of(url)); k=(brand,window,fam); d=agg[k]
+            pth=path_of(url); fam=family(pth); k=(brand,window,fam); d=agg[k]
             if fam=="OTHER": unclassified+=1
             else: classified+=1
-            if impr>0: d["pages"]+=1
+            if impr>0:
+                d["pages"]+=1; d["pos_wsum"]+=pos*impr; d["pos_w"]+=impr; gsc_impr[k].add(pth)
+            else:
+                gsc_zero[k].add(pth)
             d["impr"]+=impr; d["clicks"]+=clicks
-            if impr>0: d["pos_wsum"]+=pos*impr; d["pos_w"]+=impr
-        # Truncation heuristic: GSC *UI* Pages export caps at ~1,000 representative rows.
+        # POSSIBLE UI truncation — only a heuristic (a real property may return exactly 1,000).
         truncated = 999<=rows_imported<=1001
         provenance.append({"file":base,"rows_imported":rows_imported,
                            "urls_classified":classified,"unclassified":unclassified,
-                           "likely_UI_truncated_1000_cap":"YES" if truncated else "no"})
+                           "possible_UI_truncation":"POSSIBLE" if truncated else "no"})
     if not agg:
         print("No data parsed. Check CSV filenames and format.", file=sys.stderr); sys.exit(1)
 
-    # --- provenance / metadata (ChatGPT caveats: source completeness + immature data) ---
+    # --- provenance / metadata (source completeness + immature data) ---
     print("=== IMPORT PROVENANCE (record source; verify completeness) ===")
-    print(f"{'file':<26}{'rows':>7}{'classfd':>9}{'unclass':>8}  UI-1000-cap?")
+    print(f"{'file':<26}{'rows':>7}{'classfd':>9}{'unclass':>8}  possible-UI-trunc?")
     any_trunc=False
     for p in provenance:
-        if p["likely_UI_truncated_1000_cap"]=="YES": any_trunc=True
-        print(f"{p['file']:<26}{p['rows_imported']:>7}{p['urls_classified']:>9}{p['unclassified']:>8}  {p['likely_UI_truncated_1000_cap']}")
+        if p["possible_UI_truncation"]=="POSSIBLE": any_trunc=True
+        print(f"{p['file']:<26}{p['rows_imported']:>7}{p['urls_classified']:>9}{p['unclassified']:>8}  {p['possible_UI_truncation']}")
     if any_trunc:
-        print("\n  !! WARNING: a file hit ~1,000 rows. The GSC *UI* Pages export is capped at ~1,000")
-        print("     representative rows — for a 46,604-URL portfolio that is TRUNCATED and understates")
-        print("     long-tail families. Use the API export (docs/_data/gsc_pages_export.py:")
-        print("     rowLimit=25000 + startRow pagination) for a complete dataset.")
-    print("\n  NOTE: a URL absent from the export = 'no GSC row', NOT proven zero traffic — especially")
-    print("  for immature recent dates. Use a mature window (Before Jul 1-17, After Jul 18-27), then")
-    print("  rerun once recent days finalize. Record: source(UI/API), date range, latest-complete-date.\n")
+        print("\n  !! POSSIBLE UI truncation: a file returned ~1,000 rows. The GSC *UI* Pages export is")
+        print("     capped at ~1,000 representative rows. If this CSV came from the UI it is truncated")
+        print("     for a 46,604-URL portfolio; use the API export (gsc_pages_export.py). If it came")
+        print("     from the API and the property is genuinely small, ~1,000 may be legitimate.")
+    print("\n  NOTE: rows are what the API/UI made available — NOT guaranteed to be every URL. A URL")
+    print("  absent from the export = 'no GSC row' (gsc_missing), NOT proven zero. Use a mature window")
+    print("  (Before Jul 1-17, After Jul 18-27); rerun once recent days finalize.")
+    if not a.sitemap_dir:
+        print("  TIP: pass --sitemap-dir <dir of live *.xml> to get gsc_present/gsc_zero/gsc_missing.\n")
+    else: print()
 
     rows=[]
     for (brand,window,fam),d in sorted(agg.items(), key=lambda kv:(-kv[1]["impr"])):
+        k=(brand,window,fam)
         avgpos=round(d["pos_wsum"]/d["pos_w"],1) if d["pos_w"] else ""
-        rows.append({"brand":brand,"window":window,"family":fam,
-                     "pages_with_impr":d["pages"],"impressions":int(d["impr"]),
-                     "clicks":int(d["clicks"]),"avg_position":avgpos})
+        days=day_map.get(window)
+        row={"brand":brand,"window":window,"family":fam,
+             "pages_with_impr":d["pages"],"impressions":int(d["impr"]),
+             "impr_per_day": round(d["impr"]/days,1) if days else "",
+             "clicks":int(d["clicks"]),"avg_position":avgpos}
+        if a.sitemap_dir:
+            sm=sm_paths.get((brand,fam),set())
+            present=gsc_impr[k]; zero=gsc_zero[k]-present; seen=present|gsc_zero[k]
+            row["sitemap_urls"]=len(sm)
+            row["gsc_present"]=len(present)          # in GSC with impressions>0
+            row["gsc_zero"]=len(zero)                # in GSC, 0 impressions (Google saw it)
+            row["gsc_missing"]=len(sm-seen)          # in sitemap, no GSC row (crawl/index gap)
+        rows.append(row)
+    fields=["brand","window","family","sitemap_urls","gsc_present","gsc_zero","gsc_missing",
+            "pages_with_impr","impressions","impr_per_day","clicks","avg_position"]
+    if not a.sitemap_dir: fields=[c for c in fields if c not in ("sitemap_urls","gsc_present","gsc_zero","gsc_missing")]
     with open(a.out,"w",newline="",encoding="utf-8") as f:
-        w=csv.DictWriter(f, fieldnames=["brand","window","family","pages_with_impr","impressions","clicks","avg_position"])
-        w.writeheader(); w.writerows(rows)
+        w=csv.DictWriter(f, fieldnames=fields); w.writeheader()
+        for r in rows: w.writerow({c:r.get(c,"") for c in fields})
 
-    print(f"windows={sorted(windows)}  brands={sorted(brands)}  rows={len(rows)}")
-    print(f"wrote {a.out}\n")
-    print(f"{'brand':<13}{'window':<8}{'family':<34}{'pgs':>5}{'impr':>9}{'clk':>6}{'pos':>6}")
-    print("-"*81)
+    print(f"windows={sorted(windows)}  brands={sorted(brands)}  rows={len(rows)}  wrote {a.out}\n")
+    print(f"{'brand':<12}{'window':<7}{'family':<32}{'impr':>8}{'/day':>7}{'clk':>5}{'pos':>6}")
+    print("-"*77)
     for r in rows[:40]:
-        print(f"{r['brand']:<13}{r['window']:<8}{r['family']:<34}{r['pages_with_impr']:>5}{r['impressions']:>9}{r['clicks']:>6}{str(r['avg_position']):>6}")
+        print(f"{r['brand']:<12}{r['window']:<7}{r['family']:<32}{r['impressions']:>8}{str(r['impr_per_day']):>7}{r['clicks']:>5}{str(r['avg_position']):>6}")
     if len(rows)>40: print(f"... (+{len(rows)-40} more rows in {a.out})")
-    print("\nClassify each family A/B/C/D using: URLs, pages_with_impr, impressions(before/after),")
-    print("clicks, avg_position, cross-brand overlap, affiliate value. Do NOT cut on URL count alone.")
+    print("\nClassify A/B/C/D using: sitemap_urls, gsc_present/zero/missing, impr_per_day (windows are")
+    print("unequal — 17 vs 10 days), avg_position, cross-brand overlap, affiliate value. Not URL count alone.")
 
 if __name__=="__main__":
     main()

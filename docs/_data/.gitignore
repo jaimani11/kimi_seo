@@ -1,0 +1,9 @@
+# Never commit GSC credentials or exported data
+service-account.json
+*.credentials.json
+gsc_csv/
+sitemaps/
+*.raw.json
+*.meta.txt
+report.csv
+__pycache__/
