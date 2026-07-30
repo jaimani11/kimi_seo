@@ -1,0 +1,74 @@
+FAMILY                             gotript gobookt numiwks stayvia   TOTAL  OWNERS
+------------------------------------------------------------------------------------------
+celebrations/*                        2025    2025    2025    2025    8100  gotr,gobo,numi,stay
+stays-near/*                           949     949     949     949    3796  gotr,gobo,numi,stay
+rentals/*                                0       0       0    3114    3114  stay
+{city}-weather-in-{month}             2580       0       0       0    2580  gotr
+tours/*                                  0       0    1874       0    1874  numi
+hotels/*                                 0    1850       0       0    1850  gobo
+{season}-in-{city}                     900       0     900       0    1800  gotr,numi
+{city}-N-day-itinerary                   0       0    1125       0    1125  numi
+best-hotels-in-{city}                  225     225       0     225     675  gotr,gobo,stay
+cheap-hotels-in-{city}                 225     225       0     225     675  gotr,gobo,stay
+luxury-hotels-in-{city}                225     225       0     225     675  gotr,gobo,stay
+family-hotels-in-{city}                225     225       0     225     675  gotr,gobo,stay
+boutique-hotels-in-{city}              225     225       0     225     675  gotr,gobo,stay
+pet-friendly-hotels-in-{city}          225     225       0     225     675  gotr,gobo,stay
+beach-hotels-in-{city}                 225     225       0     225     675  gotr,gobo,stay
+apartments-in-{city}                   225     225       0     225     675  gotr,gobo,stay
+destinations/*                         164     164     164     164     656  gotr,gobo,numi,stay
+hotels-in-{city}                       225     225       0       0     450  gotr,gobo
+flights-to-{city}                      225     225       0       0     450  gotr,gobo
+cheap-flights-to-{city}                225     225       0       0     450  gotr,gobo
+car-rentals-in-{city}                  225     225       0       0     450  gotr,gobo
+cheap-car-rental-in-{city}             225     225       0       0     450  gotr,gobo
+airport-car-rental-in-{city}           225     225       0       0     450  gotr,gobo
+top-attractions-in-{city}              225     225       0       0     450  gotr,gobo
+free-things-to-do-in-{city}            225     225       0       0     450  gotr,gobo
+museums-in-{city}                      225     225       0       0     450  gotr,gobo
+tours-in-{city}                        225     225       0       0     450  gotr,gobo
+best-family-activities-in-{city}       225       0     225       0     450  gotr,numi
+best-food-tours-in-{city}              225       0     225       0     450  gotr,numi
+day-trips-from-{city}                  225       0     225       0     450  gotr,numi
+honeymoon-in-{city}                    225       0     225       0     450  gotr,numi
+solo-travel-in-{city}                  225       0     225       0     450  gotr,numi
+girls-trip-in-{city}                   225       0     225       0     450  gotr,numi
+rainy-day-in-{city}                    225       0     225       0     450  gotr,numi
+night-in-{city}                        225       0     225       0     450  gotr,numi
+{city}-with-kids                       225       0     225       0     450  gotr,numi
+{city}-with-teens                      225       0     225       0     450  gotr,numi
+{city}-airport-guide                   225       0     225       0     450  gotr,numi
+{city}-budget-per-day                  225       0     225       0     450  gotr,numi
+bachelor-party-in-{city}               225       0     225       0     450  gotr,numi
+bachelorette-party-in-{city}           225       0     225       0     450  gotr,numi
+first-time-in-{city}                   225       0     225       0     450  gotr,numi
+is-{city}-worth-visiting               225       0     225       0     450  gotr,numi
+hidden-gems-in-{city}                  225       0     225       0     450  gotr,numi
+most-instagrammable-places-in-{city}     225       0     225       0     450  gotr,numi
+luxury-travel-in-{city}                225       0     225       0     450  gotr,numi
+how-many-days-in-{city}                225       0     225       0     450  gotr,numi
+{city}-for-solo-female-travelers       225       0     225       0     450  gotr,numi
+{city}-bucket-list                     225       0     225       0     450  gotr,numi
+private-tours-in-{city}                225       0     225       0     450  gotr,numi
+walking-tours-in-{city}                225       0     225       0     450  gotr,numi
+things-to-do-in-{city}                   0       0     225       0     225  numi
+weekend-in-{city}                        0       0     225       0     225  numi
+best-time-to-visit-{city}              215       0       0       0     215  gotr
+where-to-stay-in-{city}                  0     159       0       0     159  gobo
+OTHER                                   44       0      39       0      83  gotr,numi
+[accommodation-category] {type}         17      17       0      17      51  gotr,gobo,stay
+where-to-go-in-{month}                  12       0       0       0      12  gotr
+attractions/*                            0       0      10       0      10  numi
+home                                     1       1       1       1       4  gotr,gobo,numi,stay
+[static/tool] about                      1       1       1       1       4  gotr,gobo,numi,stay
+[static/tool] privacy                    1       1       1       1       4  gotr,gobo,numi,stay
+[static/tool] terms                      1       1       1       1       4  gotr,gobo,numi,stay
+[static/tool] contact                    1       1       1       1       4  gotr,gobo,numi,stay
+[static/tool] destinations               1       1       1       1       4  gotr,gobo,numi,stay
+[static/tool] plan                       1       0       1       1       3  gotr,numi,stay
+[static/tool] quiz                       0       0       1       0       1  numi
+[static/tool] trip-cost-estimator        0       0       1       0       1  numi
+------------------------------------------------------------------------------------------
+TOTAL                                16363    9220   12945    8076   46604
+
+Distinct families: 68
