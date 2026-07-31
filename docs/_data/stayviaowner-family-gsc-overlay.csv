@@ -1,0 +1,24 @@
+domain,family,window,sitemap_urls,gsc_reported_urls,gsc_not_reported_urls,gsc_reported_with_clicks,gsc_reported_zero_clicks,impressions,clicks,impressions_per_day,clicks_per_day,weighted_position,export_row_count,export_cap_reached
+stayviaowner,home,jul,1,1,0,1,0,59,7,,,32.7,61,no
+stayviaowner,OTHER,jul,0,3,0,0,3,50,0,,,39.9,61,no
+stayviaowner,pet-friendly-hotels-in-{city},jul,225,5,220,0,5,50,0,,,7.8,61,no
+stayviaowner,rentals/*,jul,3114,9,3105,0,9,46,0,,,44.2,61,no
+stayviaowner,[static/tool] cars,jul,0,1,0,0,1,45,0,,,19.7,61,no
+stayviaowner,[accommodation-category] {type},jul,17,3,14,0,3,36,0,,,43.8,61,no
+stayviaowner,luxury-hotels-in-{city},jul,225,5,220,0,5,14,0,,,64.9,61,no
+stayviaowner,[static/tool] stays,jul,0,1,0,0,1,12,0,,,12.2,61,no
+stayviaowner,[static/tool] about,jul,1,1,0,0,1,12,0,,,26.2,61,no
+stayviaowner,destinations/*,jul,164,5,159,0,5,10,0,,,57.2,61,no
+stayviaowner,apartments-in-{city},jul,225,5,220,0,5,10,0,,,42.2,61,no
+stayviaowner,beach-hotels-in-{city},jul,225,6,219,0,6,10,0,,,39.0,61,no
+stayviaowner,[static/tool] contact,jul,1,1,0,0,1,9,0,,,8.0,61,no
+stayviaowner,[static/tool] terms,jul,1,1,0,0,1,6,0,,,3.5,61,no
+stayviaowner,[static/tool] flights,jul,0,1,0,0,1,6,0,,,5.0,61,no
+stayviaowner,celebrations/*,jul,2025,3,2022,0,3,6,0,,,48.0,61,no
+stayviaowner,[static/tool] privacy,jul,1,1,0,0,1,5,0,,,5.4,61,no
+stayviaowner,[static/tool] cruises,jul,0,1,0,0,1,5,0,,,6.6,61,no
+stayviaowner,things-to-{city},jul,0,1,0,0,1,5,0,,,6.6,61,no
+stayviaowner,[static/tool] destinations,jul,1,1,0,0,1,4,0,,,8.2,61,no
+stayviaowner,family-hotels-in-{city},jul,225,3,222,0,3,4,0,,,51.2,61,no
+stayviaowner,boutique-hotels-in-{city},jul,225,2,223,0,2,3,0,,,46.3,61,no
+stayviaowner,best-hotels-in-{city},jul,225,1,224,0,1,1,0,,,17.0,61,no
