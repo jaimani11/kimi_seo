@@ -14,18 +14,25 @@ const origin = getSiteOrigin();
 const sections = sitemapSections();
 const all = buildSitemapEntries();
 
-// The four sections carved out of the shared programmatic long-tail
-// (enumerateAllSeoSlugs). Their union must equal the full slug set.
-const SEO_SPLIT_SECTIONS = ['itineraries', 'things-to-do', 'seasonal', 'editorial'] as const;
+// The SEO sections carved out of the shared programmatic long-tail
+// (enumerateAllSeoSlugs). The 'itineraries' and 'things-to-do' sections were retired
+// (those families now 308-redirect and must not be listed in a sitemap), so only
+// 'seasonal' + 'editorial' are emitted. where-to-stay is also filtered out (owned by
+// gobookt). Their union must equal enumerateAllSeoSlugs MINUS those excluded families.
+const SEO_SPLIT_SECTIONS = ['seasonal', 'editorial'] as const;
 const seoSplitEntries = SEO_SPLIT_SECTIONS.flatMap((n) => sitemapSectionEntries(n) ?? []);
+/** Families intentionally kept OUT of the sitemap (retired/redirected or single-owner). */
+const isExcludedFromSitemap = (slug: string): boolean =>
+  /-\d+-day-itinerary$/.test(slug) ||
+  /^weekend-in-/.test(slug) ||
+  /^things-to-do-in-/.test(slug) ||
+  /^where-to-stay-in-/.test(slug);
 
 describe('gotript sitemap index', () => {
   it('exposes the expected named sections in order', () => {
     expect(sitemapSectionNames()).toEqual([
       'core',
       'destinations',
-      'itineraries',
-      'things-to-do',
       'seasonal',
       'accommodation',
       'stays-near',
@@ -75,14 +82,19 @@ describe('gotript sitemap index', () => {
     expect(all.length).toBe(sections.reduce((n, s) => n + s.entries.length, 0));
   });
 
-  it('parity: itineraries ∪ things-to-do ∪ seasonal ∪ editorial === full enumerateAllSeoSlugs (no drop, no cross-section dupe)', () => {
+  it('parity: seasonal ∪ editorial === enumerateAllSeoSlugs MINUS excluded families (no extra, no dupe)', () => {
     const splitUrls = seoSplitEntries.map((x) => x.url);
     const splitSet = new Set(splitUrls);
-    const expected = new Set(enumerateAllSeoSlugs().map((slug) => `${origin}/${slug}`));
+    const expected = new Set(
+      enumerateAllSeoSlugs()
+        .filter((slug) => !isExcludedFromSitemap(slug))
+        .map((slug) => `${origin}/${slug}`),
+    );
 
-    // No slug lands in two of the four SEO sections.
+    // No slug lands in two of the SEO sections.
     expect(splitUrls.length).toBe(splitSet.size);
-    // Exact set equality: every enumerated slug is present, and nothing extra.
+    // Exact set equality: every NON-excluded enumerated slug is present, nothing extra,
+    // and every excluded family (itinerary/weekend/things-to-do/where-to-stay) is absent.
     expect([...splitSet].sort()).toEqual([...expected].sort());
   });
 
@@ -91,10 +103,10 @@ describe('gotript sitemap index', () => {
       sitemapSectionNames().map((n) => ({ loc: `${origin}/sitemaps/${n}.xml` })),
     );
     expect(idx).toContain('<sitemapindex');
-    expect(idx).toContain(`${origin}/sitemaps/itineraries.xml`);
+    expect(idx).toContain(`${origin}/sitemaps/editorial.xml`);
     expect(idx).not.toContain('<?xml-stylesheet'); // an index is machine-only
 
-    const child = renderSitemapXml(sitemapSectionEntries('things-to-do') ?? []);
+    const child = renderSitemapXml(sitemapSectionEntries('editorial') ?? []);
     expect(child).toContain('<urlset');
     expect(child).toContain('<loc>');
     expect(child).toContain('<?xml-stylesheet'); // children keep the human stylesheet
