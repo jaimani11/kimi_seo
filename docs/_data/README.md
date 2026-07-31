@@ -59,11 +59,14 @@ impressions, impr_per_day, clicks, avg_position`. Windows unequal (17 vs 10 days
 ## 5. Classify each family → send `report.csv` back
 - **A — keep & improve:** differentiated, clearly owned, real demand.
 - **B — consolidate:** demand exists, but another brand should own it.
-- **C — noindex / drop from sitemap:** weak/duplicate surface, no owner, `gsc_missing`≈all.
+- **C — noindex / drop from sitemap:** weak/duplicate surface, no owner, `gsc_not_reported`≈all — but confirm with an API export first (see caveat below).
 - **D — investigate:** ambiguous/unclassified/conflicting.
 
-A URL with **no GSC row = `gsc_missing`** (crawl/index gap), which is different from
-**`gsc_zero`** (Google saw it, 0 impressions). Don't treat missing as zero.
+A URL absent from the export is **`gsc_not_reported`** — status **UNKNOWN** (could be
+zero-impressions, truncated out by the ~1,000-row cap, or indexed-but-never-surfaced). A
+GSC Performance export is **not** an index-status signal, so do **not** read
+`gsc_not_reported` as "never crawled" or "not indexed" — that requires the Page Indexing
+report / URL Inspection. Don't treat "not reported" as proven zero.
 
 ## Guardrails
 - Do **not** prune from URL count or overlap alone — use the GSC evidence.
