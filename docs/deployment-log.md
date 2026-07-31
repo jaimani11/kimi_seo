@@ -40,3 +40,29 @@ the removal. Decide after the index effect settles.
   numiworks tours/destinations.
 - Expected first effect: fewer low-value URLs + cleaner crawl concentration — **not** an
   immediate traffic increase.
+
+---
+
+## 2026-07-30 — editorial metadata/H1/intro brand differentiation (PR #6)
+
+| Field | Value |
+|---|---|
+| Deployed `main` SHA | `f772ce7` (merge of PR #6) |
+| Scope | gotript + numiworks + stayviaowner: `kind==='themed-list'` editorial pages (seasonal/occasion/persona/day-trips/…) |
+| Change | brand-role framed `<title>`, `<meta description>`, on-page `<h1>` + intro (`applyEditorialVoice`). Shared `city.oneLiner` opener dropped; city facts kept |
+| NOT changed | routes, sitemaps, noindex, canonicals, URL counts, internal-link architecture, body-section structure, affiliate/provider logic |
+| Live verification | confirmed: `/spring-in-paris`, `/honeymoon-in-rome` now render distinct title+meta per brand |
+| Framing | hygiene + differentiation correction — **not** a standalone SEO recovery |
+
+Also merged same day: **PR #7** (test-only, fixed pre-existing gotript/stayviaowner sitemap-index assertions) and **PR #5** (docs, cross-brand similarity audit).
+
+## HOLD — no further production change
+
+Two substantive production changes deployed close together (numiworks itinerary noindex;
+editorial metadata differentiation). **Freeze additional pruning** and measure over 1–2 weeks:
+impressions/day, pages receiving impressions, numiworks Page-Indexing movement into "Excluded
+by noindex", sitemap processing, crawl activity, and any collateral change to destination /
+tour / rental pages. Early 24–72h checks are informational; judge on 1–2 week trends.
+
+**stayviaowner:** overlay complete (`docs/stayviaowner-family-gsc-overlay.md`) — **no prune
+needed** (generic editorial already noindexed; celebrations are rental-framed/on-role).
