@@ -73,8 +73,14 @@ const BRAND_OPENERS: Record<EditorialBrand, readonly string[]> = {
 };
 
 export interface EditorialMeta {
+  /** <title> tag — brand-role qualified. */
   title: string;
+  /** <meta description> — brand-role opener + shared family facts. */
   description: string;
+  /** On-page <h1> — brand-role qualified. */
+  h1: string;
+  /** On-page intro paragraph — same brand-role framing as the description. */
+  intro: string;
 }
 
 /**
@@ -99,8 +105,12 @@ export function applyEditorialVoice(
   const tail = base.intro.startsWith(base.oneLiner)
     ? base.intro.slice(base.oneLiner.length).trim()
     : base.intro;
+  const framedIntro = `${opener} ${tail}`.trim();
+  const framedHeading = `${base.heading} — ${TITLE_TAG[brand]}`;
   return {
-    title: `${base.heading} — ${TITLE_TAG[brand]}`,
-    description: `${opener} ${tail}`.trim(),
+    title: framedHeading,
+    description: framedIntro,
+    h1: framedHeading,
+    intro: framedIntro,
   };
 }

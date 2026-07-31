@@ -3,6 +3,7 @@ import { ExperienceCardStandard } from '@/features/experience-cards';
 import { SeoPageShell } from './seo-page-shell';
 import type { SeoCity } from '@lib/seo/cities';
 import type { ThemedListTheme } from '@lib/seo/route-parser';
+import { applyEditorialVoice } from '@adored/brand-config';
 import type { Experience } from '@core/experience';
 import { GygActivitiesWidget } from '@/features/experiences/getyourguide-widget';
 
@@ -37,8 +38,13 @@ export function ThemedListSeoPage({
   const slug = meta.slugFor
     ? meta.slugFor(city)
     : `${meta.slugPrefix}${city.slug}`;
-  const heading = meta.heading(city);
-  const intro = meta.intro(city);
+  const framed = applyEditorialVoice('stayviaowner', city.slug, city.name, theme, {
+    heading: meta.heading(city),
+    intro: meta.intro(city),
+    oneLiner: city.oneLiner,
+  });
+  const heading = framed.h1;
+  const intro = framed.intro;
 
   return (
     <SeoPageShell
