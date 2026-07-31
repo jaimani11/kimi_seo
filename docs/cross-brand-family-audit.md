@@ -5,6 +5,15 @@ overlapping page families across brands, to separate *shared factual overlap* fr
 *actual page duplication* and to assign one clear owner per intent. Data (140 comparisons):
 `docs/_data/cross-brand-family-audit.csv`.
 
+## Provenance
+- **Crawl date:** 2026-07-30 (this session), Googlebot UA, live production sites.
+- **Exact URLs sampled:** `https://www.{brand}.com/{slug}` for every `slug` in
+  `docs/_data/cross-brand-family-audit.csv` (the `slug` column) × each applicable brand —
+  140 fetched comparisons.
+- **Verified findings vs proposed decisions:** the similarity numbers below are *measured*.
+  The A–F family classifications and owner assignments are *proposed* and require GSC
+  evidence + explicit approval before any production change (see Recommendations).
+
 ## Method
 - **10 cities** (major + secondary): paris, rome, tokyo, barcelona, lisbon, dubai, bangkok,
   mexico-city, cape-town, reykjavik.
