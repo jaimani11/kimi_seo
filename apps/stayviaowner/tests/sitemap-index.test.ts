@@ -21,6 +21,9 @@ describe('stayviaowner sitemap index', () => {
       'rentals',
       'stays-near',
       'group-travel',
+      'hot-tub-cabins',
+      'farm-stays',
+      'reunion-villas',
       'editorial',
     ]);
   });
