@@ -18,6 +18,7 @@ import {
   buildThemedListJsonLd,
   THEME_META,
 } from '@/features/seo/themed-list-seo-page';
+import { applyEditorialVoice } from '@adored/brand-config';
 import {
   ComparisonSeoPage,
   buildComparisonJsonLd,
@@ -198,8 +199,13 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   if (parsed.kind === 'themed-list') {
     const meta = THEME_META[parsed.theme];
-    const title = `${meta.heading(parsed.city)} · numiworks`;
-    const description = meta.intro(parsed.city);
+    const framed = applyEditorialVoice('numiworks', parsed.city.slug, parsed.city.name, parsed.theme, {
+      heading: meta.heading(parsed.city),
+      intro: meta.intro(parsed.city),
+      oneLiner: parsed.city.oneLiner,
+    });
+    const title = `${framed.title} · numiworks`;
+    const description = framed.description;
     return {
       title,
       description,

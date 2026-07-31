@@ -3,6 +3,7 @@ import { ExperienceCardStandard } from '@/features/experience-cards';
 import { SeoPageShell } from './seo-page-shell';
 import type { SeoCity } from '@lib/seo/cities';
 import type { ThemedListTheme } from '@lib/seo/route-parser';
+import { applyEditorialVoice } from '@adored/brand-config';
 import type { Experience } from '@core/experience';
 import { GygActivitiesWidget } from '@/features/experiences/getyourguide-widget';
 import { buildCityContext } from '@lib/seo/city-context';
@@ -38,8 +39,13 @@ export function ThemedListSeoPage({
   const slug = meta.slugFor
     ? meta.slugFor(city)
     : `${meta.slugPrefix}${city.slug}`;
-  const heading = meta.heading(city);
-  const intro = meta.intro(city);
+  const framed = applyEditorialVoice('numiworks', city.slug, city.name, theme, {
+    heading: meta.heading(city),
+    intro: meta.intro(city),
+    oneLiner: city.oneLiner,
+  });
+  const heading = framed.h1;
+  const intro = framed.intro;
   // City-specific prose + FAQs harvested from the destination guide / climate —
   // breaks the ~93% token-swap duplication that kept this family out of the index.
   const ctx = buildCityContext(city, theme);

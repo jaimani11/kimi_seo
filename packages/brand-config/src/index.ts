@@ -17,3 +17,8 @@ export {
   type DestinationCopyBrand,
   type SectionVoiceBrand,
 } from './destination-copy';
+export {
+  applyEditorialVoice,
+  type EditorialBrand,
+  type EditorialMeta,
+} from './editorial-voice';
