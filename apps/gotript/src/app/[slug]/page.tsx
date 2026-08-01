@@ -101,6 +101,23 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     };
   }
 
+  // Phase 2B (hybrid): reverse ONLY the 2da18a0 climate expansion. Remove monthly-weather
+  // ({city}-weather-in-{month}) and where-to-go-in-{month}; KEEP best-time-to-visit (one
+  // climate page/city). Seasonal ({spring,summer,fall,winter}-in-{city}) came from a DIFFERENT
+  // commit (b63f05c) and is intentionally LEFT INDEXED here — evaluated separately later, so
+  // this deployment cleanly tests reversing 2da18a0 alone. where-to-stay is already noindexed.
+  const parsedKind: string = parsed.kind;
+  const isPhase2BClimate =
+    parsedKind === 'weather-month' || parsedKind === 'where-to-go-month';
+  if (isPhase2BClimate) {
+    const label = slug.replace(/-/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase());
+    return {
+      title: `${label} · gotript`,
+      alternates: { canonical },
+      robots: { index: false, follow: true },
+    };
+  }
+
   // Resolve a destination photo for the Open Graph card. Pinterest,
   // Facebook, X and Slack all read this — without it, rich pins fall
   // back to the pin's own image (no page-context photo). Cruise-region
