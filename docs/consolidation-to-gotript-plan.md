@@ -12,12 +12,19 @@ consistency, cross-brand metadata, single-owner, itinerary prune, Phase 2A/2B/2C
 sites combined earn **~218 impressions/day** (gobookt 96, stayviaowner 112, numiworks 10,
 gotript 0) on deep-position, near-zero-volume long-tail queries. The overlap is concrete:
 
-| Family | gotript | gobookt | numiworks | stayviaowner | dup total |
+| Family | gotript | gobookt | numiworks | stayviaowner | total URLs |
 |---|--:|--:|--:|--:|--:|
 | `celebrations/{occasion}` | 2,025 | 2,025 | 2,025 | 2,025 | **8,100** |
 | `stays-near/{poi}` | (dropped) | 949 | 949 | 949 | 2,847 |
 | `destinations/{city}` | 164 | 164 | 164 | 164 | 656 |
 | occasion/persona/tours/hotels families | duplicated across 2–3 sites each | | | | ~thousands |
+
+**Wording precision (corrected):** the inventory proves the same *route family and intent*
+exist across all four sites — it does **not** prove all 8,100 celebration pages have identical
+content (metadata/intros are now differentiated; some bodies differ substantially). The
+defensible statement is: *celebration intent is **structurally duplicated** across all four
+domains — 2,025 URLs per site, 8,100 URLs targeting substantially overlapping occasion×city
+queries.* That structural duplication + the corpus size is the consolidation argument.
 
 **Honest caveat:** consolidation is **necessary but not sufficient**. The 5k/day comparison
 sites have (a) real backlinks and (b) content on real-demand queries. Consolidation removes
@@ -65,6 +72,83 @@ Each affiliate stream survives as a **section** (keep all revenue): `/hotels/`=B
 
 **Rule:** redirect ONLY where a genuine equivalent exists. No blanket redirect to the
 homepage or a vaguely-related city. No-equivalent pages return **404/410**.
+
+## Affiliate ownership per section — VERIFIED LIVE (do NOT hard-code assumptions)
+Checked live outbound links + code (2026-07-31). Providers are **mixed**, not clean per-brand:
+
+| Future section | Verified current provider(s) | Note / decision needed |
+|---|---|---|
+| `/hotels/{city}` | **Booking.com** (gobookt, JS/Stay22 widget) + Expedia in code | confirm Booking is the live CTA before building |
+| `/rentals/{city}` | **Vrbo** (stayviaowner `rentals/villas-in-paris` → vrbo.com) + Expedia | Vrbo confirmed on category pages |
+| `/things-to-do/{city}` | **Viator + GetYourGuide** (numiworks) — **NOT Viator-only** | but gotript's *current* experience pages use **Expedia Attractions** → pick ONE provider for the consolidated section |
+| `/plan//guides//itineraries/` | editorial (no direct booking) + contextual affiliate | — |
+
+**Open decision:** the consolidated `/things-to-do` must standardize on one provider stack
+(numiworks' Viator+GYG vs gotript's Expedia) — resolve before building that section.
+
+## City eligibility rules (do NOT auto-create all 225 cities)
+A city earns a section page only when it meets ALL of:
+1. **Affiliate inventory** exists for that section (real hotels/rentals/tours for the city);
+2. **Useful destination data** (a real destination guide — `hasDestinationGuide`, currently **164 cities**);
+3. **Distinct search intent** (not a near-duplicate of a larger nearby city);
+4. **Original or meaningfully curated content** (not a bare template fill).
+
+**Baseline gate = the 164 guide-cities** (climate sections may use the 215 climate-cities).
+This gate is what makes the size model below EXACT rather than "225 × everything."
+
+## Surviving gotript SIZE MODEL (make the final size explicit BEFORE any migration)
+**The goal is FEWER pages, not the union of four sites.** Do NOT copy every useful family
+from all three sites into gotript — that would turn a 16k-page problem into a 25–30k-page
+problem on one domain. Target **one canonical owner per intent, curated per city.**
+
+| Future section | Basis | Target count |
+|---|---|--:|
+| `/destinations/{city}` | cities with a real guide (merge 4 sites → 1) | 164 |
+| `/plan/{city}` | planner, guide-cities only | ~164 |
+| `/itineraries/{city}/{n}-days` | guide-cities × 3 durations (3/5/7), not 225×5 | ~500 |
+| `/hotels/{city}` | one per city (fold 8 hotel themes into on-page sections) | ~225 |
+| `/rentals/{city}` (+ ~10 category hubs) | one per city (fold 3,114 category perms) | ~235 |
+| `/things-to-do/{city}` (+ ~10 category hubs) | one per city (fold tours/attractions perms) | ~235 |
+| `/guides/{city}/best-time-to-visit` | climate, kept | 215 |
+| `/guides/{city}/{persona}` | ~4 strongest personas (with-teens/kids, budget, how-many-days) × guide-cities | ~650 |
+| `/guides/{city}/where-to-stay` | neighborhoods (from gobookt) | ~159 |
+| `/guides/{city}/celebrations/{occasion}` | curated top occasions only (NOT 2,025) | ~200 |
+| static / tools | plan, quiz, trip-cost-estimator, trust pages | ~10 |
+| **TARGET TOTAL** | | **≈ 2,700–3,500** |
+
+**Headline: gotript goes from 16,363 (today) / 46,604 (all 4 sites) → ~2,900 focused pages.**
+Under the 164-city gate with 4 personas / 3 itinerary durations / 3 curated occasions the
+model sums to **≈ 2,879**. Tightening curation → ~2,500; loosening → ~3,500. Exact numbers
+follow the final content decisions (a judgment call you approve).
+
+## Migration totals (MODELED — exact per-URL map is the artifact that follows your approval)
+| Bucket | Modeled count | Basis |
+|---|--:|---|
+| **Surviving gotript pages** | ~2,900 | size model above (164-city gate) |
+| **301 redirects** (sibling/old → new gotript equivalent) | ~8,000–11,000 | one 301 per old URL whose family+city has a surviving equivalent |
+| **410 retired** (no genuine equivalent) | ~30,000+ | celebration bulk, weather/seasonal, occasion/persona permutations beyond the gate, thin cross-brand dupes, non-eligible cities |
+| Current total (4 sites) | ~46,604 peak / ~40,705 in live sitemaps | — |
+
+The 301/410 split is **modeled, not final** — it becomes exact only after (a) city eligibility
+is confirmed per section (incl. real affiliate inventory) and (b) the deterministic per-URL map
+is generated from the family rules. That per-URL map is the NEXT artifact, produced after you
+approve this inventory — **not** before.
+
+## No flat + folder coexistence (avoid re-duplicating under one domain)
+When a family moves to a folder route, the OLD flat route must **301 to the new folder route**,
+never coexist. E.g. gotript's own `hotels-in-{city}` (flat, currently noindexed) must 301 to
+`/hotels/{city}` — not remain live alongside it. Every old flat pattern is either redirected
+or retired; none stays indexable next to its folder replacement.
+
+## APPROVAL GATE — do not build routes or deploy redirects until this is signed off
+Before any production route or redirect:
+1. Exact final gotript URL count by section (this model, with your curation choices locked).
+2. Family-by-family keep/merge/redirect/retire decisions (table below) confirmed.
+3. City eligibility confirmed per section (incl. affiliate inventory check).
+4. Exact old→new URL patterns confirmed (no flat+folder coexistence).
+5. `/things-to-do` provider decision (Viator+GYG vs Expedia) made.
+6. Exact 301 / 410 / surviving counts from the per-URL map.
+Only then: build sections (order below), then redirects domain-by-domain.
 
 ## Execution order (sequential, one domain at a time)
 1. **Build gotript's new `/hotels`, `/rentals`, `/things-to-do`, `/itineraries`, `/guides`,
