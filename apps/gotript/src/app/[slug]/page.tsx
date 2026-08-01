@@ -79,6 +79,28 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   const canonical = canonicalUrl(`/${slug}`);
 
+  // Phase 2A refocus: OFF-ROLE families are noindex,follow + dropped from the sitemap so
+  // gotript concentrates on planning/editorial. Owners elsewhere: hotels/apartments →
+  // gobookt, whole-home rentals → stayviaowner, tours → numiworks; cars/flights are thin
+  // affiliate landing pages. Kept crawlable (NOT robots.txt-blocked) so Google observes the
+  // noindex; no redirect (no 1:1 equivalent on the owner brand). See docs/gotript-phase2-refocus-proposal.md.
+  const PHASE2A_KINDS: ReadonlySet<string> = new Set([
+    'hotels-in', 'hotels-themed', 'cars-in', 'cars-themed', 'flights-to', 'flights-themed',
+  ]);
+  const isPhase2AOffRole =
+    PHASE2A_KINDS.has(parsed.kind) ||
+    (parsed.kind === 'things-themed' && parsed.variant === 'tours') ||
+    (parsed.kind === 'themed-list' &&
+      (parsed.theme === 'private-tours' || parsed.theme === 'walking-tours'));
+  if (isPhase2AOffRole) {
+    const label = slug.replace(/-/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase());
+    return {
+      title: `${label} · gotript`,
+      alternates: { canonical },
+      robots: { index: false, follow: true },
+    };
+  }
+
   // Resolve a destination photo for the Open Graph card. Pinterest,
   // Facebook, X and Slack all read this — without it, rich pins fall
   // back to the pin's own image (no page-context photo). Cruise-region

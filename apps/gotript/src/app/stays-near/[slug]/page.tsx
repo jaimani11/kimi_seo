@@ -42,6 +42,9 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     title,
     description,
     alternates: { canonical },
+    // Phase 2A: stays-near is accommodation-adjacent (owned by gobookt/stayviaowner) —
+    // noindex,follow + removed from the sitemap so gotript stays planning/editorial-focused.
+    robots: { index: false, follow: true },
     openGraph: { title, description, url: canonical, type: 'website' },
     twitter: { card: 'summary_large_image', title, description },
   };
