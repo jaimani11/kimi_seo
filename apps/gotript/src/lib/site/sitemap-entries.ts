@@ -98,6 +98,21 @@ function isPhase2aOffRoleUrl(url: string): boolean {
 }
 
 /**
+ * Phase 2B climate compression: monthly-weather + where-to-go-in-{month} pages (the seasonal
+ * pages are dropped by removing the 'seasonal' section). Noindexed in `[slug]` and excluded
+ * from the sitemap; `best-time-to-visit-{city}` is KEPT. Keep in sync with the PHASE2B guard.
+ */
+const MONTHS_RE =
+  '(january|february|march|april|may|june|july|august|september|october|november|december)';
+function isPhase2bClimateUrl(url: string): boolean {
+  return (
+    new RegExp(`-weather-in-${MONTHS_RE}$`).test(url) ||
+    new RegExp(`/where-to-go-in-${MONTHS_RE}$`).test(url) ||
+    /\/(spring|summer|fall|winter)-in-/.test(url)
+  );
+}
+
+/**
  * Named sections in index order. Deduped globally: a URL that would appear in
  * more than one section is kept only in the first (guarantees uniqueness within
  * and across child sitemaps).
@@ -132,6 +147,9 @@ export function sitemapSections(): SitemapSection[] {
     // the Expedia brand; experiences live on numiworks). A sitemap must not list
     // redirecting URLs, so the section is dropped.
     {
+      // Phase 2B climate compression: this bucket holds best-time + monthly-weather + the 4
+      // seasonal pages. The global filter below drops monthly-weather and seasonal pages
+      // (noindexed), so only `best-time-to-visit-{city}` survives here — one climate page/city.
       name: 'seasonal',
       entries: seo.seasonal.map((slug) => e(base, `/${slug}`, 0.75, 'weekly')),
     },
@@ -166,6 +184,8 @@ export function sitemapSections(): SitemapSection[] {
       // Phase 2A: OFF-ROLE families (noindexed in [slug]) — keep them out of the sitemap.
       // hotels/apartments → gobookt; tours → numiworks; cars/flights = thin affiliate.
       if (isPhase2aOffRoleUrl(entry.url)) return false;
+      // Phase 2B: monthly-weather + where-to-go-in-{month} (noindexed) — keep out of sitemap.
+      if (isPhase2bClimateUrl(entry.url)) return false;
       if (seen.has(entry.url)) return false;
       seen.add(entry.url);
       return true;

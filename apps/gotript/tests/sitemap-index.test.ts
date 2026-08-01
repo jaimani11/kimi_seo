@@ -31,7 +31,16 @@ const isExcludedFromSitemap = (slug: string): boolean =>
   // (owners: gobookt/numiworks/stayviaowner; cars/flights = thin affiliate).
   /^(hotels-in-|best-hotels-in-|cheap-hotels-in-|luxury-hotels-in-|boutique-hotels-in-|family-hotels-in-|pet-friendly-hotels-in-|beach-hotels-in-|hostels-in-|apartments-in-|tours-in-|private-tours-in-|walking-tours-in-|cars-in-|car-rentals-in-|cheap-car-rental-in-|airport-car-rental-in-|flights-to-|cheap-flights-to-)/.test(
     slug,
-  );
+  ) ||
+  // Phase 2B: climate compression — keep best-time; noindex+drop monthly weather, the 4
+  // seasonal pages, and where-to-go-in-{month}.
+  /-weather-in-(january|february|march|april|may|june|july|august|september|october|november|december)$/.test(
+    slug,
+  ) ||
+  /^where-to-go-in-(january|february|march|april|may|june|july|august|september|october|november|december)$/.test(
+    slug,
+  ) ||
+  /^(spring|summer|fall|winter)-in-/.test(slug);
 
 describe('gotript sitemap index', () => {
   it('exposes the expected named sections in order', () => {

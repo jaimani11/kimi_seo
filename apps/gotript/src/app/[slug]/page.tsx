@@ -101,6 +101,27 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     };
   }
 
+  // Phase 2B refocus: climate compression. gotript carries ~17 near-identical climate pages
+  // per city from one dataset. KEEP `best-time-to-visit-{city}` (one climate page/city);
+  // noindex + sitemap-drop monthly weather, the 4 seasonal pages, and where-to-go-in-{month}.
+  const parsedKind: string = parsed.kind;
+  const isPhase2BClimate =
+    parsedKind === 'weather-month' ||
+    parsedKind === 'where-to-go-month' ||
+    (parsed.kind === 'themed-list' &&
+      (parsed.theme === 'spring' ||
+        parsed.theme === 'summer' ||
+        parsed.theme === 'fall' ||
+        parsed.theme === 'winter'));
+  if (isPhase2BClimate) {
+    const label = slug.replace(/-/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase());
+    return {
+      title: `${label} · gotript`,
+      alternates: { canonical },
+      robots: { index: false, follow: true },
+    };
+  }
+
   // Resolve a destination photo for the Open Graph card. Pinterest,
   // Facebook, X and Slack all read this — without it, rich pins fall
   // back to the pin's own image (no page-context photo). Cruise-region
