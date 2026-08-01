@@ -98,17 +98,17 @@ function isPhase2aOffRoleUrl(url: string): boolean {
 }
 
 /**
- * Phase 2B climate compression: monthly-weather + where-to-go-in-{month} pages (the seasonal
- * pages are dropped by removing the 'seasonal' section). Noindexed in `[slug]` and excluded
- * from the sitemap; `best-time-to-visit-{city}` is KEPT. Keep in sync with the PHASE2B guard.
+ * Phase 2B (hybrid): reverse ONLY the 2da18a0 climate expansion — monthly-weather +
+ * where-to-go-in-{month}. `best-time-to-visit-{city}` is KEPT; seasonal ({spring,summer,fall,
+ * winter}-in-{city}) is from a different commit (b63f05c) and is LEFT INDEXED here (evaluated
+ * separately). Keep in sync with the PHASE2B guard in app/[slug]/page.tsx.
  */
 const MONTHS_RE =
   '(january|february|march|april|may|june|july|august|september|october|november|december)';
 function isPhase2bClimateUrl(url: string): boolean {
   return (
     new RegExp(`-weather-in-${MONTHS_RE}$`).test(url) ||
-    new RegExp(`/where-to-go-in-${MONTHS_RE}$`).test(url) ||
-    /\/(spring|summer|fall|winter)-in-/.test(url)
+    new RegExp(`/where-to-go-in-${MONTHS_RE}$`).test(url)
   );
 }
 
@@ -147,9 +147,10 @@ export function sitemapSections(): SitemapSection[] {
     // the Expedia brand; experiences live on numiworks). A sitemap must not list
     // redirecting URLs, so the section is dropped.
     {
-      // Phase 2B climate compression: this bucket holds best-time + monthly-weather + the 4
-      // seasonal pages. The global filter below drops monthly-weather and seasonal pages
-      // (noindexed), so only `best-time-to-visit-{city}` survives here — one climate page/city.
+      // Phase 2B (hybrid): this bucket holds best-time + monthly-weather + the 4 seasonal
+      // pages. The global filter below drops ONLY monthly-weather + where-to-go (the 2da18a0
+      // expansion), so best-time-to-visit AND the seasonal pages survive here (seasonal is
+      // from a different commit, evaluated separately later).
       name: 'seasonal',
       entries: seo.seasonal.map((slug) => e(base, `/${slug}`, 0.75, 'weekly')),
     },

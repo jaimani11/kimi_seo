@@ -101,18 +101,14 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     };
   }
 
-  // Phase 2B refocus: climate compression. gotript carries ~17 near-identical climate pages
-  // per city from one dataset. KEEP `best-time-to-visit-{city}` (one climate page/city);
-  // noindex + sitemap-drop monthly weather, the 4 seasonal pages, and where-to-go-in-{month}.
+  // Phase 2B (hybrid): reverse ONLY the 2da18a0 climate expansion. Remove monthly-weather
+  // ({city}-weather-in-{month}) and where-to-go-in-{month}; KEEP best-time-to-visit (one
+  // climate page/city). Seasonal ({spring,summer,fall,winter}-in-{city}) came from a DIFFERENT
+  // commit (b63f05c) and is intentionally LEFT INDEXED here — evaluated separately later, so
+  // this deployment cleanly tests reversing 2da18a0 alone. where-to-stay is already noindexed.
   const parsedKind: string = parsed.kind;
   const isPhase2BClimate =
-    parsedKind === 'weather-month' ||
-    parsedKind === 'where-to-go-month' ||
-    (parsed.kind === 'themed-list' &&
-      (parsed.theme === 'spring' ||
-        parsed.theme === 'summer' ||
-        parsed.theme === 'fall' ||
-        parsed.theme === 'winter'));
+    parsedKind === 'weather-month' || parsedKind === 'where-to-go-month';
   if (isPhase2BClimate) {
     const label = slug.replace(/-/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase());
     return {
