@@ -26,7 +26,12 @@ const isExcludedFromSitemap = (slug: string): boolean =>
   /-\d+-day-itinerary$/.test(slug) ||
   /^weekend-in-/.test(slug) ||
   /^things-to-do-in-/.test(slug) ||
-  /^where-to-stay-in-/.test(slug);
+  /^where-to-stay-in-/.test(slug) ||
+  // Phase 2A: off-role families (hotels/apartments/tours/cars/flights) noindexed + dropped
+  // (owners: gobookt/numiworks/stayviaowner; cars/flights = thin affiliate).
+  /^(hotels-in-|best-hotels-in-|cheap-hotels-in-|luxury-hotels-in-|boutique-hotels-in-|family-hotels-in-|pet-friendly-hotels-in-|beach-hotels-in-|hostels-in-|apartments-in-|tours-in-|private-tours-in-|walking-tours-in-|cars-in-|car-rentals-in-|cheap-car-rental-in-|airport-car-rental-in-|flights-to-|cheap-flights-to-)/.test(
+    slug,
+  );
 
 describe('gotript sitemap index', () => {
   it('exposes the expected named sections in order', () => {
@@ -35,7 +40,6 @@ describe('gotript sitemap index', () => {
       'destinations',
       'seasonal',
       'accommodation',
-      'stays-near',
       'celebrations',
       'editorial',
     ]);
@@ -73,8 +77,10 @@ describe('gotript sitemap index', () => {
     const urlset = new Set(all.map((x) => x.url));
     for (const slug of enumerateOccasionSlugs())
       expect(urlset.has(`${origin}/celebrations/${slug}`)).toBe(true);
+    // Phase 2A: stays-near was removed (accommodation-adjacent, owned by gobookt/stayviaowner) —
+    // its section is gone and the pages are noindexed, so none appear in the sitemap.
     for (const slug of enumerateStaysNearSlugs())
-      expect(urlset.has(`${origin}/stays-near/${slug}`)).toBe(true);
+      expect(urlset.has(`${origin}/stays-near/${slug}`)).toBe(false);
     // Accommodation category pages (/villas, /cabins, …) predate the split and
     // must survive it — the section list must not silently drop these.
     for (const c of allAccommodationCategories())

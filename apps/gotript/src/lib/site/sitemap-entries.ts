@@ -5,7 +5,7 @@ import { enumerateAllSeoSlugs } from '@lib/seo/route-parser';
 import { SEO_CITIES } from '@lib/seo/cities';
 import { hasDestinationGuide } from '@lib/seo/destination-content';
 import { allAccommodationCategories } from '@lib/seo/accommodation-categories';
-import { enumerateStaysNearSlugs, enumerateOccasionSlugs } from '@adored/seo-data';
+import { enumerateOccasionSlugs } from '@adored/seo-data';
 
 /**
  * Crawler-facing sitemap, split into named SECTIONS so `/sitemap.xml` serves a
@@ -86,6 +86,18 @@ function bucketSeoSlugs(): SeoSlugBuckets {
 }
 
 /**
+ * Phase 2A off-role families (hotels/apartments/tours/cars/flights) — owned by sibling
+ * brands (gobookt/numiworks/stayviaowner) or thin affiliate. Noindexed in `[slug]` and
+ * excluded from the sitemap so gotript concentrates on planning/editorial. Keep this in
+ * sync with the PHASE2A guard in app/[slug]/page.tsx.
+ */
+function isPhase2aOffRoleUrl(url: string): boolean {
+  return /\/(hotels-in-|best-hotels-in-|cheap-hotels-in-|luxury-hotels-in-|boutique-hotels-in-|family-hotels-in-|pet-friendly-hotels-in-|beach-hotels-in-|hostels-in-|apartments-in-|tours-in-|private-tours-in-|walking-tours-in-|cars-in-|car-rentals-in-|cheap-car-rental-in-|airport-car-rental-in-|flights-to-|cheap-flights-to-)/.test(
+    url,
+  );
+}
+
+/**
  * Named sections in index order. Deduped globally: a URL that would appear in
  * more than one section is kept only in the first (guarantees uniqueness within
  * and across child sitemaps).
@@ -133,10 +145,8 @@ export function sitemapSections(): SitemapSection[] {
       name: 'accommodation',
       entries: allAccommodationCategories().map((c) => e(base, `/${c.slug}`, 0.9)),
     },
-    {
-      name: 'stays-near',
-      entries: enumerateStaysNearSlugs().map((slug) => e(base, `/stays-near/${slug}`, 0.7)),
-    },
+    // Phase 2A: 'stays-near' section removed — accommodation-adjacent, owned by
+    // gobookt/stayviaowner. The pages are noindexed at the route level.
     {
       name: 'celebrations',
       entries: enumerateOccasionSlugs().map((slug) => e(base, `/celebrations/${slug}`, 0.6)),
@@ -153,6 +163,9 @@ export function sitemapSections(): SitemapSection[] {
     entries: s.entries.filter((entry) => {
       // where-to-stay is owned by gobookt (noindex here) — keep it out of sitemap.
       if (/\/where-to-stay-in-/.test(entry.url)) return false;
+      // Phase 2A: OFF-ROLE families (noindexed in [slug]) — keep them out of the sitemap.
+      // hotels/apartments → gobookt; tours → numiworks; cars/flights = thin affiliate.
+      if (isPhase2aOffRoleUrl(entry.url)) return false;
       if (seen.has(entry.url)) return false;
       seen.add(entry.url);
       return true;
